@@ -1,0 +1,161 @@
+{
+  "infercoon_format": "INFER-COON-PROJECT-V1",
+  "file_extension": ".inf",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Modelo 8: Detecção e Expurgo de Outlier (Distância de Cook)",
+    "author": "Engenheiro Perito Avaliador - Coon Engenharia",
+    "company": "Coon Engenharia",
+    "website": "https://www.coon.com.br",
+    "standard": "ABNT NBR 14653-2",
+    "purpose": "Validação de Paridade SisDEA e Determinação do Valor de Mercado",
+    "notes": "Identificação de ponto atípico com resíduo padronizado elevado (> 2,5) e recálculo da regressão sem a amostra espúria.",
+    "created_at": "2026-09-24T07:03:44.058233"
+  },
+  "dataset": {
+    "dependent_var": "preco",
+    "independent_vars": [
+      "area",
+      "vagas"
+    ],
+    "transformations": {
+      "preco": "linear",
+      "area": "linear",
+      "vagas": "linear"
+    },
+    "samples": [
+      {
+        "id": 1,
+        "endereco": "Amostra Normal 1",
+        "preco": 450000,
+        "area": 50.0,
+        "vagas": 1
+      },
+      {
+        "id": 2,
+        "endereco": "Amostra Normal 2",
+        "preco": 550000,
+        "area": 60.0,
+        "vagas": 1
+      },
+      {
+        "id": 3,
+        "endereco": "Amostra Normal 3",
+        "preco": 650000,
+        "area": 70.0,
+        "vagas": 2
+      },
+      {
+        "id": 4,
+        "endereco": "Amostra Normal 4",
+        "preco": 750000,
+        "area": 80.0,
+        "vagas": 2
+      },
+      {
+        "id": 5,
+        "endereco": "Amostra Normal 5",
+        "preco": 850000,
+        "area": 90.0,
+        "vagas": 2
+      },
+      {
+        "id": 6,
+        "endereco": "Amostra Normal 6",
+        "preco": 950000,
+        "area": 100.0,
+        "vagas": 3
+      },
+      {
+        "id": 7,
+        "endereco": "Amostra Normal 7",
+        "preco": 1050000,
+        "area": 110.0,
+        "vagas": 3
+      },
+      {
+        "id": 8,
+        "endereco": "Amostra Normal 8",
+        "preco": 1150000,
+        "area": 120.0,
+        "vagas": 3
+      },
+      {
+        "id": 9,
+        "endereco": "Amostra Normal 9",
+        "preco": 580000,
+        "area": 65.0,
+        "vagas": 1
+      },
+      {
+        "id": 10,
+        "endereco": "Amostra Normal 10",
+        "preco": 880000,
+        "area": 95.0,
+        "vagas": 2
+      },
+      {
+        "id": 11,
+        "endereco": "Amostra OUTLIER (Abaixo de Mercado)",
+        "preco": 320000,
+        "area": 95.0,
+        "vagas": 2
+      }
+    ]
+  },
+  "subject": {
+    "description": "Imóvel Avaliando (Expurgo de Outliers)",
+    "attributes": {
+      "area": 80.0,
+      "vagas": 2.0
+    }
+  },
+  "calibration": {
+    "is_manual": false,
+    "coefficients": {
+      "const": 143165.1594478818,
+      "area": 2314.136125654455,
+      "vagas": 201884.81675392657
+    }
+  },
+  "results": {
+    "r2": 0.6192849221931354,
+    "r2_adj": 0.5241061527414193,
+    "f_stat": 6.506544744805684,
+    "f_pval": 0.021008754575459507,
+    "se_reg": 178597.31640730632,
+    "se_mean_pred": 62463.80910087709,
+    "t_crit_80": 1.3968153097438654,
+    "df_resid": 8,
+    "coefficients": {
+      "const": {
+        "valor": 143165.1594478818,
+        "se": 262102.51877467523,
+        "t": 0.5462181749232188,
+        "p": 0.599813436068027
+      },
+      "area": {
+        "valor": 2314.136125654455,
+        "se": 6330.876858240823,
+        "t": 0.3655316913394348,
+        "p": 0.7241906393778422
+      },
+      "vagas": {
+        "valor": 201884.81675392657,
+        "se": 179064.2382927629,
+        "t": 1.1274435290862095,
+        "p": 0.29223215157227256
+      }
+    },
+    "estimated_value": 732065.6830080913,
+    "mean_value": 732065.6830080913,
+    "median_value": 732065.6830080913,
+    "ci_80": {
+      "lower": 644815.278151068,
+      "upper": 819316.0878651146,
+      "amplitude_pct": 23.836769536445797
+    },
+    "grau_precisao": "Grau III",
+    "grau_fundamentacao": "Grau II"
+  }
+}

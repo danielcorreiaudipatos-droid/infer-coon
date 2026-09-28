@@ -1,0 +1,239 @@
+{
+  "infercoon_format": "INFER-COON-PROJECT-V1",
+  "file_extension": ".inf",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Modelo 2: Regressão Linear Múltipla Completa (4 Variáveis)",
+    "author": "Engenheiro Perito Avaliador - Coon Engenharia",
+    "company": "Coon Engenharia",
+    "website": "https://www.coon.com.br",
+    "standard": "ABNT NBR 14653-2",
+    "purpose": "Validação de Paridade SisDEA e Determinação do Valor de Mercado",
+    "notes": "Modelo urbano SisDEA com Área, Vagas, Idade e Padrão Construtivo atendendo Grau III de Fundamentação.",
+    "created_at": "2026-09-24T07:03:43.947969"
+  },
+  "dataset": {
+    "dependent_var": "preco",
+    "independent_vars": [
+      "area",
+      "vagas",
+      "idade",
+      "padrao"
+    ],
+    "transformations": {
+      "preco": "linear",
+      "area": "linear",
+      "vagas": "linear",
+      "idade": "linear",
+      "padrao": "linear"
+    },
+    "samples": [
+      {
+        "id": 1,
+        "endereco": "Rua Oscar Freire, 110",
+        "preco": 850000,
+        "area": 68.0,
+        "vagas": 1,
+        "idade": 6,
+        "padrao": 2.5
+      },
+      {
+        "id": 2,
+        "endereco": "Alameda Lorena, 450",
+        "preco": 1250000,
+        "area": 95.0,
+        "vagas": 2,
+        "idade": 4,
+        "padrao": 3.0
+      },
+      {
+        "id": 3,
+        "endereco": "Rua Bela Cintra, 890",
+        "preco": 620000,
+        "area": 52.0,
+        "vagas": 1,
+        "idade": 12,
+        "padrao": 2.0
+      },
+      {
+        "id": 4,
+        "endereco": "Rua Haddock Lobo, 720",
+        "preco": 1680000,
+        "area": 120.0,
+        "vagas": 2,
+        "idade": 3,
+        "padrao": 3.5
+      },
+      {
+        "id": 5,
+        "endereco": "Rua Augusta, 1420",
+        "preco": 540000,
+        "area": 45.0,
+        "vagas": 0,
+        "idade": 15,
+        "padrao": 2.0
+      },
+      {
+        "id": 6,
+        "endereco": "Alameda Santos, 310",
+        "preco": 1100000,
+        "area": 84.0,
+        "vagas": 1,
+        "idade": 8,
+        "padrao": 3.0
+      },
+      {
+        "id": 7,
+        "endereco": "Rua Pamplona, 980",
+        "preco": 980000,
+        "area": 76.0,
+        "vagas": 1,
+        "idade": 5,
+        "padrao": 2.5
+      },
+      {
+        "id": 8,
+        "endereco": "Rua da Consolação, 2100",
+        "preco": 710000,
+        "area": 58.0,
+        "vagas": 1,
+        "idade": 10,
+        "padrao": 2.0
+      },
+      {
+        "id": 9,
+        "endereco": "Alameda Campinas, 650",
+        "preco": 1420000,
+        "area": 105.0,
+        "vagas": 2,
+        "idade": 2,
+        "padrao": 3.5
+      },
+      {
+        "id": 10,
+        "endereco": "Rua Estados Unidos, 180",
+        "preco": 1950000,
+        "area": 135.0,
+        "vagas": 3,
+        "idade": 5,
+        "padrao": 3.5
+      },
+      {
+        "id": 11,
+        "endereco": "Rua Peixoto Gomide, 550",
+        "preco": 890000,
+        "area": 70.0,
+        "vagas": 1,
+        "idade": 7,
+        "padrao": 2.7
+      },
+      {
+        "id": 12,
+        "endereco": "Alameda Itu, 320",
+        "preco": 1340000,
+        "area": 100.0,
+        "vagas": 2,
+        "idade": 3,
+        "padrao": 3.2
+      },
+      {
+        "id": 13,
+        "endereco": "Rua Melo Alves, 410",
+        "preco": 1180000,
+        "area": 88.0,
+        "vagas": 2,
+        "idade": 6,
+        "padrao": 3.0
+      },
+      {
+        "id": 14,
+        "endereco": "Rua da Consolação, 1850",
+        "preco": 760000,
+        "area": 62.0,
+        "vagas": 1,
+        "idade": 9,
+        "padrao": 2.2
+      },
+      {
+        "id": 15,
+        "endereco": "Alameda Franca, 890",
+        "preco": 1550000,
+        "area": 115.0,
+        "vagas": 2,
+        "idade": 4,
+        "padrao": 3.4
+      }
+    ]
+  },
+  "subject": {
+    "description": "Imóvel Avaliando (Linear Múltiplo)",
+    "attributes": {
+      "area": 85.0,
+      "vagas": 2.0,
+      "idade": 5.0,
+      "padrao": 2.8
+    }
+  },
+  "calibration": {
+    "is_manual": false,
+    "coefficients": {
+      "const": -284254.93335313105,
+      "area": 16415.445740511692,
+      "vagas": 5377.48698031978,
+      "idade": 7015.164388408117,
+      "padrao": -14901.057509375678
+    }
+  },
+  "results": {
+    "r2": 0.9984559900248099,
+    "r2_adj": 0.9978383860347338,
+    "f_stat": 1616.6605236826474,
+    "f_pval": 5.258266626559721e-14,
+    "se_reg": 19154.20405406429,
+    "se_mean_pred": 10916.37207022832,
+    "t_crit_80": 1.372183641110336,
+    "df_resid": 10,
+    "coefficients": {
+      "const": {
+        "valor": -284254.93335313105,
+        "se": 69192.82091903093,
+        "t": -4.108156447122812,
+        "p": 0.002116781625348537
+      },
+      "area": {
+        "valor": 16415.445740511692,
+        "se": 924.181673459758,
+        "t": 17.762141591770565,
+        "p": 6.823746104004392e-09
+      },
+      "vagas": {
+        "valor": 5377.48698031978,
+        "se": 18790.703176242358,
+        "t": 0.28617805996311496,
+        "p": 0.7805826861972136
+      },
+      "idade": {
+        "valor": 7015.164388408117,
+        "se": 2775.9194777144407,
+        "t": 2.527149812783499,
+        "p": 0.030017203313620785
+      },
+      "padrao": {
+        "valor": -14901.057509375678,
+        "se": 35374.38711425758,
+        "t": -0.4212386058095077,
+        "p": 0.6824915761898261
+      }
+    },
+    "estimated_value": 1115165.7894667913,
+    "mean_value": 1115165.7894667913,
+    "median_value": 1115165.7894667913,
+    "ci_80": {
+      "lower": 1100186.5222917502,
+      "upper": 1130145.0566418325,
+      "amplitude_pct": 2.6864646165667203
+    },
+    "grau_precisao": "Grau III",
+    "grau_fundamentacao": "Grau III"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Infer.coon - Engenharia de Avaliações NBR 14653",
+  "short_name": "Infer.coon",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#0f172a",
+  "orientation": "any",
+  "description": "Plataforma de Engenharia de Avaliações imobiliárias em estrita conformidade com a ABNT NBR 14653. Motor estatístico MQO, testes F e t, VIF, Shapiro-Wilk, Durbin-Watson e IA Pericial.",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f172a'/><path d='M30 70 L50 30 L70 70 Z' stroke='%2310b981' stroke-width='8' fill='none'/><circle cx='50' cy='30' r='6' fill='%2338bdf8'/></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

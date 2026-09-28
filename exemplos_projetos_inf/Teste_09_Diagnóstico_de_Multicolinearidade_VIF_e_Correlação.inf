@@ -1,0 +1,174 @@
+{
+  "infercoon_format": "INFER-COON-PROJECT-V1",
+  "file_extension": ".inf",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Modelo 9: Diagnóstico de Multicolinearidade (VIF e Correlação)",
+    "author": "Engenheiro Perito Avaliador - Coon Engenharia",
+    "company": "Coon Engenharia",
+    "website": "https://www.coon.com.br",
+    "standard": "ABNT NBR 14653-2",
+    "purpose": "Validação de Paridade SisDEA e Determinação do Valor de Mercado",
+    "notes": "Avaliação de variáveis altamente correlacionadas no SisDEA (VIF > 5.0) para isolamento do efeito causal real.",
+    "created_at": "2026-09-24T07:03:44.063181"
+  },
+  "dataset": {
+    "dependent_var": "preco",
+    "independent_vars": [
+      "area",
+      "comodos",
+      "vagas"
+    ],
+    "transformations": {
+      "preco": "linear",
+      "area": "linear",
+      "comodos": "linear",
+      "vagas": "linear"
+    },
+    "samples": [
+      {
+        "id": 1,
+        "endereco": "Imóvel 1",
+        "preco": 480000,
+        "area": 50.0,
+        "comodos": 4.0,
+        "vagas": 1
+      },
+      {
+        "id": 2,
+        "endereco": "Imóvel 2",
+        "preco": 590000,
+        "area": 60.0,
+        "comodos": 5.0,
+        "vagas": 1
+      },
+      {
+        "id": 3,
+        "endereco": "Imóvel 3",
+        "preco": 710000,
+        "area": 72.0,
+        "comodos": 6.0,
+        "vagas": 2
+      },
+      {
+        "id": 4,
+        "endereco": "Imóvel 4",
+        "preco": 820000,
+        "area": 84.0,
+        "comodos": 7.0,
+        "vagas": 2
+      },
+      {
+        "id": 5,
+        "endereco": "Imóvel 5",
+        "preco": 940000,
+        "area": 96.0,
+        "comodos": 8.0,
+        "vagas": 2
+      },
+      {
+        "id": 6,
+        "endereco": "Imóvel 6",
+        "preco": 1060000,
+        "area": 108.0,
+        "comodos": 9.0,
+        "vagas": 3
+      },
+      {
+        "id": 7,
+        "endereco": "Imóvel 7",
+        "preco": 1190000,
+        "area": 120.0,
+        "comodos": 10.0,
+        "vagas": 3
+      },
+      {
+        "id": 8,
+        "endereco": "Imóvel 8",
+        "preco": 650000,
+        "area": 66.0,
+        "comodos": 5.0,
+        "vagas": 1
+      },
+      {
+        "id": 9,
+        "endereco": "Imóvel 9",
+        "preco": 880000,
+        "area": 90.0,
+        "comodos": 7.0,
+        "vagas": 2
+      },
+      {
+        "id": 10,
+        "endereco": "Imóvel 10",
+        "preco": 1320000,
+        "area": 135.0,
+        "comodos": 11.0,
+        "vagas": 3
+      }
+    ]
+  },
+  "subject": {
+    "description": "Imóvel Avaliando (Diagnóstico de Colinearidade)",
+    "attributes": {
+      "area": 80.0,
+      "comodos": 6.0,
+      "vagas": 2.0
+    }
+  },
+  "calibration": {
+    "is_manual": false,
+    "coefficients": {
+      "const": -4479.36859595729,
+      "area": 9435.059540293558,
+      "comodos": 4662.1434505679645,
+      "vagas": 1841.5951260038128
+    }
+  },
+  "results": {
+    "r2": 0.9995476269053135,
+    "r2_adj": 0.9993214403579702,
+    "f_stat": 4419.129425007056,
+    "f_pval": 2.024718616046632e-10,
+    "se_reg": 7014.708077986319,
+    "se_mean_pred": 8507.949261144477,
+    "t_crit_80": 1.4397557472651483,
+    "df_resid": 6,
+    "coefficients": {
+      "const": {
+        "valor": -4479.36859595729,
+        "se": 8719.929175092417,
+        "t": -0.5136932314487309,
+        "p": 0.6258288677441581
+      },
+      "area": {
+        "valor": 9435.059540293558,
+        "se": 1004.1803480599658,
+        "t": 9.395781901649137,
+        "p": 8.254334629793979e-05
+      },
+      "comodos": {
+        "valor": 4662.1434505679645,
+        "se": 13233.183045950518,
+        "t": 0.3523070325846226,
+        "p": 0.7366527019986417
+      },
+      "vagas": {
+        "valor": 1841.5951260038128,
+        "se": 9378.728877581614,
+        "t": 0.19635871236302163,
+        "p": 0.8508113415911679
+      }
+    },
+    "estimated_value": 781981.4455829428,
+    "mean_value": 781981.4455829428,
+    "median_value": 781981.4455829428,
+    "ci_80": {
+      "lower": 769732.0767367698,
+      "upper": 794230.8144291159,
+      "amplitude_pct": 3.1329052410039027
+    },
+    "grau_precisao": "Grau III",
+    "grau_fundamentacao": "Grau II"
+  }
+}

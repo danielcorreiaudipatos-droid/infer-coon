@@ -1,0 +1,134 @@
+{
+  "infercoon_format": "INFER-COON-PROJECT-V1",
+  "file_extension": ".inf",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Modelo 4: Log-Log ln(Preço) x ln(Área)",
+    "author": "Engenheiro Perito Avaliador - Coon Engenharia",
+    "company": "Coon Engenharia",
+    "website": "https://www.coon.com.br",
+    "standard": "ABNT NBR 14653-2",
+    "purpose": "Validação de Paridade SisDEA e Determinação do Valor de Mercado",
+    "notes": "Modelo de elasticidade constante de preço em função da área (Cobb-Douglas aplicada à avaliação imobiliária).",
+    "created_at": "2026-09-24T07:03:43.955677"
+  },
+  "dataset": {
+    "dependent_var": "preco",
+    "independent_vars": [
+      "area"
+    ],
+    "transformations": {
+      "preco": "ln",
+      "area": "ln"
+    },
+    "samples": [
+      {
+        "id": 1,
+        "endereco": "Ponto A",
+        "preco": 350000,
+        "area": 48.0
+      },
+      {
+        "id": 2,
+        "endereco": "Ponto B",
+        "preco": 440000,
+        "area": 58.0
+      },
+      {
+        "id": 3,
+        "endereco": "Ponto C",
+        "preco": 530000,
+        "area": 68.0
+      },
+      {
+        "id": 4,
+        "endereco": "Ponto D",
+        "preco": 640000,
+        "area": 80.0
+      },
+      {
+        "id": 5,
+        "endereco": "Ponto E",
+        "preco": 760000,
+        "area": 95.0
+      },
+      {
+        "id": 6,
+        "endereco": "Ponto F",
+        "preco": 890000,
+        "area": 110.0
+      },
+      {
+        "id": 7,
+        "endereco": "Ponto G",
+        "preco": 1020000,
+        "area": 125.0
+      },
+      {
+        "id": 8,
+        "endereco": "Ponto H",
+        "preco": 1180000,
+        "area": 140.0
+      },
+      {
+        "id": 9,
+        "endereco": "Ponto I",
+        "preco": 1350000,
+        "area": 160.0
+      },
+      {
+        "id": 10,
+        "endereco": "Ponto J",
+        "preco": 1540000,
+        "area": 180.0
+      }
+    ]
+  },
+  "subject": {
+    "description": "Imóvel Avaliando (Log-Log)",
+    "attributes": {
+      "area": 92.0
+    }
+  },
+  "calibration": {
+    "is_manual": false,
+    "coefficients": {
+      "const": 8.484749458449073,
+      "area": 1.110336829959616
+    }
+  },
+  "results": {
+    "r2": 0.99952717505257,
+    "r2_adj": 0.9994680719341413,
+    "f_stat": 16911.58100663847,
+    "f_pval": 1.3669157924533281e-14,
+    "se_reg": 0.011359156738277965,
+    "se_mean_pred": 0.003629365573344052,
+    "t_crit_80": 1.3968153097438654,
+    "df_resid": 8,
+    "coefficients": {
+      "const": {
+        "valor": 8.484749458449073,
+        "se": 0.03929104396399412,
+        "t": 215.94614452658485,
+        "p": 2.3669342368047274e-16
+      },
+      "area": {
+        "valor": 1.110336829959616,
+        "se": 0.008538127592046904,
+        "t": 130.04453470499465,
+        "p": 1.3669157924532998e-14
+      }
+    },
+    "estimated_value": 733455.6183528886,
+    "mean_value": 733455.6183528886,
+    "median_value": 733408.3008280151,
+    "ci_80": {
+      "lower": 729699.656812021,
+      "upper": 737135.7937502803,
+      "amplitude_pct": 1.013849611645006
+    },
+    "grau_precisao": "Grau III",
+    "grau_fundamentacao": "Grau III"
+  }
+}

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studio de Aplicativos | COON Soluções Tecnológicas</title>
+  
+  <meta name="description" content="Diretório de aplicativos e softwares desenvolvidos pela COON Soluções Tecnológicas. Brasil.">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #faf9fd;
+      background-image: 
+        radial-gradient(at 5% 5%, rgba(139, 92, 246, 0.20) 0px, transparent 50%),
+        radial-gradient(at 95% 8%, rgba(217, 70, 239, 0.16) 0px, transparent 50%),
+        radial-gradient(at 50% 35%, rgba(245, 158, 11, 0.12) 0px, transparent 55%),
+        radial-gradient(at 85% 88%, rgba(168, 85, 247, 0.18) 0px, transparent 50%),
+        radial-gradient(at 15% 90%, rgba(244, 63, 94, 0.14) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* ======================================================== */
+    /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: TRANSIÇÃO SUAVE DE CORES COON */
+    /* ======================================================== */
+    @keyframes coonSmoothSpectrum {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes coonDotPulse {
+      0%, 100% {
+        color: #10b981;
+        filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.5));
+        transform: scale(1);
+      }
+      50% {
+        color: #06b6d4;
+        filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.7));
+        transform: scale(1.18);
+      }
+    }
+
+    .gemini-wordmark, .coon-gradient, .coon-bigtech-logo {
+      display: inline-block;
+      background: linear-gradient(
+        90deg,
+        #1d4ed8 0%,
+        #2563eb 15%,
+        #0ea5e9 30%,
+        #10b981 45%,
+        #6366f1 60%,
+        #8b5cf6 75%,
+        #06b6d4 90%,
+        #1d4ed8 100%
+      );
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.055em;
+      animation: coonSmoothSpectrum 7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+      will-change: background-position;
+      transition: transform 0.3s ease;
+    }
+
+    .gemini-wordmark:hover, .coon-bigtech-logo:hover {
+      transform: scale(1.02);
+    }
+
+    .coon-dot-animated {
+      display: inline-block;
+      animation: coonDotPulse 7s ease-in-out infinite alternate;
+      will-change: color, filter, transform;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800 selection:bg-slate-900 selection:text-white">
+
+  <!-- ======================================================== -->
+  <!-- BARRA SUPERIOR (DISCRETA E ELEGANTE • PADRÃO BIG TECH) -->
+  <!-- ======================================================== -->
+  <header class="bg-white/85 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      
+      <!-- Marca Oficial Co.on com transição suave contínua -->
+      <a href="/" class="flex items-center space-x-3 group">
+        <span class="text-2xl font-black tracking-tighter gemini-wordmark">coon<span class="coon-dot-animated text-emerald-500">.</span></span>
+        <span class="text-xs font-semibold text-slate-400 pl-2 border-l border-slate-200">Studio de Aplicativos</span>
+      </a>
+
+      <!-- Ações -->
+      <div class="flex items-center space-x-4">
+        <span class="hidden md:inline-flex items-center space-x-1.5 text-[11px] font-medium text-slate-500 bg-slate-100/80 px-2.5 py-1 rounded-full border border-slate-200/60">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span>Tecnologia Proprietária & Padrão Big Tech</span>
+        </span>
+        <a href="/" class="text-xs font-semibold text-slate-600 hover:text-slate-900 transition flex items-center space-x-1">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Início</span>
+        </a>
+        <a href="/infer" target="_blank" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-full shadow-xs transition flex items-center space-x-1.5">
+          <span>Acessar infer.coon</span>
+          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-emerald-400"></i>
+        </a>
+
+        <!-- Widget Universal de Autenticação / Área do Assinante COON -->
+        <div id="coonAuthNavSlot"></div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- CONTEÚDO PRINCIPAL: DIRETÓRIO DE APLICATIVOS (ESTILO APPS) -->
+  <!-- ======================================================== -->
+  <main class="flex-1 max-w-6xl mx-auto px-6 py-12 w-full">
+    
+    <!-- Cabeçalho do Diretório (Sóbrio, Sem Propaganda) -->
+    <div class="mb-10 text-left">
+      <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 text-[11px] font-semibold mb-3">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+        <span>Aplicações Oficiais COON</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+        Diretório de Softwares & Soluções
+      </h1>
+      <p class="text-sm text-slate-500 max-w-2xl mt-1.5 leading-relaxed">
+        Plataformas verticais e ecossistemas digitais desenhados para alta precisão técnica, gestão e produtividade operacional.
+      </p>
+    </div>
+
+    <!-- GRID DE APLICATIVOS (ESTILO APP STORE / GOOGLE WORKSPACE) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      
+      <!-- 1. infer.coon (Engenharia - Destaque Central) -->
+      <div class="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+              <i data-lucide="line-chart" class="w-6 h-6"></i>
+            </div>
+            <span class="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center space-x-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1"></span>
+              Operacional v1.0
+            </span>
+          </div>
+          <span class="text-[10px] font-mono font-bold text-emerald-700 uppercase tracking-wider block mb-1">
+            Engenharia & Perícias
+          </span>
+          <h2 class="text-lg font-bold text-slate-900 mb-2">infer.coon</h2>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Inferência estatística, regressão linear múltipla MCO, paridade SisDEA e conformidade integral com a <strong>ABNT NBR 14653</strong>. Laudos auditáveis para juízos e bancos públicos e privados.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-[11px] text-slate-400 font-mono">infer.coon.com.br</span>
+          <a href="/infer" target="_blank" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
+            <span>Acessar Plataforma</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. growth.coon (Vendas & Aceleração Comercial) -->
+      <div class="bg-white rounded-3xl border border-indigo-200/90 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute top-0 right-0 bg-indigo-600 text-white text-[9px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-bl-xl">
+          Aceleração Comercial Contínua
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold">
+              <i data-lucide="zap" class="w-6 h-6"></i>
+            </div>
+            <span class="text-[10px] font-mono font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 flex items-center space-x-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse mr-1"></span>
+              Operacional v1.0
+            </span>
+          </div>
+          <span class="text-[10px] font-mono font-bold text-indigo-700 uppercase tracking-wider block mb-1">
+            Aceleração Comercial & Vendas Digitais
+          </span>
+          <h2 class="text-lg font-bold text-slate-900 mb-2">growth.coon</h2>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Atendimento comercial no WhatsApp 24/7 com tempo de resposta em 5 segundos, gestão ativa de reputação 5 estrelas no Google Maps e reativação sistemática de clientes com linguagem empática e humana.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-[11px] text-slate-400 font-mono">growth.coon.com.br</span>
+          <a href="/growth" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
+            <span>Acessar Plataforma</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. imob.coon (Vendas, Locações & Split Automático) -->
+      <div class="bg-white rounded-3xl border border-blue-200/90 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute top-0 right-0 bg-blue-600 text-white text-[9px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-bl-xl">
+          Split Pix Automático
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
+              <i data-lucide="building-2" class="w-6 h-6"></i>
+            </div>
+            <span class="text-[10px] font-mono font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200 flex items-center space-x-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse mr-1"></span>
+              Operacional v1.0
+            </span>
+          </div>
+          <span class="text-[10px] font-mono font-bold text-blue-700 uppercase tracking-wider block mb-1">
+            Gestão Imobiliária, Vendas & Locações
+          </span>
+          <h2 class="text-lg font-bold text-slate-900 mb-2">imob.coon</h2>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Plataforma para imobiliárias e corretores com <strong>Split Bancário Automático via Pix</strong>. Ao receber aluguéis ou vendas, o dinheiro é dividido no mesmo instante: repasse líquido do proprietário, taxa da imobiliária e comissão do corretor, sem bitributação e com conciliação bancária instantânea.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-[11px] text-slate-400 font-mono">imob.coon.com.br</span>
+          <a href="/imob" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
+            <span>Acessar Plataforma</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. check.coon (Vistorias Imobiliárias no Celular) -->
+      <div class="bg-white rounded-3xl border border-teal-200/90 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute top-0 right-0 bg-teal-600 text-white text-[9px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-bl-xl">
+          App Mobile / PWA
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold">
+              <i data-lucide="clipboard-check" class="w-6 h-6"></i>
+            </div>
+            <span class="text-[10px] font-mono font-bold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200 flex items-center space-x-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse mr-1"></span>
+              Operacional v1.0
+            </span>
+          </div>
+          <span class="text-[10px] font-mono font-bold text-teal-700 uppercase tracking-wider block mb-1">
+            Laudo de Vistoria de Imóveis no Smartphone
+          </span>
+          <h2 class="text-lg font-bold text-slate-900 mb-2">check.coon</h2>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Vistorias de entrada e saída 100% práticas no celular. Tire fotos ilimitadas por cômodo, dite anotações com transcrição técnica de voz em tempo real, aponte avarias e colha <strong>assinatura digital na tela</strong> do proprietário e inquilino com validade jurídica, geolocalização e carimbo de tempo à prova de contestações.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-[11px] text-slate-400 font-mono">check.coon.com.br</span>
+          <a href="/check" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
+            <span>Acessar Plataforma</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- 5. cob.coon (Cobrança Humana & Recuperação Estruturada) -->
+      <div class="bg-white rounded-3xl border border-emerald-200/90 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute top-0 right-0 bg-emerald-600 text-white text-[9px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-bl-xl">
+          Recuperação Ativa • Pix
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+              <i data-lucide="coins" class="w-6 h-6"></i>
+            </div>
+            <span class="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center space-x-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1"></span>
+              Operacional v1.0
+            </span>
+          </div>
+          <span class="text-[10px] font-mono font-bold text-emerald-700 uppercase tracking-wider block mb-1">
+            Cobrança Humanizada & Recuperação de Recebíveis
+          </span>
+          <h2 class="text-lg font-bold text-slate-900 mb-2">cob.coon</h2>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Recupere até 68% dos clientes em atraso nos primeiros 7 dias via WhatsApp. Abordagem empática e respeitosa, sem atrito ou desgaste de relacionamento, com <strong>Pix Copia e Cola em 1 clique</strong> e propostas personalizadas para liquidação imediata.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-[11px] text-slate-400 font-mono">cob.coon.com.br</span>
+          <a href="/cob" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
+            <span>Acessar Plataforma</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- 6. ad.coon (Inteligência Criativa de Mídia & Tráfego Multicanal) -->
+      <div class="bg-white rounded-3xl border border-rose-200/90 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute top-0 right-0 bg-rose-600 text-white text-[9px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-bl-xl">
+          Estratégia Multicanal • 1 Clique
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-700 flex items-center justify-center font-bold">
+              <i data-lucide="target" class="w-6 h-6"></i>
+            </div>
+            <span class="text-[10px] font-mono font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200 flex items-center space-x-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse mr-1"></span>
+              Operacional v1.0
+            </span>
+          </div>
+          <span class="text-[10px] font-mono font-bold text-rose-700 uppercase tracking-wider block mb-1">
+            Inteligência Criativa de Mídia & Tráfego Multicanal
+          </span>
+          <h2 class="text-lg font-bold text-slate-900 mb-2">ad.coon</h2>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Estratégia de mídia e planejamento de anúncios em <strong>1 clique para qualquer canal</strong>. O sistema gera os criativos visuais, estrutura copies persuasivas de alta conversão com linguagem humana, segmenta o público ideal e orquestra campanhas no <strong>Instagram, Facebook, Google Ads, TikTok e LinkedIn</strong>, direcionando clientes qualificados ao seu WhatsApp.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-[11px] text-slate-400 font-mono">ad.coon.com.br</span>
+          <a href="/ad" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
+            <span>Acessar Plataforma</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- MODAL DE ACESSO AO SISTEMA -->
+  <!-- ======================================================== -->
+  <div id="accessModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-200 max-w-sm w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-sm font-bold text-slate-900" id="accessTitle">Acesso à Plataforma</h3>
+        <button onclick="closeAccessModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Para credenciamento, liberação de acesso imediato ou demonstração guiada do sistema, fale diretamente com nossa equipe de suporte e implantação.
+      </p>
+      <div class="pt-2 flex justify-end space-x-2">
+        <button onclick="closeAccessModal()" class="px-3 py-1.5 text-xs text-slate-500">Fechar</button>
+        <a id="accessBtn" href="https://wa.me/5531999999999" target="_blank" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition">
+          Falar com Atendimento
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- RODAPÉ SÓBRIO (GOOGLE STYLE) -->
+  <!-- ======================================================== -->
+  <footer class="bg-white border-t border-slate-200/80 text-xs text-slate-500 py-4">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500">
+      <span class="font-bold text-slate-800">Co.on Participações 2026</span>
+      <span class="text-[10px] text-slate-400">Todos os direitos reservados</span>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    function openAccessModal(appName) {
+      document.getElementById("accessTitle").innerText = `Acesso • ${appName}`;
+      const btn = document.getElementById("accessBtn");
+      btn.href = `https://wa.me/5531999999999?text=${encodeURIComponent('Olá! Gostaria de informações de acesso e implantação do ' + appName + ' da COON.')}`;
+      document.getElementById("accessModal").classList.remove("hidden");
+      document.getElementById("accessModal").classList.add("flex");
+    }
+
+    function closeAccessModal() {
+      document.getElementById("accessModal").classList.add("hidden");
+      document.getElementById("accessModal").classList.remove("flex");
+    }
+  </script>
+  <script src="/static/coon-auth.js"></script>
+  <script src="/static/coon-bot.js"></script>
+</body>
+</html>

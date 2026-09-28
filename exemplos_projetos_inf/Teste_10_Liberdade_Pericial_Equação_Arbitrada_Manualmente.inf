@@ -1,0 +1,158 @@
+{
+  "infercoon_format": "INFER-COON-PROJECT-V1",
+  "file_extension": ".inf",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Modelo 10: Liberdade Pericial (Equação Arbitrada Manualmente)",
+    "author": "Engenheiro Perito Avaliador - Coon Engenharia",
+    "company": "Coon Engenharia",
+    "website": "https://www.coon.com.br",
+    "standard": "ABNT NBR 14653-2",
+    "purpose": "Validação de Paridade SisDEA e Determinação do Valor de Mercado",
+    "notes": "Parametrização direta dos coeficientes e constante conforme prerrogativa pericial do SisDEA e NBR 14653.",
+    "created_at": "2026-09-24T07:03:44.067517"
+  },
+  "dataset": {
+    "dependent_var": "preco",
+    "independent_vars": [
+      "area",
+      "vagas",
+      "padrao"
+    ],
+    "transformations": {
+      "preco": "linear",
+      "area": "linear",
+      "vagas": "linear",
+      "padrao": "linear"
+    },
+    "samples": [
+      {
+        "id": 1,
+        "endereco": "Amostra 1",
+        "preco": 500000,
+        "area": 55.0,
+        "vagas": 1,
+        "padrao": 2.0
+      },
+      {
+        "id": 2,
+        "endereco": "Amostra 2",
+        "preco": 750000,
+        "area": 75.0,
+        "vagas": 2,
+        "padrao": 2.5
+      },
+      {
+        "id": 3,
+        "endereco": "Amostra 3",
+        "preco": 920000,
+        "area": 90.0,
+        "vagas": 2,
+        "padrao": 3.0
+      },
+      {
+        "id": 4,
+        "endereco": "Amostra 4",
+        "preco": 1150000,
+        "area": 110.0,
+        "vagas": 2,
+        "padrao": 3.5
+      },
+      {
+        "id": 5,
+        "endereco": "Amostra 5",
+        "preco": 1400000,
+        "area": 130.0,
+        "vagas": 3,
+        "padrao": 4.0
+      },
+      {
+        "id": 6,
+        "endereco": "Amostra 6",
+        "preco": 620000,
+        "area": 65.0,
+        "vagas": 1,
+        "padrao": 2.2
+      },
+      {
+        "id": 7,
+        "endereco": "Amostra 7",
+        "preco": 840000,
+        "area": 85.0,
+        "vagas": 2,
+        "padrao": 2.8
+      },
+      {
+        "id": 8,
+        "endereco": "Amostra 8",
+        "preco": 1020000,
+        "area": 100.0,
+        "vagas": 2,
+        "padrao": 3.2
+      }
+    ]
+  },
+  "subject": {
+    "description": "Imóvel Avaliando (Liberdade Pericial)",
+    "attributes": {
+      "area": 80.0,
+      "vagas": 2.0,
+      "padrao": 3.0
+    }
+  },
+  "calibration": {
+    "is_manual": true,
+    "coefficients": {
+      "const": -134888.55869242363,
+      "area": 12558.692421991072,
+      "vagas": 12421.991084695212,
+      "padrao": -35512.63001485821
+    }
+  },
+  "results": {
+    "r2": 0.9989113224971088,
+    "r2_adj": 0.9980948143699404,
+    "f_stat": 1223.3942189421937,
+    "f_pval": 2.2214784571621457e-06,
+    "se_reg": 12691.32918778598,
+    "se_mean_pred": 45528.52663515661,
+    "t_crit_80": 1.533206274058944,
+    "df_resid": 4,
+    "coefficients": {
+      "const": {
+        "valor": -134888.55869242363,
+        "se": 65271.22701839269,
+        "t": -2.0665853064844875,
+        "p": 0.10764584686629679
+      },
+      "area": {
+        "valor": 12558.692421991072,
+        "se": 3647.8500074114513,
+        "t": 3.4427655732760893,
+        "p": 0.02622730994359704
+      },
+      "vagas": {
+        "valor": 12421.991084695212,
+        "se": 17171.369387627154,
+        "t": 0.7234129558499796,
+        "p": 0.5094666849320783
+      },
+      "padrao": {
+        "valor": -35512.63001485821,
+        "se": 132359.49984829503,
+        "t": -0.2683043533373979,
+        "p": 0.801733674345247
+      }
+    },
+    "estimated_value": 788112.927191678,
+    "mean_value": 788112.927191678,
+    "median_value": 788112.927191678,
+    "ci_80": {
+      "lower": 718308.3045059962,
+      "upper": 857917.5498773598,
+      "amplitude_pct": 17.714370689088955
+    },
+    "grau_precisao": "Grau III",
+    "grau_fundamentacao": "Grau II"
+  }
+}

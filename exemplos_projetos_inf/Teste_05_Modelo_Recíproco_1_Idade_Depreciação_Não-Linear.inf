@@ -1,0 +1,154 @@
+{
+  "infercoon_format": "INFER-COON-PROJECT-V1",
+  "file_extension": ".inf",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Modelo 5: Modelo Recíproco 1/Idade (Depreciação Não-Linear)",
+    "author": "Engenheiro Perito Avaliador - Coon Engenharia",
+    "company": "Coon Engenharia",
+    "website": "https://www.coon.com.br",
+    "standard": "ABNT NBR 14653-2",
+    "purpose": "Validação de Paridade SisDEA e Determinação do Valor de Mercado",
+    "notes": "Modelagem de depreciação imobiliária onde a perda de valor desacelera com a idade do imóvel (Critério de Heidecke).",
+    "created_at": "2026-09-24T07:03:43.959809"
+  },
+  "dataset": {
+    "dependent_var": "preco",
+    "independent_vars": [
+      "area",
+      "idade"
+    ],
+    "transformations": {
+      "preco": "linear",
+      "area": "linear",
+      "idade": "inv"
+    },
+    "samples": [
+      {
+        "id": 1,
+        "endereco": "Imóvel 1",
+        "preco": 680000,
+        "area": 65.0,
+        "idade": 2.0
+      },
+      {
+        "id": 2,
+        "endereco": "Imóvel 2",
+        "preco": 630000,
+        "area": 65.0,
+        "idade": 5.0
+      },
+      {
+        "id": 3,
+        "endereco": "Imóvel 3",
+        "preco": 590000,
+        "area": 65.0,
+        "idade": 10.0
+      },
+      {
+        "id": 4,
+        "endereco": "Imóvel 4",
+        "preco": 560000,
+        "area": 65.0,
+        "idade": 20.0
+      },
+      {
+        "id": 5,
+        "endereco": "Imóvel 5",
+        "preco": 850000,
+        "area": 85.0,
+        "idade": 3.0
+      },
+      {
+        "id": 6,
+        "endereco": "Imóvel 6",
+        "preco": 790000,
+        "area": 85.0,
+        "idade": 7.0
+      },
+      {
+        "id": 7,
+        "endereco": "Imóvel 7",
+        "preco": 740000,
+        "area": 85.0,
+        "idade": 15.0
+      },
+      {
+        "id": 8,
+        "endereco": "Imóvel 8",
+        "preco": 710000,
+        "area": 85.0,
+        "idade": 25.0
+      },
+      {
+        "id": 9,
+        "endereco": "Imóvel 9",
+        "preco": 1050000,
+        "area": 110.0,
+        "idade": 4.0
+      },
+      {
+        "id": 10,
+        "endereco": "Imóvel 10",
+        "preco": 970000,
+        "area": 110.0,
+        "idade": 12.0
+      }
+    ]
+  },
+  "subject": {
+    "description": "Imóvel Avaliando (Recíproco 1/X)",
+    "attributes": {
+      "area": 70.0,
+      "idade": 8.0
+    }
+  },
+  "calibration": {
+    "is_manual": false,
+    "coefficients": {
+      "const": -45802.919852564344,
+      "area": 9093.849764675524,
+      "idade": 323335.6759591796
+    }
+  },
+  "results": {
+    "r2": 0.9865834891444847,
+    "r2_adj": 0.9827502003286231,
+    "f_stat": 257.37259479697065,
+    "f_pval": 2.7972968246210225e-07,
+    "se_reg": 21096.539952456682,
+    "se_mean_pred": 8822.050698552797,
+    "t_crit_80": 1.4149239276505086,
+    "df_resid": 7,
+    "coefficients": {
+      "const": {
+        "valor": -45802.919852564344,
+        "se": 36123.51410018446,
+        "t": -1.2679530492392062,
+        "p": 0.24535776677891497
+      },
+      "area": {
+        "valor": 9093.849764675524,
+        "se": 405.8092097742431,
+        "t": 22.409175409632894,
+        "p": 8.914302291313343e-08
+      },
+      "idade": {
+        "valor": 323335.6759591796,
+        "se": 47964.63281360845,
+        "t": 6.741126888548666,
+        "p": 0.00026717006630811525
+      }
+    },
+    "estimated_value": 631183.5231696197,
+    "mean_value": 631183.5231696197,
+    "median_value": 631183.5231696197,
+    "ci_80": {
+      "lower": 618700.9925452915,
+      "upper": 643666.0537939479,
+      "amplitude_pct": 3.9552777175312017
+    },
+    "grau_precisao": "Grau III",
+    "grau_fundamentacao": "Grau III"
+  }
+}

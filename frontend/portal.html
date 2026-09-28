@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studio Co.on | Co.on Participações 2026</title>
+  
+  <meta name="description" content="Studio Co.on • Softwares Especializados e Ecossistemas Digitais da Co.on Participações Ltda. Brasil.">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='18' font-size='18' font-weight='bold' fill='%2310b981'>c</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts: Inter / Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #faf9fd;
+      background-image: 
+        radial-gradient(at 5% 5%, rgba(139, 92, 246, 0.20) 0px, transparent 50%),
+        radial-gradient(at 95% 8%, rgba(217, 70, 239, 0.16) 0px, transparent 50%),
+        radial-gradient(at 50% 35%, rgba(245, 158, 11, 0.12) 0px, transparent 55%),
+        radial-gradient(at 85% 88%, rgba(168, 85, 247, 0.18) 0px, transparent 50%),
+        radial-gradient(at 15% 90%, rgba(244, 63, 94, 0.14) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* ======================================================== */
+    /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: TRANSIÇÃO SUAVE DE CORES COON */
+    /* ======================================================== */
+    @keyframes coonSmoothSpectrum {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes coonDotPulse {
+      0%, 100% {
+        color: #10b981;
+        filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.5));
+        transform: scale(1);
+      }
+      50% {
+        color: #06b6d4;
+        filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.7));
+        transform: scale(1.15);
+      }
+    }
+
+    .gemini-wordmark, .coon-gradient, .coon-bigtech-logo {
+      display: inline-block;
+      background: linear-gradient(
+        90deg,
+        #1d4ed8 0%,
+        #2563eb 15%,
+        #0ea5e9 30%,
+        #10b981 45%,
+        #6366f1 60%,
+        #8b5cf6 75%,
+        #06b6d4 90%,
+        #1d4ed8 100%
+      );
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.055em;
+      animation: coonSmoothSpectrum 7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+      will-change: background-position;
+      transition: transform 0.3s ease;
+    }
+
+    .gemini-wordmark:hover, .coon-bigtech-logo:hover {
+      transform: scale(1.02);
+    }
+
+    .coon-dot-animated {
+      display: inline-block;
+      animation: coonDotPulse 7s ease-in-out infinite alternate;
+      will-change: color, filter, transform;
+    }
+
+    /* Dropdown do App Launcher (9 Pontinhos Estilo Google Workspace) */
+    .app-drawer-shadow {
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 2px 10px -2px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800 selection:bg-slate-900 selection:text-white">
+
+  <!-- ======================================================== -->
+  <!-- 1. BARRA SUPERIOR (ESTILO GOOGLE: LINKS + 9 PONTINHOS + BOTÃO) -->
+  <!-- ======================================================== -->
+  <header class="w-full px-6 py-4 flex items-center justify-between relative z-30">
+    <!-- Lado Esquerdo Discreto (Identificação Sutil) -->
+    <div class="flex items-center space-x-4 text-xs text-slate-500 font-medium">
+      <button onclick="openAboutModal()" class="hover:text-slate-900 transition flex items-center space-x-1.5 font-semibold text-slate-700">
+        <i data-lucide="info" class="w-3.5 h-3.5 text-emerald-600"></i>
+        <span>Sobre a Empresa</span>
+      </button>
+      <button onclick="openContactModal()" class="hover:text-slate-900 transition">Contato</button>
+    </div>
+
+    <!-- Lado Direito: 9 Pontinhos (App Launcher) + Acesso Direto -->
+    <div class="flex items-center space-x-3">
+      
+      <!-- Botão dos 9 Pontinhos (Google Apps Launcher) -->
+      <div class="relative">
+        <button 
+          id="appDrawerBtn" 
+          onclick="toggleAppDrawer()" 
+          class="w-10 h-10 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600 hover:text-slate-900 transition focus:outline-none"
+          title="Studio de Softwares COON"
+          aria-label="Abrir aplicativos do Studio"
+        >
+          <!-- Ícone de 9 Pontinhos -->
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <circle cx="6" cy="6" r="2"/>
+            <circle cx="12" cy="6" r="2"/>
+            <circle cx="18" cy="6" r="2"/>
+            <circle cx="6" cy="12" r="2"/>
+            <circle cx="12" cy="12" r="2"/>
+            <circle cx="18" cy="12" r="2"/>
+            <circle cx="6" cy="18" r="2"/>
+            <circle cx="12" cy="18" r="2"/>
+            <circle cx="18" cy="18" r="2"/>
+          </svg>
+        </button>
+
+        <!-- Popover / Drawer dos Aplicativos (Estilo Google Workspace) -->
+        <div 
+          id="appDrawer" 
+          class="hidden absolute right-0 top-12 w-80 sm:w-96 bg-white rounded-3xl border border-slate-200 p-5 app-drawer-shadow z-50 animate-in fade-in zoom-in-95 duration-150"
+        >
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+            <div>
+              <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Studio de Aplicativos</h3>
+              <p class="text-[11px] text-slate-400">COON Soluções Tecnológicas</p>
+            </div>
+            <span class="text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200">
+              Brasil
+            </span>
+          </div>
+
+          <!-- Grid de Aplicativos -->
+          <div class="grid grid-cols-2 gap-2 text-left">
+            
+            <!-- infer.coon (Engenharia - Destaque Absoluto) -->
+            <a href="/infer" target="_blank" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-emerald-300 transition flex flex-col justify-between group">
+              <div class="flex items-center space-x-2 mb-2">
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+                  <i data-lucide="line-chart" class="w-4 h-4"></i>
+                </div>
+                <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-700">infer.coon</span>
+              </div>
+              <p class="text-[10px] text-slate-500 leading-tight">Engenharia de Avaliações NBR 14653 & Laudos</p>
+            </a>
+
+            <!-- growth.coon (Vendas & Aceleração) -->
+            <a href="/growth" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-indigo-300 transition flex flex-col justify-between group">
+              <div class="flex items-center space-x-2 mb-2">
+                <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold">
+                  <i data-lucide="zap" class="w-4 h-4"></i>
+                </div>
+                <span class="text-xs font-bold text-slate-900 group-hover:text-indigo-700">growth.coon</span>
+              </div>
+              <p class="text-[10px] text-slate-500 leading-tight">Aceleração Comercial 24/7 & Google 5 Estrelas</p>
+            </a>
+
+            <!-- imob.coon -->
+            <a href="/imob" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-blue-300 transition flex flex-col justify-between group">
+              <div class="flex items-center space-x-2 mb-2">
+                <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
+                  <i data-lucide="building-2" class="w-4 h-4"></i>
+                </div>
+                <span class="text-xs font-bold text-slate-900 group-hover:text-blue-700">imob.coon</span>
+              </div>
+              <p class="text-[10px] text-slate-500 leading-tight">Vendas, Locações & Split Pix Automático</p>
+            </a>
+
+            <!-- check.coon -->
+            <a href="/check" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-teal-300 transition flex flex-col justify-between group">
+              <div class="flex items-center space-x-2 mb-2">
+                <div class="w-8 h-8 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold">
+                  <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+                </div>
+                <span class="text-xs font-bold text-slate-900 group-hover:text-teal-700">check.coon</span>
+              </div>
+              <p class="text-[10px] text-slate-500 leading-tight">Laudos de Vistoria de Imóveis no Smartphone</p>
+            </a>
+
+            <!-- cob.coon -->
+            <a href="/cob" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-emerald-300 transition flex flex-col justify-between group">
+              <div class="flex items-center space-x-2 mb-2">
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+                  <i data-lucide="coins" class="w-4 h-4"></i>
+                </div>
+                <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-700">cob.coon</span>
+              </div>
+              <p class="text-[10px] text-slate-500 leading-tight">Cobrança Humanizada & Pix Dinâmico</p>
+            </a>
+
+            <!-- ad.coon -->
+            <a href="/ad" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-rose-300 transition flex flex-col justify-between group">
+              <div class="flex items-center space-x-2 mb-2">
+                <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center font-bold">
+                  <i data-lucide="target" class="w-4 h-4"></i>
+                </div>
+                <span class="text-xs font-bold text-slate-900 group-hover:text-rose-700">ad.coon</span>
+              </div>
+              <p class="text-[10px] text-slate-500 leading-tight">Inteligência de Mídia & Tráfego Multicanal</p>
+            </a>
+
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 text-center">
+            <span class="text-[10px] text-slate-400">Softwares independentes • COON Soluções Tecnológicas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Widget Universal de Autenticação / Área do Assinante COON -->
+      <div id="coonAuthNavSlot"></div>
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- 2. CORPO CENTRAL (STUDIO CO.ON • EXCLUSIVO & ULTRA-LIMPO) -->
+  <!-- ======================================================== -->
+  <main class="flex-1 flex flex-col items-center justify-center px-4 -mt-10">
+    
+    <div class="w-full max-w-2xl text-center">
+      
+      <!-- LOGO OFICIAL COON (CENTRALIZADO & UNIFORME COM TRANSIÇÃO SUAVE BIG TECH) -->
+      <div class="relative mb-8 select-none flex items-center justify-center">
+        <div class="absolute -inset-10 max-w-md mx-auto bg-gradient-to-r from-violet-500/20 via-purple-400/15 to-emerald-300/15 blur-3xl rounded-full -z-10 pointer-events-none"></div>
+
+        <h1 class="inline-block text-7xl sm:text-8xl md:text-9xl font-black tracking-tighter gemini-wordmark leading-none relative select-none text-center">
+          coon<span class="coon-dot-animated text-emerald-500">.</span>
+        </h1>
+      </div>
+
+      <!-- BARRA DE PESQUISA & ATALHO (ESTILO GOOGLE CAPSULE MODERNA) -->
+      <div class="w-full max-w-xl mx-auto mb-6">
+        <div class="relative flex items-center w-full px-4 py-3 bg-white/90 backdrop-blur-md rounded-full border border-slate-200 hover:border-slate-300 focus-within:border-emerald-500/60 focus-within:shadow-md transition">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 mr-3 shrink-0"></i>
+          <input 
+            type="text" 
+            id="mainSearchInput" 
+            placeholder="Pesquise na COON (ex: growth, ad, cob, imob, check, contratos)..." 
+            class="w-full bg-transparent border-0 focus:ring-0 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
+            onkeydown="if(event.key === 'Enter') handleSearchSubmit()"
+          >
+          <button onclick="handleSearchSubmit()" class="text-slate-400 hover:text-slate-700 pl-2">
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- BOTÃO CENTRAL EXCLUSIVO: STUDIO CO.ON -->
+      <div class="flex items-center justify-center">
+        <a 
+          href="/studio" 
+          class="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-2xl shadow-xl shadow-slate-900/15 hover:scale-105 transition flex items-center space-x-2.5 group cursor-pointer"
+        >
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 group-hover:scale-125 transition"></span>
+          <span>Entrar no Studio Co.on</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition"></i>
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- 3. RODAPÉ INSTITUCIONAL ULTRA-LIMPO -->
+  <!-- ======================================================== -->
+  <footer class="bg-slate-50/90 border-t border-slate-200/80 text-xs text-slate-500">
+    <!-- Última Linha do Site: Co.on Participações 2026 -->
+    <div class="py-3 px-6 text-center text-[11px] text-slate-600 font-medium flex flex-col sm:flex-row items-center justify-between max-w-6xl mx-auto gap-1">
+      <span class="font-bold text-slate-900">Co.on Participações 2026</span>
+      <span class="text-[10px] text-slate-500">Todos os direitos reservados</span>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- MODAIS INSTITUCIONAIS (SOBRE, CONTATO, TERMOS, PRODUTOS) -->
+  <!-- ======================================================== -->
+
+  <!-- MODAL: SOBRE A EMPRESA (LIDERANÇA, BIOGRAFIA & PALAVRA DO PRESIDENTE) -->
+  <div id="aboutModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-200 max-w-3xl w-full max-h-[92vh] overflow-y-auto p-6 sm:p-8 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150 text-left">
+      
+      <!-- Topo do Modal: Identidade Institucional + Fechar -->
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div class="flex items-center space-x-3">
+          <span class="text-2xl font-black tracking-tighter gemini-wordmark">coon<span class="text-emerald-500">.</span></span>
+          <div class="pl-2.5 border-l border-slate-200">
+            <h3 class="text-base font-extrabold text-slate-900 leading-tight">Sobre a Empresa • Co.on Participações Ltda.</h3>
+            <p class="text-[11px] text-slate-500 font-mono">Liderança Executiva, Visão Tecnológica & Studio de Softwares</p>
+          </div>
+        </div>
+        <button onclick="closeAboutModal()" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-700 transition" title="Fechar">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Bloco Presidencial: Retrato Oficial & Download -->
+      <div class="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-950 to-indigo-950 text-white shadow-xl space-y-6">
+        
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+          <!-- Foto Oficial do Presidente Daniel (Modelo 2) -->
+          <div class="relative shrink-0 text-center">
+            <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-2xl p-1 bg-gradient-to-tr from-amber-400 via-emerald-400 to-sky-400 shadow-2xl">
+              <img 
+                src="/daniel_avatar.jpg" 
+                alt="Daniel Soares Correia - Presidente & Fundador" 
+                class="w-full h-full object-cover rounded-[14px]"
+              >
+            </div>
+            <span class="inline-block mt-2 px-2.5 py-0.5 rounded-full bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider shadow">
+              Presidente & Fundador
+            </span>
+          </div>
+
+          <!-- Dados do Presidente & Download da Foto -->
+          <div class="space-y-3 text-center sm:text-left flex-1">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h4 class="text-xl font-black text-white tracking-tight">Daniel Soares Correia</h4>
+                <p class="text-xs font-semibold text-emerald-400">Presidente, Fundador & Comandante em Chefe</p>
+                <p class="text-[11px] text-slate-400">Holding Co.on Participações Ltda.</p>
+              </div>
+              <div>
+                <a 
+                  href="/download/daniel_avatar.jpg" 
+                  download="Daniel_Soares_Correia_Presidente_Coon.jpg"
+                  class="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-900 bg-emerald-400 hover:bg-emerald-300 px-3.5 py-2 rounded-xl transition shadow-lg shadow-emerald-400/20 cursor-pointer"
+                  title="Baixar foto oficial em alta resolução (JPG)"
+                >
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                  <span>Baixar Minha Foto (JPG)</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Canal Oficial de Contato da Holding -->
+            <div class="pt-2 border-t border-white/10 flex items-center space-x-2 text-xs font-mono">
+              <span class="text-slate-400">E-mail:</span>
+              <a href="mailto:falecom@coon.com.br" class="inline-flex items-center space-x-1.5 text-emerald-300 hover:text-emerald-200 transition font-bold" title="Canal Oficial: falecom@coon.com.br">
+                <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                <span>falecom@coon.com.br</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- A Palavra do Presidente sobre Alto Investimento em Tecnologia & Plataformas Seguras -->
+        <div class="space-y-2 pt-3 border-t border-white/10">
+          <div class="flex items-center space-x-2 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span>A Palavra do Presidente • Alto Investimento em Tecnologia & Segurança</span>
+          </div>
+          <blockquote class="text-xs sm:text-sm text-slate-200 leading-relaxed italic border-l-2 border-emerald-400 pl-4 py-1">
+            "Na <strong>Co.on Participações Ltda.</strong>, nosso compromisso é inegociável: realizamos um <strong>alto e contínuo investimento em tecnologia de ponta, infraestrutura em nuvem e inteligência artificial</strong> para criar softwares que realmente facilitam o dia a dia das pessoas. Mais do que inovação, garantimos <strong>plataformas ultra-seguras</strong>, blindadas contra ameaças cibernéticas com criptografia perimetral e rigorosa conformidade com a LGPD. Quem utiliza o ecossistema Co.on tem a certeza de contar com o que há de mais moderno, rápido e seguro no mercado brasileiro."
+          </blockquote>
+          <div class="text-right text-[11px] text-slate-400 font-mono">
+            — Daniel Soares Correia, Presidente
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Biografia Executiva & Visão em Inteligência e Softwares -->
+      <div class="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+        <h5 class="text-sm font-extrabold text-slate-900 flex items-center space-x-2">
+          <i data-lucide="cpu" class="w-4 h-4 text-emerald-600"></i>
+          <span>Inteligência Cognitiva & Softwares para Descomplicar a Vida</span>
+        </h5>
+        <p>
+          <strong>Daniel Soares Correia</strong> lidera a holding <strong>Co.on Participações Ltda.</strong> (<a href="https://www.coon.com.br" target="_blank" class="text-slate-900 underline font-semibold">www.coon.com.br</a>) com o objetivo de desenvolver soluções tecnológicas verticais que eliminam a burocracia e aceleram a produtividade corporativa no Brasil.
+        </p>
+        <p>
+          Sob sua liderança, a Co.on transformou processos historicamente lentos e complexos — como engenharia avaliatória pericial (ABNT NBR 14653), cobrança humanóide ativa, captação de clientes, vistorias e automações contratuais — em sistemas ágeis, intuitivos e altamente rentáveis através do <strong>Studio Co.on</strong>.
+        </p>
+        <p>
+          A empresa conta com alianças estratégicas e integrações de ecossistema com tecnologias de ponta da <strong>Google</strong> e <strong>Anthropic</strong>, além de servidores de alta disponibilidade e proteção cibernética padrão bancário.
+        </p>
+      </div>
+
+      <!-- Chancelas do Setor & Opinião Técnica -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+          <div class="flex items-center space-x-2">
+            <img src="/victor_avatar.jpg" alt="Dr. Victor Canto" class="w-7 h-7 rounded-full object-cover border border-rose-400">
+            <div>
+              <div class="text-[11px] font-bold text-slate-900">Dr. Victor Canto</div>
+              <div class="text-[9px] text-rose-600 font-mono font-bold">CISO • Segurança Fort Knox</div>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-600 leading-tight">
+            <em>"O investimento massivo em infraestrutura garante bancos de dados blindados, criptografia TLS 1.3 e conformidade bancária absoluta em cada clique."</em>
+          </p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+          <div class="flex items-center space-x-2">
+            <img src="/alexandre_avatar.jpg" alt="Dr. Alexandre Valente" class="w-7 h-7 rounded-full object-cover border border-sky-400">
+            <div>
+              <div class="text-[11px] font-bold text-slate-900">Dr. Alexandre Valente</div>
+              <div class="text-[9px] text-sky-600 font-mono font-bold">VP Executivo & Estratégia</div>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-600 leading-tight">
+            <em>"A união entre facilidade de uso para o usuário e uma esteira tecnológica pesada consolida o Studio Co.on como padrão Big Tech para todos."</em>
+          </p>
+        </div>
+      </div>
+
+      <!-- Botões de Ação do Modal -->
+      <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <a href="/studio" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition flex items-center space-x-2 cursor-pointer">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>Acessar o Studio Co.on</span>
+        </a>
+        <button onclick="closeAboutModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer">
+          Fechar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: GOVERNANÇA & LGPD -->
+  <div id="governanceModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-200 max-w-lg w-full p-6 shadow-2xl space-y-4 animate-in fade-in duration-150">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-sm font-bold text-slate-900">Governança, Segurança & LGPD</h3>
+        <button onclick="closeGovernanceModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="space-y-3 text-xs text-slate-600 leading-relaxed">
+        <p><strong>1. Proteção de Dados (LGPD):</strong> Todos os dados cadastrais, financeiros e periciais trafegam com criptografia TLS 1.3 e repouso em bancos de dados em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).</p>
+        <p><strong>2. Trava de Veracidade:</strong> No setor de engenharia pericial, nossos algoritmos exigem dados verificados de acordo com a NBR 14653-2 item 7.4.1, vedando qualquer geração de informações artificiais ou fictícias.</p>
+        <p><strong>3. Disponibilidade e Backup:</strong> Infraestrutura com redundância contínua e backups criptografados.</p>
+      </div>
+      <div class="pt-2 flex justify-end">
+        <button onclick="closeGovernanceModal()" class="px-4 py-2 bg-slate-900 text-white text-xs font-semibold rounded-xl">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CONTATO OFICIAL • falecom@coon.com.br -->
+  <div id="contactModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-200 max-w-lg w-full p-6 shadow-2xl space-y-4 animate-in fade-in duration-150">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Fale com a Co.on</h3>
+          </div>
+        </div>
+        <button onclick="closeContactModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Banner E-mail Oficial -->
+      <div class="p-3.5 bg-slate-900 rounded-2xl border border-slate-800 text-white flex items-center justify-between">
+        <div>
+          <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">E-mail Oficial Centralizado</div>
+          <div class="text-sm font-bold text-emerald-400 font-mono">falecom@coon.com.br</div>
+        </div>
+        <a href="mailto:falecom@coon.com.br?subject=Contato%20via%20Portal%20Co.on" class="px-3 py-1.5 bg-emerald-400 hover:bg-emerald-300 text-slate-950 text-xs font-bold rounded-xl transition flex items-center space-x-1.5 shadow-sm cursor-pointer">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span>Abrir E-mail</span>
+        </a>
+      </div>
+
+      <!-- Formulário de Mensagem Direta -->
+      <form id="faleComForm" onsubmit="submitFaleCom(event)" class="space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Seu Nome *</label>
+            <input type="text" id="fcName" required placeholder="Nome completo" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500 focus:bg-white transition">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Seu E-mail *</label>
+            <input type="email" id="fcEmail" required placeholder="seu@email.com" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500 focus:bg-white transition">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-700 mb-1">Assunto</label>
+          <input type="text" id="fcSubject" placeholder="Ex: Parceria, Demonstração, Dúvidas..." class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500 focus:bg-white transition">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-700 mb-1">Mensagem *</label>
+          <textarea id="fcMessage" rows="3" required placeholder="Escreva sua mensagem para nossa equipe..." class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500 focus:bg-white transition"></textarea>
+        </div>
+
+        <div id="fcFeedback" class="hidden p-3 rounded-xl text-xs font-medium"></div>
+
+        <div class="pt-1 flex items-center justify-between">
+          <a href="https://wa.me/5531999999999?text=Ol%C3%A1!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20as%20solu%C3%A7%C3%B5es%20da%20COON." target="_blank" class="text-xs text-emerald-600 hover:text-emerald-700 font-semibold flex items-center space-x-1">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+            <span>WhatsApp</span>
+          </a>
+          <div class="flex items-center space-x-2">
+            <button type="button" onclick="closeContactModal()" class="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-700 transition cursor-pointer">Cancelar</button>
+            <button type="submit" id="fcSubmitBtn" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition flex items-center space-x-1.5 shadow-md cursor-pointer">
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+              <span>Enviar Mensagem</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DETALHES DE PRODUTO DO STUDIO -->
+  <div id="productModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-200 max-w-sm w-full p-6 shadow-2xl space-y-4 animate-in fade-in duration-150">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-sm font-bold text-slate-900" id="productModalTitle">Software COON</h3>
+        <button onclick="closeProductModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-600 leading-relaxed" id="productModalDesc"></p>
+      <div class="pt-2 flex justify-end space-x-2">
+        <button onclick="closeProductModal()" class="px-3 py-1.5 text-xs text-slate-500">Fechar</button>
+        <a id="productModalBtn" href="https://wa.me/5531999999999?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20os%20planos." target="_blank" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition">
+          Falar com Consultor
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT DE CONTROLE -->
+  <script>
+    lucide.createIcons();
+
+    // Controle do App Drawer (9 Pontinhos)
+    function toggleAppDrawer() {
+      const drawer = document.getElementById("appDrawer");
+      drawer.classList.toggle("hidden");
+    }
+
+    // Fechar gaveta ao clicar fora
+    document.addEventListener("click", function(event) {
+      const drawer = document.getElementById("appDrawer");
+      const btn = document.getElementById("appDrawerBtn");
+      if (drawer && btn && !drawer.contains(event.target) && !btn.contains(event.target)) {
+        drawer.classList.add("hidden");
+      }
+    });
+
+    // Busca rápida do input central
+    function handleSearchSubmit() {
+      const term = document.getElementById("mainSearchInput").value.trim().toLowerCase();
+      if (!term) return;
+
+      if (term.includes("infer") || term.includes("eng") || term.includes("laudo") || term.includes("pericia") || term.includes("nbr")) {
+        window.open("/infer", "_blank");
+      } else if (term.includes("growth") || term.includes("venda") || term.includes("whatsapp") || term.includes("maps") || term.includes("review")) {
+        window.open("/growth", "_blank");
+      } else if (term.includes("imob") || term.includes("aluguel") || term.includes("loca") || term.includes("split") || term.includes("corretor")) {
+        window.open("/imob", "_blank");
+      } else if (term.includes("check") || term.includes("vistoria")) {
+        window.open("/check", "_blank");
+      } else if (term.includes("obra") || term.includes("rdo") || term.includes("canteiro")) {
+        openProductModal("obra.coon", "Diário de Obras (RDO) e apontamento de canteiro via áudio e fotos no WhatsApp com conformidade CREA e Caixa Econômica.");
+      } else if (term.includes("ad") || term.includes("anuncio") || term.includes("trafego") || term.includes("meta") || term.includes("social")) {
+        openProductModal("ad.coon", "Piloto automático de anúncios e tráfego pago com IA em 1 clique para qualquer rede social (Instagram, Facebook, Google Ads, TikTok, YouTube e LinkedIn).");
+      } else {
+        window.location.href = "/studio";
+      }
+    }
+
+    // Modais
+    function openAboutModal() {
+      document.getElementById("aboutModal").classList.remove("hidden");
+      document.getElementById("aboutModal").classList.add("flex");
+    }
+    function closeAboutModal() {
+      document.getElementById("aboutModal").classList.add("hidden");
+      document.getElementById("aboutModal").classList.remove("flex");
+    }
+
+    function openGovernanceModal() {
+      document.getElementById("governanceModal").classList.remove("hidden");
+      document.getElementById("governanceModal").classList.add("flex");
+    }
+    function closeGovernanceModal() {
+      document.getElementById("governanceModal").classList.add("hidden");
+      document.getElementById("governanceModal").classList.remove("flex");
+    }
+
+    function openContactModal() {
+      document.getElementById("contactModal").classList.remove("hidden");
+      document.getElementById("contactModal").classList.add("flex");
+    }
+    function closeContactModal() {
+      document.getElementById("contactModal").classList.add("hidden");
+      document.getElementById("contactModal").classList.remove("flex");
+    }
+
+    async function submitFaleCom(e) {
+      e.preventDefault();
+      const btn = document.getElementById("fcSubmitBtn");
+      const feedback = document.getElementById("fcFeedback");
+      const name = document.getElementById("fcName").value.trim();
+      const email = document.getElementById("fcEmail").value.trim();
+      const subject = document.getElementById("fcSubject").value.trim();
+      const message = document.getElementById("fcMessage").value.trim();
+
+      if (!name || !email || !message) return;
+
+      btn.disabled = true;
+      btn.innerHTML = `<span>Enviando...</span>`;
+
+      try {
+        const resp = await fetch("/api/contact/falecom", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, subject, message })
+        });
+        const data = await resp.json();
+        if (resp.ok && data.success) {
+          feedback.className = "p-3 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 block";
+          feedback.innerHTML = `✓ Mensagem recebida com sucesso! Protocolo #${data.ticket_id || 1} registrado em <strong>falecom@coon.com.br</strong>.`;
+          document.getElementById("faleComForm").reset();
+          setTimeout(() => {
+            feedback.className = "hidden";
+            closeContactModal();
+          }, 3500);
+        } else {
+          feedback.className = "p-3 rounded-xl text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200 block";
+          feedback.innerText = data.detail || "Erro ao enviar mensagem. Tente novamente.";
+        }
+      } catch (err) {
+        feedback.className = "p-3 rounded-xl text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200 block";
+        feedback.innerText = "Falha de conexão. Por favor envie diretamente para falecom@coon.com.br";
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5"></i><span>Enviar Mensagem</span>`;
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function openTermsModal() {
+      openGovernanceModal();
+    }
+
+    function openProductModal(title, desc) {
+      document.getElementById("productModalTitle").innerText = title;
+      document.getElementById("productModalDesc").innerText = desc;
+      const btn = document.getElementById("productModalBtn");
+      btn.href = `https://wa.me/5531999999999?text=${encodeURIComponent('Olá! Gostaria de conhecer e contratar o ' + title + ' da COON.')}`;
+      document.getElementById("productModal").classList.remove("hidden");
+      document.getElementById("productModal").classList.add("flex");
+    }
+    function closeProductModal() {
+      document.getElementById("productModal").classList.add("hidden");
+      document.getElementById("productModal").classList.remove("flex");
+    }
+  </script>
+  <script src="/static/coon-auth.js"></script>
+  <script src="/static/coon-bot.js"></script>
+</body>
+</html>

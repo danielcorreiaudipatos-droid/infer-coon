@@ -1,0 +1,168 @@
+{
+  "infercoon_format": "INFER-COON-PROJECT-V1",
+  "file_extension": ".inf",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Modelo 3: Semi-Log ln(Preço) com Despolarização de Miller",
+    "author": "Engenheiro Perito Avaliador - Coon Engenharia",
+    "company": "Coon Engenharia",
+    "website": "https://www.coon.com.br",
+    "standard": "ABNT NBR 14653-2",
+    "purpose": "Validação de Paridade SisDEA e Determinação do Valor de Mercado",
+    "notes": "Cálculo exato de Média Despolarizada exp(Y + s²/2) vs Mediana exp(Y) idêntico ao SisDEA e ABNT NBR 14653-2.",
+    "created_at": "2026-09-24T07:03:43.951741"
+  },
+  "dataset": {
+    "dependent_var": "preco",
+    "independent_vars": [
+      "area",
+      "vagas"
+    ],
+    "transformations": {
+      "preco": "ln",
+      "area": "linear",
+      "vagas": "linear"
+    },
+    "samples": [
+      {
+        "id": 1,
+        "endereco": "Apt 101",
+        "preco": 450000,
+        "area": 50.0,
+        "vagas": 1
+      },
+      {
+        "id": 2,
+        "endereco": "Apt 102",
+        "preco": 580000,
+        "area": 65.0,
+        "vagas": 1
+      },
+      {
+        "id": 3,
+        "endereco": "Apt 201",
+        "preco": 720000,
+        "area": 75.0,
+        "vagas": 2
+      },
+      {
+        "id": 4,
+        "endereco": "Apt 202",
+        "preco": 890000,
+        "area": 90.0,
+        "vagas": 2
+      },
+      {
+        "id": 5,
+        "endereco": "Apt 301",
+        "preco": 1050000,
+        "area": 105.0,
+        "vagas": 2
+      },
+      {
+        "id": 6,
+        "endereco": "Apt 302",
+        "preco": 1280000,
+        "area": 120.0,
+        "vagas": 3
+      },
+      {
+        "id": 7,
+        "endereco": "Apt 401",
+        "preco": 610000,
+        "area": 70.0,
+        "vagas": 1
+      },
+      {
+        "id": 8,
+        "endereco": "Apt 402",
+        "preco": 790000,
+        "area": 82.0,
+        "vagas": 2
+      },
+      {
+        "id": 9,
+        "endereco": "Apt 501",
+        "preco": 940000,
+        "area": 95.0,
+        "vagas": 2
+      },
+      {
+        "id": 10,
+        "endereco": "Apt 502",
+        "preco": 1150000,
+        "area": 110.0,
+        "vagas": 3
+      },
+      {
+        "id": 11,
+        "endereco": "Apt 601",
+        "preco": 510000,
+        "area": 58.0,
+        "vagas": 1
+      },
+      {
+        "id": 12,
+        "endereco": "Apt 602",
+        "preco": 1400000,
+        "area": 130.0,
+        "vagas": 3
+      }
+    ]
+  },
+  "subject": {
+    "description": "Imóvel Avaliando (Semi-Log (Miller))",
+    "attributes": {
+      "area": 80.0,
+      "vagas": 2.0
+    }
+  },
+  "calibration": {
+    "is_manual": false,
+    "coefficients": {
+      "const": 12.381358572380925,
+      "area": 0.012600691671967118,
+      "vagas": 0.06510741849247825
+    }
+  },
+  "results": {
+    "r2": 0.9883372923880681,
+    "r2_adj": 0.9857455795854165,
+    "f_stat": 381.3452213443254,
+    "f_pval": 1.9980081036363505e-09,
+    "se_reg": 0.044026810712886194,
+    "se_mean_pred": 0.019040551917541223,
+    "t_crit_80": 1.3830287383966329,
+    "df_resid": 9,
+    "coefficients": {
+      "const": {
+        "valor": 12.381358572380925,
+        "se": 0.0556512483048551,
+        "t": 222.4812371603308,
+        "p": 3.8098449358304894e-18
+      },
+      "area": {
+        "valor": 0.012600691671967118,
+        "se": 0.0014160273374008675,
+        "t": 8.898621756198446,
+        "p": 9.36620997648176e-06
+      },
+      "vagas": {
+        "valor": 0.06510741849247825,
+        "se": 0.045089470375537184,
+        "t": 1.4439605954609216,
+        "p": 0.18264327742159392
+      }
+    },
+    "estimated_value": 744596.6364507908,
+    "mean_value": 744596.6364507908,
+    "median_value": 743875.3378503214,
+    "ci_80": {
+      "lower": 724542.0743012395,
+      "upper": 763724.4790726479,
+      "amplitude_pct": 5.26223230851217
+    },
+    "grau_precisao": "Grau III",
+    "grau_fundamentacao": "Grau III"
+  }
+}

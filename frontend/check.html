@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>check.coon | Laudo de Vistoria de Imóveis no Celular</title>
+  
+  <meta name="description" content="check.coon: Vistorias imobiliárias 100% no celular. Registro de fotos ilimitadas, notas por áudio com IA e assinatura digital na tela com validade jurídica. COON.">
+  <meta name="theme-color" content="#0d9488">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='18' font-size='18' font-weight='bold' fill='%230d9488'>✓</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f8fafc;
+    }
+    /* ======================================================== */
+    /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: TRANSIÇÃO SUAVE DE CORES COON */
+    /* ======================================================== */
+    @keyframes coonSmoothSpectrum {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .gemini-wordmark, .coon-gradient, .coon-bigtech-logo {
+      display: inline-block;
+      background: linear-gradient(
+        90deg,
+        #1d4ed8 0%,
+        #2563eb 15%,
+        #0ea5e9 30%,
+        #10b981 45%,
+        #6366f1 60%,
+        #8b5cf6 75%,
+        #06b6d4 90%,
+        #1d4ed8 100%
+      );
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.055em;
+      animation: coonSmoothSpectrum 7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+      will-change: background-position;
+      transition: transform 0.3s ease;
+    }
+
+    .gemini-wordmark:hover, .coon-bigtech-logo:hover {
+      transform: scale(1.02);
+    }
+    canvas {
+      touch-action: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800 selection:bg-teal-600 selection:text-white pb-20 sm:pb-0">
+
+  <!-- ======================================================== -->
+  <!-- BARRA SUPERIOR MOBILE / DESKTOP -->
+  <!-- ======================================================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      
+      <!-- Marca check.coon -->
+      <a href="/" class="flex items-center space-x-2 group">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-600 flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition">
+          <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <span class="text-base font-extrabold tracking-tight text-slate-900">check<span class="gemini-wordmark">.coon</span></span>
+          <span class="text-[9px] bg-teal-50 text-teal-700 px-1.5 py-0.2 rounded font-mono font-bold ml-1 border border-teal-200">Mobile PWA</span>
+        </div>
+      </a>
+
+      <!-- Ações Rápidas -->
+      <div class="flex items-center space-x-2">
+        <a href="/studio" class="text-xs font-semibold text-slate-500 hover:text-slate-900 px-2 py-1 rounded transition hidden sm:inline-block">
+          Studio COON
+        </a>
+        <button onclick="window.print()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition flex items-center space-x-1 cursor-pointer">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">Imprimir Laudo</span>
+        </button>
+        <button onclick="openCheckCheckout('pro', 99.00, 'Plano Vistorias Pro')" class="px-3 py-1.5 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white text-xs font-bold rounded-lg shadow-xs transition flex items-center space-x-1.5 cursor-pointer">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-300"></i>
+          <span>Assinar Pro (R$ 99/mês)</span>
+        </button>
+
+        <!-- Widget Universal de Autenticação / Área do Assinante COON -->
+        <div id="coonAuthNavSlot"></div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- CONTEÚDO PRINCIPAL: ASSISTENTE DE VISTORIA -->
+  <!-- ======================================================== -->
+  <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-1 space-y-6">
+
+    <!-- Banner Pro check.coon -->
+    <div class="bg-gradient-to-r from-slate-900 to-teal-950 text-white rounded-2xl p-4 sm:p-5 border border-teal-800/40 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="flex items-center space-x-2">
+          <span class="px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-mono font-bold border border-teal-500/30">LOTE FUNDADOR</span>
+          <h2 class="text-sm sm:text-base font-extrabold text-white">Vistorias Ilimitadas com Laudo Pericial & Assinatura Digital</h2>
+        </div>
+        <p class="text-xs text-slate-300">Gere laudos ilimitados com fotos em alta definição, notas por voz com IA e validade jurídica NBR 12.721.</p>
+      </div>
+      <button onclick="openCheckCheckout('pro', 99.00, 'Plano Vistorias Pro')" class="shrink-0 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-2 cursor-pointer">
+        <i data-lucide="zap" class="w-4 h-4"></i>
+        <span>Ativar Acesso Pro • R$ 99/mês</span>
+      </button>
+    </div>
+
+    <!-- Card de Identificação da Vistoria -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-4">
+        <div>
+          <span class="text-[10px] font-mono font-bold text-teal-700 uppercase tracking-wider block">
+            Lei do Inquilinato (Nº 8.245/91)
+          </span>
+          <h1 class="text-lg font-extrabold text-slate-900 leading-tight">
+            Laudo de Vistoria de Imóvel
+          </h1>
+        </div>
+        <div class="flex items-center space-x-2">
+          <select id="vistoriaTipo" class="text-xs font-bold bg-teal-50 border border-teal-200 text-teal-800 rounded-xl px-3 py-1.5 focus:outline-none">
+            <option value="entrada">Vistoria de ENTRADA</option>
+            <option value="saida">Vistoria de SAÍDA</option>
+            <option value="periodica">Vistoria PERIÓDICA</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Grid de Dados Básicos -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Endereço do Imóvel:</label>
+          <input type="text" id="propAddress" value="Rua Oscar Freire, 110 - Apto 42, Jardins" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:border-teal-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Inquilino (Locatário):</label>
+          <input type="text" id="tenantName" value="Lucas Gabriel Mendonça" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:border-teal-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Proprietário (Locador):</label>
+          <input type="text" id="landlordName" value="Dra. Helena Martins Siqueira" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:border-teal-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Vistoriador Responsável:</label>
+          <input type="text" id="inspectorName" value="Eng. Marcos Paulo Ribeiro (CREA-SP)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:border-teal-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Data & Hora Oficial:</label>
+          <input type="text" id="timestampField" readonly class="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-slate-600 font-mono text-[11px]">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Geolocalização (GPS):</label>
+          <div class="flex items-center space-x-1 bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-[11px] font-mono text-slate-600">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-teal-600"></i>
+            <span id="gpsField">-23.5615, -46.6559 (Precisão: 4m)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seletor de Cômodos (Abas Rápidas no Smartphone) -->
+    <div class="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none text-xs font-bold">
+      <button onclick="selectRoom('sala')" id="tab-sala" class="room-tab px-4 py-2 rounded-xl bg-teal-600 text-white shadow-xs shrink-0 flex items-center space-x-1.5 transition">
+        <i data-lucide="tv" class="w-3.5 h-3.5"></i>
+        <span>Sala de Estar</span>
+      </button>
+      <button onclick="selectRoom('cozinha')" id="tab-cozinha" class="room-tab px-4 py-2 rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 shrink-0 flex items-center space-x-1.5 transition">
+        <i data-lucide="utensils" class="w-3.5 h-3.5"></i>
+        <span>Cozinha</span>
+      </button>
+      <button onclick="selectRoom('quarto')" id="tab-quarto" class="room-tab px-4 py-2 rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 shrink-0 flex items-center space-x-1.5 transition">
+        <i data-lucide="bed" class="w-3.5 h-3.5"></i>
+        <span>Quarto Principal</span>
+      </button>
+      <button onclick="selectRoom('banheiro')" id="tab-banheiro" class="room-tab px-4 py-2 rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 shrink-0 flex items-center space-x-1.5 transition">
+        <i data-lucide="bath" class="w-3.5 h-3.5"></i>
+        <span>Banheiro Social</span>
+      </button>
+      <button onclick="selectRoom('externa')" id="tab-externa" class="room-tab px-4 py-2 rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 shrink-0 flex items-center space-x-1.5 transition">
+        <i data-lucide="trees" class="w-3.5 h-3.5"></i>
+        <span>Fachada & Garagem</span>
+      </button>
+    </div>
+
+    <!-- Área Ativa do Cômodo -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-5">
+      
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center font-bold">
+            <span id="activeRoomNumber">1</span>
+          </div>
+          <h2 class="text-sm font-extrabold text-slate-900" id="activeRoomTitle">Sala de Estar</h2>
+        </div>
+        <span class="text-[10px] bg-slate-100 px-2 py-1 rounded-full text-slate-500 font-semibold">
+          Checklist Estrutural
+        </span>
+      </div>
+
+      <!-- Itens de Inspeção Rápida -->
+      <div class="space-y-3" id="inspectionItemsContainer">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+
+      <!-- Seção de Fotos e Áudio com IA -->
+      <div class="border-t border-slate-100 pt-4 space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <span class="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
+            <i data-lucide="camera" class="w-4 h-4 text-teal-600"></i>
+            <span>Fotos do Cômodo (com Carimbo Data/Hora)</span>
+          </span>
+          <div class="flex items-center space-x-2">
+            <!-- Botão Tirar Foto -->
+            <label class="px-3 py-1.5 bg-teal-50 hover:bg-teal-100 border border-teal-200 text-teal-800 text-xs font-bold rounded-xl cursor-pointer transition flex items-center space-x-1">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>Adicionar Foto</span>
+              <input type="file" accept="image/*" capture="environment" class="hidden" onchange="handlePhotoUpload(event)">
+            </label>
+            <!-- Botão Áudio IA -->
+            <button onclick="simulateVoiceAI()" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 text-xs font-bold rounded-xl transition flex items-center space-x-1">
+              <i data-lucide="mic" class="w-3.5 h-3.5 text-indigo-600"></i>
+              <span>Ditar por Áudio (IA)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Grade de Fotos do Cômodo -->
+        <div id="photosGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+          <div class="aspect-video bg-slate-100 rounded-xl border border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 p-2 text-center text-[10px]">
+            <i data-lucide="image" class="w-5 h-5 mb-1 opacity-50"></i>
+            <span>Nenhuma foto tirada ainda</span>
+          </div>
+        </div>
+
+        <!-- Caixa de Observações Formatada pela IA -->
+        <div class="pt-2">
+          <label class="block text-xs font-bold text-slate-700 mb-1">
+            Parecer Técnico do Cômodo (IA Transcrição):
+          </label>
+          <textarea id="roomNotes" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-700 focus:outline-none focus:border-teal-500" placeholder="Descreva avarias, marcas, manchas ou observações específicas deste cômodo..."></textarea>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- ÁREA DE ASSINATURA DIGITAL NA TELA (TOUCH / MOUSE) -->
+    <!-- ======================================================== -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4">
+      <div class="border-b border-slate-100 pb-3">
+        <h3 class="text-sm font-extrabold text-slate-900 flex items-center space-x-1.5">
+          <i data-lucide="pen-tool" class="w-4 h-4 text-teal-600"></i>
+          <span>Assinatura Digital no Celular (Validade Jurídica)</span>
+        </h3>
+        <p class="text-[11px] text-slate-500 mt-0.5">
+          Assine diretamente com o dedo ou caneta touch na tela para consolidar o laudo.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        
+        <!-- Assinatura Inquilino -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+            <span>Assinatura do Inquilino:</span>
+            <button onclick="clearCanvas('signatureTenant')" class="text-[10px] text-slate-400 hover:text-rose-600 font-semibold">Limpar</button>
+          </div>
+          <div class="bg-slate-50 rounded-xl border border-slate-300 p-1">
+            <canvas id="signatureTenant" width="340" height="110" class="w-full bg-white rounded-lg cursor-crosshair"></canvas>
+          </div>
+          <span class="text-[10px] text-slate-400 block text-center" id="tenantSignLabel">Lucas Gabriel Mendonça</span>
+        </div>
+
+        <!-- Assinatura Vistoriador -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+            <span>Assinatura do Vistoriador:</span>
+            <button onclick="clearCanvas('signatureInspector')" class="text-[10px] text-slate-400 hover:text-rose-600 font-semibold">Limpar</button>
+          </div>
+          <div class="bg-slate-50 rounded-xl border border-slate-300 p-1">
+            <canvas id="signatureInspector" width="340" height="110" class="w-full bg-white rounded-lg cursor-crosshair"></canvas>
+          </div>
+          <span class="text-[10px] text-slate-400 block text-center" id="inspectorSignLabel">Eng. Marcos Paulo Ribeiro (CREA-SP)</span>
+        </div>
+
+      </div>
+
+      <!-- Botão de Finalização Oficial -->
+      <div class="pt-3">
+        <button onclick="finalizeReport()" class="w-full py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md shadow-teal-600/20 transition flex items-center justify-center space-x-2">
+          <i data-lucide="check-check" class="w-4 h-4"></i>
+          <span>Consolidar Laudo & Gerar Termo Pericial</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- MODAL DE LAUDO EMITIDO (VISUALIZAÇÃO DE TERMO FORMAL) -->
+  <!-- ======================================================== -->
+  <div id="reportModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl border border-slate-200 max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-4 my-8 animate-in fade-in zoom-in-95">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-teal-500 animate-pulse"></span>
+          <h3 class="text-sm font-bold text-slate-900">Laudo Pericial de Vistoria Consolidado</h3>
+        </div>
+        <button onclick="closeReportModal()" class="text-slate-400 hover:text-slate-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 text-xs leading-relaxed text-slate-700" id="reportContent">
+        <!-- Preenchido via JS -->
+      </div>
+
+      <div class="flex items-center justify-end space-x-3 pt-2">
+        <button onclick="closeReportModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition">
+          Fechar
+        </button>
+        <button onclick="window.print()" class="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Baixar PDF Assinado</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL DE CHECKOUT & ATIVAÇÃO INSTANTÂNEA PIX / HETZNER -->
+  <!-- ======================================================== -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl border border-slate-200 max-w-md w-full p-6 shadow-2xl space-y-5 my-8">
+      
+      <!-- Topo -->
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center space-x-2">
+          <span class="text-xl font-black tracking-tight gemini-wordmark">check<span class="text-teal-600">.coon</span></span>
+          <span id="checkoutPlanBadge" class="text-xs font-bold text-teal-800 bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full">
+            Plano Vistorias Pro
+          </span>
+        </div>
+        <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-xl hover:bg-slate-100 transition cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Resumo do Pedido -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total da Assinatura</span>
+          <span id="checkoutAmountDisplay" class="text-2xl font-black text-slate-900 font-mono">R$ 99,00</span>
+          <span class="text-[10px] text-teal-600 font-semibold block">Vistorias Ilimitadas • Lote Oficial</span>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center shadow-xs">
+          <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+        </div>
+      </div>
+
+      <!-- Formulário de Ativação -->
+      <div id="checkFormStep" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Seu Nome / Imobiliária:</label>
+          <input type="text" id="chkCheckName" placeholder="Ex: Eng. Marcos Paulo / Prime Imóveis" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 font-medium">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">E-mail para Acesso ao PWA:</label>
+          <input type="email" id="chkCheckEmail" placeholder="marcos@engenharia.com.br" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 font-medium">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">WhatsApp para Liberação:</label>
+          <input type="tel" id="chkCheckPhone" placeholder="(11) 97777-6666" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 font-medium">
+        </div>
+
+        <button onclick="submitCheckCheckout()" id="btnSubmitCheckCheckout" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow-md shadow-teal-600/20 transition flex items-center justify-center space-x-2 mt-4 cursor-pointer">
+          <i data-lucide="zap" class="w-4 h-4 text-emerald-300"></i>
+          <span>Gerar Chave Pix & Liberar Laudos</span>
+        </button>
+      </div>
+
+      <!-- Etapa de Pagamento (QR Code Pix & Copia e Cola) -->
+      <div id="checkPixStep" class="hidden space-y-4 text-center">
+        <div class="p-3 bg-teal-50 border border-teal-200 rounded-2xl">
+          <span class="text-xs font-bold text-teal-950 block">🎉 Conta Gravada no Banco da Holding!</span>
+          <span class="text-[11px] text-teal-800">Efetue o pagamento Pix para liberação imediata das vistorias:</span>
+        </div>
+
+        <div class="w-40 h-40 mx-auto bg-white p-2 rounded-2xl border-2 border-teal-400 shadow-sm flex items-center justify-center">
+          <div id="chkCheckQrContainer" class="w-full h-full flex items-center justify-center"></div>
+        </div>
+
+        <div class="space-y-1.5 text-left">
+          <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Pix Copia e Cola:</span>
+          <input type="text" id="chkCheckPixCopyPaste" readonly class="w-full p-2 bg-slate-100 border border-slate-200 rounded-lg font-mono text-[10px] text-slate-700 select-all">
+          <button onclick="copyCheckCheckoutPix()" id="btnCopyCheckChkPix" class="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span id="btnCopyCheckChkText">Copiar Código Pix</span>
+          </button>
+        </div>
+
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+          <span class="flex items-center space-x-1"><i data-lucide="clock" class="w-3 h-3 text-teal-600"></i><span>Liberação em 2 segundos</span></span>
+          <button onclick="closeCheckoutModal();" class="font-bold text-teal-600 hover:underline">Já Paguei / Continuar Vistoria →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Rodapé Institucional -->
+  <footer class="bg-white border-t border-slate-200 text-xs text-slate-500 py-4 px-4">
+    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500">
+      <span class="font-bold text-slate-800">Co.on Participações 2026</span>
+      <span class="text-[10px] text-slate-400">Todos os direitos reservados</span>
+    </div>
+  </footer>
+
+  <script>
+    // Inicialização de Dados
+    const roomsData = {
+      sala: {
+        number: 1,
+        title: "Sala de Estar",
+        items: [
+          { name: "Pintura de Paredes & Teto", status: "Novo" },
+          { name: "Piso (Porcelanato/Madeira)", status: "Bom" },
+          { name: "Janelas, Esquadrias & Vidros", status: "Bom" },
+          { name: "Tomadas, Interruptores & Lâmpadas", status: "Bom" },
+          { name: "Porta de Entrada & Fechadura", status: "Novo" }
+        ],
+        notes: "Pintura recém-feita em tom branco acetinado. Tomadas testadas e operacionais. Fechadura tetra com 2 cópias de chave entregues.",
+        photos: []
+      },
+      cozinha: {
+        number: 2,
+        title: "Cozinha",
+        items: [
+          { name: "Bancada de Granito / Pia", status: "Novo" },
+          { name: "Torneira & Sifão Hidráulico", status: "Bom" },
+          { name: "Revestimento Cerâmico / Azulejos", status: "Bom" },
+          { name: "Gás Encanado / Registros", status: "Novo" },
+          { name: "Armários Embutidos", status: "Regular" }
+        ],
+        notes: "Armário sob a pia apresenta leve descolamento na fita de borda lateral. Hidráulica sem vazamentos aparentes.",
+        photos: []
+      },
+      quarto: {
+        number: 3,
+        title: "Quarto Principal",
+        items: [
+          { name: "Pintura Geral", status: "Bom" },
+          { name: "Piso Laminado", status: "Novo" },
+          { name: "Janela & Cortina", status: "Bom" },
+          { name: "Ponto de Ar-Condicionado", status: "Bom" }
+        ],
+        notes: "Piso laminado sem riscos. Janela com fechamento suave e travas operacionais.",
+        photos: []
+      },
+      banheiro: {
+        number: 4,
+        title: "Banheiro Social",
+        items: [
+          { name: "Box de Vidro Blindex", status: "Bom" },
+          { name: "Vaso Sanitário & Descarga", status: "Bom" },
+          { name: "Chuveiro Elétrico", status: "Novo" },
+          { name: "Espelho & Gabinete", status: "Novo" }
+        ],
+        notes: "Box com vedação de silicone íntegra. Descarga higienizada com fluxo normal.",
+        photos: []
+      },
+      externa: {
+        number: 5,
+        title: "Fachada & Garagem",
+        items: [
+          { name: "Portão Eletrônico / Tag", status: "Novo" },
+          { name: "Piso da Garagem / Vaga 42", status: "Bom" },
+          { name: "Interfone", status: "Bom" }
+        ],
+        notes: "Vaga de garagem demarcada no piso térreo, livre e desimpedida.",
+        photos: []
+      }
+    };
+
+    let currentRoom = 'sala';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      document.getElementById("timestampField").value = new Date().toLocaleString('pt-BR');
+      renderRoom(currentRoom);
+      setupCanvas('signatureTenant');
+      setupCanvas('signatureInspector');
+    });
+
+    function selectRoom(roomKey) {
+      currentRoom = roomKey;
+      document.querySelectorAll(".room-tab").forEach(tab => {
+        tab.classList.remove("bg-teal-600", "text-white");
+        tab.classList.add("bg-white", "text-slate-600");
+      });
+      const activeTab = document.getElementById(`tab-${roomKey}`);
+      if (activeTab) {
+        activeTab.classList.remove("bg-white", "text-slate-600");
+        activeTab.classList.add("bg-teal-600", "text-white");
+      }
+      renderRoom(roomKey);
+    }
+
+    function renderRoom(roomKey) {
+      const data = roomsData[roomKey];
+      document.getElementById("activeRoomNumber").innerText = data.number;
+      document.getElementById("activeRoomTitle").innerText = data.title;
+      document.getElementById("roomNotes").value = data.notes;
+
+      const container = document.getElementById("inspectionItemsContainer");
+      container.innerHTML = "";
+
+      data.items.forEach((item, index) => {
+        const row = document.createElement("div");
+        row.className = "flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs";
+        
+        row.innerHTML = `
+          <span class="font-bold text-slate-800">${item.name}</span>
+          <div class="flex items-center space-x-1">
+            <button onclick="setItemStatus('${roomKey}', ${index}, 'Novo')" class="px-2.5 py-1 rounded-lg font-bold text-[10px] transition ${item.status === 'Novo' ? 'bg-emerald-600 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'}">Novo</button>
+            <button onclick="setItemStatus('${roomKey}', ${index}, 'Bom')" class="px-2.5 py-1 rounded-lg font-bold text-[10px] transition ${item.status === 'Bom' ? 'bg-teal-600 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'}">Bom</button>
+            <button onclick="setItemStatus('${roomKey}', ${index}, 'Regular')" class="px-2.5 py-1 rounded-lg font-bold text-[10px] transition ${item.status === 'Regular' ? 'bg-amber-500 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'}">Regular</button>
+            <button onclick="setItemStatus('${roomKey}', ${index}, 'Danificado')" class="px-2.5 py-1 rounded-lg font-bold text-[10px] transition ${item.status === 'Danificado' ? 'bg-rose-600 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'}">Avariado</button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      renderPhotos(data.photos);
+    }
+
+    function setItemStatus(roomKey, itemIndex, newStatus) {
+      roomsData[roomKey].items[itemIndex].status = newStatus;
+      renderRoom(roomKey);
+    }
+
+    function renderPhotos(photos) {
+      const grid = document.getElementById("photosGrid");
+      if (!photos || photos.length === 0) {
+        grid.innerHTML = `
+          <div class="aspect-video bg-slate-100 rounded-xl border border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 p-2 text-center text-[10px]">
+            <i data-lucide="image" class="w-5 h-5 mb-1 opacity-50"></i>
+            <span>Nenhuma foto tirada ainda</span>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      grid.innerHTML = photos.map((src, i) => `
+        <div class="relative group aspect-video rounded-xl overflow-hidden border border-slate-200 shadow-2xs">
+          <img src="${src}" class="w-full h-full object-cover">
+          <div class="absolute bottom-0 inset-x-0 bg-black/60 text-white text-[8px] p-1 font-mono">
+            Foto #${i+1} • ${new Date().toLocaleTimeString()}
+          </div>
+        </div>
+      `).join("");
+      lucide.createIcons();
+    }
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          roomsData[currentRoom].photos.push(e.target.result);
+          renderPhotos(roomsData[currentRoom].photos);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function simulateVoiceAI() {
+      const notes = document.getElementById("roomNotes");
+      notes.value = "IA Transcrição Automática: 'Vistoriador constatou que as paredes do cômodo foram entregues pintadas de branco fosco. Foram testadas todas as 4 tomadas elétricas com voltímetro (110V estável). Pontos de iluminação em perfeito estado de funcionamento.'";
+      roomsData[currentRoom].notes = notes.value;
+      alert("🎙️ Áudio gravado e processado pela IA da COON com sucesso!");
+    }
+
+    // Canvas de Assinatura
+    function setupCanvas(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      let drawing = false;
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: clientX - rect.left,
+          y: clientY - rect.top
+        };
+      }
+
+      function startDraw(e) {
+        drawing = true;
+        ctx.beginPath();
+        const pos = getPos(e);
+        ctx.moveTo(pos.x, pos.y);
+        e.preventDefault();
+      }
+
+      function draw(e) {
+        if (!drawing) return;
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.strokeStyle = "#0f172a";
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = "round";
+        ctx.stroke();
+        e.preventDefault();
+      }
+
+      function stopDraw() {
+        drawing = false;
+      }
+
+      canvas.addEventListener("mousedown", startDraw);
+      canvas.addEventListener("mousemove", draw);
+      window.addEventListener("mouseup", stopDraw);
+
+      canvas.addEventListener("touchstart", startDraw, { passive: false });
+      canvas.addEventListener("touchmove", draw, { passive: false });
+      window.addEventListener("touchend", stopDraw);
+    }
+
+    function clearCanvas(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function finalizeReport() {
+      const tipo = document.getElementById("vistoriaTipo").value.toUpperCase();
+      const addr = document.getElementById("propAddress").value;
+      const tenant = document.getElementById("tenantName").value;
+      const landlord = document.getElementById("landlordName").value;
+      const inspector = document.getElementById("inspectorName").value;
+      const date = document.getElementById("timestampField").value;
+
+      const reportDiv = document.getElementById("reportContent");
+      reportDiv.innerHTML = `
+        <div class="border-b border-slate-200 pb-2 mb-2">
+          <p class="font-bold text-slate-900 text-sm">TERMO DE LAUDO PERICIAL DE VISTORIA (${tipo})</p>
+          <p class="text-[10px] text-slate-500 font-mono">COON Soluções Tecnológicas • Registro Digital SHA-256: 7f8a9b2c...d4e1</p>
+        </div>
+        <p><strong>Imóvel:</strong> ${addr}</p>
+        <p><strong>Locatário (Inquilino):</strong> ${tenant}</p>
+        <p><strong>Locador (Proprietário):</strong> ${landlord}</p>
+        <p><strong>Vistoriador Pericial:</strong> ${inspector}</p>
+        <p><strong>Data/Hora de Consolidação:</strong> ${date}</p>
+        <div class="mt-3 p-3 bg-white rounded-xl border border-slate-200">
+          <p class="font-bold text-teal-800 text-[11px] mb-1">CONSTATACÃO DE CONFORMIDADE LEGAL:</p>
+          <p class="text-[10px] text-slate-600">
+            As partes declaram ciência e pleno acordo com as condições descritas no presente laudo de vistoria, que passa a integrar o contrato de locação sob a égide da Lei Federal nº 8.245/1991. Todas as fotografias e anotações técnicas possuem validade jurídica irretratável.
+          </p>
+        </div>
+      `;
+
+      document.getElementById("reportModal").classList.remove("hidden");
+      document.getElementById("reportModal").classList.add("flex");
+    }
+
+    function closeReportModal() {
+      document.getElementById("reportModal").classList.add("hidden");
+      document.getElementById("reportModal").classList.remove("flex");
+    }
+
+    // ========================================================
+    // CHECKOUT UNIVERSAL PIX & PERSISTÊNCIA HETZNER
+    // ========================================================
+    let activeCheckPlan = 'pro';
+    let activeCheckAmount = 99.00;
+
+    function openCheckCheckout(plan, amount, badgeText) {
+      activeCheckPlan = plan;
+      activeCheckAmount = amount;
+
+      document.getElementById("checkoutPlanBadge").innerText = badgeText;
+      document.getElementById("checkoutAmountDisplay").innerText = `R$ ${amount.toFixed(2).replace('.', ',')}`;
+
+      document.getElementById("checkFormStep").classList.remove("hidden");
+      document.getElementById("checkPixStep").classList.add("hidden");
+
+      const modal = document.getElementById("checkoutModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      lucide.createIcons();
+    }
+
+    function closeCheckoutModal() {
+      const modal = document.getElementById("checkoutModal");
+      if (modal) {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }
+    }
+
+    async function submitCheckCheckout() {
+      const name = document.getElementById("chkCheckName").value.trim() || "Cliente check.coon";
+      const email = document.getElementById("chkCheckEmail").value.trim();
+      const phone = document.getElementById("chkCheckPhone").value.trim();
+
+      if (!email || !email.includes("@")) {
+        alert("Por favor, digite um e-mail válido para liberação das Vistorias!");
+        return;
+      }
+
+      const btn = document.getElementById("btnSubmitCheckCheckout");
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Gravando Assinatura no Banco Hetzner...</span>`;
+      lucide.createIcons();
+
+      try {
+        const res = await fetch("/api/checkout/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            app_id: "check",
+            plan_id: activeCheckPlan,
+            billing_cycle: "monthly",
+            user_name: name,
+            user_email: email,
+            user_phone: phone,
+            payment_method: "pix"
+          })
+        });
+
+        const data = await res.json();
+
+        document.getElementById("chkCheckPixCopyPaste").value = data.pix_copy_paste;
+        document.getElementById("chkCheckQrContainer").innerHTML = data.pix_qr_code_base64;
+
+        localStorage.setItem('checkcoon_plan', data.plan_id);
+        localStorage.setItem('coon_check_token', data.access_token);
+
+        document.getElementById("checkFormStep").classList.add("hidden");
+        document.getElementById("checkPixStep").classList.remove("hidden");
+        lucide.createIcons();
+      } catch (err) {
+        alert("Erro ao conectar ao servidor. Tente novamente em instantes.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="zap" class="w-4 h-4 text-emerald-300"></i><span>Gerar Chave Pix & Liberar Laudos</span>`;
+        lucide.createIcons();
+      }
+    }
+
+    function copyCheckCheckoutPix() {
+      const copyText = document.getElementById("chkCheckPixCopyPaste");
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(copyText.value).then(() => {
+        document.getElementById("btnCopyCheckChkText").innerText = "Código Pix Copiado!";
+        setTimeout(() => {
+          document.getElementById("btnCopyCheckChkText").innerText = "Copiar Código Pix";
+        }, 2500);
+      });
+    }
+  </script>
+  <script src="/static/coon-auth.js"></script>
+  <script src="/static/coon-bot.js"></script>
+</body>
+</html>

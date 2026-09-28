@@ -1,0 +1,154 @@
+{
+  "infercoon_format": "INFER-COON-PROJECT-V1",
+  "file_extension": ".inf",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Modelo 6: Modelo Raiz Quadrada √Área (Retornos Decrescentes)",
+    "author": "Engenheiro Perito Avaliador - Coon Engenharia",
+    "company": "Coon Engenharia",
+    "website": "https://www.coon.com.br",
+    "standard": "ABNT NBR 14653-2",
+    "purpose": "Validação de Paridade SisDEA e Determinação do Valor de Mercado",
+    "notes": "Modelagem com transformação raiz quadrada de variável explicativa no SisDEA.",
+    "created_at": "2026-09-24T07:03:43.965290"
+  },
+  "dataset": {
+    "dependent_var": "preco",
+    "independent_vars": [
+      "area",
+      "vagas"
+    ],
+    "transformations": {
+      "preco": "linear",
+      "area": "sqrt",
+      "vagas": "linear"
+    },
+    "samples": [
+      {
+        "id": 1,
+        "endereco": "Lote 1",
+        "preco": 220000,
+        "area": 36.0,
+        "vagas": 1
+      },
+      {
+        "id": 2,
+        "endereco": "Lote 2",
+        "preco": 290000,
+        "area": 49.0,
+        "vagas": 1
+      },
+      {
+        "id": 3,
+        "endereco": "Lote 3",
+        "preco": 370000,
+        "area": 64.0,
+        "vagas": 2
+      },
+      {
+        "id": 4,
+        "endereco": "Lote 4",
+        "preco": 460000,
+        "area": 81.0,
+        "vagas": 2
+      },
+      {
+        "id": 5,
+        "endereco": "Lote 5",
+        "preco": 560000,
+        "area": 100.0,
+        "vagas": 2
+      },
+      {
+        "id": 6,
+        "endereco": "Lote 6",
+        "preco": 660000,
+        "area": 121.0,
+        "vagas": 3
+      },
+      {
+        "id": 7,
+        "endereco": "Lote 7",
+        "preco": 780000,
+        "area": 144.0,
+        "vagas": 3
+      },
+      {
+        "id": 8,
+        "endereco": "Lote 8",
+        "preco": 910000,
+        "area": 169.0,
+        "vagas": 3
+      },
+      {
+        "id": 9,
+        "endereco": "Lote 9",
+        "preco": 410000,
+        "area": 75.0,
+        "vagas": 2
+      },
+      {
+        "id": 10,
+        "endereco": "Lote 10",
+        "preco": 610000,
+        "area": 110.0,
+        "vagas": 2
+      }
+    ]
+  },
+  "subject": {
+    "description": "Imóvel Avaliando (Raiz Quadrada)",
+    "attributes": {
+      "area": 100.0,
+      "vagas": 2.0
+    }
+  },
+  "calibration": {
+    "is_manual": false,
+    "coefficients": {
+      "const": -429214.245280862,
+      "area": 105341.27411353294,
+      "vagas": -21947.8656186281
+    }
+  },
+  "results": {
+    "r2": 0.9885807989787829,
+    "r2_adj": 0.9853181701155781,
+    "f_stat": 303.00130368113656,
+    "f_pval": 1.5912008931231877e-07,
+    "se_reg": 26473.17496940486,
+    "se_mean_pred": 11541.839415552276,
+    "t_crit_80": 1.4149239276505086,
+    "df_resid": 7,
+    "coefficients": {
+      "const": {
+        "valor": -429214.245280862,
+        "se": 46796.90541026572,
+        "t": -9.171851034122149,
+        "p": 3.7713026599562427e-05
+      },
+      "area": {
+        "valor": 105341.27411353294,
+        "se": 10330.4424317257,
+        "t": 10.197169657518307,
+        "p": 1.8807568087862665e-05
+      },
+      "vagas": {
+        "valor": -21947.8656186281,
+        "se": 30843.146370335227,
+        "t": -0.7115961956377265,
+        "p": 0.4997353429342291
+      }
+    },
+    "estimated_value": 580302.7646172113,
+    "mean_value": 580302.7646172113,
+    "median_value": 580302.7646172113,
+    "ci_80": {
+      "lower": 563971.9398590466,
+      "upper": 596633.589375376,
+      "amplitude_pct": 5.628380822530495
+    },
+    "grau_precisao": "Grau III",
+    "grau_fundamentacao": "Grau III"
+  }
+}

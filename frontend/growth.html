@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>growth.coon | Piloto Automático de Vendas & Marketing Local com IA</title>
+  
+  <meta name="description" content="growth.coon: Atenda leads em 5 segundos no WhatsApp 24/7, multiplique avaliações 5 estrelas no Google Maps e dobre suas vendas locais com Inteligência Artificial. COON Soluções Tecnológicas.">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='18' font-size='18' font-weight='bold' fill='%236366f1'>g</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #fafbfd;
+      background-image: 
+        radial-gradient(at 10% 12%, rgba(99, 102, 241, 0.12) 0px, transparent 45%),
+        radial-gradient(at 90% 10%, rgba(16, 185, 129, 0.10) 0px, transparent 40%),
+        radial-gradient(at 50% 35%, rgba(56, 189, 248, 0.08) 0px, transparent 55%),
+        radial-gradient(at 85% 85%, rgba(147, 51, 234, 0.07) 0px, transparent 45%),
+        radial-gradient(at 15% 85%, rgba(16, 185, 129, 0.07) 0px, transparent 45%);
+      background-attachment: fixed;
+    }
+
+    /* ======================================================== */
+    /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: TRANSIÇÃO SUAVE DE CORES COON */
+    /* ======================================================== */
+    @keyframes coonSmoothSpectrum {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes coonDotPulse {
+      0%, 100% {
+        color: #10b981;
+        filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.5));
+        transform: scale(1);
+      }
+      50% {
+        color: #06b6d4;
+        filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.7));
+        transform: scale(1.15);
+      }
+    }
+
+    .gemini-wordmark, .coon-gradient, .coon-bigtech-logo {
+      display: inline-block;
+      background: linear-gradient(
+        90deg,
+        #1d4ed8 0%,
+        #2563eb 15%,
+        #0ea5e9 30%,
+        #10b981 45%,
+        #6366f1 60%,
+        #8b5cf6 75%,
+        #06b6d4 90%,
+        #1d4ed8 100%
+      );
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.055em;
+      animation: coonSmoothSpectrum 7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+      will-change: background-position;
+      transition: transform 0.3s ease;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800 selection:bg-indigo-600 selection:text-white">
+
+  <!-- ======================================================== -->
+  <!-- BARRA DE NAVEGAÇÃO SUPERIOR -->
+  <!-- ======================================================== -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      
+      <!-- Marca Oficial com animação suave de transição de cores Big Tech -->
+      <a href="/" class="flex items-center space-x-2.5 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition">
+          <i data-lucide="zap" class="w-5 h-5"></i>
+        </div>
+        <div class="flex items-baseline space-x-1">
+          <span class="text-xl font-black tracking-tight text-slate-900">growth<span class="gemini-wordmark">.coon</span></span>
+          <span class="text-[9px] font-mono font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full border border-indigo-200 hidden sm:inline-block">
+            Growth Engine
+          </span>
+        </div>
+      </a>
+
+      <!-- Menu de Navegação -->
+      <nav class="hidden md:flex items-center space-x-6 text-xs font-semibold text-slate-600">
+        <a href="#como-funciona" class="hover:text-indigo-600 transition">Como Funciona</a>
+        <a href="#simulador-whatsapp" class="hover:text-indigo-600 transition">Simulador Comercial</a>
+        <a href="#calculadora-roi" class="hover:text-indigo-600 transition">Calculadora de ROI</a>
+        <a href="#precos" class="hover:text-indigo-600 transition">Planos</a>
+        <a href="#faq" class="hover:text-indigo-600 transition">FAQ</a>
+      </nav>
+
+      <!-- Ações Direitas -->
+      <div class="flex items-center space-x-3">
+        <a href="/studio" class="text-xs font-semibold text-slate-500 hover:text-slate-900 transition hidden sm:inline-block">
+          Studio COON
+        </a>
+        <a 
+          href="#precos" 
+          class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-full shadow-sm shadow-indigo-500/20 transition flex items-center space-x-1.5"
+        >
+          <span>Começar Agora</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+
+        <!-- Widget Universal de Autenticação / Área do Assinante COON -->
+        <div id="coonAuthNavSlot"></div>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="flex-1">
+
+    <!-- ======================================================== -->
+    <!-- 1. HERO SECTION DE ALTO IMPACTO -->
+    <!-- ======================================================== -->
+    <section class="max-w-6xl mx-auto px-6 pt-16 pb-20 text-center relative">
+      
+      <!-- Ambient Glow de Fundo -->
+      <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-tr from-indigo-500/20 via-violet-500/15 to-emerald-400/15 blur-3xl rounded-full -z-10 pointer-events-none"></div>
+
+      <!-- Badge de Tecnologia -->
+      <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-indigo-50/80 border border-indigo-200/80 text-indigo-700 text-xs font-bold mb-6">
+        <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
+        <span>PILOTO AUTOMÁTICO DE VENDAS & MARKETING LOCAL 24/7</span>
+      </div>
+
+      <!-- Título Principal Persuasivo -->
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight max-w-4xl mx-auto">
+        Transforme o WhatsApp e o Google da sua empresa em uma <span class="bg-gradient-to-r from-indigo-600 via-violet-600 to-emerald-600 bg-clip-text text-transparent">máquina de vendas 24/7</span>
+      </h1>
+
+      <!-- Subtítulo Focado na Dor e Solução -->
+      <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mt-6 leading-relaxed">
+        Atenda clientes em <strong>5 segundos</strong> no WhatsApp mesmo de madrugada, multiplique avaliações <strong>5 estrelas no Google Maps</strong> e domine o seu bairro sem gastar fortunas com agências.
+      </p>
+
+      <!-- Botões de Ação Imediata -->
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a 
+          href="#simulador-whatsapp" 
+          class="w-full sm:w-auto px-7 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-2xl shadow-lg shadow-slate-900/10 transition flex items-center justify-center space-x-2"
+        >
+          <i data-lucide="play-circle" class="w-4 h-4 text-emerald-400"></i>
+          <span>Testar Simulador de Atendimento</span>
+        </a>
+        <a 
+          href="#precos" 
+          class="w-full sm:w-auto px-7 py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm rounded-2xl border border-slate-200/90 shadow-xs transition flex items-center justify-center space-x-2"
+        >
+          <span>Ver Planos a partir de R$ 197/mês</span>
+          <i data-lucide="arrow-down" class="w-4 h-4 text-slate-400"></i>
+        </a>
+      </div>
+
+      <!-- Selos de Credibilidade -->
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 font-medium">
+        <div class="flex items-center space-x-1.5">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+          <span>Respostas em até 5 segundos</span>
+        </div>
+        <div class="flex items-center space-x-1.5">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+          <span>Sem fidelidade (cancele quando quiser)</span>
+        </div>
+        <div class="flex items-center space-x-1.5">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+          <span>Funciona no seu número atual de WhatsApp</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 2. COMPARAÇÃO IRRECUSÁVEL: O JEITO ANTIGO VS GROWTH.COON -->
+    <!-- ======================================================== -->
+    <section class="max-w-5xl mx-auto px-6 py-12">
+      <div class="glass-card rounded-3xl p-8 sm:p-10 shadow-sm border border-slate-200/90">
+        
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-slate-900">Por que donos de empresas estão demitindo agências tradicionais?</h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">A conta simples que prova o retorno instantâneo do growth.coon</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Lado A: O Jeito Antigo (Caro e Lento) -->
+          <div class="p-6 rounded-2xl bg-rose-50/50 border border-rose-100 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center space-x-2 text-rose-700 font-bold text-sm mb-3">
+                <i data-lucide="x-circle" class="w-5 h-5"></i>
+                <span>O Jeito Tradicional (Lento e Caro)</span>
+              </div>
+              <ul class="space-y-3 text-xs text-slate-600">
+                <li class="flex items-start space-x-2">
+                  <span class="text-rose-500 font-bold">•</span>
+                  <span><strong>R$ 2.000 a R$ 3.500/mês</strong> por uma recepcionista ou agência.</span>
+                </li>
+                <li class="flex items-start space-x-2">
+                  <span class="text-rose-500 font-bold">•</span>
+                  <span><strong>Clientes perdidos à noite:</strong> Mensagens às 20h só são respondidas no dia seguinte. O lead já comprou de outro.</span>
+                </li>
+                <li class="flex items-start space-x-2">
+                  <span class="text-rose-500 font-bold">•</span>
+                  <span><strong>Google abandonado:</strong> Poucas avaliações, nota estagnada e concorrentes dominando a busca local.</span>
+                </li>
+                <li class="flex items-start space-x-2">
+                  <span class="text-rose-500 font-bold">•</span>
+                  <span>Contratos longos de fidelidade que prendem sua empresa sem garantia de vendas.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-6 pt-4 border-t border-rose-100 text-[11px] font-semibold text-rose-700">
+              Custo anual médio: Mais de R$ 24.000 + encargos
+            </div>
+          </div>
+
+          <!-- Lado B: O Jeito growth.coon (IA 24/7 de Alta Performance) -->
+          <div class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-200 flex flex-col justify-between relative overflow-hidden">
+            <div class="absolute top-3 right-3 bg-emerald-600 text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
+              Alta Lucratividade
+            </div>
+            <div>
+              <div class="flex items-center space-x-2 text-emerald-800 font-bold text-sm mb-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"></i>
+                <span>Com growth.coon (Piloto Automático)</span>
+              </div>
+              <ul class="space-y-3 text-xs text-slate-700">
+                <li class="flex items-start space-x-2">
+                  <span class="text-emerald-600 font-bold">✓</span>
+                  <span>Apenas <strong>R$ 197/mês</strong> (menos de R$ 7 por dia, sem custos trabalhistas).</span>
+                </li>
+                <li class="flex items-start space-x-2">
+                  <span class="text-emerald-600 font-bold">✓</span>
+                  <span><strong>Resposta em 5 segundos 24h por dia:</strong> Atende, tira dúvidas de preços, agenda horários e envia chave Pix na hora.</span>
+                </li>
+                <li class="flex items-start space-x-2">
+                  <span class="text-emerald-600 font-bold">✓</span>
+                  <span><strong>Multiplicador Google 5 Estrelas:</strong> Coleta avaliações positivas de cada cliente atendido no piloto automático.</span>
+                </li>
+                <li class="flex items-start space-x-2">
+                  <span class="text-emerald-600 font-bold">✓</span>
+                  <span>Zero fidelidade. Teste e comprove o aumento de clientes no primeiro mês.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-6 pt-4 border-t border-emerald-200 text-[11px] font-bold text-emerald-800 flex items-center justify-between">
+              <span>Economia anual: mais de R$ 21.000</span>
+              <span class="font-mono text-xs">ROI Imediato</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 3. SIMULADOR INTERATIVO DE WHATSAPP (DEMONSTRAÇÃO AO VIVO) -->
+    <!-- ======================================================== -->
+    <section id="simulador-whatsapp" class="max-w-5xl mx-auto px-6 py-12">
+      
+      <div class="text-center mb-10">
+        <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Demonstração Interativa</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+          Veja como o growth.coon atende seus clientes
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto mt-2">
+          Clique nas mensagens abaixo para simular o comportamento do seu atendente IA no WhatsApp em tempo real.
+        </p>
+      </div>
+
+      <!-- Simulador Estilo Celular / WhatsApp -->
+      <div class="max-w-md mx-auto bg-slate-900 rounded-[2.5rem] p-3 shadow-2xl border-4 border-slate-800">
+        <div class="bg-[#efeae2] rounded-[2rem] overflow-hidden flex flex-col h-[520px] relative">
+          
+          <!-- Cabeçalho do Chat -->
+          <div class="bg-[#075e54] text-white px-4 py-3 flex items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-3">
+              <div class="w-9 h-9 rounded-full bg-emerald-400 flex items-center justify-center font-bold text-[#075e54] text-sm">
+                AI
+              </div>
+              <div>
+                <h4 class="text-xs font-bold leading-tight">Atendente IA • growth.coon</h4>
+                <p class="text-[10px] text-emerald-200 flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-300"></span>
+                  <span>Online agora (tempo de resposta: 3s)</span>
+                </p>
+              </div>
+            </div>
+            <i data-lucide="more-vertical" class="w-4 h-4 text-emerald-100"></i>
+          </div>
+
+          <!-- Corpo de Mensagens -->
+          <div id="chatMessages" class="flex-1 p-3.5 overflow-y-auto space-y-3 text-xs">
+            
+            <div class="flex justify-start">
+              <div class="bg-white text-slate-800 p-2.5 rounded-2xl rounded-tl-none shadow-xs max-w-[85%] leading-relaxed">
+                <p>Olá! Seja muito bem-vindo! 👋 Sou o assistente inteligente da empresa. Como posso te ajudar hoje?</p>
+                <span class="text-[9px] text-slate-400 text-right block mt-1">22:45 ✓✓</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Gatilhos de Teste Rápido -->
+          <div class="bg-slate-100/90 border-t border-slate-200 p-2.5">
+            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
+              Simule a dúvida do seu cliente:
+            </span>
+            <div class="flex flex-wrap gap-1.5">
+              <button onclick="simulateChat('preco')" class="text-[11px] bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-full font-medium transition shadow-xs">
+                💬 "Qual o valor do serviço?"
+              </button>
+              <button onclick="simulateChat('horario')" class="text-[11px] bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-full font-medium transition shadow-xs">
+                ⏰ "Tem vaga para amanhã?"
+              </button>
+              <button onclick="simulateChat('pix')" class="text-[11px] bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-full font-medium transition shadow-xs">
+                💳 "Aceita Pix? Envia a chave?"
+              </button>
+            </div>
+          </div>
+
+          <!-- Barra de Input Interativa -->
+          <div class="bg-white p-2 flex items-center space-x-2 border-t border-slate-200">
+            <input 
+              type="text" 
+              id="userChatInput" 
+              placeholder="Digite uma dúvida ou simule um cliente..." 
+              class="flex-1 bg-slate-100 px-3 py-1.5 rounded-full text-xs text-slate-700 focus:outline-none focus:bg-white border border-transparent focus:border-emerald-500"
+              onkeydown="if(event.key==='Enter') sendCustomChatMessage()"
+            >
+            <button onclick="sendCustomChatMessage()" class="w-8 h-8 rounded-full bg-[#128c7e] hover:bg-[#075e54] text-white flex items-center justify-center transition cursor-pointer">
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- FERRAMENTA VIVA: GERADOR DE REPUTAÇÃO GOOGLE MAPS & REATIVAÇÃO -->
+    <!-- ======================================================== -->
+    <section class="max-w-5xl mx-auto px-6 py-8">
+      <div class="glass-card rounded-3xl p-6 sm:p-8 border border-indigo-200/90 shadow-sm space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Motor de Inteligência Local</span>
+            <h3 class="text-xl sm:text-2xl font-black text-slate-900 mt-1">
+              Gerador de Respostas Google Maps & Reativação WhatsApp
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Experimente em tempo real a tecnologia que eleva o ranqueamento orgânico da sua empresa no Google Maps.
+            </p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="switchGrowthLabTab('review')" id="tabLabReview" class="px-3.5 py-1.5 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-xs transition cursor-pointer">
+              ⭐ Resposta Google Maps
+            </button>
+            <button onclick="switchGrowthLabTab('reactivate')" id="tabLabReactivate" class="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold text-xs transition cursor-pointer">
+              💬 Reativação WhatsApp
+            </button>
+          </div>
+        </div>
+
+        <!-- Painel Review -->
+        <div id="panelLabReview" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Nome da Empresa:</label>
+              <input type="text" id="labReviewBiz" value="Pizzaria Forno Nobre" class="w-full text-xs font-semibold p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Nome do Cliente:</label>
+              <input type="text" id="labReviewClient" value="Mariana Souza" class="w-full text-xs font-semibold p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Nota Avaliada:</label>
+              <select id="labReviewRating" class="w-full text-xs font-semibold p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500">
+                <option value="5">⭐⭐⭐⭐⭐ (5 Estrelas - Excelente)</option>
+                <option value="4">⭐⭐⭐⭐ (4 Estrelas - Bom)</option>
+                <option value="2">⭐⭐ (2 Estrelas - Problema/Crise)</option>
+                <option value="1">⭐ (1 Estrela - Insatisfeito)</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Comentário do Cliente no Google:</label>
+            <input type="text" id="labReviewText" value="Pizza sensacional, massa super leve e a entrega chegou 15 minutos antes do prazo!" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500">
+          </div>
+          <button onclick="generateGrowthAction('review')" id="btnGenReview" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center space-x-2 cursor-pointer">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
+            <span>Gerar Resposta Otimizada para SEO Google Maps</span>
+          </button>
+        </div>
+
+        <!-- Painel Reativação -->
+        <div id="panelLabReactivate" class="hidden space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Nome da Empresa:</label>
+              <input type="text" id="labReactivateBiz" value="Studio Belle Salão & Spa" class="w-full text-xs font-semibold p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Nome do Cliente:</label>
+              <input type="text" id="labReactivateClient" value="Camila" class="w-full text-xs font-semibold p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Dias de Inatividade:</label>
+              <input type="number" id="labReactivateDays" value="45" class="w-full text-xs font-semibold p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Oferta / Presente de Retorno:</label>
+            <input type="text" id="labReactivateDiscount" value="15% de desconto no corte ou hidratação" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500">
+          </div>
+          <button onclick="generateGrowthAction('reactivate')" id="btnGenReactivate" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center space-x-2 cursor-pointer">
+            <i data-lucide="message-square" class="w-4 h-4 text-emerald-300"></i>
+            <span>Gerar Mensagem de Reativação no WhatsApp</span>
+          </button>
+        </div>
+
+        <!-- Resultado Gerado -->
+        <div id="labResultCard" class="hidden p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <span id="labResultTag" class="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full">
+              Canal: Google Maps
+            </span>
+            <button onclick="copyLabResult()" id="btnCopyLab" class="text-xs text-slate-600 hover:text-slate-900 font-bold flex items-center space-x-1 cursor-pointer">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span id="txtCopyLab">Copiar Mensagem</span>
+            </button>
+          </div>
+          <div id="labResultText" class="text-xs font-medium text-slate-800 bg-white p-3 rounded-xl border border-slate-200 whitespace-pre-line leading-relaxed"></div>
+          <div id="labResultStrategy" class="text-[11px] text-slate-500 italic"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 4. OS 3 PILARES DO PRODUTO (RECURSOS CHAVE) -->
+    <!-- ======================================================== -->
+    <section id="como-funciona" class="max-w-6xl mx-auto px-6 py-16">
+      
+      <div class="text-center mb-12">
+        <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Os 3 Motores de Faturamento</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+          Tudo o que sua empresa precisa para vender todos os dias
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Motor 1: Vendedor WhatsApp IA -->
+        <div class="glass-card rounded-3xl p-7 shadow-xs hover:shadow-md transition flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5">
+              <i data-lucide="message-square" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">1. Vendedor WhatsApp 24/7</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Responde na velocidade da luz com as informações corretas da sua empresa. Qualifica o lead, apresenta seu catálogo, agenda atendimentos e fornece link de pagamento ou Pix.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-bold text-emerald-700">
+            <span>Zera perda de clientes por demora</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
+          </div>
+        </div>
+
+        <!-- Motor 2: Multiplicador Google 5 Estrelas -->
+        <div class="glass-card rounded-3xl p-7 shadow-xs hover:shadow-md transition flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-5">
+              <i data-lucide="star" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">2. Google Maps 5 Estrelas</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              O software envia uma mensagem amigável no WhatsApp pós-atendimento pedindo avaliação no Google. Filtra insatisfações internamente e joga avaliações 5 estrelas direto na sua página.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-bold text-amber-700">
+            <span>Sua empresa #1 no Google da cidade</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
+          </div>
+        </div>
+
+        <!-- Motor 3: Gerador de Criativos & Anúncios -->
+        <div class="glass-card rounded-3xl p-7 shadow-xs hover:shadow-md transition flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-5">
+              <i data-lucide="sparkles" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">3. Fábrica de Anúncios com IA</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Crie textos persuasivos para anúncios no Instagram, ideias de carrosséis e roteiros para vídeos curtos em segundos. Tudo calibrado para o seu nicho e localização geográfica.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-bold text-indigo-700">
+            <span>Tráfego pago descomplicado</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 5. CALCULADORA INTERATIVA DE ROI (RETORNO FINANCEIRO) -->
+    <!-- ======================================================== -->
+    <section id="calculadora-roi" class="max-w-4xl mx-auto px-6 py-12">
+      <div class="glass-card rounded-3xl p-8 sm:p-10 border border-slate-200/90 shadow-sm">
+        
+        <div class="text-center mb-8">
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Simulação de Retorno</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+            Quanto dinheiro sua empresa está perdendo por mês?
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            Estudos mostram que 35% a 50% dos contatos no WhatsApp deixam de comprar quando demoram mais de 10 minutos para responder.
+          </p>
+        </div>
+
+        <!-- Controles da Calculadora -->
+        <div class="space-y-6">
+          
+          <div>
+            <div class="flex justify-between items-center text-xs font-bold text-slate-700 mb-2">
+              <span>Leads/Mensagens recebidas no WhatsApp por mês:</span>
+              <span id="leadsValueText" class="text-indigo-600 font-mono text-sm">150 mensagens</span>
+            </div>
+            <input 
+              type="range" 
+              id="leadsSlider" 
+              min="20" 
+              max="1000" 
+              step="10" 
+              value="150" 
+              class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+              oninput="calculateROI()"
+            >
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center text-xs font-bold text-slate-700 mb-2">
+              <span>Ticket Médio por Venda / Atendimento:</span>
+              <span id="ticketValueText" class="text-indigo-600 font-mono text-sm">R$ 150</span>
+            </div>
+            <input 
+              type="range" 
+              id="ticketSlider" 
+              min="30" 
+              max="2000" 
+              step="10" 
+              value="150" 
+              class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+              oninput="calculateROI()"
+            >
+          </div>
+
+        </div>
+
+        <!-- Resultado Instantâneo -->
+        <div class="mt-8 p-6 rounded-2xl bg-indigo-50/70 border border-indigo-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+          <div>
+            <span class="text-xs font-bold text-indigo-900 block">Faturamento Extra Estimado com Resposta em 5s:</span>
+            <div class="text-3xl sm:text-4xl font-black text-indigo-700 font-mono mt-1" id="roiResult">
+              + R$ 3.375 / mês
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1">
+              Recuperando apenas 15% das vendas perdidas fora do horário comercial.
+            </p>
+          </div>
+          <div class="sm:text-right shrink-0">
+            <span class="text-[11px] text-slate-500 block">Investimento no growth.coon:</span>
+            <span class="text-sm font-bold text-slate-900 block">Apenas R$ 197 / mês</span>
+            <span class="inline-block mt-1 text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
+              Retorno de 17x
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 6. TABELA DE PLANOS & PREÇOS (RECORRÊNCIA / MRR) -->
+    <!-- ======================================================== -->
+    <section id="precos" class="max-w-6xl mx-auto px-6 py-16">
+      
+      <div class="text-center mb-12">
+        <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Planos Transparentes</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+          Escolha o plano ideal para a sua escala
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 max-w-md mx-auto mt-2">
+          Sem taxas de setup ocultas. Sem contratos abusivos. Ativação imediata em 2 minutos.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+        
+        <!-- Plano Start -->
+        <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-xs hover:shadow-md transition flex flex-col justify-between">
+          <div>
+            <div class="mb-4">
+              <h3 class="text-base font-bold text-slate-900">Start</h3>
+              <p class="text-xs text-slate-500">Para autônomos, consultórios e barbearias</p>
+            </div>
+            <div class="mb-6">
+              <span class="text-3xl font-extrabold text-slate-900 font-mono">R$ 197</span>
+              <span class="text-xs text-slate-500">/mês</span>
+            </div>
+            <ul class="space-y-3 text-xs text-slate-600 mb-8">
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span>1 Número de WhatsApp Conectado</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span>Atendente IA 24/7 (respostas em 5s)</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span>Multiplicador Google 5 Estrelas</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span>Até 500 conversas inteligentes/mês</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span>Suporte via WhatsApp e E-mail</span>
+              </li>
+            </ul>
+          </div>
+          <button onclick="openCheckout('Start', 197)" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs rounded-xl transition">
+            Assinar Plano Start
+          </button>
+        </div>
+
+        <!-- Plano Pro (Destaque) -->
+        <div class="bg-white rounded-3xl border-2 border-indigo-600 p-8 shadow-xl relative flex flex-col justify-between transform md:-translate-y-2">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+            Mais Escolhido por Empresas
+          </div>
+          <div>
+            <div class="mb-4">
+              <h3 class="text-base font-bold text-slate-900">Pro</h3>
+              <p class="text-xs text-slate-500">Para clínicas, imobiliárias e comércios em expansão</p>
+            </div>
+            <div class="mb-6">
+              <span class="text-3xl font-extrabold text-indigo-600 font-mono">R$ 397</span>
+              <span class="text-xs text-slate-500">/mês</span>
+            </div>
+            <ul class="space-y-3 text-xs text-slate-600 mb-8">
+              <li class="flex items-center space-x-2 font-semibold text-slate-900">
+                <i data-lucide="check" class="w-4 h-4 text-indigo-600 shrink-0"></i>
+                <span>Até 3 Números ou Atendentes</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-indigo-600 shrink-0"></i>
+                <span>Conversas Inteligentes Ilimitadas</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-indigo-600 shrink-0"></i>
+                <span>Google Reviews com Filtro Anti-Crítica</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-indigo-600 shrink-0"></i>
+                <span>Fábrica de Anúncios e Criativos com IA</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-indigo-600 shrink-0"></i>
+                <span>Disparos de Reativação de Clientes Antigos</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-indigo-600 shrink-0"></i>
+                <span>Suporte Prioritário VIP</span>
+              </li>
+            </ul>
+          </div>
+          <button onclick="openCheckout('Pro', 397)" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md shadow-indigo-600/20 transition">
+            Assinar Plano Pro
+          </button>
+        </div>
+
+        <!-- Plano Enterprise -->
+        <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-xs hover:shadow-md transition flex flex-col justify-between">
+          <div>
+            <div class="mb-4">
+              <h3 class="text-base font-bold text-slate-900">Enterprise</h3>
+              <p class="text-xs text-slate-500">Para franquias, redes e alto volume</p>
+            </div>
+            <div class="mb-6">
+              <span class="text-3xl font-extrabold text-slate-900 font-mono">R$ 897</span>
+              <span class="text-xs text-slate-500">/mês</span>
+            </div>
+            <ul class="space-y-3 text-xs text-slate-600 mb-8">
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span>Múltiplas Filiais e WhatsApps</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span>IA Treinada com Manual & Catálogo Próprio</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span>Integração via Webhooks & CRM</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span>Gerente de Contas Dedicado</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span>SLA de Atendimento Garantido</span>
+              </li>
+            </ul>
+          </div>
+          <button onclick="openCheckout('Enterprise', 897)" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition">
+            Falar com Consultor
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 7. PERGUNTAS FREQUENTES (QUEBRANDO TODAS AS OBJEÇÕES) -->
+    <!-- ======================================================== -->
+    <section id="faq" class="max-w-4xl mx-auto px-6 py-12">
+      <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-slate-900">Perguntas Frequentes</h2>
+        <p class="text-xs text-slate-500 mt-1">Tudo esclarecido antes de você assinar</p>
+      </div>
+
+      <div class="space-y-3">
+        <details class="group bg-white rounded-2xl border border-slate-200 p-4 transition open:shadow-xs">
+          <summary class="font-bold text-xs text-slate-800 cursor-pointer list-none flex items-center justify-between">
+            <span>Preciso deixar meu computador ligado para a IA responder?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
+          </summary>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Não! O growth.coon opera 100% na nuvem de alta segurança da COON. Mesmo com seu computador desligado ou sem bateria no celular, o atendente inteligente responde instantaneamente.
+          </p>
+        </details>
+
+        <details class="group bg-white rounded-2xl border border-slate-200 p-4 transition open:shadow-xs">
+          <summary class="font-bold text-xs text-slate-800 cursor-pointer list-none flex items-center justify-between">
+            <span>Vou precisar trocar o número do WhatsApp da minha empresa?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
+          </summary>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            De jeito nenhum. A integração é feita via leitura de QR Code no seu WhatsApp atual (seja Normal ou Business) em menos de 1 minuto, exatamente como você conecta o WhatsApp Web.
+          </p>
+        </details>
+
+        <details class="group bg-white rounded-2xl border border-slate-200 p-4 transition open:shadow-xs">
+          <summary class="font-bold text-xs text-slate-800 cursor-pointer list-none flex items-center justify-between">
+            <span>E se o cliente fizer uma pergunta muito específica ou técnica?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
+          </summary>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            A IA é treinada para reconhecer dúvidas fora do escopo pré-definido e transfere a conversa educadamente para um atendente humano da sua equipe, notificando você no mesmo instante.
+          </p>
+        </details>
+
+        <details class="group bg-white rounded-2xl border border-slate-200 p-4 transition open:shadow-xs">
+          <summary class="font-bold text-xs text-slate-800 cursor-pointer list-none flex items-center justify-between">
+            <span>Tem contrato de fidelidade ou multa de cancelamento?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
+          </summary>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Zero fidelidade. Acreditamos no valor gerado pelo software no primeiro mês. Se por qualquer motivo quiser pausar ou cancelar, basta 1 clique no painel sem perguntas ou taxas.
+          </p>
+        </details>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- MODAL DE CHECKOUT / CONTATO RÁPIDO -->
+  <!-- ======================================================== -->
+  <!-- MODAL DE CHECKOUT & ATIVAÇÃO INSTANTÂNEA PIX / HETZNER -->
+  <!-- ======================================================== -->
+  <div id="checkoutModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 max-w-md w-full shadow-2xl animate-in fade-in zoom-in-95 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div>
+          <h3 class="text-sm font-bold text-slate-900">Ativação do growth.coon</h3>
+          <p id="checkoutPlanSubtitle" class="text-xs text-indigo-600 font-semibold">Plano Pro • R$ 89,90/mês</p>
+        </div>
+        <button onclick="closeCheckout()" class="text-slate-400 hover:text-slate-700 cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Formulário de Ativação -->
+      <div id="growthFormStep" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nome do Responsável:</label>
+          <input type="text" id="leadName" placeholder="Ex: Marcelo Silveira" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 font-medium">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Email de Acesso:</label>
+          <input type="email" id="leadEmail" placeholder="marcelo@empresa.com.br" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 font-medium">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp para Ativação:</label>
+          <input type="tel" id="leadWhatsapp" placeholder="(11) 99999-9999" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 font-medium">
+        </div>
+        <button onclick="submitGrowthCheckout()" id="btnSubmitGrowth" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-2 cursor-pointer">
+          <i data-lucide="zap" class="w-4 h-4"></i>
+          <span>Gerar Chave Pix & Liberar Acesso</span>
+        </button>
+        <p class="text-[10px] text-center text-slate-400">
+          Ativação segura via COON Soluções Tecnológicas • Banco Hetzner
+        </p>
+      </div>
+
+      <!-- Etapa de Pagamento Pix -->
+      <div id="growthPixStep" class="hidden space-y-4 text-center">
+        <div class="p-3 bg-indigo-50 border border-indigo-200 rounded-2xl">
+          <span class="text-xs font-bold text-indigo-950 block">🎉 Conta Ativada no Banco Hetzner!</span>
+          <span class="text-[11px] text-indigo-800">Escaneie o QR Code ou copie a chave Pix para quitação:</span>
+        </div>
+
+        <div class="w-36 h-36 mx-auto bg-white p-2 rounded-2xl border-2 border-indigo-400 shadow-sm flex items-center justify-center">
+          <div id="growthQrContainer" class="w-full h-full flex items-center justify-center"></div>
+        </div>
+
+        <div class="space-y-1.5 text-left">
+          <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Pix Copia e Cola:</span>
+          <input type="text" id="growthPixCopyPaste" readonly class="w-full p-2 bg-slate-100 border border-slate-200 rounded-lg font-mono text-[10px] text-slate-700 select-all">
+          <button onclick="copyGrowthPix()" id="btnCopyGrowthPix" class="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span id="btnCopyGrowthText">Copiar Código Pix</span>
+          </button>
+        </div>
+
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+          <span class="flex items-center space-x-1"><i data-lucide="clock" class="w-3 h-3 text-indigo-600"></i><span>Aprovação em 2 segundos</span></span>
+          <button onclick="closeCheckout(); window.location.reload();" class="font-bold text-indigo-600 hover:underline">Já Paguei / Entrar no App →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- RODAPÉ INSTITUCIONAL COON -->
+  <!-- ======================================================== -->
+  <!-- ======================================================== -->
+  <!-- RODAPÉ INSTITUCIONAL COON -->
+  <!-- ======================================================== -->
+  <footer class="bg-white border-t border-slate-200 py-4 px-6 text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500">
+      <span class="font-bold text-slate-800">Co.on Participações 2026</span>
+      <span class="text-[10px] text-slate-400">Todos os direitos reservados</span>
+    </div>
+  </footer>
+
+  <script>
+    // Inicializar ícones Lucide
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      calculateROI();
+    });
+
+    // Simulador de Chat no WhatsApp
+    function simulateChat(type) {
+      const chatBox = document.getElementById("chatMessages");
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      let userMsg = "";
+      let botMsg = "";
+
+      if (type === 'preco') {
+        userMsg = "Qual o valor do serviço de vocês?";
+        botMsg = "Olá! Nossos serviços começam a partir de R$ 150 com garantia total de qualidade. Posso te enviar a tabela completa de pacotes com desconto especial de hoje?";
+      } else if (type === 'horario') {
+        userMsg = "Vocês têm horário vago para amanhã à tarde?";
+        botMsg = "Temos sim! Tenho vaga disponível às 14:30 e às 16:00. Qual desses horários fica melhor para reservar no seu nome agora mesmo?";
+      } else if (type === 'pix') {
+        userMsg = "Aceitam Pix? Como faço para pagar?";
+        botMsg = "Sim, aceitamos Pix e cartão! Segue a nossa chave Pix oficial (CNPJ): <strong>financeiro@coon.com.br</strong>. Assim que fizer, já me envia o comprovante que confirmo seu agendamento em 5 segundos! 🚀";
+      }
+
+      // Append User message
+      chatBox.innerHTML += `
+        <div class="flex justify-end">
+          <div class="bg-[#dcf8c6] text-slate-800 p-2.5 rounded-2xl rounded-tr-none shadow-xs max-w-[85%] leading-relaxed">
+            <p>${userMsg}</p>
+            <span class="text-[9px] text-slate-400 text-right block mt-1">${time} ✓✓</span>
+          </div>
+        </div>
+      `;
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Append Bot response after 400ms
+      setTimeout(() => {
+        chatBox.innerHTML += `
+          <div class="flex justify-start animate-in fade-in duration-200">
+            <div class="bg-white text-slate-800 p-2.5 rounded-2xl rounded-tl-none shadow-xs max-w-[85%] leading-relaxed">
+              <p>${botMsg}</p>
+              <span class="text-[9px] text-slate-400 text-right block mt-1">${time} ✓✓</span>
+            </div>
+          </div>
+        `;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 450);
+    }
+
+    function sendCustomChatMessage() {
+      const input = document.getElementById("userChatInput");
+      const text = input ? input.value.trim() : "";
+      if (!text) return;
+      input.value = "";
+
+      const chatBox = document.getElementById("chatMessages");
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Append user msg
+      chatBox.innerHTML += `
+        <div class="flex justify-end">
+          <div class="bg-[#dcf8c6] text-slate-800 p-2.5 rounded-2xl rounded-tr-none shadow-xs max-w-[85%] leading-relaxed">
+            <p>${text}</p>
+            <span class="text-[9px] text-slate-400 text-right block mt-1">${time} ✓✓</span>
+          </div>
+        </div>
+      `;
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Smart AI reply
+      setTimeout(() => {
+        let reply = "Perfeito! Já anotei aqui. Nossa equipe especializada atende em até 5 segundos para tirar todas as dúvidas e agilizar seu atendimento. Como posso te direcionar melhor agora?";
+        const low = text.toLowerCase();
+        if (low.includes("preço") || low.includes("valor") || low.includes("custa")) {
+          reply = "Nossos pacotes têm condições exclusivas a partir de R$ 89,90/mês no lote de lançamento, sem taxa de adesão nem fidelidade. Quer que eu reserve sua vaga agora?";
+        } else if (low.includes("horario") || low.includes("vaga") || low.includes("amanha") || low.includes("hoje")) {
+          reply = "Temos horários disponíveis sim! Nosso sistema automatiza o agendamento em tempo real direto na sua agenda. Qual dia fica melhor para você?";
+        } else if (low.includes("pix") || low.includes("pagar") || low.includes("cartao")) {
+          reply = "Aceitamos Pix instantâneo e parcelamento em até 12x no cartão! Os dados para quitação são gerados na hora com segurança total.";
+        }
+
+        chatBox.innerHTML += `
+          <div class="flex justify-start animate-in fade-in duration-200">
+            <div class="bg-white text-slate-800 p-2.5 rounded-2xl rounded-tl-none shadow-xs max-w-[85%] leading-relaxed">
+              <p>${reply}</p>
+              <span class="text-[9px] text-slate-400 text-right block mt-1">${time} ✓✓</span>
+            </div>
+          </div>
+        `;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 500);
+    }
+
+    // Laboratório de Respostas Google Maps & Reativação WhatsApp
+    function switchGrowthLabTab(tab) {
+      const pReview = document.getElementById("panelLabReview");
+      const pReactivate = document.getElementById("panelLabReactivate");
+      const tReview = document.getElementById("tabLabReview");
+      const tReactivate = document.getElementById("tabLabReactivate");
+
+      if (tab === 'review') {
+        pReview.classList.remove("hidden");
+        pReactivate.classList.add("hidden");
+        tReview.className = "px-3.5 py-1.5 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-xs transition cursor-pointer";
+        tReactivate.className = "px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold text-xs transition cursor-pointer";
+      } else {
+        pReview.classList.add("hidden");
+        pReactivate.classList.remove("hidden");
+        tReview.className = "px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold text-xs transition cursor-pointer";
+        tReactivate.className = "px-3.5 py-1.5 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-xs transition cursor-pointer";
+      }
+      lucide.createIcons();
+    }
+
+    async function generateGrowthAction(type) {
+      const resultCard = document.getElementById("labResultCard");
+      const resultText = document.getElementById("labResultText");
+      const resultStrat = document.getElementById("labResultStrategy");
+      const resultTag = document.getElementById("labResultTag");
+
+      let payload = {};
+      let btn = null;
+
+      if (type === 'review') {
+        btn = document.getElementById("btnGenReview");
+        payload = {
+          action_type: "reply_review",
+          business_name: document.getElementById("labReviewBiz").value.trim() || "Minha Empresa",
+          customer_name: document.getElementById("labReviewClient").value.trim() || "Cliente",
+          rating: parseInt(document.getElementById("labReviewRating").value, 10),
+          customer_feedback: document.getElementById("labReviewText").value.trim() || "Ótimo atendimento!"
+        };
+      } else {
+        btn = document.getElementById("btnGenReactivate");
+        payload = {
+          action_type: "reactivate_customer",
+          business_name: document.getElementById("labReactivateBiz").value.trim() || "Minha Empresa",
+          customer_name: document.getElementById("labReactivateClient").value.trim() || "Cliente",
+          inactivity_days: parseInt(document.getElementById("labReactivateDays").value, 10) || 30,
+          discount_offered: document.getElementById("labReactivateDiscount").value.trim() || "10% de presente"
+        };
+      }
+
+      const origHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Gerando com Motor IA...</span>`;
+      lucide.createIcons();
+
+      try {
+        const res = await fetch("/api/growth/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          resultTag.innerText = `Canal Otimizado: ${data.suggested_channel}`;
+          resultText.innerText = data.generated_text;
+          resultStrat.innerText = `💡 Estratégia de Conversão: ${data.strategy_explanation}`;
+          resultCard.classList.remove("hidden");
+          lucide.createIcons();
+        } else {
+          alert("Não foi possível gerar no momento. Verifique a conexão com o servidor.");
+        }
+      } catch (err) {
+        alert("Erro ao conectar à API do growth.coon.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
+        lucide.createIcons();
+      }
+    }
+
+    function copyLabResult() {
+      const text = document.getElementById("labResultText").innerText;
+      navigator.clipboard.writeText(text);
+      const span = document.getElementById("txtCopyLab");
+      span.innerText = "Copiado com Sucesso!";
+      setTimeout(() => { span.innerText = "Copiar Mensagem"; }, 2500);
+    }
+
+    // Calculadora Interativa de ROI
+    function calculateROI() {
+      const leads = parseInt(document.getElementById("leadsSlider").value, 10);
+      const ticket = parseInt(document.getElementById("ticketSlider").value, 10);
+
+      document.getElementById("leadsValueText").innerText = `${leads} contatos`;
+      document.getElementById("ticketValueText").innerText = `R$ ${ticket}`;
+
+      // Estimativa conservadora: recuperação de 15% de vendas perdidas pela velocidade de 5s da IA
+      const recoveredSales = Math.max(1, Math.round(leads * 0.15));
+      const extraRevenue = recoveredSales * ticket;
+
+      document.getElementById("roiResult").innerText = `+ R$ ${extraRevenue.toLocaleString('pt-BR')} / mês`;
+    }
+
+    // Checkout Modal Unificado Hetzner
+    let selectedPlan = 'pro';
+    let selectedPrice = 89.90;
+
+    function openCheckout(plan, price) {
+      selectedPlan = (plan || 'pro').toLowerCase();
+      selectedPrice = price || 89.90;
+      document.getElementById("checkoutPlanSubtitle").innerText = `Plano ${plan} • R$ ${Number(selectedPrice).toFixed(2).replace('.', ',')}/mês`;
+      document.getElementById("growthFormStep").classList.remove("hidden");
+      document.getElementById("growthPixStep").classList.add("hidden");
+      document.getElementById("checkoutModal").classList.remove("hidden");
+      lucide.createIcons();
+    }
+
+    function closeCheckout() {
+      document.getElementById("checkoutModal").classList.add("hidden");
+    }
+
+    async function submitGrowthCheckout() {
+      const name = document.getElementById("leadName").value.trim() || "Cliente Growth";
+      const email = document.getElementById("leadEmail").value.trim();
+      const whatsapp = document.getElementById("leadWhatsapp").value.trim();
+
+      if (!email || !email.includes("@")) {
+        alert("Por favor, digite um email válido para liberação do acesso!");
+        return;
+      }
+
+      const btn = document.getElementById("btnSubmitGrowth");
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Gravando Assinatura no Banco Hetzner...</span>`;
+      lucide.createIcons();
+
+      try {
+        const res = await fetch("/api/checkout/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            app_id: "growth",
+            plan_id: selectedPlan === 'ultra' ? 'ultra' : 'pro',
+            billing_cycle: "monthly",
+            user_name: name,
+            user_email: email,
+            user_phone: whatsapp,
+            payment_method: "pix"
+          })
+        });
+
+        const data = await res.json();
+
+        document.getElementById("growthPixCopyPaste").value = data.pix_copy_paste;
+        document.getElementById("growthQrContainer").innerHTML = data.pix_qr_code_base64;
+        
+        localStorage.setItem("coon_growth_token", data.access_token);
+        localStorage.setItem("coon_growth_plan", data.plan_id);
+
+        document.getElementById("growthFormStep").classList.add("hidden");
+        document.getElementById("growthPixStep").classList.remove("hidden");
+        lucide.createIcons();
+      } catch (err) {
+        alert("Erro ao conectar ao servidor. Tente novamente em instantes.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i><span>Gerar Chave Pix & Liberar Acesso</span>`;
+        lucide.createIcons();
+      }
+    }
+
+    function copyGrowthPix() {
+      const copyText = document.getElementById("growthPixCopyPaste");
+      copyText.select();
+      navigator.clipboard.writeText(copyText.value);
+      document.getElementById("btnCopyGrowthText").innerText = "Chave Pix Copiada!";
+      setTimeout(() => {
+        document.getElementById("btnCopyGrowthText").innerText = "Copiar Código Pix";
+      }, 3000);
+    }
+  </script>
+  <script src="/static/coon-auth.js"></script>
+  <script src="/static/coon-bot.js"></script>
+</body>
+</html>

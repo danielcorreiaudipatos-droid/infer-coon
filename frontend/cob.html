@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cob.coon | Cobrança Humanoide & Recuperação de Boletos/Pix no WhatsApp</title>
+  
+  <meta name="description" content="cob.coon: Recupere até 68% dos clientes em atraso nos primeiros 7 dias via WhatsApp com Inteligência Artificial humanizada, tom educado e Pix Copia e Cola em 1 clique. COON.">
+  <meta name="theme-color" content="#059669">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='18' font-size='18' font-weight='bold' fill='%23059669'>$</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #fafbfd;
+      background-image: 
+        radial-gradient(at 10% 12%, rgba(16, 185, 129, 0.12) 0px, transparent 45%),
+        radial-gradient(at 90% 10%, rgba(59, 130, 246, 0.10) 0px, transparent 40%),
+        radial-gradient(at 50% 35%, rgba(13, 148, 136, 0.08) 0px, transparent 55%),
+        radial-gradient(at 85% 85%, rgba(16, 185, 129, 0.08) 0px, transparent 45%);
+      background-attachment: fixed;
+    }
+
+    /* ======================================================== */
+    /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: TRANSIÇÃO SUAVE DE CORES COON */
+    /* ======================================================== */
+    @keyframes coonSmoothSpectrum {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes coonDotPulse {
+      0%, 100% {
+        color: #10b981;
+        filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.5));
+        transform: scale(1);
+      }
+      50% {
+        color: #06b6d4;
+        filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.7));
+        transform: scale(1.18);
+      }
+    }
+
+    .gemini-wordmark, .coon-gradient, .coon-bigtech-logo {
+      display: inline-block;
+      background: linear-gradient(
+        90deg,
+        #1d4ed8 0%,
+        #2563eb 15%,
+        #0ea5e9 30%,
+        #10b981 45%,
+        #6366f1 60%,
+        #8b5cf6 75%,
+        #06b6d4 90%,
+        #1d4ed8 100%
+      );
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.055em;
+      animation: coonSmoothSpectrum 7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+      will-change: background-position;
+      transition: transform 0.3s ease;
+    }
+
+    .gemini-wordmark:hover, .coon-bigtech-logo:hover {
+      transform: scale(1.02);
+    }
+
+    .coon-dot-animated {
+      display: inline-block;
+      animation: coonDotPulse 7s ease-in-out infinite alternate;
+      will-change: color, filter, transform;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.90);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.90);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800 selection:bg-emerald-600 selection:text-white">
+
+  <!-- ======================================================== -->
+  <!-- BARRA DE NAVEGAÇÃO -->
+  <!-- ======================================================== -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-6 py-3.5">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      
+      <!-- Marca Oficial -->
+      <a href="/" class="flex items-center space-x-2.5 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition">
+          <i data-lucide="coins" class="w-5 h-5"></i>
+        </div>
+        <div class="flex items-baseline space-x-1">
+          <span class="text-xl font-extrabold tracking-tight text-slate-900">cob<span class="gemini-wordmark">.coon</span></span>
+          <span class="text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200 hidden sm:inline-block">
+            Recuperação Humanizada
+          </span>
+        </div>
+      </a>
+
+      <!-- Menu Superior -->
+      <nav class="hidden md:flex items-center space-x-6 text-xs font-semibold text-slate-600">
+        <a href="#simulador" class="hover:text-emerald-600 transition">Simulador WhatsApp</a>
+        <a href="#como-funciona" class="hover:text-emerald-600 transition">Como Funciona</a>
+        <a href="#recuperacao" class="hover:text-emerald-600 transition">Régua Educada</a>
+        <a href="#planos" class="hover:text-emerald-600 transition">Lote Fundador</a>
+      </nav>
+
+      <!-- Ações -->
+      <div class="flex items-center space-x-3">
+        <a href="/studio" class="text-xs font-semibold text-slate-500 hover:text-slate-900 transition hidden sm:inline-block">
+          Studio COON
+        </a>
+        <a href="#planos" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-full shadow-xs transition flex items-center space-x-1">
+          <span>Garantir Vaga</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-emerald-400"></i>
+        </a>
+
+        <!-- Widget Universal de Autenticação / Área do Assinante COON -->
+        <div id="coonAuthNavSlot"></div>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="flex-1">
+
+    <!-- ======================================================== -->
+    <!-- HERO SECTION: COBRANÇA HUMANIZADA SEM DESGASTE -->
+    <!-- ======================================================== -->
+    <section class="max-w-6xl mx-auto px-6 pt-16 pb-16 text-center relative">
+      
+      <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold mb-6">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>RECUPERAÇÃO AMIGÁVEL DE INADIMPLÊNCIA COM IA</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight max-w-4xl mx-auto">
+        Receba o que é seu sem <span class="coon-gradient">perder o cliente</span> e sem constrangimento
+      </h1>
+
+      <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mt-6 leading-relaxed">
+        78% das faturas em atraso não são má-fé: são apenas esquecimento, falta de tempo ou boleto perdido no email. A IA da COON conversa no WhatsApp com tom acolhedor, oferece o <strong>Pix Copia e Cola em 1 clique</strong> e recupera o caixa da sua empresa.
+      </p>
+
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#simulador" class="w-full sm:w-auto px-7 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-2xl shadow-lg shadow-emerald-600/20 transition flex items-center justify-center space-x-2">
+          <i data-lucide="message-square" class="w-4 h-4"></i>
+          <span>Testar Simulador no WhatsApp</span>
+        </a>
+        <a href="#planos" class="w-full sm:w-auto px-7 py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm rounded-2xl border border-slate-200 shadow-xs transition flex items-center justify-center space-x-2">
+          <span>Ver Preços de Lançamento</span>
+        </a>
+      </div>
+
+      <!-- Métricas Reais de Recuperação -->
+      <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-left">
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Taxa de Recuperação</span>
+          <div class="text-2xl font-black text-emerald-600 mt-1">68,4%</div>
+          <span class="text-[11px] text-slate-500">Recuperados em até 7 dias</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Taxa de Resposta</span>
+          <div class="text-2xl font-black text-slate-900 mt-1">94,2%</div>
+          <span class="text-[11px] text-emerald-600 font-semibold">Mensagens lidas no WhatsApp</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Tempo do Empresário</span>
+          <div class="text-2xl font-black text-slate-900 mt-1">0 Minutos</div>
+          <span class="text-[11px] text-blue-600 font-semibold">Régua 100% autônoma</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Relacionamento</span>
+          <div class="text-2xl font-black text-slate-900 mt-1">100% Seguro</div>
+          <span class="text-[11px] text-slate-500">Zero atrito ou constrangimento</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SIMULADOR INTERATIVO DE WHATSAPP COBRANÇA IA -->
+    <!-- ======================================================== -->
+    <section id="simulador" class="max-w-5xl mx-auto px-6 py-12">
+      <div class="glass-card rounded-3xl p-6 sm:p-10 border border-emerald-200/90 shadow-sm relative overflow-hidden">
+        
+        <div class="text-center mb-8">
+          <span class="text-xs font-bold text-emerald-700 uppercase tracking-widest">Simulação em Tempo Real</span>
+          <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+            Veja a Alice cobrando com elegância e empatia
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto mt-2">
+            Personalize a simulação abaixo e veja como a assistente aborda o cliente de acordo com os dias de atraso.
+          </p>
+        </div>
+
+        <!-- Painel de Controle da Simulação -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nome do Cliente:</label>
+            <input 
+              type="text" 
+              id="clientName" 
+              value="Carlos Eduardo" 
+              oninput="renderWhatsAppSimulator()"
+              class="w-full text-xs font-semibold px-3 py-2.5 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500"
+            >
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Valor em Aberto (R$):</label>
+            <input 
+              type="number" 
+              id="debtAmount" 
+              value="850.00" 
+              step="50"
+              oninput="renderWhatsAppSimulator()"
+              class="w-full text-xs font-semibold px-3 py-2.5 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500"
+            >
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Motivo da Cobrança:</label>
+            <select 
+              id="debtReason" 
+              onchange="renderWhatsAppSimulator()"
+              class="w-full text-xs font-semibold px-3 py-2.5 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500"
+            >
+              <option value="aluguel">Aluguel Imobiliário</option>
+              <option value="mensalidade">Mensalidade de Serviço</option>
+              <option value="pedido">Pedido / Compra de Mercadoria</option>
+              <option value="honorarios">Honorários Profissionais</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Seletor de Fase da Régua -->
+        <div class="flex flex-wrap gap-2 justify-center mb-8">
+          <button onclick="setStage('d-1')" id="btnD1" class="px-4 py-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition">
+            1 Dia Antes (Lembrete Gentil)
+          </button>
+          <button onclick="setStage('d0')" id="btnD0" class="px-4 py-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition">
+            No Dia (Facilitador Pix)
+          </button>
+          <button onclick="setStage('d3')" id="btnD3" class="px-4 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white shadow-xs transition">
+            3 Dias Depois (Checagem de Suporte)
+          </button>
+          <button onclick="setStage('d10')" id="btnD10" class="px-4 py-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition">
+            10 Dias Depois (Quitação com Desconto)
+          </button>
+        </div>
+
+        <!-- Mockup do WhatsApp Real -->
+        <div class="max-w-md mx-auto bg-[#efeae2] rounded-3xl overflow-hidden border border-slate-300 shadow-xl">
+          
+          <!-- Header do WhatsApp -->
+          <div class="bg-[#075e54] text-white px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="relative">
+                <div class="w-9 h-9 rounded-full bg-emerald-200 border border-white flex items-center justify-center font-bold text-emerald-900 text-sm overflow-hidden">
+                  <img src="/static/alice_avatar.jpg" alt="Alice" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80'">
+                </div>
+                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-white"></span>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold leading-tight">Alice • Assistente Financeira</h4>
+                <p class="text-[10px] text-emerald-100">online agora</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2 text-emerald-100">
+              <i data-lucide="shield-check" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+          <!-- Corpo das Mensagens -->
+          <div class="p-4 space-y-3 min-h-[300px] flex flex-col justify-end text-xs" id="chatContainer">
+            <!-- Mensagem da Alice -->
+            <div class="bg-white rounded-2xl rounded-tl-none p-3 shadow-2xs max-w-[88%] text-slate-800 space-y-2">
+              <p id="chatMsgText" class="leading-relaxed"></p>
+              
+              <!-- Card de Pagamento Copia e Cola -->
+              <div class="bg-emerald-50 rounded-xl p-2.5 border border-emerald-200 mt-2 space-y-1.5">
+                <div class="flex items-center justify-between text-[11px] font-bold text-emerald-900">
+                  <span>Chave Pix Copia e Cola:</span>
+                  <span id="chatAmountTag" class="text-emerald-700">R$ 850,00</span>
+                </div>
+                <div id="chatPixCodeText" class="bg-white p-2 rounded-lg font-mono text-[9px] text-slate-600 truncate border border-slate-200 select-all">
+                  00020126580014br.gov.bcb.pix0136cob.coon.850.quitacao.instantanea5204000053039865405850.005802BR5925COON TECNOLOGIA
+                </div>
+                <button onclick="copyPixCode()" id="copyPixBtn" class="w-full py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] rounded-lg transition flex items-center justify-center space-x-1">
+                  <i data-lucide="copy" class="w-3 h-3"></i>
+                  <span id="copyBtnText">Copiar Código Pix</span>
+                </button>
+              </div>
+
+              <div class="text-[9px] text-slate-400 text-right">Hoje, 09:42 ✓✓</div>
+            </div>
+          </div>
+
+          <!-- Footer Fake do WhatsApp -->
+          <div class="bg-[#f0f2f5] p-2.5 flex items-center space-x-2 border-t border-slate-200">
+            <div class="flex-1 bg-white rounded-full px-3 py-1.5 text-xs text-slate-400">
+              Digite uma mensagem...
+            </div>
+            <div class="w-8 h-8 rounded-full bg-[#00a884] text-white flex items-center justify-center">
+              <i data-lucide="mic" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- POR QUE O COB.COON É SUPERIOR A UMA AGÊNCIA DE COBRANÇA? -->
+    <!-- ======================================================== -->
+    <section id="como-funciona" class="max-w-6xl mx-auto px-6 py-12">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          A diferença entre uma cobrança invasiva e uma resolução inteligente
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-2xs">
+          <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold mb-4">
+            <i data-lucide="x-circle" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 mb-2">Cobrança Tradicional Antiga</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Ligação de telemarketing de número desconhecido que o cliente rejeita, mensagens robóticas com tom de ameaça e processo que destrói a relação e impede qualquer recompra.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-emerald-50/70 border border-emerald-300 shadow-xs">
+          <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold mb-4">
+            <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 mb-2">Método cob.coon com IA</h3>
+          <p class="text-xs text-slate-700 leading-relaxed">
+            Abordagem consultiva e humana no canal que ele mais usa (WhatsApp). A assistente pergunta se houve imprevisto, facilita o pagamento com Pix e preserva a dignidade e a fidelidade do cliente.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-2xs">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold mb-4">
+            <i data-lucide="badge-percent" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 mb-2">Gatilho de Desconto Dinâmico</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Para títulos com mais de 7 dias, a IA pode negociar um abatimento de 5% a 10% de juros para quitação hoje via Pix, transformando dívida perdida em dinheiro no caixa.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- PREÇOS & LOTE FUNDADOR -->
+    <!-- ======================================================== -->
+    <section id="planos" class="max-w-5xl mx-auto px-6 py-16">
+      
+      <!-- Selo de Alerta de Urgência: Lote Fundador -->
+      <div class="mb-10 p-4 rounded-2xl bg-amber-50 border border-amber-300/80 max-w-2xl mx-auto flex items-center justify-between text-left shadow-2xs">
+        <div class="flex items-center space-x-3">
+          <span class="w-3 h-3 rounded-full bg-amber-500 animate-ping"></span>
+          <div>
+            <div class="text-xs font-bold text-amber-950 uppercase tracking-wide">
+              Lote Fundador Aberto • Preço Travado Vitalício
+            </div>
+            <div class="text-[11px] text-amber-800">
+              Valor promocional garantido para os primeiros 500 assinantes. Quem entrar agora nunca terá reajuste!
+            </div>
+          </div>
+        </div>
+        <span class="text-[11px] font-mono font-bold bg-amber-200 text-amber-900 px-2.5 py-1 rounded-full whitespace-nowrap">
+          382/500 vagas
+        </span>
+      </div>
+
+      <div class="text-center mb-10">
+        <h2 class="text-3xl font-black text-slate-900 tracking-tight">Planos Acessíveis que se Pagam no 1º Boleto</h2>
+        <p class="text-sm text-slate-500 mt-2">Recupere um único boleto ou aluguel atrasado e a plataforma já está 100% paga.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+        
+        <!-- Plano Gratuito -->
+        <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-2xs flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block mb-1">Degustação</span>
+            <h3 class="text-lg font-bold text-slate-900">Gratuito</h3>
+            <div class="mt-4 mb-6">
+              <span class="text-3xl font-black text-slate-900">R$ 0</span>
+              <span class="text-xs text-slate-500">/mês</span>
+            </div>
+            <ul class="text-xs text-slate-600 space-y-2.5">
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+                <span>Até 10 cobranças com Pix</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+                <span>Disparo manual assistido</span>
+              </li>
+              <li class="flex items-center space-x-2 text-slate-400">
+                <i data-lucide="x" class="w-4 h-4"></i>
+                <span>Régua automática no WhatsApp</span>
+              </li>
+            </ul>
+          </div>
+          <button class="mt-8 w-full py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition">
+            Testar Grátis
+          </button>
+        </div>
+
+        <!-- Plano Pro (Destaque) -->
+        <div class="p-6 rounded-3xl bg-emerald-50/50 border-2 border-emerald-500 shadow-md relative flex flex-col justify-between">
+          <div class="absolute -top-3 right-6 bg-emerald-600 text-white text-[9px] font-bold uppercase tracking-widest px-3 py-0.5 rounded-full">
+            Mais Escolhido
+          </div>
+          <div>
+            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-700 block mb-1">Lote Fundador</span>
+            <h3 class="text-lg font-bold text-slate-900">Plano Pro</h3>
+            <div class="mt-4 mb-2">
+              <span class="text-xs text-slate-400 line-through">De R$ 149,90</span>
+              <div class="flex items-baseline space-x-1">
+                <span class="text-3xl font-black text-emerald-700">R$ 89,90</span>
+                <span class="text-xs text-slate-500">/mês</span>
+              </div>
+              <span class="text-[11px] font-bold text-emerald-800">ou 12x de R$ 49,90 no Anual</span>
+            </div>
+            <ul class="text-xs text-slate-700 space-y-2.5 mt-4">
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+                <span>Até 150 clientes cobrados/mês</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+                <span>Alice no WhatsApp 24/7 autônoma</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+                <span>Régua D-1, D0, D+3 e D+10</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+                <span>Geração de Pix com Desconto</span>
+              </li>
+            </ul>
+          </div>
+          <button onclick="openUniversalCheckout('cob', 'pro', 89.90, 'Plano Pro (Lote Fundador)')" class="mt-8 w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white shadow-xs transition cursor-pointer">
+            Garantir Lote Fundador Pro
+          </button>
+        </div>
+
+        <!-- Plano Ultra -->
+        <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-2xs flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block mb-1">Grandes Carteiras</span>
+            <h3 class="text-lg font-bold text-slate-900">Plano Ultra</h3>
+            <div class="mt-4 mb-2">
+              <span class="text-xs text-slate-400 line-through">De R$ 249,90</span>
+              <div class="flex items-baseline space-x-1">
+                <span class="text-3xl font-black text-slate-900">R$ 149,90</span>
+                <span class="text-xs text-slate-500">/mês</span>
+              </div>
+              <span class="text-[11px] font-bold text-slate-800">ou 12x de R$ 99,90 no Anual</span>
+            </div>
+            <ul class="text-xs text-slate-600 space-y-2.5 mt-4">
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+                <span>Cobranças Ilimitadas</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+                <span>Integração ERP & Split Bancário</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+                <span>Multi-WhatsApp e Multi-Atendentes</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+                <span>Gerente de Conta Dedicado</span>
+              </li>
+            </ul>
+          </div>
+          <button onclick="openUniversalCheckout('cob', 'ultra', 149.90, 'Plano Ultra (Lote Fundador)')" class="mt-8 w-full py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition cursor-pointer">
+            Garantir Lote Fundador Ultra
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- FOOTER -->
+  <!-- ======================================================== -->
+  <footer class="bg-white border-t border-slate-200 py-4 px-6 text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500">
+      <span class="font-bold text-slate-800">Co.on Participações 2026</span>
+      <span class="text-[10px] text-slate-400">Todos os direitos reservados</span>
+    </div>
+  </footer>
+
+  <script>
+    // Lucide Icons
+    lucide.createIcons();
+
+    let currentStage = 'd3';
+
+    function setStage(stage) {
+      currentStage = stage;
+      
+      // Atualizar classes dos botões
+      const buttons = {
+        'd-1': document.getElementById('btnD1'),
+        'd0': document.getElementById('btnD0'),
+        'd3': document.getElementById('btnD3'),
+        'd10': document.getElementById('btnD10')
+      };
+
+      for (let s in buttons) {
+        if (s === stage) {
+          buttons[s].className = "px-4 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white shadow-xs transition";
+        } else {
+          buttons[s].className = "px-4 py-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition";
+        }
+      }
+
+      renderWhatsAppSimulator();
+    }
+
+    let currentPixPayload = "00020126580014br.gov.bcb.pix0136cob.coon.850.quitacao.instantanea5204000053039865405850.005802BR5925COON TECNOLOGIA";
+
+    async function renderWhatsAppSimulator() {
+      const name = document.getElementById('clientName').value || 'Cliente';
+      const amount = parseFloat(document.getElementById('debtAmount').value || 850);
+      const reasonSelect = document.getElementById('debtReason');
+      const reasonVal = reasonSelect.value;
+      const reasonText = reasonSelect.options[reasonSelect.selectedIndex].text.toLowerCase();
+
+      let days = 3;
+      if (currentStage === 'd-1') days = -1;
+      else if (currentStage === 'd0') days = 0;
+      else if (currentStage === 'd3') days = 3;
+      else if (currentStage === 'd10') days = 10;
+
+      try {
+        const res = await fetch("/api/cob/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            debtor_name: name,
+            amount: amount,
+            days_overdue: days,
+            reason: reasonVal
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          currentPixPayload = data.pix_copy_paste;
+
+          const formattedAmount = data.discounted_amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+          document.getElementById('chatAmountTag').innerText = (data.discounted_amount < data.original_amount)
+            ? `${formattedAmount} (5% OFF)`
+            : formattedAmount;
+
+          const pixDiv = document.getElementById('chatPixCodeText');
+          if (pixDiv) pixDiv.innerText = currentPixPayload;
+
+          const chatMsg = document.getElementById('chatMsgText');
+          if (chatMsg) chatMsg.innerHTML = data.message_text.replace(/\n/g, '<br>');
+          return;
+        }
+      } catch (err) {
+        console.warn("Backend API indisponível, usando renderizador local", err);
+      }
+
+      // Fallback local caso o backend esteja off
+      const formattedAmount = amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('chatAmountTag').innerText = formattedAmount;
+      const chatMsg = document.getElementById('chatMsgText');
+
+      if (currentStage === 'd-1') {
+        chatMsg.innerHTML = `Olá, <strong>${name}</strong>! Tudo bem? 😊<br><br>Aqui é a Alice da equipe financeira. Só passando para te lembrar gentilmente que a fatura referente a <strong>${reasonText}</strong> (${formattedAmount}) vence <strong>amanhã</strong>.<br><br>Para sua comodidade, estou deixando o Pix Copia e Cola logo abaixo:`;
+      } else if (currentStage === 'd0') {
+        chatMsg.innerHTML = `Oi, <strong>${name}</strong>, bom dia!<br><br>Hoje é a data de vencimento de <strong>${reasonText}</strong> no valor de <strong>${formattedAmount}</strong>. Para não acumular juros ou encargos de cartório, você pode quitar em 1 segundo pelo Pix abaixo:`;
+      } else if (currentStage === 'd3') {
+        chatMsg.innerHTML = `Olá, <strong>${name}</strong>! Espero que esteja bem.<br><br>Passando para checar se houve algum imprevisto com o envio do comprovante referente a <strong>${reasonText}</strong> (${formattedAmount}), que constou em aberto há 3 dias.<br><br>Caso precise de uma segunda via ou queira quitar agora sem complicações, gerei este Pix direto para você:`;
+      } else if (currentStage === 'd10') {
+        const discounted = (amount * 0.95).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        document.getElementById('chatAmountTag').innerText = `${discounted} (5% OFF)`;
+        chatMsg.innerHTML = `Olá, <strong>${name}</strong>!<br><br>Entendemos perfeitamente que imprevistos acontecem. Para resolvermos a pendência de <strong>${reasonText}</strong> de forma tranquila e sem burocracia, a diretoria liberou uma condição especial de <strong>quitação hoje por ${discounted}</strong> (juros e encargos 100% zerados).<br><br>Basta copiar o Pix com desconto abaixo:`;
+      }
+    }
+
+    function copyPixCode() {
+      const btn = document.getElementById('copyPixBtn');
+      const text = document.getElementById('copyBtnText');
+      navigator.clipboard.writeText(currentPixPayload);
+      text.innerText = "Pix Copiado com Sucesso!";
+      btn.classList.add('bg-emerald-800');
+      setTimeout(() => {
+        text.innerText = "Copiar Código Pix";
+        btn.classList.remove('bg-emerald-800');
+      }, 2500);
+    }
+
+    // Inicializar
+    renderWhatsAppSimulator();
+  </script>
+
+  <!-- ======================================================== -->
+  <!-- MODAL DE CHECKOUT & ATIVAÇÃO INSTANTÂNEA PIX / HETZNER -->
+  <!-- ======================================================== -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl border border-slate-200 max-w-md w-full p-6 shadow-2xl space-y-5 my-8">
+      
+      <!-- Topo -->
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center space-x-2">
+          <span class="text-xl font-black tracking-tight coon-gradient">cob<span class="text-emerald-500">.coon</span></span>
+          <span id="checkoutPlanBadge" class="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+            Plano Pro
+          </span>
+        </div>
+        <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-xl hover:bg-slate-100 transition cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Resumo do Pedido -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total do Investimento</span>
+          <span id="checkoutAmountDisplay" class="text-2xl font-black text-slate-900 font-mono">R$ 89,90</span>
+          <span class="text-[10px] text-emerald-600 font-semibold block">Preço vitalício travado • Lote Fundador</span>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow-xs">
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
+        </div>
+      </div>
+
+      <!-- Formulário de Ativação -->
+      <div id="checkoutFormStep" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Seu Nome Completo:</label>
+          <input type="text" id="chkName" placeholder="Ex: Roberto Silva" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500 font-medium">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Seu Email de Acesso:</label>
+          <input type="email" id="chkEmail" placeholder="roberto@suaempresa.com.br" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500 font-medium">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">WhatsApp para Ativação:</label>
+          <input type="tel" id="chkPhone" placeholder="(11) 99999-9999" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500 font-medium">
+        </div>
+
+        <button onclick="submitCheckoutSubscription()" id="btnSubmitCheckout" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center justify-center space-x-2 mt-4 cursor-pointer">
+          <i data-lucide="zap" class="w-4 h-4"></i>
+          <span>Gerar Chave Pix & Liberar Acesso</span>
+        </button>
+      </div>
+
+      <!-- Etapa de Pagamento (QR Code Pix & Copia e Cola) -->
+      <div id="checkoutPixStep" class="hidden space-y-4 text-center">
+        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-2xl">
+          <span class="text-xs font-bold text-emerald-950 block">🎉 Conta Criada & Salva no Banco Hetzner!</span>
+          <span class="text-[11px] text-emerald-800">Escaneie o QR Code abaixo ou copie o código Pix para quitação:</span>
+        </div>
+
+        <div class="w-40 h-40 mx-auto bg-white p-2 rounded-2xl border-2 border-emerald-400 shadow-sm flex items-center justify-center">
+          <div id="chkQrContainer" class="w-full h-full flex items-center justify-center"></div>
+        </div>
+
+        <div class="space-y-1.5 text-left">
+          <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Pix Copia e Cola:</span>
+          <input type="text" id="chkPixCopyPaste" readonly class="w-full p-2 bg-slate-100 border border-slate-200 rounded-lg font-mono text-[10px] text-slate-700 select-all">
+          <button onclick="copyCheckoutPix()" id="btnCopyChkPix" class="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span id="btnCopyChkText">Copiar Código Pix</span>
+          </button>
+        </div>
+
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+          <span class="flex items-center space-x-1"><i data-lucide="clock" class="w-3 h-3 text-emerald-600"></i><span>Aprovação em 2 segundos</span></span>
+          <button onclick="completeCheckoutLogin()" class="font-bold text-emerald-600 hover:underline">Já Paguei / Entrar no App →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    let activeAppId = 'cob';
+    let activePlanId = 'pro';
+    let activeAmount = 89.90;
+
+    function openUniversalCheckout(appId, planId, amount, planName) {
+      activeAppId = appId;
+      activePlanId = planId;
+      activeAmount = amount;
+
+      document.getElementById("checkoutPlanBadge").innerText = planName;
+      document.getElementById("checkoutAmountDisplay").innerText = `R$ ${amount.toFixed(2).replace('.', ',')}`;
+
+      document.getElementById("checkoutFormStep").classList.remove("hidden");
+      document.getElementById("checkoutPixStep").classList.add("hidden");
+
+      const modal = document.getElementById("checkoutModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      lucide.createIcons();
+    }
+
+    function closeCheckoutModal() {
+      const modal = document.getElementById("checkoutModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    async function submitCheckoutSubscription() {
+      const name = document.getElementById("chkName").value.trim() || "Cliente COON";
+      const email = document.getElementById("chkEmail").value.trim();
+      const phone = document.getElementById("chkPhone").value.trim();
+
+      if (!email || !email.includes("@")) {
+        alert("Por favor, digite um e-mail válido para liberação do acesso!");
+        return;
+      }
+
+      const btn = document.getElementById("btnSubmitCheckout");
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Gravando Assinatura no Banco Hetzner...</span>`;
+      lucide.createIcons();
+
+      try {
+        const res = await fetch("/api/checkout/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            app_id: activeAppId,
+            plan_id: activePlanId,
+            billing_cycle: "monthly",
+            user_name: name,
+            user_email: email,
+            user_phone: phone,
+            payment_method: "pix"
+          })
+        });
+
+        const data = await res.json();
+
+        document.getElementById("chkPixCopyPaste").value = data.pix_copy_paste;
+        document.getElementById("chkQrContainer").innerHTML = data.pix_qr_code_base64;
+        
+        localStorage.setItem(`coon_${activeAppId}_token`, data.access_token);
+        localStorage.setItem(`coon_${activeAppId}_plan`, data.plan_id);
+
+        document.getElementById("checkoutFormStep").classList.add("hidden");
+        document.getElementById("checkoutPixStep").classList.remove("hidden");
+        lucide.createIcons();
+      } catch (err) {
+        alert("Erro ao conectar ao servidor. Tente novamente em instantes.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i><span>Gerar Chave Pix & Liberar Acesso</span>`;
+        lucide.createIcons();
+      }
+    }
+
+    function copyCheckoutPix() {
+      const copyText = document.getElementById("chkPixCopyPaste");
+      copyText.select();
+      navigator.clipboard.writeText(copyText.value);
+      document.getElementById("btnCopyChkText").innerText = "Chave Pix Copiada!";
+      setTimeout(() => {
+        document.getElementById("btnCopyChkText").innerText = "Copiar Código Pix";
+      }, 3000);
+    }
+
+    function completeCheckoutLogin() {
+      alert("🎉 Acesso confirmado! Sua conta foi ativada com sucesso.");
+      closeCheckoutModal();
+      window.location.reload();
+    }
+  </script>
+  <script src="/static/coon-auth.js"></script>
+  <script src="/static/coon-bot.js"></script>
+</body>
+</html>

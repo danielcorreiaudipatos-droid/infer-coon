@@ -1,0 +1,2399 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Co.on Participações Ltda. | Gabinete de Governança, Equipe & Novos Negócios</title>
+  
+  <meta name="description" content="Painel Corporativo de Governança da holding Co.on Participações Ltda. Gestão de diretores, funcionários, P&D de novos softwares e auditoria Claude.">
+  <meta name="theme-color" content="#0f172a">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='18' font-size='18' font-weight='bold' fill='%2338bdf8'>c</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #080c14;
+      color: #f1f5f9;
+    }
+
+    /* ======================================================== */
+    /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: TRANSIÇÃO SUAVE DE CORES COON */
+    /* ======================================================== */
+    @keyframes coonSmoothSpectrum {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes coonDotPulse {
+      0%, 100% {
+        color: #10b981;
+        filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.5));
+        transform: scale(1);
+      }
+      50% {
+        color: #38bdf8;
+        filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.7));
+        transform: scale(1.18);
+      }
+    }
+
+    .gemini-wordmark, .coon-gradient, .coon-bigtech-logo {
+      display: inline-block;
+      background: linear-gradient(
+        90deg,
+        #38bdf8 0%,
+        #3b82f6 15%,
+        #06b6d4 30%,
+        #10b981 45%,
+        #6366f1 60%,
+        #a855f7 75%,
+        #38bdf8 90%,
+        #00e575 100%
+      );
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.055em;
+      animation: coonSmoothSpectrum 7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+      will-change: background-position;
+      transition: transform 0.3s ease;
+    }
+
+    .gemini-wordmark:hover, .coon-bigtech-logo:hover {
+      transform: scale(1.02);
+    }
+
+    .coon-dot-animated {
+      display: inline-block;
+      animation: coonDotPulse 7s ease-in-out infinite alternate;
+      will-change: color, filter, transform;
+    }
+
+    .dark-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    }
+
+    .dark-card-hover {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .dark-card-hover:hover {
+      border-color: rgba(56, 189, 248, 0.3);
+      transform: translateY(-2px);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-sky-500 selection:text-black">
+
+  <!-- ======================================================== -->
+  <!-- BARRA DE TOPO DA PRESIDÊNCIA • CO.ON PARTICIPAÇÕES LTDA. -->
+  <!-- ======================================================== -->
+  <header class="bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      
+      <!-- Marca & Identidade -->
+      <div class="flex items-center space-x-3">
+        <a href="/" class="flex items-center space-x-2.5">
+          <span class="text-2xl font-black tracking-tighter gemini-wordmark">coon<span class="text-emerald-400">.</span></span>
+          <span class="text-[11px] font-bold uppercase tracking-widest text-slate-300 pl-2.5 border-l border-slate-700/80">
+            Co.on Participações Ltda.
+          </span>
+        </a>
+        <span class="hidden md:inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-sky-500/10 border border-sky-500/20 text-[10px] font-mono text-sky-400 font-bold">
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+          <span>GABINETE DA PRESIDÊNCIA</span>
+        </span>
+      </div>
+
+      <!-- Navegação Interna do Painel de Governança -->
+      <nav class="hidden lg:flex items-center space-x-1 text-xs font-semibold">
+        <button onclick="switchTab('tab-team')" id="nav-tab-team" class="px-3 py-1.5 rounded-xl text-sky-400 bg-sky-500/10 border border-sky-500/30 transition flex items-center space-x-1.5">
+          <i data-lucide="users" class="w-3.5 h-3.5"></i>
+          <span>Quadro de Oficiais & Equipe</span>
+        </button>
+        <button onclick="switchTab('tab-api-financial')" id="nav-tab-api-financial" class="px-3 py-1.5 rounded-xl text-emerald-400 hover:bg-emerald-500/10 transition flex items-center space-x-1.5">
+          <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+          <span>Saldos de APIs & Vencimentos</span>
+        </button>
+        <button onclick="switchTab('tab-pipeline')" id="nav-tab-pipeline" class="px-3 py-1.5 rounded-xl text-purple-400 hover:bg-purple-500/10 transition flex items-center space-x-1.5">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>P&D Novos Softwares (Dr. Gabriel)</span>
+        </button>
+        <button onclick="switchTab('tab-claude')" id="nav-tab-claude" class="px-3 py-1.5 rounded-xl text-amber-400 hover:bg-amber-500/10 transition flex items-center space-x-1.5">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+          <span>Segunda Opinião (Dr. Claude)</span>
+        </button>
+        <button onclick="switchTab('tab-meetings')" id="nav-tab-meetings" class="px-3 py-1.5 rounded-xl text-sky-400 hover:bg-sky-500/10 transition flex items-center space-x-1.5">
+          <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+          <span>Reuniões & Relatórios Semanais</span>
+        </button>
+      </nav>
+
+      <!-- Ações do Administrador Master com Foto do Presidente -->
+      <div class="flex items-center space-x-3 text-xs">
+        <div class="hidden sm:flex items-center space-x-2 px-2.5 py-1 rounded-xl bg-slate-900 border border-amber-500/30 text-amber-200">
+          <img src="/daniel_avatar.jpg" alt="Presidente Daniel Soares Correia" class="w-7 h-7 rounded-full object-cover border border-amber-400 shadow-sm">
+          <div class="text-left">
+            <div class="text-[11px] font-bold text-white leading-tight">Daniel Soares Correia</div>
+            <div class="text-[9px] text-amber-400 font-mono leading-tight">Presidente & Fundador</div>
+          </div>
+        </div>
+
+        <a href="/admin" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition flex items-center space-x-1.5 font-bold">
+          <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-sky-400"></i>
+          <span class="hidden sm:inline">Cockpit Master</span>
+        </a>
+
+        <button onclick="lockAdminSession()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-rose-400 border border-slate-700 transition cursor-pointer" title="Bloquear Sessão">
+          <i data-lucide="lock" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- CONTEÚDO PRINCIPAL (PAINEL DE GOVERNANÇA CORPORATIVA) -->
+  <!-- ======================================================== -->
+  <main class="flex-1 max-w-7xl mx-auto px-6 py-8 w-full space-y-8">
+
+    <!-- Header Executivo da Presidência -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
+      <div class="space-y-1">
+        <div class="flex items-center space-x-2.5">
+          <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">Governança Corporativa, Equipe & P&D</h1>
+          <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-bold">Co.on Participações Ltda.</span>
+        </div>
+        <p class="text-xs text-slate-400">
+          Supervisão institucional e estratégica sob a presidência soberana de <strong>Daniel Soares Correia</strong>. Gestão de oficiais, ideação de novos softwares rentáveis e auditoria executiva.
+        </p>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 flex items-center space-x-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>9 Oficiais do Conselho Ativos</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- DECRETO EXECUTIVO DA VICE-PRESIDÊNCIA (DR. ALEXANDRE VALENTE) & TELEMETRIA DA ONDA 1 -->
+    <!-- ======================================================== -->
+    <div class="space-y-4">
+      <!-- Banner do Decreto do Vice-Presidente -->
+      <div class="dark-card rounded-3xl p-6 border-2 border-emerald-500/50 bg-gradient-to-r from-slate-950 via-emerald-950/20 to-slate-900 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5 relative z-10">
+          <div class="flex items-start sm:items-center space-x-4">
+            <div class="relative shrink-0">
+              <img src="/alexandre_avatar.jpg" alt="Dr. Alexandre Valente" class="w-16 h-16 rounded-2xl object-cover border-2 border-emerald-400 shadow-lg">
+              <span class="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 text-[9px] font-black uppercase">VP</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>Ordem Executiva Nº 01/2026</span>
+                </span>
+                <span class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-mono font-bold">
+                  Protocolo GAB-DIR-2026-001
+                </span>
+              </div>
+              <h2 class="text-base sm:text-lg font-black text-white flex items-center space-x-2">
+                <span>Decreto Executivo da Vice-Presidência • Dr. Alexandre Valente</span>
+              </h2>
+              <p class="text-xs text-slate-300 leading-relaxed max-w-3xl">
+                Por determinação soberana do <strong>Presidente & Fundador Daniel Soares Correia</strong> (<em>"Vice presidente de autorização para tudo"</em>), fica outorgada <strong>Autorização Plena & Desimpedimento Geral</strong> para todas as rotinas e a execução integral da <strong>Onda 1</strong>: Roteamento em Cascata (Dr. Gabriel), Cache Determinístico SQLite (Dra. Alice), Blindagem Fort Knox (Dr. Victor) e Fila Prioritária (Dra. Sofia), sem entraves burocráticos.
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center gap-2.5 shrink-0 self-stretch sm:self-auto">
+            <button onclick="requestVpReauthorization()" class="w-full sm:w-auto px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs transition flex items-center justify-center space-x-1.5 shadow-lg shadow-emerald-500/20 cursor-pointer">
+              <i data-lucide="shield-check" class="w-4 h-4"></i>
+              <span>Rechancelar Decreto</span>
+            </button>
+            <button onclick="openDirectChat('dr_alexandre')" class="w-full sm:w-auto px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl border border-slate-700 text-xs font-bold transition flex items-center justify-center space-x-1.5 cursor-pointer">
+              <i data-lucide="message-square" class="w-3.5 h-3.5 text-sky-400"></i>
+              <span>Despacho com o VP</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cockpit de Telemetria da Onda 1 (Tempo Real) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <!-- 1. Economia de Tokens & Caixa -->
+        <div class="dark-card rounded-2xl p-4 border border-emerald-500/30 bg-slate-900/80 space-y-1.5">
+          <div class="flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+            <span>Economia de Tokens (Onda 1)</span>
+            <span class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs">⚡</span>
+          </div>
+          <div class="text-xl font-black text-emerald-400 font-mono" id="mCascadeSavings">R$ 0,00</div>
+          <div class="text-[10px] text-slate-400 pt-1 border-t border-slate-800 flex justify-between">
+            <span>Roteador em Cascata:</span>
+            <span class="text-emerald-300 font-mono font-bold">-78.5% custo</span>
+          </div>
+        </div>
+
+        <!-- 2. Cache Determinístico SQLite (Alice) -->
+        <div class="dark-card rounded-2xl p-4 border border-sky-500/30 bg-slate-900/80 space-y-1.5">
+          <div class="flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+            <span>Cache Determinístico (Alice)</span>
+            <span class="w-6 h-6 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center text-xs">💾</span>
+          </div>
+          <div class="text-xl font-black text-sky-400 font-mono" id="mCacheLatency">0.01s</div>
+          <div class="text-[10px] text-slate-400 pt-1 border-t border-slate-800 flex justify-between">
+            <span>Hits no SQLite:</span>
+            <span class="text-sky-300 font-mono font-bold" id="mCacheHitsText">0 tokens gastos</span>
+          </div>
+        </div>
+
+        <!-- 3. Blindagem Perimetral Fort Knox (Victor) -->
+        <div class="dark-card rounded-2xl p-4 border border-amber-500/30 bg-slate-900/80 space-y-1.5">
+          <div class="flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+            <span>Fort Knox & Rate-Limiting</span>
+            <span class="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs">🛡️</span>
+          </div>
+          <div class="text-xl font-black text-amber-400 font-mono" id="mFortKnoxStatus">Ativa 🛡️</div>
+          <div class="text-[10px] text-slate-400 pt-1 border-t border-slate-800 flex justify-between">
+            <span>Trava Anti-Abuso:</span>
+            <span class="text-amber-300 font-mono font-bold" id="mFortKnoxReqs">Máx 60 req/min</span>
+          </div>
+        </div>
+
+        <!-- 4. Fila Prioritária & Status Geral -->
+        <div class="dark-card rounded-2xl p-4 border border-purple-500/30 bg-slate-900/80 space-y-1.5">
+          <div class="flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+            <span>Fila Prioritária VIP (Sofia)</span>
+            <span class="w-6 h-6 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-xs">👑</span>
+          </div>
+          <div class="text-xl font-black text-purple-300 font-mono">Canal VIP</div>
+          <div class="text-[10px] text-slate-400 pt-1 border-t border-slate-800 flex justify-between">
+            <span>Status da Operação:</span>
+            <span class="text-emerald-400 font-mono font-bold" id="onda1LastUpdated">Sincronizado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- ABA 1: QUADRO DE OFICIAIS & EQUIPE (GABINETE & DIRETORES) -->
+    <!-- ======================================================== -->
+    <div id="content-tab-team" class="space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center space-x-2">
+            <i data-lucide="crown" class="w-4 h-4 text-amber-400"></i>
+            <span>Gabinete da Presidência & Quadro de Oficiais Executivos</span>
+          </h2>
+          <p class="text-xs text-slate-400">Atribuições, e-mails corporativos oficiais e supervisão direta da holding Co.on Participações Ltda.</p>
+        </div>
+      </div>
+
+      <!-- Card Especial: Presidência & Gabinete Executivo -->
+      <div class="dark-card rounded-2xl p-6 border border-amber-500/40 bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950/20 shadow-xl space-y-4">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          
+          <!-- Presidente Daniel Soares Correia -->
+          <div class="flex items-center space-x-4">
+            <div class="relative">
+              <img src="/daniel_avatar.jpg" alt="Presidente Daniel Soares Correia" class="w-20 h-20 rounded-2xl object-cover border-2 border-amber-400 shadow-xl">
+              <span class="absolute -bottom-1 -right-1 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-black uppercase tracking-wider">Presidente</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center space-x-2">
+                <h3 class="text-lg font-black text-white">Daniel Soares Correia</h3>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">Fundador & Comandante em Chefe</span>
+              </div>
+              <div class="flex items-center space-x-2 text-xs font-mono pt-1">
+                <span class="text-slate-400">E-mail:</span>
+                <a href="mailto:falecom@coon.com.br" class="inline-flex items-center space-x-1 text-amber-300 hover:text-amber-200 transition font-bold" title="Canal Oficial: falecom@coon.com.br">
+                  <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                  <span>falecom@coon.com.br</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Secretária Executiva & Chefe de Gabinete: Beatriz Valadão -->
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-xl bg-slate-900/90 border border-rose-500/40 hover:border-rose-400 transition cursor-pointer" onclick="openDirectChat('beatriz_valadao')">
+            <div class="flex items-center space-x-3.5">
+              <div class="relative">
+                <img src="/beatriz_avatar.jpg" alt="Beatriz Valadão" class="w-14 h-14 rounded-xl object-cover border-2 border-rose-400 shadow-lg">
+                <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 border-2 border-slate-950" title="A postos 24/7"></span>
+              </div>
+              <div class="space-y-0.5 text-xs">
+                <div class="flex items-center space-x-1.5">
+                  <span class="font-bold text-white">Beatriz Valadão</span>
+                  <span class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[9px] font-bold border border-rose-500/30">Chefe de Gabinete</span>
+                </div>
+                <p class="text-[11px] text-slate-400">Secretária Executiva da Presidência</p>
+                <div class="text-[10px] font-mono text-rose-300">beatriz@coon.com.br • gabinete.coon@gmail.com</div>
+              </div>
+            </div>
+            
+            <button onclick="event.stopPropagation(); openDirectChat('beatriz_valadao')" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-bold transition flex items-center space-x-1.5 cursor-pointer shrink-0 self-end sm:self-center shadow-sm">
+              <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+              <span>Conversar com Beatriz (Privado)</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Grid dos 9 Diretores Oficiais -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="teamCardsContainer">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- CHAT COM TODOS • ORDEM GERAL & SALA DE REUNIÕES DO CONSELHO -->
+      <!-- ======================================================== -->
+      <div class="dark-card rounded-3xl p-6 sm:p-8 border border-sky-500/40 bg-gradient-to-b from-slate-900/90 to-slate-950 shadow-2xl space-y-6 mt-8" id="boardRoundtableSection">
+        
+        <!-- Cabeçalho da Sala de Reuniões -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+          <div class="space-y-1">
+            <div class="flex items-center space-x-2.5">
+              <span class="px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30 text-xs font-mono font-bold uppercase tracking-wider flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+                <span>Plenário & Mesa de Reuniões</span>
+              </span>
+              <span class="text-xs text-slate-400 font-mono">Co.on Participações 2026</span>
+            </div>
+            <h3 class="text-lg sm:text-xl font-black text-white flex items-center space-x-2 pt-1">
+              <i data-lucide="users" class="w-5 h-5 text-sky-400"></i>
+              <span>Chat com Todos • Convocação Geral & Reuniões do Conselho</span>
+            </h3>
+            <p class="text-xs text-slate-400">
+              Espaço oficial para o <strong>Presidente Daniel Soares Correia</strong> emitir ordens plenárias, pautas e convocar as reuniões da holding. Quando acionado, <strong>todos os 10 membros</strong> (Beatriz Valadão e os 9 diretores) emitem suas opiniões e pareceres departamentais sucessivos.
+            </p>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <button onclick="loadBoardRoundtableHistory()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 text-xs font-semibold transition flex items-center space-x-1.5 cursor-pointer" title="Atualizar feed">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              <span>Atualizar Atas</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Estatuto Oficial da Presidência: Trava da Verdade & Proibição de Bajulação -->
+        <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start space-x-3 text-xs">
+          <i data-lucide="shield-check" class="w-5 h-5 text-amber-400 shrink-0 mt-0.5"></i>
+          <div class="space-y-0.5">
+            <span class="font-bold text-amber-300">Diretriz Magna do Presidente Daniel Soares Correia • Trava Anti-Bajulação:</span>
+            <p class="text-slate-300 text-[11px] leading-relaxed">
+              Aqui é um grupo colegiado. <strong>É terminantemente proibido bajular o Presidente.</strong> Todos os oficiais (como Luiz no Marketing e Campanhas, Arthur no Caixa, Alice na Engenharia e Claude na Segunda Opinião) têm o dever estatutário de discordar de outros agentes e até do Presidente se identificarem premissas erradas, riscos ou desperdício de verba. A opinião verdadeira é a nossa trava de proteção.
+            </p>
+          </div>
+        </div>
+
+        <!-- Sugestões de Ordens Rápidas / Pautas de Reunião -->
+        <div class="space-y-2">
+          <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Ordens Rápidas & Convocação de Reunião:</span>
+          <div class="flex flex-wrap gap-2 text-xs">
+            <button onclick="sendQuickBoardPrompt('Ordem para todos: sejam 100% verdadeiros e usem a trava crítica. É proibido me bajular. Se discordarem de mim ou de outro diretor, manifestem-se abertamente, como Luiz em marketing e campanhas.')" class="px-3 py-1.5 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 border border-amber-500/50 hover:border-amber-400 transition cursor-pointer font-semibold shadow-xs">
+              🛡️ Ordem: Trava da Verdade & Anti-Bajulação
+            </button>
+            <button onclick="sendQuickBoardPrompt('Prezados diretores e Beatriz: Início oficial da nossa Reunião Semanal de Produção. Quero o parecer de cada um sobre o status dos seus departamentos para a Co.on Participações.')" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-sky-900/40 text-slate-300 hover:text-sky-200 border border-slate-700/80 hover:border-sky-500/40 transition cursor-pointer">
+              🎙️ Iniciar Reunião Semanal com Todos
+            </button>
+            <button onclick="sendQuickBoardPrompt('Atenção Conselho: Alinhamento de metas para os softwares do Studio Co.on e cobrança de entregas. Todos dêem sua posição agora.')" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-emerald-900/40 text-slate-300 hover:text-emerald-200 border border-slate-700/80 hover:border-emerald-500/40 transition cursor-pointer">
+              🚀 Metas do Studio Co.on & Entregas
+            </button>
+            <button onclick="sendQuickBoardPrompt('Ordem da Presidência: Aqui na Co.on Participações é padrão Big Tech para todos, segurança Fort Knox e foco total na simplificação da vida dos nossos clientes.')" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-amber-900/40 text-slate-300 hover:text-amber-200 border border-slate-700/80 hover:border-amber-500/40 transition cursor-pointer">
+              ⭐ Ordem Presidencial: Padrão Big Tech para Todos
+            </button>
+            <button onclick="switchTab('tab-api-financial')" class="px-3 py-1.5 rounded-xl bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 transition cursor-pointer font-semibold shadow-xs">
+              ⚡ Painel de Saldos de APIs, Recargas & Vencimentos
+            </button>
+          </div>
+        </div>
+
+        <!-- Feed do Chat Plenário com Todos -->
+        <div id="boardRoundtableFeed" class="space-y-3.5 max-h-[520px] overflow-y-auto p-4 sm:p-5 rounded-2xl bg-slate-950/90 border border-slate-800/80 text-xs">
+          <!-- Carregado via JS -->
+        </div>
+
+        <!-- Campo de Envio de Ordem Geral para Todos -->
+        <form onsubmit="handleBoardRoundtableSubmit(event)" class="space-y-3">
+          <div class="relative">
+            <textarea 
+              id="boardRoundtableInput" 
+              rows="3" 
+              placeholder="Digite aqui sua ordem ou pauta de reunião para TODOS os diretores e a secretária (ex: 'Ordem a todos: avaliar o plano de lançamento do cob.coon e apresentar status')..."
+              class="w-full bg-slate-950 border border-slate-700/80 rounded-2xl p-4 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 shadow-inner"
+              onkeydown="if(event.key === 'Enter' && (event.ctrlKey || event.metaKey)) handleBoardRoundtableSubmit(event)"
+            ></textarea>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <span class="text-[11px] text-slate-400 font-mono flex items-center space-x-1.5">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-sky-400"></i>
+              <span>Ordem emitida com a Chave Mestra do Presidente Daniel</span>
+            </span>
+            <button 
+              type="submit" 
+              id="btnSendBoardRoundtable" 
+              class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-sky-500/20 cursor-pointer"
+            >
+              <i data-lucide="send" class="w-4 h-4"></i>
+              <span>Emitir Ordem para Todos • Mesa de Reunião</span>
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- ABA 2: P&D • RADAR DE NOVOS SOFTWARES (DR. GABRIEL SILVEIRA) -->
+    <!-- ======================================================== -->
+    <div id="content-tab-pipeline" class="space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-mono font-bold uppercase tracking-wider">
+              P&D Contínuo 24/7
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Diretor Responsável: Dr. Gabriel Silveira (CINO)</span>
+          </div>
+          <h2 class="text-lg font-bold text-white mt-1 flex items-center space-x-2">
+            <i data-lucide="sparkles" class="w-5 h-5 text-purple-400"></i>
+            <span>Incubadora & Pipeline de Novos Softwares Rentáveis</span>
+          </h2>
+          <p class="text-xs text-slate-400">
+            Varredura contínua de nichos B2B desatendidos com alta margem (>80%) e rápido tempo de desenvolvimento para aprovação do Presidente Daniel.
+          </p>
+        </div>
+
+        <button onclick="loadSoftwarePipeline()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition" title="Atualizar Pipeline">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="pipelineCardsContainer">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- ABA 3: GABINETE DE NOTÓRIO SABER • CLAUDE ADVISOR -->
+    <!-- ======================================================== -->
+    <div id="content-tab-claude" class="space-y-6 hidden">
+      <div class="border-b border-slate-800 pb-4">
+        <div class="flex items-center space-x-2">
+          <span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-bold uppercase tracking-wider">
+            Sob Demanda • Claude API Advisor
+          </span>
+          <span class="text-xs text-slate-400 font-mono">Conselheiro: Prof. Dr. Claude Valois</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mt-1 flex items-center space-x-2">
+          <i data-lucide="shield-check" class="w-5 h-5 text-amber-400"></i>
+          <span>Bancada de Notório Saber & Segunda Opinião Estratégica</span>
+        </h2>
+        <p class="text-xs text-slate-400">
+          Acionado exclusivamente para submeter decisões críticas, códigos, laudos ou teses a uma auditoria analítica desapaixonada e profunda.
+        </p>
+      </div>
+
+      <!-- Formulário de Convocação do Dr. Claude -->
+      <div class="dark-card rounded-2xl p-6 space-y-4 border border-amber-500/30">
+        <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+          <i data-lucide="file-search" class="w-4 h-4 text-amber-400"></i>
+          <span>Convocar Parecer Pericial de Segunda Opinião</span>
+        </h3>
+        
+        <div class="space-y-3 text-xs">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Tema / Decisão a ser Auditada:</label>
+            <input type="text" id="claudeSubjectInput" placeholder="Ex: Viabilidade de lançar o Contrato.coon com integração ICP-Brasil" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:border-amber-500">
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Pergunta ou Ponto Crítico Específico:</label>
+            <textarea id="claudeQuestionInput" rows="3" placeholder="Ex: Quais os riscos regulatórios perante a Infraestrutura de Chaves Públicas Brasileira e quais os custos ocultos de custódia de certificados?" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:border-amber-500"></textarea>
+          </div>
+          <button onclick="requestClaudeReview()" id="btnSubmitClaude" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl transition flex items-center space-x-2 cursor-pointer shadow-lg shadow-amber-500/20">
+            <i data-lucide="cpu" class="w-4 h-4"></i>
+            <span>Emitir Segunda Opinião com Dr. Claude Valois</span>
+          </button>
+        </div>
+
+        <!-- Parecer do Dr. Claude -->
+        <div id="claudeResultBox" class="mt-4 p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3 hidden text-xs leading-relaxed">
+          <!-- Injetado dinamicamente -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- ABA 4: REUNIÕES SEMANAIS & RELATÓRIOS DE PRODUÇÃO -->
+    <!-- ======================================================== -->
+    <div id="content-tab-meetings" class="space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-bold uppercase tracking-wider">
+              Toda Segunda-feira • 08:30
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Rotina Institucional de Produção</span>
+          </div>
+          <h2 class="text-lg font-bold text-white mt-1 flex items-center space-x-2">
+            <i data-lucide="calendar" class="w-5 h-5 text-emerald-400"></i>
+            <span>Reuniões Semanais da Diretoria & Relatórios Executivos</span>
+          </h2>
+          <p class="text-xs text-slate-400">
+            Programa de reuniões e atas semanais que <strong>começa amanhã</strong> para alinhamento contínuo das metas e entregas da Co.on Participações Ltda.
+          </p>
+        </div>
+
+        <button onclick="loadWeeklyMeetings()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition" title="Atualizar Pauta">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Card da Próxima Reunião (Amanhã) -->
+      <div class="dark-card rounded-2xl p-6 space-y-4 border border-emerald-500/40 shadow-xl shadow-emerald-950/20" id="nextMeetingCard">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- ABA 5: SALDOS DE APIS, RECARGAS & VENCIMENTO DE APPS/TAXAS -->
+    <!-- ======================================================== -->
+    <div id="content-tab-api-financial" class="space-y-8 hidden">
+      
+      <!-- Cabeçalho da Aba -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div class="space-y-1">
+          <div class="flex items-center space-x-2.5">
+            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold uppercase tracking-wider flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Controladoria Técnica de APIs & Infraestrutura</span>
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Arthur Montenegro (CFO) & Gabinete</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-white flex items-center space-x-2 pt-1">
+            <i data-lucide="cpu" class="w-6 h-6 text-emerald-400"></i>
+            <span>Saldos de APIs, Recargas & Calendário de Vencimentos</span>
+          </h2>
+          <p class="text-xs text-slate-400 max-w-3xl">
+            Painel unificado para monitorar o saldo das APIs conectadas (Gemini, Claude, WhatsApp Meta, Hetzner, Gateways), efetuar recargas instantâneas com débito automático no livro caixa e acompanhar o calendário de renovações e taxas de todos os aplicativos da holding.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="openApiReloadModal()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition flex items-center space-x-1.5 shadow-lg shadow-emerald-500/20 cursor-pointer">
+            <i data-lucide="zap" class="w-4 h-4"></i>
+            <span>+ Carregar Saldo de API</span>
+          </button>
+          <button onclick="openNewRenewalModal()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs rounded-xl transition flex items-center space-x-1.5 cursor-pointer">
+            <i data-lucide="plus-circle" class="w-4 h-4 text-sky-400"></i>
+            <span>+ Nova Taxa / App</span>
+          </button>
+          <button onclick="loadApiFinancialTabAll()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition cursor-pointer" title="Sincronizar dados">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 0. DECRETO DA VICE-PRESIDÊNCIA: AUTORIZAÇÃO PLENA & DESIMPEDIMENTO TOTAL -->
+      <div class="dark-card rounded-2xl p-6 border-2 border-sky-500/40 bg-gradient-to-r from-slate-950 via-sky-950/20 to-slate-900 shadow-2xl relative overflow-hidden">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+          <div class="flex items-start sm:items-center space-x-4">
+            <div class="relative shrink-0">
+              <img src="/alexandre_avatar.jpg" alt="Dr. Alexandre Valente" class="w-14 h-14 rounded-2xl object-cover border-2 border-sky-400 shadow-xl">
+              <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-slate-950 flex items-center justify-center text-[9px] text-white font-bold">✓</span>
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-bold text-sky-400 uppercase tracking-wider font-mono">Decreto da Vice-Presidência • Ordem Executiva Nº 01/2026</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">Autorização Plena Concedida</span>
+              </div>
+              <h2 class="text-base sm:text-lg font-black text-white mt-0.5">
+                Dr. Alexandre Valente: "Dada Autorização Total e Irrestrita para Tudo"
+              </h2>
+              <p class="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                Por determinação soberana do Presidente Daniel Soares Correia, o Gabinete da Vice-Presidência lavrou a ordem estatutária de <strong>desimpedimento total</strong> para a execução imediata da Onda 1 (Roteamento Flash, Cache SQLite da Dra. Alice, Fort Knox de Victor, Fila VIP de Sofia e Débito no DRE do CFO), além da remoção de jargões robóticos e transição de cores Big Tech.
+              </p>
+            </div>
+          </div>
+          <div class="shrink-0 flex flex-col items-start md:items-end gap-1.5 w-full md:w-auto">
+            <span class="text-[11px] font-mono text-slate-400">Assinado: <strong>Dr. Alexandre Valente (VP)</strong></span>
+            <span class="text-[10px] font-mono text-emerald-400">Protocolo Presidencial: GAB-DIR-2026-001</span>
+            <span class="px-3 py-1 bg-sky-500/10 text-sky-300 border border-sky-500/30 text-[10px] font-bold rounded-lg">
+              Eficácia Plena em Toda a Holding 🟢
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 0.1 TELEMETRIA AO VIVO DA ONDA 1: EFICIÊNCIA DE TOKENS, CACHE E BLINDAGEM FORT KNOX -->
+      <div class="dark-card rounded-2xl p-5 border border-slate-700/80 bg-slate-900/60 shadow-xl space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <h3 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider font-mono">
+              Onda 1 em Execução • Telemetria Ativa de Eficiência & Blindagem
+            </h3>
+          </div>
+          <span class="text-[10px] font-mono text-slate-400" id="onda1LastUpdated">Atualizado em tempo real</span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs" id="onda1MetricsGrid">
+          <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between">
+            <span class="text-[10px] text-slate-400 font-mono">1. Economia Cascata (Dr. Gabriel)</span>
+            <span class="text-lg font-black text-emerald-400 font-mono mt-1" id="mCascadeSavings">78.5%</span>
+            <span class="text-[10px] text-slate-500">Gemini 1.5 Flash Gatekeeper</span>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between">
+            <span class="text-[10px] text-slate-400 font-mono">2. Cache SQLite (Profª Alice)</span>
+            <span class="text-lg font-black text-sky-400 font-mono mt-1" id="mCacheLatency">0.01s</span>
+            <span class="text-[10px] text-slate-500" id="mCacheHitsText">0 tokens consumidos</span>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between">
+            <span class="text-[10px] text-slate-400 font-mono">3. Fort Knox (Dr. Victor Canto)</span>
+            <span class="text-lg font-black text-amber-400 font-mono mt-1" id="mFortKnoxStatus">60 req/min</span>
+            <span class="text-[10px] text-slate-500">Rate-limiting ativo por IP</span>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between">
+            <span class="text-[10px] text-slate-400 font-mono">4. Fila VIP (Dra. Sofia Mendes)</span>
+            <span class="text-lg font-black text-indigo-400 font-mono mt-1">Alta Prioridade</span>
+            <span class="text-[10px] text-slate-500">Pro & Enterprise garantidos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. Card Executivo: Alerta & Parecer do CFO Arthur Montenegro -->
+      <div id="cfoApiAlertCard" class="dark-card rounded-2xl p-6 border border-emerald-500/40 bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950/20 shadow-2xl space-y-4">
+        <!-- Injetado dinamicamente via JS -->
+        <div class="text-center py-6 text-slate-500 font-mono text-xs animate-pulse">
+          <i data-lucide="loader" class="w-5 h-5 animate-spin inline mr-1 text-emerald-400"></i>
+          Carregando parecer do CFO Arthur Montenegro...
+        </div>
+      </div>
+
+      <!-- 2. Cockpit de Saldos de APIs Conectadas -->
+      <div class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center space-x-2">
+              <i data-lucide="activity" class="w-4 h-4 text-sky-400"></i>
+              <span>Conexões de APIs & Consumo em Tempo Real</span>
+            </h3>
+            <p class="text-xs text-slate-400">Autonomia estimada em dias, taxas de consumo diário e recarga direta com lançamento no caixa.</p>
+          </div>
+          <div id="apiRunwayBadge" class="text-xs font-mono px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-emerald-400 font-bold">
+            Carregando runway...
+          </div>
+        </div>
+
+        <!-- 4 Cards de Resumo Rápido de APIs -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 text-xs" id="apiSummaryCardsContainer">
+          <!-- Renderizado via JS -->
+        </div>
+
+        <!-- Grid de Cards Individuais das APIs -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2" id="apiCardsContainer">
+          <!-- Injetado via JS -->
+        </div>
+      </div>
+
+      <!-- 3. Calendário Executivo de Vencimento de Taxas, Serviços e Apps -->
+      <div class="space-y-4 pt-4 border-t border-slate-800/80">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center space-x-2">
+              <h3 class="text-base font-bold text-white flex items-center space-x-2">
+                <i data-lucide="calendar-clock" class="w-4 h-4 text-amber-400"></i>
+                <span>Calendário de Vencimentos, Renovação de Taxas & Apps</span>
+              </h3>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">Controle do Dia & Valor</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5">Obrigações recorrentes da holding: servidores Hetzner, domínios, licenças, gateways e certificados com dias restantes até o vencimento.</p>
+          </div>
+
+          <div class="flex items-center space-x-3 text-xs">
+            <div class="p-2 px-3 rounded-xl bg-slate-900 border border-slate-800 text-right">
+              <span class="text-[10px] text-slate-400 block font-mono">Compromisso Mensal:</span>
+              <span class="font-mono font-bold text-slate-200" id="renewalsTotalMonth">R$ --</span>
+            </div>
+            <div class="p-2 px-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-right">
+              <span class="text-[10px] text-rose-300 block font-mono">Próximos 7 Dias:</span>
+              <span class="font-mono font-bold text-rose-400" id="renewalsNext7Days">R$ --</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabela dos Vencimentos -->
+        <div class="overflow-x-auto border border-slate-800 rounded-2xl bg-slate-950/60 shadow-xl">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-900/90 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800">
+              <tr>
+                <th class="py-3 px-4">App / Serviço</th>
+                <th class="py-3 px-3">Categoria</th>
+                <th class="py-3 px-3 text-center">Dia do Mês</th>
+                <th class="py-3 px-3">Próximo Vencimento</th>
+                <th class="py-3 px-3">Prazo Restante</th>
+                <th class="py-3 px-3 text-right">Valor Recorrente</th>
+                <th class="py-3 px-3 text-center">Status</th>
+                <th class="py-3 px-4 text-center">Ação</th>
+              </tr>
+            </thead>
+            <tbody id="appRenewalsTableBody" class="divide-y divide-slate-800/80 font-mono">
+              <!-- Renderizado via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4. Mural de Sugestões de Melhorias de Toda a Equipe / Conselho (10 Membros) -->
+      <div class="space-y-4 pt-6 border-t border-slate-800/80">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[10px] font-mono font-bold uppercase">
+                Colegiado C-Suite • 10 Oficiais
+              </span>
+              <span class="text-xs text-amber-400 font-bold font-mono">Trava Magna Anti-Bajulação Ativa</span>
+            </div>
+            <h3 class="text-lg font-black text-white mt-1 flex items-center space-x-2">
+              <i data-lucide="lightbulb" class="w-5 h-5 text-amber-400"></i>
+              <span>Pareceres & Sugestões Estratégicas de Otimização da Equipe</span>
+            </h3>
+            <p class="text-xs text-slate-400">
+              Cada um dos 10 oficiais do Conselho Executivo formulou uma recomendação prática e fundamentada para reduzir gastos de API, mitigar riscos de fornecedores e blindar a tesouraria da Co.on Participações Ltda.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="governanceSuggestionsContainer">
+          <!-- Injetado dinamicamente via JS -->
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Rodapé Institucional Oficial -->
+  <footer class="border-t border-slate-800/80 bg-slate-950/80 py-4 mt-12">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500">
+      <span class="font-bold text-slate-300">Co.on Participações 2026</span>
+      <span class="text-[10px] text-slate-400">Todos os direitos reservados</span>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: CHAT DIRETO 1-A-1 (PRESIDENTE DANIEL <-> OFICIAL) -->
+  <!-- ======================================================== -->
+  <div id="directChatModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-3 sm:p-4 animate-in fade-in duration-150" onclick="if(event.target===this) closeDirectChat()">
+    <div class="bg-slate-900 border border-slate-700/90 rounded-3xl max-w-2xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
+      
+      <!-- Topo do Chat Direto com Foto do Oficial e Botão Claro de Fechar -->
+      <div class="p-4 sm:p-5 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
+        <div class="flex items-center space-x-3.5">
+          <div class="relative">
+            <img id="directChatAvatar" src="/beatriz_avatar.jpg" alt="Avatar" class="w-12 h-12 rounded-2xl object-cover border-2 border-sky-400 shadow-md">
+            <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 border-2 border-slate-950" title="Online"></span>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h3 id="directChatName" class="text-sm sm:text-base font-black text-white">Nome do Oficial</h3>
+              <span id="directChatRoleBadge" class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">Cargo</span>
+            </div>
+            <p id="directChatSubtext" class="text-[11px] text-slate-400">Canal Seguro 1-a-1 • Presidência Co.on Participações Ltda.</p>
+          </div>
+        </div>
+
+        <!-- Botão Claro de Fechar o Chat -->
+        <button 
+          onclick="closeDirectChat()" 
+          class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-500/20 hover:text-rose-300 text-slate-300 border border-slate-700 transition flex items-center space-x-1.5 text-xs font-bold cursor-pointer"
+          title="Fechar Chat Individual (Esc)"
+        >
+          <i data-lucide="x" class="w-4 h-4"></i>
+          <span>Fechar Conversa</span>
+        </button>
+      </div>
+
+      <!-- Feed de Mensagens do Chat Direto -->
+      <div id="directChatBox" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-slate-950/80 text-xs min-h-[300px] max-h-[460px]">
+        <!-- Mensagens renderizadas dinamicamente -->
+      </div>
+
+      <!-- Formulário de Envio Direto -->
+      <form onsubmit="handleDirectChatSubmit(event)" class="p-3.5 sm:p-4 bg-slate-950 border-t border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2">
+          <input 
+            type="text" 
+            id="directChatInput" 
+            placeholder="Digite sua mensagem direta ou ordem para este oficial..." 
+            class="flex-1 bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-3 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 shadow-inner"
+            autocomplete="off"
+          >
+          <button 
+            type="submit" 
+            id="btnDirectChatSubmit" 
+            class="px-5 py-3 bg-sky-500 hover:bg-sky-400 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition flex items-center space-x-1.5 cursor-pointer shadow-md shadow-sky-500/20 shrink-0"
+          >
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">Enviar</span>
+          </button>
+        </div>
+        <div class="flex items-center justify-between text-[10px] text-slate-500 px-1 font-mono">
+          <span>Gabinete da Presidência • Despacho Soberano</span>
+          <span>Pressione Enter para enviar</span>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: RECARGA DE SALDO DE API CONECTADA -->
+  <!-- ======================================================== -->
+  <div id="apiReloadModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4" onclick="if(event.target===this) closeApiReloadModal()">
+    <div class="bg-slate-900 border border-emerald-500/40 rounded-3xl max-w-lg w-full p-6 sm:p-7 space-y-5 shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center">
+            <i data-lucide="zap" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-black text-white">Carregar Saldo de API</h3>
+            <span class="text-[11px] text-emerald-400 font-mono font-bold">Autorização Direta • Débito no Caixa do Arthur</span>
+          </div>
+        </div>
+        <button onclick="closeApiReloadModal()" class="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1.5">Serviço de API / Infraestrutura:</label>
+          <select id="reloadServiceSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500 font-semibold cursor-pointer">
+            <option value="gemini">Google Gemini API (Flash & Pro) - IA Inferência</option>
+            <option value="claude">Anthropic Claude 3.5 Sonnet - Auditoria Cognitiva</option>
+            <option value="whatsapp_meta">Meta WhatsApp Cloud API - Mensageria & Bots</option>
+            <option value="hetzner">Hetzner Cloud VPS - Servidores & Docker</option>
+            <option value="pix_gateway">Gateway Pix & Split (Asaas / EFI) - Liquidação</option>
+            <option value="openai">OpenAI Whisper & Fallback - Transcrição</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-bold mb-1.5">Valores Rápidos de Aporte:</label>
+          <div class="grid grid-cols-5 gap-1.5">
+            <button type="button" onclick="selectPresetReloadAmount(50)" class="py-2 rounded-xl bg-slate-800 hover:bg-emerald-500/20 hover:text-emerald-300 hover:border-emerald-500/40 border border-slate-700 font-mono font-bold text-slate-300 transition text-[11px]">R$ 50</button>
+            <button type="button" onclick="selectPresetReloadAmount(100)" class="py-2 rounded-xl bg-slate-800 hover:bg-emerald-500/20 hover:text-emerald-300 hover:border-emerald-500/40 border border-slate-700 font-mono font-bold text-slate-300 transition text-[11px]">R$ 100</button>
+            <button type="button" onclick="selectPresetReloadAmount(250)" class="py-2 rounded-xl bg-slate-800 hover:bg-emerald-500/20 hover:text-emerald-300 hover:border-emerald-500/40 border border-slate-700 font-mono font-bold text-emerald-400 transition text-[11px]">R$ 250</button>
+            <button type="button" onclick="selectPresetReloadAmount(500)" class="py-2 rounded-xl bg-slate-800 hover:bg-emerald-500/20 hover:text-emerald-300 hover:border-emerald-500/40 border border-slate-700 font-mono font-bold text-slate-300 transition text-[11px]">R$ 500</button>
+            <button type="button" onclick="selectPresetReloadAmount(1000)" class="py-2 rounded-xl bg-slate-800 hover:bg-emerald-500/20 hover:text-emerald-300 hover:border-emerald-500/40 border border-slate-700 font-mono font-bold text-slate-300 transition text-[11px]">R$ 1.000</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-bold mb-1.5">Valor da Recarga (R$):</label>
+          <div class="relative">
+            <span class="absolute left-3.5 top-3 text-slate-500 font-mono font-bold">R$</span>
+            <input type="number" id="reloadAmountInput" step="10" min="10" value="250" placeholder="250.00" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 pl-10 text-white font-mono font-bold text-sm focus:outline-none focus:border-emerald-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-bold mb-1.5">Método de Liquidação:</label>
+          <select id="reloadMethodSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500 font-semibold cursor-pointer">
+            <option value="pix">Pix Instantâneo (Liquidação em 3 segundos)</option>
+            <option value="cartao">Cartão Corporativo Co.on (Crédito Imediato)</option>
+            <option value="fatura">Fatura Big Tech 30 Dias (Pós-Pago)</option>
+          </select>
+        </div>
+
+        <div class="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-[11px] text-emerald-300 space-y-1">
+          <div class="font-bold flex items-center space-x-1">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+            <span>Conformidade & DRE Automático:</span>
+          </div>
+          <p class="text-slate-300">
+            A recarga creditará o saldo da API e lançará simultaneamente uma despesa operacional na tesouraria do CFO Arthur Montenegro, recalculando o Lucro Líquido Real instantaneamente.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-800">
+        <button type="button" onclick="closeApiReloadModal()" class="px-4 py-2 text-slate-400 hover:text-white font-semibold transition cursor-pointer">
+          Cancelar
+        </button>
+        <button type="button" id="btnConfirmReloadApi" onclick="executeApiReload()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl transition flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-emerald-500/20">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          <span>Confirmar e Carregar Saldo</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: CADASTRAR NOVA TAXA, SERVIÇO OU APP -->
+  <!-- ======================================================== -->
+  <div id="newRenewalModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4" onclick="if(event.target===this) closeNewRenewalModal()">
+    <div class="bg-slate-900 border border-slate-700/80 rounded-3xl max-w-lg w-full p-6 sm:p-7 space-y-5 shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-sky-500/10 border border-sky-500/30 text-sky-400 flex items-center justify-center">
+            <i data-lucide="calendar-plus" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-black text-white">Cadastrar Nova Taxa / App</h3>
+            <span class="text-[11px] text-slate-400 font-mono">Calendário de Obrigações da Holding</span>
+          </div>
+        </div>
+        <button onclick="closeNewRenewalModal()" class="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1.5">Nome do App / Serviço / Taxa:</label>
+          <input type="text" id="renewalNameInput" placeholder="Ex: Servidor de Contingência AWS / Licença JetBrains" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-sky-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-bold mb-1.5">Categoria:</label>
+            <select id="renewalCategorySelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-sky-500 cursor-pointer">
+              <option value="Infraestrutura">Infraestrutura</option>
+              <option value="Domínios & SSL">Domínios & SSL</option>
+              <option value="Segurança & CDN">Segurança & CDN</option>
+              <option value="Comunicação">Comunicação</option>
+              <option value="Meios de Pagamento">Meios de Pagamento</option>
+              <option value="Lojas de Apps">Lojas de Apps</option>
+              <option value="Desenvolvimento">Desenvolvimento</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 font-bold mb-1.5">Valor Recorrente (R$):</label>
+            <input type="number" id="renewalAmountInput" step="0.01" min="1" placeholder="199.00" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white font-mono focus:outline-none focus:border-sky-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-bold mb-1.5">Dia do Mês de Vencimento:</label>
+            <input type="number" id="renewalDueDayInput" min="1" max="31" value="10" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white font-mono focus:outline-none focus:border-sky-500">
+          </div>
+          <div>
+            <label class="block text-slate-300 font-bold mb-1.5">Periodicidade:</label>
+            <select id="renewalCycleSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-sky-500 cursor-pointer">
+              <option value="monthly">Mensal</option>
+              <option value="annual">Anual</option>
+              <option value="quarterly">Trimestral</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-bold mb-1.5">Notas & Finalidade:</label>
+          <input type="text" id="renewalNotesInput" placeholder="Ex: Provedor de fallback para manter 99.9% de uptime" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-sky-500">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-800">
+        <button type="button" onclick="closeNewRenewalModal()" class="px-4 py-2 text-slate-400 hover:text-white font-semibold transition cursor-pointer">
+          Cancelar
+        </button>
+        <button type="button" onclick="saveNewRenewal()" class="px-5 py-2.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-black rounded-xl transition flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-sky-500/20">
+          <i data-lucide="save" class="w-4 h-4"></i>
+          <span>Salvar no Calendário</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Master Key -->
+  <div id="masterAuthModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700/80 rounded-3xl max-w-sm w-full p-6 sm:p-7 space-y-5 shadow-2xl text-center">
+      <div class="w-12 h-12 mx-auto rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center">
+        <i data-lucide="shield-check" class="w-6 h-6"></i>
+      </div>
+      <div>
+        <h3 class="text-base font-black text-white tracking-tight">Gabinete da Presidência</h3>
+        <p class="text-xs text-slate-400 mt-1">Acesso exclusivo do Presidente Daniel Soares Correia. Insira a Chave Mestra:</p>
+      </div>
+      <div class="space-y-3 text-left">
+        <input type="password" id="inputMasterKey" placeholder="••••••••••••" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white font-mono focus:outline-none focus:border-sky-500" onkeydown="if(event.key==='Enter') submitMasterAuth()">
+        <p id="authErrorMsg" class="text-[11px] text-rose-400 font-semibold hidden text-center">Chave incorreta.</p>
+        <button onclick="submitMasterAuth()" class="w-full py-3 bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold text-xs rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer">
+          <i data-lucide="key" class="w-4 h-4"></i>
+          <span>Acessar Governança</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function getMasterKey() {
+      return localStorage.getItem('coon_master_key') || '';
+    }
+
+    function lockAdminSession() {
+      localStorage.removeItem('coon_master_key');
+      location.reload();
+    }
+
+    function submitMasterAuth() {
+      const key = document.getElementById('inputMasterKey').value.trim();
+      if (!key) return;
+      if (key === 'coon2026master') {
+        localStorage.setItem('coon_master_key', key);
+        document.getElementById('masterAuthModal').classList.add('hidden');
+        document.getElementById('masterAuthModal').classList.remove('flex');
+        initGovernanceData();
+      } else {
+        document.getElementById('authErrorMsg').classList.remove('hidden');
+      }
+    }
+
+    function switchTab(tabId) {
+      const tabs = ['tab-team', 'tab-api-financial', 'tab-pipeline', 'tab-claude', 'tab-meetings'];
+      tabs.forEach(t => {
+        const content = document.getElementById(`content-${t}`);
+        const nav = document.getElementById(`nav-${t}`);
+        if (!content || !nav) return;
+        if (t === tabId) {
+          content.classList.remove('hidden');
+          nav.classList.add('bg-sky-500/10', 'border', 'border-sky-500/30', 'text-sky-400');
+        } else {
+          content.classList.add('hidden');
+          nav.classList.remove('bg-sky-500/10', 'border', 'border-sky-500/30', 'text-sky-400');
+        }
+      });
+      lucide.createIcons();
+    }
+
+    // Mapa em memória de todos os Oficiais do Conselho e Gabinete
+    let currentDirectOfficer = null;
+    const allOfficersMap = {
+      'beatriz_valadao': {
+        id: 'beatriz_valadao',
+        name: 'Beatriz Valadão',
+        short_role: 'Chefe de Gabinete',
+        role: 'Secretária Executiva da Presidência & Chefe de Gabinete',
+        avatar: '/beatriz_avatar.jpg',
+        department: 'Gabinete da Presidência'
+      }
+    };
+
+    async function loadTeamData() {
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch('/api/admin/csuite/directors', {
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          (data.directors || []).forEach(d => {
+            allOfficersMap[d.id] = d;
+          });
+          // Exibir os 9 diretores no grid (Beatriz tem card especial no topo)
+          const gridDirectors = (data.directors || []).filter(d => d.id !== 'beatriz_valadao');
+          renderTeamCards(gridDirectors);
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    function renderTeamCards(directors) {
+      const container = document.getElementById('teamCardsContainer');
+      if (!container) return;
+
+      container.innerHTML = directors.map(d => `
+        <div class="dark-card dark-card-hover rounded-2xl p-5 space-y-4 border border-slate-800 transition flex flex-col justify-between cursor-pointer group" onclick="openDirectChat('${d.id}')">
+          <div>
+            <div class="flex items-start justify-between">
+              <div class="flex items-center space-x-3">
+                <img src="${d.avatar}" alt="${d.name}" class="w-12 h-12 rounded-2xl object-cover border-2 border-slate-700 shadow-md group-hover:border-sky-400 transition">
+                <div>
+                  <h3 class="text-sm font-bold text-white group-hover:text-sky-300 transition">${d.name}</h3>
+                  <span class="text-[11px] font-mono text-slate-400">${d.short_role}</span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center space-x-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Online</span>
+              </span>
+            </div>
+
+            <div class="space-y-2 text-xs text-slate-300 pt-3 mt-3 border-t border-slate-800/80">
+              <div class="flex justify-between text-[11px]">
+                <span class="text-slate-400">Departamento:</span>
+                <span class="font-semibold text-slate-200">${d.department || 'Diretoria'}</span>
+              </div>
+              <div class="flex justify-between text-[11px]">
+                <span class="text-slate-400">Regime:</span>
+                <span class="font-mono text-sky-400">${d.work_mode || 'Operação Ativa'}</span>
+              </div>
+              <div class="flex justify-between text-[11px] pt-0.5">
+                <span class="text-slate-400">E-mail:</span>
+                <span class="font-mono text-emerald-400 font-semibold">${d.email || 'diretoria@coon.com.br'}</span>
+              </div>
+              <div class="flex justify-between text-[10px]">
+                <span class="text-slate-400">Gmail:</span>
+                <span class="font-mono text-slate-400">${d.gmail_alias || 'coon@gmail.com'}</span>
+              </div>
+              <div class="pt-2 border-t border-slate-800/50">
+                <span class="text-[10px] text-slate-400 block font-semibold">Atribuições:</span>
+                <p class="text-[11px] text-slate-300 leading-snug mt-0.5">${d.daily_responsibilities || d.specialty}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ação Direta: Chat Privado 1-a-1 com o Oficial -->
+          <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+            <span class="text-[10px] text-slate-500 font-mono">Canal Seguro 1-a-1</span>
+            <button onclick="event.stopPropagation(); openDirectChat('${d.id}')" class="px-3 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-xs font-bold transition flex items-center space-x-1.5 cursor-pointer shadow-sm">
+              <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+              <span>Conversar com ${d.name.split(' ')[0]}</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    // ========================================================
+    // CHAT DIRETO 1-A-1 (PRESIDENTE DANIEL <-> OFICIAL)
+    // ========================================================
+    function openDirectChat(officerId) {
+      const officer = allOfficersMap[officerId] || {
+        id: officerId,
+        name: officerId,
+        short_role: 'Oficial do Conselho',
+        role: 'Oficial',
+        avatar: '/alexandre_avatar.jpg'
+      };
+      currentDirectOfficer = officer;
+
+      document.getElementById('directChatAvatar').src = officer.avatar;
+      document.getElementById('directChatName').innerText = officer.name;
+      document.getElementById('directChatRoleBadge').innerText = officer.short_role || officer.role;
+      document.getElementById('directChatInput').placeholder = `Mensagem direta para ${officer.name.split(' ')[0]}...`;
+
+      const modal = document.getElementById('directChatModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      loadDirectChatHistory(officer);
+      setTimeout(() => {
+        document.getElementById('directChatInput').focus();
+      }, 100);
+      lucide.createIcons();
+    }
+
+    function closeDirectChat() {
+      const modal = document.getElementById('directChatModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+      currentDirectOfficer = null;
+    }
+
+    async function loadDirectChatHistory(officer) {
+      const box = document.getElementById('directChatBox');
+      if (!box) return;
+
+      box.innerHTML = `
+        <div class="text-center py-6 text-slate-500 font-mono text-[11px]">
+          <i data-lucide="loader" class="w-4 h-4 animate-spin inline mr-1 text-sky-400"></i> Carregando canal seguro com ${officer.name}...
+        </div>
+      `;
+      lucide.createIcons();
+
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch('/api/admin/csuite/history?limit=40', {
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const msgs = (data.history || []).filter(m => m.speaker_id === officer.id || (m.speaker_id === 'president_daniel' && m.message.toLowerCase().includes(officer.name.toLowerCase().split(' ')[0])));
+
+          if (msgs.length === 0) {
+            box.innerHTML = `
+              <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 text-center space-y-2.5">
+                <img src="${officer.avatar}" class="w-12 h-12 rounded-xl mx-auto object-cover border border-sky-400 shadow-md">
+                <h4 class="font-bold text-white text-xs">${officer.name} a postos</h4>
+                <p class="text-[11px] text-slate-400 max-w-sm mx-auto leading-relaxed">
+                  Canal direto 1-a-1 criptografado com o Presidente Daniel Soares Correia. Envie sua mensagem, instrução ou demanda individual abaixo.
+                </p>
+              </div>
+            `;
+          } else {
+            box.innerHTML = msgs.map(m => {
+              const isPresident = m.speaker_id === 'president_daniel';
+              const timeStr = new Date(m.created_at * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+              if (isPresident) {
+                return `
+                  <div class="flex items-start justify-end space-x-2.5">
+                    <div class="max-w-[82%] p-3.5 rounded-2xl rounded-tr-none bg-gradient-to-r from-amber-500/20 to-emerald-500/20 border border-amber-500/40 text-slate-100 shadow-md">
+                      <div class="flex items-center justify-between gap-2 border-b border-white/10 pb-1 mb-1.5 text-[10px]">
+                        <span class="font-bold text-amber-300">Daniel Soares Correia (Presidente)</span>
+                        <span class="font-mono text-slate-400">${timeStr}</span>
+                      </div>
+                      <p class="leading-relaxed whitespace-pre-wrap">${m.message}</p>
+                    </div>
+                    <img src="/daniel_avatar.jpg" alt="Presidente Daniel" class="w-8 h-8 rounded-xl object-cover border border-amber-400 shrink-0">
+                  </div>
+                `;
+              } else {
+                return `
+                  <div class="flex items-start space-x-2.5">
+                    <img src="${officer.avatar}" alt="${officer.name}" class="w-8 h-8 rounded-xl object-cover border border-sky-400 shrink-0">
+                    <div class="max-w-[82%] p-3.5 rounded-2xl rounded-tl-none bg-slate-900 border border-slate-800 text-slate-200 shadow-md">
+                      <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-1 mb-1.5 text-[10px]">
+                        <span class="font-bold text-sky-400">${m.speaker_name}</span>
+                        <span class="font-mono text-slate-500">${timeStr}</span>
+                      </div>
+                      <p class="leading-relaxed whitespace-pre-wrap">${m.message}</p>
+                    </div>
+                  </div>
+                `;
+              }
+            }).join('');
+          }
+          box.scrollTop = box.scrollHeight;
+          lucide.createIcons();
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    async function handleDirectChatSubmit(event) {
+      event.preventDefault();
+      const input = document.getElementById('directChatInput');
+      const btn = document.getElementById('btnDirectChatSubmit');
+      const box = document.getElementById('directChatBox');
+      const msg = input.value.trim();
+      if (!msg || !currentDirectOfficer) return;
+
+      input.value = '';
+      const masterKey = getMasterKey();
+      const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Mensagem imediata do Presidente Daniel
+      const userHtml = `
+        <div class="flex items-start justify-end space-x-2.5 animate-in fade-in duration-100">
+          <div class="max-w-[82%] p-3.5 rounded-2xl rounded-tr-none bg-gradient-to-r from-amber-500/20 to-emerald-500/20 border border-amber-500/40 text-slate-100 shadow-md">
+            <div class="flex items-center justify-between gap-2 border-b border-white/10 pb-1 mb-1.5 text-[10px]">
+              <span class="font-bold text-amber-300">Daniel Soares Correia (Presidente)</span>
+              <span class="font-mono text-slate-400">${nowStr}</span>
+            </div>
+            <p class="leading-relaxed whitespace-pre-wrap">${msg}</p>
+          </div>
+          <img src="/daniel_avatar.jpg" alt="Presidente Daniel" class="w-8 h-8 rounded-xl object-cover border border-amber-400 shrink-0">
+        </div>
+      `;
+      box.insertAdjacentHTML('beforeend', userHtml);
+
+      // Indicador de digitação
+      const typingId = 'typing_' + Date.now();
+      const typingHtml = `
+        <div id="${typingId}" class="flex items-start space-x-2.5 animate-pulse">
+          <img src="${currentDirectOfficer.avatar}" alt="${currentDirectOfficer.name}" class="w-8 h-8 rounded-xl object-cover border border-sky-400 shrink-0">
+          <div class="p-3 rounded-2xl rounded-tl-none bg-slate-900 border border-slate-800 text-slate-400 text-xs">
+            <span class="font-bold text-sky-400">${currentDirectOfficer.name}</span> formulando resposta...
+          </div>
+        </div>
+      `;
+      box.insertAdjacentHTML('beforeend', typingHtml);
+      box.scrollTop = box.scrollHeight;
+
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/admin/csuite/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Coon-Master-Key': masterKey
+          },
+          body: JSON.stringify({
+            message: msg,
+            user_role: "Daniel Soares Correia (Presidente)",
+            target_director: currentDirectOfficer.id
+          })
+        });
+
+        const typingElem = document.getElementById(typingId);
+        if (typingElem) typingElem.remove();
+
+        if (res.ok) {
+          const data = await res.json();
+          (data.turns || []).forEach(turn => {
+            const turnHtml = `
+              <div class="flex items-start space-x-2.5 animate-in fade-in duration-150">
+                <img src="${turn.avatar || currentDirectOfficer.avatar}" alt="${turn.speaker_name}" class="w-8 h-8 rounded-xl object-cover border border-sky-400 shrink-0">
+                <div class="max-w-[82%] p-3.5 rounded-2xl rounded-tl-none bg-slate-900 border border-slate-800 text-slate-200 shadow-md">
+                  <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-1 mb-1.5 text-[10px]">
+                    <span class="font-bold text-sky-400">${turn.speaker_name}</span>
+                    <span class="font-mono text-slate-500">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                  </div>
+                  <p class="leading-relaxed whitespace-pre-wrap">${turn.message}</p>
+                </div>
+              </div>
+            `;
+            box.insertAdjacentHTML('beforeend', turnHtml);
+          });
+          box.scrollTop = box.scrollHeight;
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        lucide.createIcons();
+      }
+    }
+
+    // ========================================================
+    // CHAT COM TODOS • ORDEM GERAL & MESA DE REUNIÕES DO CONSELHO
+    // ========================================================
+    async function loadBoardRoundtableHistory() {
+      const feed = document.getElementById('boardRoundtableFeed');
+      if (!feed) return;
+
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch('/api/admin/csuite/history?limit=30', {
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          renderBoardRoundtableFeed(data.history || []);
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    function renderBoardRoundtableFeed(messages) {
+      const feed = document.getElementById('boardRoundtableFeed');
+      if (!feed) return;
+
+      if (messages.length === 0) {
+        feed.innerHTML = `
+          <div class="text-center py-8 space-y-2 text-slate-500">
+            <i data-lucide="shield-alert" class="w-8 h-8 mx-auto text-sky-400/50"></i>
+            <p class="text-xs font-semibold text-slate-400">Mesa do Conselho em Plenário Aguardando Ordem Presidencial</p>
+            <p class="text-[11px] text-slate-500">Use os botões de atalho acima ou digite uma instrução para convocar os 10 membros e dar início à reunião.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      feed.innerHTML = messages.map(m => {
+        const isPresident = m.speaker_id === 'president_daniel';
+        const timeStr = new Date(m.created_at * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        if (isPresident) {
+          return `
+            <div class="p-4 rounded-2xl bg-gradient-to-r from-amber-950/40 via-slate-900 to-emerald-950/30 border border-amber-500/50 space-y-2 shadow-lg">
+              <div class="flex items-center justify-between border-b border-amber-500/30 pb-2">
+                <div class="flex items-center space-x-2.5">
+                  <img src="/daniel_avatar.jpg" alt="Presidente Daniel" class="w-7 h-7 rounded-lg object-cover border border-amber-400">
+                  <div>
+                    <span class="font-black text-amber-300 text-xs">Daniel Soares Correia</span>
+                    <span class="text-[10px] text-amber-400/80 font-mono ml-1.5">• Ordem Presidencial</span>
+                  </div>
+                </div>
+                <span class="font-mono text-[10px] text-slate-400">${timeStr}</span>
+              </div>
+              <p class="text-xs text-white leading-relaxed font-medium whitespace-pre-wrap">${m.message}</p>
+            </div>
+          `;
+        } else {
+          const officer = allOfficersMap[m.speaker_id] || { avatar: '/alexandre_avatar.jpg' };
+          return `
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2 shadow-md hover:border-slate-700 transition">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <div class="flex items-center space-x-2.5">
+                  <img src="${officer.avatar || '/alexandre_avatar.jpg'}" alt="${m.speaker_name}" class="w-7 h-7 rounded-lg object-cover border border-sky-400">
+                  <div>
+                    <span class="font-bold text-white text-xs">${m.speaker_name}</span>
+                    <span class="text-[10px] text-sky-400 font-mono ml-1.5">• ${m.speaker_role}</span>
+                  </div>
+                </div>
+                <span class="font-mono text-[10px] text-slate-500">${timeStr}</span>
+              </div>
+              <div class="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap">${m.message}</div>
+            </div>
+          `;
+        }
+      }).join('');
+
+      feed.scrollTop = feed.scrollHeight;
+      lucide.createIcons();
+    }
+
+    async function handleBoardRoundtableSubmit(event) {
+      if (event) event.preventDefault();
+      const input = document.getElementById('boardRoundtableInput');
+      const btn = document.getElementById('btnSendBoardRoundtable');
+      const feed = document.getElementById('boardRoundtableFeed');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      input.value = '';
+      const masterKey = getMasterKey();
+      const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Mensagem imediata da Diretriz Presidencial Plenária
+      const userHtml = `
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-amber-950/40 via-slate-900 to-emerald-950/30 border border-amber-500/50 space-y-2 shadow-lg animate-in fade-in duration-100">
+          <div class="flex items-center justify-between border-b border-amber-500/30 pb-2">
+            <div class="flex items-center space-x-2.5">
+              <img src="/daniel_avatar.jpg" alt="Presidente Daniel" class="w-7 h-7 rounded-lg object-cover border border-amber-400">
+              <div>
+                <span class="font-black text-amber-300 text-xs">Daniel Soares Correia</span>
+                <span class="text-[10px] text-amber-400/80 font-mono ml-1.5">• Ordem Presidencial Plenária</span>
+              </div>
+            </div>
+            <span class="font-mono text-[10px] text-slate-400">${nowStr}</span>
+          </div>
+          <p class="text-xs text-white leading-relaxed font-medium whitespace-pre-wrap">${msg}</p>
+        </div>
+      `;
+      feed.insertAdjacentHTML('beforeend', userHtml);
+
+      // Loading state
+      const loadingId = 'loading_all_' + Date.now();
+      feed.insertAdjacentHTML('beforeend', `
+        <div id="${loadingId}" class="p-4 rounded-2xl bg-slate-900 border border-sky-500/30 text-sky-300 flex items-center space-x-3 animate-pulse">
+          <i data-lucide="loader" class="w-5 h-5 animate-spin"></i>
+          <div class="text-xs font-mono">Convocando os 10 oficiais do Conselho... Colhendo pareceres simultâneos...</div>
+        </div>
+      `);
+      feed.scrollTop = feed.scrollHeight;
+      lucide.createIcons();
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i><span>Conselho em Deliberação...</span>`;
+        lucide.createIcons();
+      }
+
+      try {
+        const res = await fetch('/api/admin/csuite/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Coon-Master-Key': masterKey
+          },
+          body: JSON.stringify({
+            message: msg,
+            user_role: "Daniel Soares Correia (Presidente)",
+            target_director: "all"
+          })
+        });
+
+        const loader = document.getElementById(loadingId);
+        if (loader) loader.remove();
+
+        if (res.ok) {
+          const data = await res.json();
+          (data.turns || []).forEach(turn => {
+            const turnHtml = `
+              <div class="p-4 rounded-2xl bg-slate-900/95 border border-slate-800 space-y-2 shadow-md animate-in fade-in duration-150">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <div class="flex items-center space-x-2.5">
+                    <img src="${turn.avatar || '/alexandre_avatar.jpg'}" alt="${turn.speaker_name}" class="w-7 h-7 rounded-lg object-cover border border-sky-400">
+                    <div>
+                      <span class="font-bold text-white text-xs">${turn.speaker_name}</span>
+                      <span class="text-[10px] text-sky-400 font-mono ml-1.5">• ${turn.speaker_role}</span>
+                    </div>
+                  </div>
+                  <span class="font-mono text-[10px] text-slate-500">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                </div>
+                <div class="text-xs text-slate-200 leading-relaxed whitespace-pre-wrap">${turn.message}</div>
+              </div>
+            `;
+            feed.insertAdjacentHTML('beforeend', turnHtml);
+          });
+          feed.scrollTop = feed.scrollHeight;
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>Emitir Ordem para Todos • Mesa de Reunião</span>`;
+          lucide.createIcons();
+        }
+      }
+    }
+
+    function sendQuickBoardPrompt(promptText) {
+      const input = document.getElementById('boardRoundtableInput');
+      if (input) {
+        input.value = promptText;
+        handleBoardRoundtableSubmit();
+      }
+    }
+
+    function goToRoundtableMeetingChat() {
+      switchTab('tab-team');
+      setTimeout(() => {
+        const sec = document.getElementById('boardRoundtableSection');
+        if (sec) {
+          sec.scrollIntoView({ behavior: 'smooth' });
+          document.getElementById('boardRoundtableInput')?.focus();
+        }
+      }, 100);
+    }
+
+    async function loadSoftwarePipeline() {
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch('/api/admin/governance/pipeline', {
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          renderPipelineCards(data.pipeline || []);
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    function renderPipelineCards(pipeline) {
+      const container = document.getElementById('pipelineCardsContainer');
+      if (!container) return;
+
+      container.innerHTML = pipeline.map(item => `
+        <div class="dark-card rounded-2xl p-5 space-y-4 border border-purple-500/30">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${item.status === 'approved_by_president' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'}">
+                  ${item.status_label}
+                </span>
+                <span class="text-xs text-slate-400 font-mono">MVP em ${item.development_weeks} semanas</span>
+              </div>
+              <h3 class="text-base font-black text-white mt-1">${item.name}</h3>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-slate-400 block">Faturamento Est.</span>
+              <span class="text-sm font-mono font-bold text-emerald-400">${item.revenue_formatted}/mês</span>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed">${item.problem_solved}</p>
+
+          <div class="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-slate-900/80 text-[11px]">
+            <div>
+              <span class="text-slate-400 block text-[10px]">Público-Alvo:</span>
+              <span class="font-semibold text-slate-200">${item.target_market}</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[10px]">Margem Líquida Projetada:</span>
+              <span class="font-mono font-bold text-emerald-300">${item.estimated_net_margin}%</span>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-purple-950/30 border border-purple-900/50 text-[11px] text-purple-200">
+            ${item.dossier_text}
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+            <span class="text-[10px] text-slate-400">Modelo: ${item.monetization_model}</span>
+            ${item.status !== 'approved_by_president' ? `
+              <button onclick="approveSoftware(${item.id})" class="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition flex items-center space-x-1 cursor-pointer shadow-lg shadow-emerald-500/20">
+                <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                <span>Aprovar para Produção 🚀</span>
+              </button>
+            ` : '<span class="text-emerald-400 font-bold font-mono text-xs flex items-center space-x-1"><i data-lucide="check-check" class="w-4 h-4"></i><span>Chancelado pelo Presidente</span></span>'}
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    async function approveSoftware(id) {
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch(`/api/admin/governance/pipeline/${id}/approve`, {
+          method: 'POST',
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          alert(`✅ ${data.message}`);
+          loadSoftwarePipeline();
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    async function requestClaudeReview() {
+      const masterKey = getMasterKey();
+      const subject = document.getElementById('claudeSubjectInput').value.trim();
+      const question = document.getElementById('claudeQuestionInput').value.trim();
+      const btn = document.getElementById('btnSubmitClaude');
+      const box = document.getElementById('claudeResultBox');
+
+      if (!subject) {
+        alert("Por favor, digite o tema ou decisão a ser auditada pelo Dr. Claude.");
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i><span>Dr. Claude auditando premissas...</span>`;
+        lucide.createIcons();
+      }
+
+      try {
+        const res = await fetch('/api/admin/governance/claude-review', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Coon-Master-Key': masterKey
+          },
+          body: JSON.stringify({
+            subject,
+            specific_question: question || null
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          box.classList.remove('hidden');
+          box.innerHTML = `
+            <div class="border-b border-slate-800 pb-2 flex items-center justify-between">
+              <span class="font-bold text-amber-400 text-sm">Parecer Pericial de Notório Saber • Prof. Dr. Claude Valois</span>
+              <span class="text-[10px] font-mono text-slate-400">Segunda Opinião Homologada</span>
+            </div>
+            <div class="text-slate-200 leading-relaxed whitespace-pre-wrap">${data.formal_speech}</div>
+          `;
+          lucide.createIcons();
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="cpu" class="w-4 h-4"></i><span>Emitir Segunda Opinião com Dr. Claude Valois</span>`;
+          lucide.createIcons();
+        }
+      }
+    }
+
+    async function loadWeeklyMeetings() {
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch('/api/admin/governance/meetings/next', {
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const m = await res.json();
+          renderNextMeeting(m);
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    function renderNextMeeting(m) {
+      const card = document.getElementById('nextMeetingCard');
+      if (!card || !m.title) return;
+
+      const agendaList = (m.agenda_topics || []).map(a => `
+        <li class="flex items-start space-x-2 text-xs text-slate-300">
+          <span class="font-bold text-emerald-400 font-mono min-w-44">• ${a.director}:</span>
+          <span>${a.topic}</span>
+        </li>
+      `).join('');
+
+      card.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-bold">
+                ${m.meeting_date}
+              </span>
+              <span class="text-xs text-slate-400">Semana ${m.week_number}</span>
+            </div>
+            <h3 class="text-base font-black text-white mt-1">${m.title}</h3>
+          </div>
+
+          <div>
+            ${!m.approved_by_president ? `
+              <button onclick="approveMeeting(${m.id})" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-emerald-500/20">
+                <i data-lucide="check-circle" class="w-4 h-4"></i>
+                <span>Chancelar Ata & Relatório</span>
+              </button>
+            ` : '<span class="text-emerald-400 font-bold text-xs font-mono flex items-center space-x-1"><i data-lucide="award" class="w-4 h-4"></i><span>Chancelado pelo Presidente Daniel</span></span>'}
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pautas da Reunião de Produção (9 Oficiais):</h4>
+          <ul class="space-y-1.5 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800">
+            ${agendaList}
+          </ul>
+        </div>
+
+        <div class="pt-2">
+          <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider mb-2">Relatório Executivo Semanal de Produção:</h4>
+          <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-300 leading-relaxed whitespace-pre-wrap font-mono">
+            ${m.production_report}
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    async function approveMeeting(id) {
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch(`/api/admin/governance/meetings/${id}/approve`, {
+          method: 'POST',
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          alert(`✅ ${data.message}`);
+          loadWeeklyMeetings();
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    // ========================================================
+    // GESTÃO DE SALDO DE APIS, RECARGAS & VENCIMENTOS (ARTHUR MONTENEGRO)
+    // ========================================================
+    let cachedApiBalancesData = null;
+    let cachedAppRenewalsData = null;
+
+    async function loadApiFinancialTabAll() {
+      await Promise.all([
+        loadApiBalancesData(),
+        loadAppRenewalsData(),
+        loadGovernanceSuggestionsData()
+      ]);
+    }
+
+    async function loadApiBalancesData() {
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch('/api/admin/financial/api-balances', {
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          cachedApiBalancesData = data;
+          renderCfoApiAlert(data.cfo_alert);
+          renderApiBalances(data.apis || [], data.summary || {});
+        }
+      } catch (err) {
+        console.warn("Erro ao buscar saldos de APIs:", err);
+      }
+    }
+
+    function renderCfoApiAlert(cfo) {
+      const card = document.getElementById('cfoApiAlertCard');
+      if (!card || !cfo) return;
+
+      const isAttention = cfo.status_level === 'attention';
+      const badgeClass = isAttention ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+
+      card.innerHTML = `
+        <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+          <div class="flex items-start space-x-4">
+            <div class="relative shrink-0">
+              <img src="${cfo.cfo_avatar || '/arthur_avatar.jpg'}" alt="Arthur Montenegro" class="w-16 h-16 rounded-2xl object-cover border-2 border-emerald-400 shadow-xl">
+              <span class="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 text-[9px] font-black uppercase tracking-wider">CFO</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <h3 class="text-base font-black text-white">${cfo.cfo_name}</h3>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeClass}">
+                  ${isAttention ? '⚠️ Atenção Requerida na Tesouraria' : '✅ Caixa Operacional Saudável'}
+                </span>
+                <span class="text-xs text-slate-400 font-mono">• Diretor Financeiro & Controladoria</span>
+              </div>
+              <p class="text-[11px] text-slate-400">Canal direto de governança com o Presidente Daniel Soares Correia • Trava da Verdade</p>
+              <div class="p-3.5 mt-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-200 leading-relaxed whitespace-pre-wrap font-sans">
+${cfo.executive_statement}
+              </div>
+            </div>
+          </div>
+
+          <div class="shrink-0 p-4 rounded-2xl bg-slate-900 border border-emerald-500/30 text-right space-y-2 lg:w-64">
+            <span class="text-[10px] text-slate-400 uppercase font-mono tracking-wider block">Retenção Preventiva Sugerida:</span>
+            <div class="text-2xl font-black text-emerald-400 font-mono">${cfo.total_capital_needed_formatted}</div>
+            <div class="text-[10px] text-slate-400 pt-2 border-t border-slate-800 space-y-1">
+              <div class="flex justify-between">
+                <span>APIs em Alerta:</span>
+                <span class="font-bold text-amber-400 font-mono">${cfo.critical_apis_count}</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Taxas Próx. 7 Dias:</span>
+                <span class="font-bold text-rose-400 font-mono">${cfo.upcoming_renewals_count}</span>
+              </div>
+            </div>
+            <button onclick="openApiReloadModal()" class="w-full mt-2 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs transition flex items-center justify-center space-x-1 shadow-md shadow-emerald-500/20 cursor-pointer">
+              <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+              <span>Carregar Saldo Agora</span>
+            </button>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function renderApiBalances(apis, summary) {
+      const summaryContainer = document.getElementById('apiSummaryCardsContainer');
+      const cardsContainer = document.getElementById('apiCardsContainer');
+      const runwayBadge = document.getElementById('apiRunwayBadge');
+
+      if (runwayBadge) {
+        runwayBadge.innerHTML = `<span class="text-slate-400">Autonomia Geral:</span> <span class="text-emerald-400">${summary.consolidated_runway_days || 0} dias de operação contínua</span>`;
+      }
+
+      if (summaryContainer) {
+        summaryContainer.innerHTML = `
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+            <span class="text-[10px] text-slate-400 block font-mono">Saldo Consolidado em APIs</span>
+            <div class="text-lg font-black text-white font-mono">${summary.total_balance_formatted || 'R$ 0,00'}</div>
+            <span class="text-[10px] text-emerald-400 font-mono">6 provedores conectados</span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+            <span class="text-[10px] text-slate-400 block font-mono">Queima Média Diária</span>
+            <div class="text-lg font-black text-amber-400 font-mono">${summary.total_daily_burn_formatted || 'R$ 0,00/dia'}</div>
+            <span class="text-[10px] text-slate-400 font-mono">Consumo infer.coon + ad.coon</span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+            <span class="text-[10px] text-slate-400 block font-mono">Autonomia da Operação</span>
+            <div class="text-lg font-black text-sky-400 font-mono">${summary.consolidated_runway_days || 0} dias</div>
+            <span class="text-[10px] text-slate-400 font-mono">Sem recarga adicional</span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+            <span class="text-[10px] text-slate-400 block font-mono">Status da Malha de APIs</span>
+            <div class="text-lg font-black ${summary.critical_count > 0 ? 'text-rose-400' : (summary.warning_count > 0 ? 'text-amber-400' : 'text-emerald-400')} font-mono">
+              ${summary.critical_count > 0 ? `${summary.critical_count} Crítica(s)` : (summary.warning_count > 0 ? `${summary.warning_count} Atenção` : '100% OK')}
+            </div>
+            <span class="text-[10px] text-slate-400 font-mono">${summary.healthy_count || 0} saudáveis</span>
+          </div>
+        `;
+      }
+
+      if (cardsContainer) {
+        cardsContainer.innerHTML = apis.map(a => {
+          const isCritical = a.status === 'critical';
+          const isWarning = a.status === 'warning';
+          const borderColor = isCritical ? 'border-rose-500/50 hover:border-rose-400' : (isWarning ? 'border-amber-500/40 hover:border-amber-400' : 'border-slate-800 hover:border-sky-500/40');
+          const barColor = isCritical ? 'bg-rose-500' : (isWarning ? 'bg-amber-500' : 'bg-emerald-400');
+
+          return `
+            <div class="dark-card rounded-2xl p-5 space-y-4 border ${borderColor} transition flex flex-col justify-between shadow-lg">
+              <div>
+                <div class="flex items-start justify-between">
+                  <div class="space-y-0.5">
+                    <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">${a.category}</span>
+                    <h4 class="text-sm font-black text-white">${a.service_name}</h4>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold ${a.status_badge} border flex items-center space-x-1">
+                    <span class="w-1.5 h-1.5 rounded-full ${isCritical ? 'bg-rose-400 animate-ping' : (isWarning ? 'bg-amber-400' : 'bg-emerald-400')}"></span>
+                    <span>${a.status_label}</span>
+                  </span>
+                </div>
+
+                <div class="pt-4 pb-2 space-y-1.5">
+                  <div class="flex items-baseline justify-between">
+                    <span class="text-xs text-slate-400">Saldo Atual:</span>
+                    <span class="text-2xl font-black text-white font-mono tracking-tight">${a.balance_formatted}</span>
+                  </div>
+
+                  <!-- Barra de Nível Visual -->
+                  <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700/50">
+                    <div class="${barColor} h-2 rounded-full transition-all duration-500" style="width: ${a.level_pct}%"></div>
+                  </div>
+                  <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+                    <span>${a.unit_type}</span>
+                    <span>Nível de Cota: ${a.level_pct}%</span>
+                  </div>
+                </div>
+
+                <div class="space-y-1.5 pt-3 mt-1 border-t border-slate-800/80 text-xs">
+                  <div class="flex justify-between text-[11px]">
+                    <span class="text-slate-400">Consumo Diário Médio:</span>
+                    <span class="font-mono text-slate-200 font-semibold">${a.daily_burn_formatted}</span>
+                  </div>
+                  <div class="flex justify-between text-[11px]">
+                    <span class="text-slate-400">Autonomia Restante:</span>
+                    <span class="font-mono font-bold ${isCritical ? 'text-rose-400' : (isWarning ? 'text-amber-300' : 'text-emerald-400')}">${a.days_remaining_label}</span>
+                  </div>
+                  <div class="flex justify-between text-[11px]">
+                    <span class="text-slate-400">Última Recarga:</span>
+                    <span class="font-mono text-slate-400 text-[10px]">${a.last_reload_date}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+                <span class="text-[10px] font-mono text-slate-500">Mín: R$ ${a.min_threshold.toFixed(2)}</span>
+                <button onclick="openApiReloadModal('${a.service_key}', '${a.service_name}', ${a.recommended_reload})" class="px-3.5 py-1.5 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 font-bold rounded-xl text-xs transition flex items-center space-x-1.5 border border-emerald-500/40 cursor-pointer shadow-sm">
+                  <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                  <span>Carregar Saldo</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+      lucide.createIcons();
+    }
+
+    function openApiReloadModal(serviceKey = 'gemini', serviceName = '', recAmount = 250) {
+      const select = document.getElementById('reloadServiceSelect');
+      const input = document.getElementById('reloadAmountInput');
+      if (select && serviceKey) select.value = serviceKey;
+      if (input && recAmount) input.value = recAmount;
+
+      const modal = document.getElementById('apiReloadModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        lucide.createIcons();
+      }
+    }
+
+    function closeApiReloadModal() {
+      const modal = document.getElementById('apiReloadModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function selectPresetReloadAmount(amt) {
+      const input = document.getElementById('reloadAmountInput');
+      if (input) input.value = amt;
+    }
+
+    async function executeApiReload() {
+      const select = document.getElementById('reloadServiceSelect');
+      const input = document.getElementById('reloadAmountInput');
+      const methodSelect = document.getElementById('reloadMethodSelect');
+      const btn = document.getElementById('btnConfirmReloadApi');
+
+      const serviceKey = select.value;
+      const amount = parseFloat(input.value);
+      const method = methodSelect.value;
+
+      if (!amount || amount <= 0) {
+        alert("Por favor, insira um valor válido para recarga.");
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i><span>Processando Recarga...</span>`;
+        lucide.createIcons();
+      }
+
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch('/api/admin/financial/api-balances/reload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Coon-Master-Key': masterKey
+          },
+          body: JSON.stringify({
+            service_key: serviceKey,
+            amount: amount,
+            method: method
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          alert(`✅ ${data.message}\nO lançamento de despesa operacional foi debitado no Fluxo de Caixa da Holding.`);
+          closeApiReloadModal();
+          loadApiBalancesData();
+        } else {
+          const err = await res.json();
+          alert(`Erro na recarga: ${err.detail || 'Falha no processamento'}`);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Erro de conexão ao processar recarga.");
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Confirmar e Carregar Saldo</span>`;
+          lucide.createIcons();
+        }
+      }
+    }
+
+    // ========================================================
+    // CALENDÁRIO DE VENCIMENTOS & TAXAS DOS APPS
+    // ========================================================
+    async function loadAppRenewalsData() {
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch('/api/admin/financial/app-renewals', {
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          cachedAppRenewalsData = data;
+          renderAppRenewals(data.renewals || [], data.summary || {});
+        }
+      } catch (err) {
+        console.warn("Erro ao buscar renovações de apps:", err);
+      }
+    }
+
+    function renderAppRenewals(renewals, summary) {
+      const tbody = document.getElementById('appRenewalsTableBody');
+      const totalMonthElem = document.getElementById('renewalsTotalMonth');
+      const next7DaysElem = document.getElementById('renewalsNext7Days');
+
+      if (totalMonthElem) totalMonthElem.innerText = summary.total_monthly_obligations_formatted || 'R$ 0,00';
+      if (next7DaysElem) next7DaysElem.innerText = summary.due_in_next_7_days_formatted || 'R$ 0,00';
+
+      if (!tbody) return;
+
+      if (!renewals || renewals.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-8 text-center text-slate-500 text-xs">
+              Nenhuma taxa ou aplicativo cadastrado no calendário.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = renewals.map(r => {
+        const isPaid = r.status === 'paid_current_month';
+        return `
+          <tr class="hover:bg-slate-900/60 transition ${isPaid ? 'opacity-60' : ''}">
+            <td class="py-3 px-4 font-semibold text-white">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full ${isPaid ? 'bg-slate-600' : 'bg-emerald-400'}"></span>
+                <span>${r.app_name}</span>
+              </div>
+              ${r.notes ? `<span class="text-[10px] text-slate-400 block ml-4 mt-0.5">${r.notes}</span>` : ''}
+            </td>
+            <td class="py-3 px-3">
+              <span class="px-2 py-0.5 rounded-lg bg-slate-800 text-[10px] text-slate-300 border border-slate-700 font-sans">
+                ${r.category}
+              </span>
+            </td>
+            <td class="py-3 px-3 text-center font-bold text-sky-400">
+              ${r.due_day_label}
+            </td>
+            <td class="py-3 px-3 text-slate-300">
+              ${r.next_due_date}
+            </td>
+            <td class="py-3 px-3">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border font-sans ${r.urgency_badge}">
+                ${isPaid ? 'Ciclo Quitado ✅' : r.urgency_label}
+              </span>
+            </td>
+            <td class="py-3 px-3 text-right font-bold text-white">
+              ${r.amount_formatted}
+            </td>
+            <td class="py-3 px-3 text-center">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isPaid ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'}">
+                ${r.status_label}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-center">
+              ${!isPaid ? `
+                <button onclick="payRenewal(${r.id}, '${r.app_name}', ${r.amount})" class="px-3 py-1 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 rounded-xl text-xs font-bold transition border border-emerald-500/30 flex items-center space-x-1 mx-auto cursor-pointer shadow-xs">
+                  <i data-lucide="check" class="w-3 h-3"></i>
+                  <span>Quitar</span>
+                </button>
+              ` : `
+                <span class="text-[10px] text-slate-500 font-mono">Pago (${r.last_paid_date})</span>
+              `}
+            </td>
+          </tr>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function openNewRenewalModal() {
+      const modal = document.getElementById('newRenewalModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        lucide.createIcons();
+      }
+    }
+
+    function closeNewRenewalModal() {
+      const modal = document.getElementById('newRenewalModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    async function saveNewRenewal() {
+      const name = document.getElementById('renewalNameInput').value.trim();
+      const cat = document.getElementById('renewalCategorySelect').value;
+      const amt = parseFloat(document.getElementById('renewalAmountInput').value);
+      const day = parseInt(document.getElementById('renewalDueDayInput').value);
+      const cycle = document.getElementById('renewalCycleSelect').value;
+      const notes = document.getElementById('renewalNotesInput').value.trim();
+
+      if (!name || isNaN(amt) || amt <= 0 || isNaN(day)) {
+        alert("Preencha todos os campos obrigatórios corretamente.");
+        return;
+      }
+
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch('/api/admin/financial/app-renewals', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Coon-Master-Key': masterKey
+          },
+          body: JSON.stringify({
+            app_name: name,
+            category: cat,
+            amount: amt,
+            due_day: day,
+            cycle: cycle,
+            notes: notes
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          alert(`✅ ${data.message}`);
+          closeNewRenewalModal();
+          loadAppRenewalsData();
+        } else {
+          const err = await res.json();
+          alert(`Erro: ${err.detail || 'Não foi possível salvar'}`);
+        }
+      } catch (e) {
+        console.error(e);
+        alert("Erro ao cadastrar renovação.");
+      }
+    }
+
+    async function payRenewal(id, appName, amount) {
+      if (!confirm(`Confirmar quitação de R$ ${amount.toFixed(2)} para '${appName}'?\nO valor será registrado como despesa no caixa corporativo.`)) {
+        return;
+      }
+
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch(`/api/admin/financial/app-renewals/${id}/pay`, {
+          method: 'POST',
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          alert(`✅ ${data.message}`);
+          loadAppRenewalsData();
+          loadApiBalancesData();
+        } else {
+          const err = await res.json();
+          alert(`Erro ao quitar: ${err.detail || 'Falha no pagamento'}`);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // ========================================================
+    // MURAL DE SUGESTÕES DE MELHORIAS DOS 10 OFICIAIS
+    // ========================================================
+    async function loadGovernanceSuggestionsData() {
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch('/api/admin/financial/governance-suggestions', {
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          renderGovernanceSuggestions(data.suggestions || []);
+        }
+      } catch (err) {
+        console.warn("Erro ao buscar sugestões dos diretores:", err);
+      }
+    }
+
+    function renderGovernanceSuggestions(suggestions) {
+      const container = document.getElementById('governanceSuggestionsContainer');
+      if (!container) return;
+
+      container.innerHTML = suggestions.map(s => `
+        <div class="dark-card rounded-2xl p-5 space-y-3.5 border border-slate-800 hover:border-amber-500/40 transition flex flex-col justify-between shadow-lg">
+          <div>
+            <div class="flex items-start justify-between">
+              <div class="flex items-center space-x-3">
+                <img src="${s.avatar}" alt="${s.name}" class="w-12 h-12 rounded-2xl object-cover border-2 border-slate-700 shadow-md">
+                <div>
+                  <h4 class="text-sm font-bold text-white">${s.name}</h4>
+                  <span class="text-[11px] font-mono text-slate-400">${s.role}</span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold ${s.badge_color} border">
+                ${s.badge}
+              </span>
+            </div>
+
+            <div class="pt-3">
+              <h5 class="text-xs font-black text-amber-300 flex items-center space-x-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span>${s.title}</span>
+              </h5>
+              <p class="text-xs text-slate-300 leading-relaxed mt-2 whitespace-pre-wrap">
+                ${s.suggestion}
+              </p>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] flex items-center space-x-2 text-slate-300">
+            <span class="text-emerald-400 font-bold font-mono">Impacto Projetado:</span>
+            <span class="font-medium text-slate-200">${s.impact}</span>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    async function loadOnda1Metrics() {
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch('/api/admin/ai/efficiency-metrics', {
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const ai = data.ai_efficiency || {};
+          const cache = ai.cache || {};
+          const sec = data.security_fort_knox || {};
+
+          const mSavings = document.getElementById('mCascadeSavings');
+          const mLatency = document.getElementById('mCacheLatency');
+          const mCacheHits = document.getElementById('mCacheHitsText');
+          const mFortKnox = document.getElementById('mFortKnoxStatus');
+          const mFortKnoxReqs = document.getElementById('mFortKnoxReqs');
+          const mLastUpdated = document.getElementById('onda1LastUpdated');
+
+          if (mSavings) mSavings.innerText = cache.money_saved_formatted || 'R$ 0,00';
+          if (mLatency) mLatency.innerText = '0.01s';
+          if (mCacheHits) mCacheHits.innerText = `${cache.total_cache_hits || 0} hits (${cache.tokens_saved || 0} tokens)`;
+          if (mFortKnox) mFortKnox.innerText = 'Ativa 🛡️';
+          if (mFortKnoxReqs) mFortKnoxReqs.innerText = `Máx ${sec.rate_limit_max || 60} req/min`;
+          if (mLastUpdated) mLastUpdated.innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+      } catch (err) {
+        console.warn("Erro ao buscar métricas da Onda 1:", err);
+      }
+    }
+
+    async function requestVpReauthorization() {
+      const masterKey = getMasterKey();
+      try {
+        const res = await fetch('/api/admin/governance/vp-authorize', {
+          method: 'POST',
+          headers: { 'X-Coon-Master-Key': masterKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          alert("🏛️ Decreto Executivo Nº 01/2026 revalidado pelo Vice-Presidente Dr. Alexandre Valente com sucesso!");
+          loadOnda1Metrics();
+          loadBoardRoundtableHistory();
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function initGovernanceData() {
+      const key = getMasterKey();
+      if (!key) {
+        const m = document.getElementById('masterAuthModal');
+        if (m) {
+          m.classList.remove('hidden');
+          m.classList.add('flex');
+          lucide.createIcons();
+        }
+        return;
+      }
+      loadOnda1Metrics();
+      loadTeamData();
+      loadApiFinancialTabAll();
+      loadSoftwarePipeline();
+      loadWeeklyMeetings();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initGovernanceData();
+      setInterval(loadOnda1Metrics, 15000);
+    });
+  </script>
+  <script src="/static/coon-bot.js"></script>
+</body>
+</html>
