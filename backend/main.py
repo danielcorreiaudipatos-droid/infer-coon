@@ -2442,5 +2442,55 @@ def api_admin_wave2_compile_briefing(request: Request):
         raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria COON.")
     return compile_weekly_presidential_briefing()
 
+# ==============================================================================
+# ENTREGA DE FRONTEND E PÁGINAS ESTÁTICAS DA CO.ON
+# ==============================================================================
+frontend_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend")
 
+if os.path.exists(frontend_path):
+    @app.get("/", response_class=FileResponse)
+    def serve_root():
+        return FileResponse(os.path.join(frontend_path, "portal.html"))
 
+    @app.get("/portal", response_class=FileResponse)
+    def serve_portal():
+        return FileResponse(os.path.join(frontend_path, "portal.html"))
+
+    @app.get("/index", response_class=FileResponse)
+    def serve_index():
+        return FileResponse(os.path.join(frontend_path, "index.html"))
+
+    @app.get("/studio", response_class=FileResponse)
+    def serve_studio():
+        return FileResponse(os.path.join(frontend_path, "studio.html"))
+
+    @app.get("/growth", response_class=FileResponse)
+    def serve_growth():
+        return FileResponse(os.path.join(frontend_path, "growth.html"))
+
+    @app.get("/ad", response_class=FileResponse)
+    def serve_ad():
+        return FileResponse(os.path.join(frontend_path, "ad.html"))
+
+    @app.get("/cob", response_class=FileResponse)
+    def serve_cob():
+        return FileResponse(os.path.join(frontend_path, "cob.html"))
+
+    @app.get("/imob", response_class=FileResponse)
+    def serve_imob():
+        return FileResponse(os.path.join(frontend_path, "imob.html"))
+
+    @app.get("/check", response_class=FileResponse)
+    def serve_check():
+        return FileResponse(os.path.join(frontend_path, "check.html"))
+
+    @app.get("/governance", response_class=FileResponse)
+    def serve_governance():
+        return FileResponse(os.path.join(frontend_path, "governance.html"))
+
+    @app.get("/admin", response_class=FileResponse)
+    def serve_admin():
+        return FileResponse(os.path.join(frontend_path, "admin.html"))
+
+    # Monta todos os ativos estáticos (imagens, CSS, JS, áudios)
+    app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend_static")
