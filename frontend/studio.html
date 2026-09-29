@@ -10,6 +10,23 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+
+  <!-- Inicialização do Tema Dark / Light Instantâneo (Zero FOUC) -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('coon_theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
   
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -30,18 +47,31 @@
         radial-gradient(at 85% 88%, rgba(168, 85, 247, 0.18) 0px, transparent 50%),
         radial-gradient(at 15% 90%, rgba(244, 63, 94, 0.14) 0px, transparent 50%);
       background-attachment: fixed;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Modalidade Escura (Dark Mode) Oficial Coon */
+    html.dark body {
+      background-color: #0b0f19;
+      background-image: 
+        radial-gradient(at 5% 5%, rgba(99, 102, 241, 0.18) 0px, transparent 50%),
+        radial-gradient(at 95% 8%, rgba(168, 85, 247, 0.16) 0px, transparent 50%),
+        radial-gradient(at 50% 35%, rgba(16, 185, 129, 0.10) 0px, transparent 55%),
+        radial-gradient(at 85% 88%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 15% 90%, rgba(2, 132, 199, 0.14) 0px, transparent 50%);
+      color: #f1f5f9;
     }
 
     /* ======================================================== */
     /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: PASSAGEM DE LUZ DENTRO DAS LETRAS COON */
-    /* Calibração Exigida: Não muito forte mas perceptível */
+    /* Calibração Uniforme: Todas as letras lentas e suaves por igual (linear 8s) */
     /* ======================================================== */
     @keyframes coonLetterPassage {
       0% {
-        background-position: 180% 0;
+        background-position: 200% 0;
       }
       100% {
-        background-position: -80% 0;
+        background-position: -50% 0;
       }
     }
 
@@ -63,23 +93,23 @@
       background: linear-gradient(
         115deg,
         #0f172a 0%,
-        #1e293b 24%,
-        #1d4ed8 36%,
+        #1e293b 22%,
+        #1d4ed8 35%,
         #0284c7 43%,
         #38bdf8 47%,
-        rgba(255, 255, 255, 0.92) 50%,
+        rgba(255, 255, 255, 0.90) 50%,
         #34d399 53%,
         #10b981 57%,
-        #059669 64%,
-        #1e293b 76%,
+        #059669 65%,
+        #1e293b 78%,
         #0f172a 100%
       );
-      background-size: 260% 100%;
+      background-size: 250% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: -0.055em;
-      animation: coonLetterPassage 4.2s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+      animation: coonLetterPassage 8s linear infinite;
       will-change: background-position;
       transition: transform 0.3s ease;
     }
@@ -88,42 +118,79 @@
       transform: scale(1.02);
     }
 
+    html.dark .gemini-wordmark, html.dark .coon-gradient, html.dark .coon-bigtech-logo {
+      background: linear-gradient(
+        115deg,
+        #f8fafc 0%,
+        #cbd5e1 22%,
+        #93c5fd 35%,
+        #38bdf8 43%,
+        #67e8f9 47%,
+        rgba(255, 255, 255, 0.98) 50%,
+        #6ee7b7 53%,
+        #34d399 57%,
+        #10b981 65%,
+        #94a3b8 78%,
+        #f8fafc 100%
+      );
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: coonLetterPassage 8s linear infinite;
+    }
+
     .coon-dot-animated {
       display: inline-block;
       -webkit-text-fill-color: #10b981;
       color: #10b981;
-      animation: coonDotPulse 4.2s ease-in-out infinite alternate;
+      animation: coonDotPulse 4s ease-in-out infinite alternate;
       will-change: color, filter, transform;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between text-slate-800 selection:bg-slate-900 selection:text-white">
+<body class="min-h-screen flex flex-col justify-between text-slate-800 dark:text-slate-100 selection:bg-slate-900 selection:text-white">
 
   <!-- ======================================================== -->
   <!-- BARRA SUPERIOR (DISCRETA E ELEGANTE • PADRÃO BIG TECH) -->
   <!-- ======================================================== -->
-  <header class="bg-white/85 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-30">
+  <header class="bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 sticky top-0 z-30">
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       
-      <!-- Marca Oficial Co.on com transição suave contínua -->
+      <!-- Marca Oficial Coon com transição suave contínua -->
       <a href="/" class="flex items-center space-x-3 group">
         <span class="text-2xl font-black tracking-tighter gemini-wordmark">coon<span class="coon-dot-animated text-emerald-500">.</span></span>
-        <span class="text-xs font-semibold text-slate-400 pl-2 border-l border-slate-200">Studio de Aplicativos</span>
+        <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 pl-2 border-l border-slate-200 dark:border-slate-800">Studio de Aplicativos</span>
       </a>
 
       <!-- Ações -->
-      <div class="flex items-center space-x-4">
-        <span class="hidden md:inline-flex items-center space-x-1.5 text-[11px] font-medium text-slate-500 bg-slate-100/80 px-2.5 py-1 rounded-full border border-slate-200/60">
+      <div class="flex items-center space-x-3">
+        <!-- Botão Modo Escuro / Claro (Lua / Sol) -->
+        <button 
+          id="themeToggleBtn" 
+          onclick="toggleCoonTheme()" 
+          class="w-9 h-9 rounded-full hover:bg-slate-200/60 dark:hover:bg-slate-800/80 flex items-center justify-center text-slate-600 hover:text-slate-900 dark:text-amber-300 dark:hover:text-amber-200 transition focus:outline-none"
+          title="Alternar Modo Escuro / Claro"
+          aria-label="Alternar Tema"
+        >
+          <span id="themeIconSlot">
+            <svg class="w-4 h-4 text-slate-600 hover:text-slate-900 transform hover:-rotate-12 transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+            </svg>
+          </span>
+        </button>
+
+        <span class="hidden md:inline-flex items-center space-x-1.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-slate-100/80 dark:bg-slate-800/80 px-2.5 py-1 rounded-full border border-slate-200/60 dark:border-slate-700/60">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
           <span>Tecnologia Proprietária & Padrão Big Tech</span>
         </span>
-        <a href="/" class="text-xs font-semibold text-slate-600 hover:text-slate-900 transition flex items-center space-x-1">
+        <a href="/" class="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition flex items-center space-x-1">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
           <span>Início</span>
         </a>
-        <a href="/infer" target="_blank" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-full shadow-xs transition flex items-center space-x-1.5">
+        <a href="/infer" target="_blank" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-semibold rounded-full shadow-xs transition flex items-center space-x-1.5">
           <span>Acessar infer.coon</span>
-          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-emerald-400 dark:text-white"></i>
         </a>
 
         <!-- Widget Universal de Autenticação / Área do Assinante COON -->
@@ -374,10 +441,10 @@
   <!-- ======================================================== -->
   <!-- RODAPÉ SÓBRIO (GOOGLE STYLE) -->
   <!-- ======================================================== -->
-  <footer class="bg-white border-t border-slate-200/80 text-xs text-slate-500 py-4">
-    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500">
-      <span class="font-bold text-slate-800">Co.on Participações 2026</span>
-      <span class="text-[10px] text-slate-400">Todos os direitos reservados</span>
+  <footer class="bg-white dark:bg-slate-950 border-t border-slate-200/80 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 py-4">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+      <span class="font-bold text-slate-800 dark:text-slate-100">Coon Participações 2026</span>
+      <span class="text-[10px] text-slate-400 dark:text-slate-500">Todos os direitos reservados</span>
     </div>
   </footer>
 
@@ -396,6 +463,34 @@
       document.getElementById("accessModal").classList.add("hidden");
       document.getElementById("accessModal").classList.remove("flex");
     }
+
+    // Alternador de Tema Dark / Light (Modo Lua / Sol)
+    function updateThemeIcons() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const slot = document.getElementById('themeIconSlot');
+      if (!slot) return;
+      if (isDark) {
+        slot.innerHTML = `
+          <svg class="w-4 h-4 text-amber-300 transform hover:rotate-45 transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+        `;
+      } else {
+        slot.innerHTML = `
+          <svg class="w-4 h-4 text-slate-600 hover:text-slate-900 transform hover:-rotate-12 transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+        `;
+      }
+    }
+
+    window.toggleCoonTheme = function() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('coon_theme', isDark ? 'dark' : 'light');
+      updateThemeIcons();
+    };
+
+    updateThemeIcons();
   </script>
   <script src="/static/coon-auth.js"></script>
   <script src="/static/coon-bot.js"></script>

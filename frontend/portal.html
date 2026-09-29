@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Studio Co.on | Co.on Participações 2026</title>
+  <title>Studio Coon | Coon Participações 2026</title>
   
-  <meta name="description" content="Studio Co.on • Softwares Especializados e Ecossistemas Digitais da Co.on Participações Ltda. Brasil.">
+  <meta name="description" content="Studio Coon • Softwares Especializados e Ecossistemas Digitais da Coon Participações Ltda. Brasil.">
   <meta name="theme-color" content="#ffffff">
 
   <!-- Favicon -->
@@ -13,6 +13,23 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+
+  <!-- Inicialização do Tema Dark / Light Instantâneo (Zero FOUC) -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('coon_theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
   
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -33,18 +50,31 @@
         radial-gradient(at 85% 88%, rgba(168, 85, 247, 0.18) 0px, transparent 50%),
         radial-gradient(at 15% 90%, rgba(244, 63, 94, 0.14) 0px, transparent 50%);
       background-attachment: fixed;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Modalidade Escura (Dark Mode) Oficial Coon */
+    html.dark body {
+      background-color: #0b0f19;
+      background-image: 
+        radial-gradient(at 5% 5%, rgba(99, 102, 241, 0.18) 0px, transparent 50%),
+        radial-gradient(at 95% 8%, rgba(168, 85, 247, 0.16) 0px, transparent 50%),
+        radial-gradient(at 50% 35%, rgba(16, 185, 129, 0.10) 0px, transparent 55%),
+        radial-gradient(at 85% 88%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 15% 90%, rgba(2, 132, 199, 0.14) 0px, transparent 50%);
+      color: #f1f5f9;
     }
 
     /* ======================================================== */
     /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: PASSAGEM DE LUZ DENTRO DAS LETRAS COON */
-    /* Calibração Exigida: Não muito forte mas perceptível */
+    /* Calibração Uniforme: Todas as letras lentas e suaves por igual (linear 8s) */
     /* ======================================================== */
     @keyframes coonLetterPassage {
       0% {
-        background-position: 180% 0;
+        background-position: 200% 0;
       }
       100% {
-        background-position: -80% 0;
+        background-position: -50% 0;
       }
     }
 
@@ -66,23 +96,23 @@
       background: linear-gradient(
         115deg,
         #0f172a 0%,
-        #1e293b 24%,
-        #1d4ed8 36%,
+        #1e293b 22%,
+        #1d4ed8 35%,
         #0284c7 43%,
         #38bdf8 47%,
-        rgba(255, 255, 255, 0.92) 50%,
+        rgba(255, 255, 255, 0.90) 50%,
         #34d399 53%,
         #10b981 57%,
-        #059669 64%,
-        #1e293b 76%,
+        #059669 65%,
+        #1e293b 78%,
         #0f172a 100%
       );
-      background-size: 260% 100%;
+      background-size: 250% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: -0.055em;
-      animation: coonLetterPassage 4.2s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+      animation: coonLetterPassage 8s linear infinite;
       will-change: background-position;
       transition: transform 0.3s ease;
     }
@@ -91,17 +121,42 @@
       transform: scale(1.02);
     }
 
+    html.dark .gemini-wordmark, html.dark .coon-gradient, html.dark .coon-bigtech-logo {
+      background: linear-gradient(
+        115deg,
+        #f8fafc 0%,
+        #cbd5e1 22%,
+        #93c5fd 35%,
+        #38bdf8 43%,
+        #67e8f9 47%,
+        rgba(255, 255, 255, 0.98) 50%,
+        #6ee7b7 53%,
+        #34d399 57%,
+        #10b981 65%,
+        #94a3b8 78%,
+        #f8fafc 100%
+      );
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: coonLetterPassage 8s linear infinite;
+    }
+
     .coon-dot-animated {
       display: inline-block;
       -webkit-text-fill-color: #10b981;
       color: #10b981;
-      animation: coonDotPulse 4.2s ease-in-out infinite alternate;
+      animation: coonDotPulse 4s ease-in-out infinite alternate;
       will-change: color, filter, transform;
     }
 
     /* Dropdown do App Launcher (9 Pontinhos Estilo Google Workspace) */
     .app-drawer-shadow {
       box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 2px 10px -2px rgba(0, 0, 0, 0.05);
+    }
+    html.dark .app-drawer-shadow {
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.7), 0 2px 10px -2px rgba(0, 0, 0, 0.4);
     }
   </style>
 </head>
@@ -112,23 +167,38 @@
   <!-- ======================================================== -->
   <header class="w-full px-6 py-4 flex items-center justify-between relative z-30">
     <!-- Lado Esquerdo Discreto (Identificação Sutil) -->
-    <div class="flex items-center space-x-4 text-xs text-slate-500 font-medium">
-      <button onclick="openAboutModal()" class="hover:text-slate-900 transition flex items-center space-x-1.5 font-semibold text-slate-700">
-        <i data-lucide="info" class="w-3.5 h-3.5 text-emerald-600"></i>
+    <div class="flex items-center space-x-4 text-xs text-slate-500 dark:text-slate-400 font-medium">
+      <button onclick="openAboutModal()" class="hover:text-slate-900 dark:hover:text-white transition flex items-center space-x-1.5 font-semibold text-slate-700 dark:text-slate-200">
+        <i data-lucide="info" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400"></i>
         <span>Sobre a Empresa</span>
       </button>
-      <button onclick="openContactModal()" class="hover:text-slate-900 transition">Contato</button>
+      <button onclick="openContactModal()" class="hover:text-slate-900 dark:hover:text-white transition">Contato</button>
     </div>
 
-    <!-- Lado Direito: 9 Pontinhos (App Launcher) + Acesso Direto -->
-    <div class="flex items-center space-x-3">
+    <!-- Lado Direito: Modo Escuro (Lua) + 9 Pontinhos (App Launcher) + Acesso Direto -->
+    <div class="flex items-center space-x-2 sm:space-x-3">
       
+      <!-- Botão Modo Escuro / Claro (Lua / Sol) -->
+      <button 
+        id="themeToggleBtn" 
+        onclick="toggleCoonTheme()" 
+        class="w-10 h-10 rounded-full hover:bg-slate-200/60 dark:hover:bg-slate-800/80 flex items-center justify-center text-slate-600 hover:text-slate-900 dark:text-amber-300 dark:hover:text-amber-200 transition focus:outline-none"
+        title="Alternar Modo Escuro / Claro"
+        aria-label="Alternar Tema"
+      >
+        <span id="themeIconSlot">
+          <svg class="w-5 h-5 text-slate-600 hover:text-slate-900 transform hover:-rotate-12 transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+        </span>
+      </button>
+
       <!-- Botão dos 9 Pontinhos (Google Apps Launcher) -->
       <div class="relative">
         <button 
           id="appDrawerBtn" 
           onclick="toggleAppDrawer()" 
-          class="w-10 h-10 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600 hover:text-slate-900 transition focus:outline-none"
+          class="w-10 h-10 rounded-full hover:bg-slate-200/60 dark:hover:bg-slate-800/80 flex items-center justify-center text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition focus:outline-none"
           title="Studio de Softwares COON"
           aria-label="Abrir aplicativos do Studio"
         >
@@ -149,14 +219,14 @@
         <!-- Popover / Drawer dos Aplicativos (Estilo Google Workspace) -->
         <div 
           id="appDrawer" 
-          class="hidden absolute right-0 top-12 w-80 sm:w-96 bg-white rounded-3xl border border-slate-200 p-5 app-drawer-shadow z-50 animate-in fade-in zoom-in-95 duration-150"
+          class="hidden absolute right-0 top-12 w-80 sm:w-96 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-5 app-drawer-shadow z-50 animate-in fade-in zoom-in-95 duration-150"
         >
-          <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
             <div>
-              <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Studio de Aplicativos</h3>
-              <p class="text-[11px] text-slate-400">COON Soluções Tecnológicas</p>
+              <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Studio de Aplicativos</h3>
+              <p class="text-[11px] text-slate-400 dark:text-slate-500">COON Soluções Tecnológicas</p>
             </div>
-            <span class="text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200">
+            <span class="text-[10px] font-mono font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
               Brasil
             </span>
           </div>
@@ -244,7 +314,7 @@
   </header>
 
   <!-- ======================================================== -->
-  <!-- 2. CORPO CENTRAL (STUDIO CO.ON • EXCLUSIVO & ULTRA-LIMPO) -->
+  <!-- 2. CORPO CENTRAL (STUDIO COON • EXCLUSIVO & ULTRA-LIMPO) -->
   <!-- ======================================================== -->
   <main class="flex-1 flex flex-col items-center justify-center px-4 -mt-10">
     
@@ -261,29 +331,29 @@
 
       <!-- BARRA DE PESQUISA & ATALHO (ESTILO GOOGLE CAPSULE MODERNA) -->
       <div class="w-full max-w-xl mx-auto mb-6">
-        <div class="relative flex items-center w-full px-4 py-3 bg-white/90 backdrop-blur-md rounded-full border border-slate-200 hover:border-slate-300 focus-within:border-emerald-500/60 focus-within:shadow-md transition">
+        <div class="relative flex items-center w-full px-4 py-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 focus-within:border-emerald-500/60 focus-within:shadow-md transition">
           <i data-lucide="search" class="w-4 h-4 text-slate-400 mr-3 shrink-0"></i>
           <input 
             type="text" 
             id="mainSearchInput" 
             placeholder="Pesquise na COON (ex: growth, ad, cob, imob, check, contratos)..." 
-            class="w-full bg-transparent border-0 focus:ring-0 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
+            class="w-full bg-transparent border-0 focus:ring-0 text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none"
             onkeydown="if(event.key === 'Enter') handleSearchSubmit()"
           >
-          <button onclick="handleSearchSubmit()" class="text-slate-400 hover:text-slate-700 pl-2">
+          <button onclick="handleSearchSubmit()" class="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 pl-2">
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
         </div>
       </div>
 
-      <!-- BOTÃO CENTRAL EXCLUSIVO: STUDIO CO.ON -->
+      <!-- BOTÃO CENTRAL EXCLUSIVO: STUDIO COON -->
       <div class="flex items-center justify-center">
         <a 
           href="/studio" 
-          class="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-2xl shadow-xl shadow-slate-900/15 hover:scale-105 transition flex items-center space-x-2.5 group cursor-pointer"
+          class="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 dark:bg-slate-800/90 dark:hover:bg-slate-750 dark:border dark:border-slate-700/80 text-white text-sm font-bold rounded-2xl shadow-xl shadow-slate-900/15 hover:scale-105 transition flex items-center space-x-2.5 group cursor-pointer"
         >
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 group-hover:scale-125 transition"></span>
-          <span>Entrar no Studio Co.on</span>
+          <span>Entrar no Studio Coon</span>
           <i data-lucide="arrow-right" class="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition"></i>
         </a>
       </div>
@@ -295,11 +365,11 @@
   <!-- ======================================================== -->
   <!-- 3. RODAPÉ INSTITUCIONAL ULTRA-LIMPO -->
   <!-- ======================================================== -->
-  <footer class="bg-slate-50/90 border-t border-slate-200/80 text-xs text-slate-500">
-    <!-- Última Linha do Site: Co.on Participações 2026 -->
-    <div class="py-3 px-6 text-center text-[11px] text-slate-600 font-medium flex flex-col sm:flex-row items-center justify-between max-w-6xl mx-auto gap-1">
-      <span class="font-bold text-slate-900">Co.on Participações 2026</span>
-      <span class="text-[10px] text-slate-500">Todos os direitos reservados</span>
+  <footer class="bg-slate-50/90 dark:bg-slate-950/90 border-t border-slate-200/80 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
+    <!-- Última Linha do Site: Coon Participações 2026 -->
+    <div class="py-3 px-6 text-center text-[11px] text-slate-600 dark:text-slate-400 font-medium flex flex-col sm:flex-row items-center justify-between max-w-6xl mx-auto gap-1">
+      <span class="font-bold text-slate-900 dark:text-slate-100">Coon Participações 2026</span>
+      <span class="text-[10px] text-slate-500 dark:text-slate-400">Todos os direitos reservados</span>
     </div>
   </footer>
 
@@ -316,7 +386,7 @@
         <div class="flex items-center space-x-3">
           <span class="text-2xl font-black tracking-tighter gemini-wordmark">coon<span class="text-emerald-500">.</span></span>
           <div class="pl-2.5 border-l border-slate-200">
-            <h3 class="text-base font-extrabold text-slate-900 leading-tight">Sobre a Empresa • Co.on Participações Ltda.</h3>
+            <h3 class="text-base font-extrabold text-slate-900 leading-tight">Sobre a Empresa • Coon Participações Ltda.</h3>
             <p class="text-[11px] text-slate-500 font-mono">Liderança Executiva, Visão Tecnológica & Studio de Softwares</p>
           </div>
         </div>
@@ -349,7 +419,7 @@
               <div>
                 <h4 class="text-xl font-black text-white tracking-tight">Daniel Soares Correia</h4>
                 <p class="text-xs font-semibold text-emerald-400">Presidente, Fundador & Comandante em Chefe</p>
-                <p class="text-[11px] text-slate-400">Holding Co.on Participações Ltda.</p>
+                <p class="text-[11px] text-slate-400">Holding Coon Participações Ltda.</p>
               </div>
               <div>
                 <a 
@@ -382,7 +452,7 @@
             <span>A Palavra do Presidente • Alto Investimento em Tecnologia & Segurança</span>
           </div>
           <blockquote class="text-xs sm:text-sm text-slate-200 leading-relaxed italic border-l-2 border-emerald-400 pl-4 py-1">
-            "Na <strong>Co.on Participações Ltda.</strong>, nosso compromisso é inegociável: realizamos um <strong>alto e contínuo investimento em tecnologia de ponta, infraestrutura em nuvem e inteligência artificial</strong> para criar softwares que realmente facilitam o dia a dia das pessoas. Mais do que inovação, garantimos <strong>plataformas ultra-seguras</strong>, blindadas contra ameaças cibernéticas com criptografia perimetral e rigorosa conformidade com a LGPD. Quem utiliza o ecossistema Co.on tem a certeza de contar com o que há de mais moderno, rápido e seguro no mercado brasileiro."
+            "Na <strong>Coon Participações Ltda.</strong>, nosso compromisso é inegociável: realizamos um <strong>alto e contínuo investimento em tecnologia de ponta, infraestrutura em nuvem e inteligência artificial</strong> para criar softwares que realmente facilitam o dia a dia das pessoas. Mais do que inovação, garantimos <strong>plataformas ultra-seguras</strong>, blindadas contra ameaças cibernéticas com criptografia perimetral e rigorosa conformidade com a LGPD. Quem utiliza o ecossistema Coon tem a certeza de contar com o que há de mais moderno, rápido e seguro no mercado brasileiro."
           </blockquote>
           <div class="text-right text-[11px] text-slate-400 font-mono">
             — Daniel Soares Correia, Presidente
@@ -398,10 +468,10 @@
           <span>Inteligência Cognitiva & Softwares para Descomplicar a Vida</span>
         </h5>
         <p>
-          <strong>Daniel Soares Correia</strong> lidera a holding <strong>Co.on Participações Ltda.</strong> (<a href="https://www.coon.com.br" target="_blank" class="text-slate-900 underline font-semibold">www.coon.com.br</a>) com o objetivo de desenvolver soluções tecnológicas verticais que eliminam a burocracia e aceleram a produtividade corporativa no Brasil.
+          <strong>Daniel Soares Correia</strong> lidera a holding <strong>Coon Participações Ltda.</strong> (<a href="https://www.coon.com.br" target="_blank" class="text-slate-900 underline font-semibold">www.coon.com.br</a>) com o objetivo de desenvolver soluções tecnológicas verticais que eliminam a burocracia e aceleram a produtividade corporativa no Brasil.
         </p>
         <p>
-          Sob sua liderança, a Co.on transformou processos historicamente lentos e complexos — como engenharia avaliatória pericial (ABNT NBR 14653), cobrança humanóide ativa, captação de clientes, vistorias e automações contratuais — em sistemas ágeis, intuitivos e altamente rentáveis através do <strong>Studio Co.on</strong>.
+          Sob sua liderança, a Coon transformou processos historicamente lentos e complexos — como engenharia avaliatória pericial (ABNT NBR 14653), cobrança humanóide ativa, captação de clientes, vistorias e automações contratuais — em sistemas ágeis, intuitivos e altamente rentáveis através do <strong>Studio Coon</strong>.
         </p>
         <p>
           A empresa conta com alianças estratégicas e integrações de ecossistema com tecnologias de ponta da <strong>Google</strong> e <strong>Anthropic</strong>, além de servidores de alta disponibilidade e proteção cibernética padrão bancário.
@@ -432,7 +502,7 @@
             </div>
           </div>
           <p class="text-[11px] text-slate-600 leading-tight">
-            <em>"A união entre facilidade de uso para o usuário e uma esteira tecnológica pesada consolida o Studio Co.on como padrão Big Tech para todos."</em>
+            <em>"A união entre facilidade de uso para o usuário e uma esteira tecnológica pesada consolida o Studio Coon como padrão Big Tech para todos."</em>
           </p>
         </div>
       </div>
@@ -441,7 +511,7 @@
       <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
         <a href="/studio" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition flex items-center space-x-2 cursor-pointer">
           <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span>Acessar o Studio Co.on</span>
+          <span>Acessar o Studio Coon</span>
         </a>
         <button onclick="closeAboutModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer">
           Fechar
@@ -480,7 +550,7 @@
             <i data-lucide="mail" class="w-4 h-4"></i>
           </div>
           <div>
-            <h3 class="text-sm font-bold text-slate-900">Fale com a Co.on</h3>
+            <h3 class="text-sm font-bold text-slate-900">Fale com a Coon</h3>
           </div>
         </div>
         <button onclick="closeContactModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
@@ -494,7 +564,7 @@
           <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">E-mail Oficial Centralizado</div>
           <div class="text-sm font-bold text-emerald-400 font-mono">falecom@coon.com.br</div>
         </div>
-        <a href="mailto:falecom@coon.com.br?subject=Contato%20via%20Portal%20Co.on" class="px-3 py-1.5 bg-emerald-400 hover:bg-emerald-300 text-slate-950 text-xs font-bold rounded-xl transition flex items-center space-x-1.5 shadow-sm cursor-pointer">
+        <a href="mailto:falecom@coon.com.br?subject=Contato%20via%20Portal%20Coon" class="px-3 py-1.5 bg-emerald-400 hover:bg-emerald-300 text-slate-950 text-xs font-bold rounded-xl transition flex items-center space-x-1.5 shadow-sm cursor-pointer">
           <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
           <span>Abrir E-mail</span>
         </a>
@@ -685,10 +755,33 @@
       document.getElementById("productModal").classList.remove("hidden");
       document.getElementById("productModal").classList.add("flex");
     }
-    function closeProductModal() {
-      document.getElementById("productModal").classList.add("hidden");
-      document.getElementById("productModal").classList.remove("flex");
+    // Alternador de Tema Dark / Light (Modo Lua / Sol)
+    function updateThemeIcons() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const slot = document.getElementById('themeIconSlot');
+      if (!slot) return;
+      if (isDark) {
+        slot.innerHTML = `
+          <svg class="w-5 h-5 text-amber-300 transform hover:rotate-45 transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+        `;
+      } else {
+        slot.innerHTML = `
+          <svg class="w-5 h-5 text-slate-600 hover:text-slate-900 transform hover:-rotate-12 transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+        `;
+      }
     }
+
+    window.toggleCoonTheme = function() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('coon_theme', isDark ? 'dark' : 'light');
+      updateThemeIcons();
+    };
+
+    updateThemeIcons();
   </script>
   <script src="/static/coon-auth.js"></script>
   <script src="/static/coon-bot.js"></script>

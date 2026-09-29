@@ -1,7 +1,7 @@
 /**
  * ========================================================
  * COON UNIVERSAL HUMAN-FIRST BOT WIDGET
- * Holding Co.on Participações Ltda. (www.coon.com.br)
+ * Holding Coon Participações Ltda. (www.coon.com.br)
  * Atendentes: Jéssica Santos, Camila Ferreira, Rodrigo Silva e Eduardo Mendes
  * ========================================================
  */
@@ -305,7 +305,7 @@
     container.id = 'coonBotContainer';
     container.innerHTML = `
       <!-- Launcher Flutuante (Apenas Atendimento Online) -->
-      <div id="coonBotLauncher" onclick="toggleCoonChat()" title="Atendimento Online Co.on">
+      <div id="coonBotLauncher" onclick="toggleCoonChat()" title="Atendimento Online Coon">
         <div class="coon-launcher-icon-box">
           <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
@@ -314,7 +314,7 @@
         </div>
         <div class="flex flex-col text-left pr-1">
           <span class="text-xs font-bold leading-tight text-white tracking-wide">Atendimento Online</span>
-          <span class="text-[10px] text-emerald-400 font-medium">Equipe Co.on • Online</span>
+          <span class="text-[10px] text-emerald-400 font-medium">Equipe Coon • Online</span>
         </div>
       </div>
 
@@ -332,7 +332,7 @@
                 <span id="coonChatHeaderName">Jéssica Santos</span>
                 <span class="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded border border-emerald-500/30">Oficial</span>
               </div>
-              <div class="text-[10px] text-slate-300" id="coonChatHeaderRole">Atendimento & Sucesso Co.on</div>
+              <div class="text-[10px] text-slate-300" id="coonChatHeaderRole">Atendimento & Sucesso Coon</div>
             </div>
           </div>
           <div class="flex items-center space-x-1">
@@ -352,7 +352,7 @@
               <img src="/jessica_avatar.jpg" alt="Jéssica" class="w-full h-full object-cover">
             </div>
             <div class="coon-bubble coon-bubble-bot">
-              Olá! Tudo bem? Aqui é a <strong>Jéssica Santos</strong> da equipe Co.on! 😊✨<br><br>
+              Olá! Tudo bem? Aqui é a <strong>Jéssica Santos</strong> da equipe Coon! 😊✨<br><br>
               Como posso te ajudar hoje? Temos diversos planos e com certeza um vai dar super certo para você! Se precisar de suporte, dúvidas ou cancelamento, estou aqui a postos.
             </div>
           </div>
@@ -441,7 +441,7 @@
           "Poxa, tive uma oscilação rápida na minha conexão aqui! Mas não se preocupe: você pode falar diretamente comigo ou com a nossa equipe no nosso WhatsApp oficial clicando abaixo! 📲",
           currentAttendant,
           [],
-          `https://wa.me/${window.COON_WHATSAPP_NUMBER}?text=Ol%C3%A1!%20Gostaria%20de%20atendimento%20Co.on.`
+          `https://wa.me/${window.COON_WHATSAPP_NUMBER}?text=Ol%C3%A1!%20Gostaria%20de%20atendimento%20Coon.`
         );
       }
     };
