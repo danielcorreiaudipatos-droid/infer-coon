@@ -1,6 +1,6 @@
 """
 Módulo da Onda 2: Automação Financeira, Resiliência Multi-LLM & Despachos de Gabinete.
-Holding: Co.on Participações Ltda. (www.coon.com.br)
+Holding: Coon Participações Ltda. (www.coon.com.br)
 Comandantes Executivos:
 - Arthur Montenegro (CFO): Stop-Loss & Gatilho Pix Preventivo
 - Prof. Dr. Claude Valois: Failover Multi-LLM em 50ms (Google <-> Anthropic)
@@ -111,7 +111,7 @@ def check_stop_loss_and_trigger_pix(service_key: Optional[str] = None) -> Dict[s
         curr_bal = float(api["balance"])
         thresh = float(api["min_threshold"])
 
-        # Chave Pix Corporativa Co.on Participações Ltda.
+        # Chave Pix Corporativa Coon Participações Ltda.
         pix_code = f"00020126580014br.gov.bcb.pix0136coon-participacoes-pix-recarga-{skey}520400005303986540{amount:.2f}5802BR5925COON PARTICIPACOES LTDA6009SAO PAULO62070503***6304ABCD"
 
         # Registra evento de Stop-Loss se não houver pendente recente (últimas 2h)
@@ -276,7 +276,7 @@ def compile_weekly_presidential_briefing() -> Dict[str, Any]:
 
 #### 3. Pauta Executiva para Despacho da Presidência
 1. Aprovação de lançamentos e renovações do mês corrente;
-2. Continuidade da esteira de expansão dos softwares do Studio Co.on;
+2. Continuidade da esteira de expansão dos softwares do Studio Coon;
 3. Manutenção irrestrita da Trava Anti-Bajulação e foco em margem líquida real.
 """
 

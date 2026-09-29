@@ -1,6 +1,6 @@
 """
 Módulo de Reuniões Semanais da Diretoria & Relatórios Executivos de Produção.
-Holding: Co.on Participações Ltda.
+Holding: Coon Participações Ltda.
 
 Programa e documenta reuniões semanais de produção toda segunda-feira,
 sintetizando metas, entregas, pautas por diretor e relatórios executivos para o Presidente Daniel.
@@ -46,7 +46,7 @@ def init_weekly_briefing_tables():
     if row and row["count"] == 0:
         now = time.time()
         agenda = [
-            {"director": "Dr. Alexandre Valente (VP)", "topic": "Alinhamento do Plano Estratégico Semanal e Diretrizes da Holding Co.on Participações"},
+            {"director": "Dr. Alexandre Valente (VP)", "topic": "Alinhamento do Plano Estratégico Semanal e Diretrizes da Holding Coon Participações"},
             {"director": "Arthur Montenegro (CFO)", "topic": "Previsão de Fluxo de Caixa da Semana, Metas de Assinaturas e Ponto de Equilíbrio"},
             {"director": "Dr. Gabriel Silveira (CINO)", "topic": "Apresentação dos Dossiês de Viabilidade: Contrato.coon e ITBI.coon"},
             {"director": "Profª Dra. Alice, PhD (CTO)", "topic": "Cronograma de Calibração Pericial NBR 14653 e Banco de Amostras Urbanas/Rurais"},
@@ -58,7 +58,7 @@ def init_weekly_briefing_tables():
         ]
 
         report_md = """# 📊 Relatório Executivo Semanal de Produção • Semana 39/2026
-**Holding: Co.on Participações Ltda.**  
+**Holding: Coon Participações Ltda.**  
 **Data da Reunião:** Segunda-feira, 28 de Setembro de 2026 — 08:30  
 **Presidência:** Daniel Soares Correia • **Coordenação:** Dr. Alexandre Valente (VP)
 
@@ -80,7 +80,7 @@ def init_weekly_briefing_tables():
         c.execute("""
             INSERT INTO weekly_production_meetings (
                 week_number, meeting_date, title, status, agenda_topics, production_report, approved_by_president, created_at
-            ) VALUES (39, 'Segunda-feira, 28/09/2026 - 08:30', 'Kickoff Semanal de Produção • Co.on Participações Ltda.', 'scheduled', ?, ?, 0, ?)
+            ) VALUES (39, 'Segunda-feira, 28/09/2026 - 08:30', 'Kickoff Semanal de Produção • Coon Participações Ltda.', 'scheduled', ?, ?, 0, ?)
         """, (json.dumps(agenda), report_md, now))
 
     conn.commit()

@@ -1,5 +1,5 @@
 """
-Co.on Participações Ltda. - Hub de Integrações Estratégicas
+Coon Participações Ltda. - Hub de Integrações Estratégicas
 Módulo centralizado para as 4 Camadas de Alta Performance:
 1. Blindagem & Defesa: Cloudflare Turnstile & Asaas/MercadoPago Payments
 2. Comunicação Direta: Evolution API / Z-API (WhatsApp) & Resend (E-mail DKIM)
@@ -214,7 +214,7 @@ class EmailSendRequest(BaseModel):
     recipient_email: str
     subject: str
     html_content: str
-    from_name: Optional[str] = "Co.on Participações Ltda."
+    from_name: Optional[str] = "Coon Participações Ltda."
     from_email: Optional[str] = "notificacoes@coon.com.br"
 
 def send_resend_email(req: EmailSendRequest) -> Dict[str, Any]:
@@ -227,7 +227,7 @@ def send_resend_email(req: EmailSendRequest) -> Dict[str, Any]:
             "status": "queued",
             "recipient": req.recipient_email,
             "subject": req.subject,
-            "note": "E-mail enfileirado na infraestrutura Co.on. Ative a RESEND_API_KEY para transmissão direta."
+            "note": "E-mail enfileirado na infraestrutura Coon. Ative a RESEND_API_KEY para transmissão direta."
         }
     
     try:
@@ -368,7 +368,7 @@ def geocode_location_pericial(address: str) -> Dict[str, Any]:
 # ==============================================================================
 
 def list_registered_mcp_tools() -> List[Dict[str, Any]]:
-    """Catálogo oficial de ferramentas expostas pelo Servidor MCP da Co.on."""
+    """Catálogo oficial de ferramentas expostas pelo Servidor MCP da Coon."""
     return [
         {
             "name": "calcular_regressao_abnt_nbr_14653",

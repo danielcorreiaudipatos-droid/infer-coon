@@ -135,7 +135,7 @@ def init_financial_tables():
         now = time.time()
         initial_renewals = [
             ("Servidores Hetzner Cloud VPS CPX41 (Nuremberg)", "Infraestrutura", 249.90, 5, "monthly", "pending", now - (25 * 86400), 1, "Servidor Docker principal com Nginx e bancos WAL da holding"),
-            ("Domínios coon.com.br & infercoon.com.br (Registro.br)", "Domínios & SSL", 80.00, 12, "annual", "pending", now - (350 * 86400), 1, "Domínios raiz e institucionais da Co.on Participações"),
+            ("Domínios coon.com.br & infercoon.com.br (Registro.br)", "Domínios & SSL", 80.00, 12, "annual", "pending", now - (350 * 86400), 1, "Domínios raiz e institucionais da Coon Participações"),
             ("Certificado SSL Wildcard & Proteção Cloudflare Pro", "Segurança & CDN", 115.00, 18, "monthly", "pending", now - (20 * 86400), 1, "Criptografia SSL ponta a ponta e proteção anti-DDoS Fort Knox"),
             ("Google Workspace Starter (E-mails Oficiais @coon.com.br)", "Comunicação", 180.00, 22, "monthly", "pending", now - (15 * 86400), 1, "Caixas corporativas da diretoria e gabinete"),
             ("Gateway Pix & Boletos Split (Asaas / EFI Manutenção)", "Meios de Pagamento", 69.90, 28, "monthly", "pending", now - (30 * 86400), 1, "Tarifa de manutenção de conta de liquidação Pix"),
@@ -987,7 +987,7 @@ def get_csuite_api_optimization_suggestions() -> List[Dict[str, Any]]:
             "suggestion": (
                 "Presidente Daniel: A maior causa de drenagem acidental de saldo de APIs em startups são bots externos descobrindo endpoints e fazendo scraping. "
                 "Já implementei no backend a blindagem perimetral Fort Knox: rate-limiting estrito de 60 requisições por minuto por IP, rotação mensal de chaves "
-                "e validação de tokens JWT assinados. Ninguém consome 1 centavo da Co.on sem autorização."
+                "e validação de tokens JWT assinados. Ninguém consome 1 centavo da Coon sem autorização."
             ),
             "impact": "Blindagem contra vazamento de tokens e ataque de esgotamento de saldo de terceiros."
         },

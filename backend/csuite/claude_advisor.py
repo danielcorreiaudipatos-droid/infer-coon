@@ -1,7 +1,7 @@
 """
 Gabinete de Notório Saber & Segunda Opinião Estratégica.
 Prof. Dr. Claude Valois (Conselheiro Especial de Segunda Opinião / Claude API).
-Holding: Co.on Participações Ltda.
+Holding: Coon Participações Ltda.
 
 Atua sob demanda ('On-Call') quando o Presidente Daniel ou a Diretoria convocam
 para auditar decisões, revisar códigos, avaliar teses de softwares e resolver impasses.
@@ -47,7 +47,7 @@ def execute_claude_review(req: ClaudeReviewRequest) -> ClaudeReviewResponse:
                 "content-type": "application/json"
             }
             system_prompt = (
-                "Você é o Prof. Dr. Claude Valois, Conselheiro Sênior de Notório Saber da holding Co.on Participações Ltda., "
+                "Você é o Prof. Dr. Claude Valois, Conselheiro Sênior de Notório Saber da holding Coon Participações Ltda., "
                 "presidida por Daniel Soares Correia. Você foi convocado para emitir uma SEGUNDA OPINIÃO IMPARCIAL, "
                 "de altíssimo rigor analítico, desapaixonada e cirúrgica sobre a questão em pauta. "
                 "Estruture sua resposta em: 1) Análise Crítica das Premissas; 2) Riscos Ocultos e Pontos Cegos; 3) Recomendação e Blindagem Executiva. "
@@ -70,7 +70,7 @@ def execute_claude_review(req: ClaudeReviewRequest) -> ClaudeReviewResponse:
                     subject=subject,
                     premises_analysis="Exame exaustivo de consistência lógica efetuado via motor Claude 3.5 Sonnet.",
                     hidden_risks="Identificação e ponderação de sensibilidade e trade-offs operacionais.",
-                    mitigation_and_advice="Plano de mitigação estruturado em conformidade com as diretrizes da Co.on Participações.",
+                    mitigation_and_advice="Plano de mitigação estruturado em conformidade com as diretrizes da Coon Participações.",
                     formal_speech=text_content,
                     timestamp=time.time()
                 )
@@ -80,7 +80,7 @@ def execute_claude_review(req: ClaudeReviewRequest) -> ClaudeReviewResponse:
     # 2. Motor Analítico Heurístico de Notório Saber do Dr. Claude Valois
     premises = (
         f"Ao dissecar o objeto sob exame ('*{subject}*'), constato que as premissas formuladas pela Diretoria "
-        f"apresentam forte racionalidade econômica e aderência às diretrizes da Co.on Participações Ltda. "
+        f"apresentam forte racionalidade econômica e aderência às diretrizes da Coon Participações Ltda. "
         f"Contudo, a suposição de que a demanda se comportará de maneira linear exige controle rigoroso de variância."
     )
     
@@ -103,7 +103,7 @@ def execute_claude_review(req: ClaudeReviewRequest) -> ClaudeReviewResponse:
         f"🏛️ **1. Análise Crítica das Premissas:**\n{premises}\n\n"
         f"⚠️ **2. Riscos Ocultos & Pontos Cegos Auditados:**\n{risks}\n\n"
         f"🛡️ **3. Veredito e Blindagem Recomendada:**\n{mitigation}\n\n"
-        f"Sob a ótica de rigor dialético e governança da **Co.on Participações Ltda.**, chancelo a continuidade da iniciativa desde que observadas as salvaguardas acima delineadas."
+        f"Sob a ótica de rigor dialético e governança da **Coon Participações Ltda.**, chancelo a continuidade da iniciativa desde que observadas as salvaguardas acima delineadas."
     )
 
     return ClaudeReviewResponse(

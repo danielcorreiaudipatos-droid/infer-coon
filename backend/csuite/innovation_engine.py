@@ -1,5 +1,5 @@
 """
-Motor de P&D e Novos Negócios da Co.on Participações Ltda.
+Motor de P&D e Novos Negócios da Coon Participações Ltda.
 Comandado pelo Diretor de Inovação & P&D: Dr. Gabriel Silveira (CINO).
 
 Varre continuamente oportunidades de mercado em segundo plano, calculando

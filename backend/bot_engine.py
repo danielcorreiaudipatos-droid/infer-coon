@@ -1,6 +1,6 @@
 """
-Motor de Atendimento Humanizado Co.on (Bot Concierge Human-First)
-Holding: Co.on Participações Ltda. (www.coon.com.br)
+Motor de Atendimento Humanizado Coon (Bot Concierge Human-First)
+Holding: Coon Participações Ltda. (www.coon.com.br)
 Atendentes: Jéssica Santos, Camila Ferreira, Rodrigo Silva e Eduardo Mendes.
 """
 
@@ -67,9 +67,9 @@ ATTENDANTS: Dict[str, Dict[str, Any]] = {
         "name": "Jéssica Santos",
         "role": "Atendimento & Sucesso do Cliente",
         "avatar": "/jessica_avatar.jpg",
-        "department": "Relacionamento Co.on",
-        "badge": "Crachá Co.on Oficial",
-        "greeting": "Olá! Tudo bem? Aqui é a Jéssica da Co.on! 😊 Como posso te ajudar hoje?"
+        "department": "Relacionamento Coon",
+        "badge": "Crachá Coon Oficial",
+        "greeting": "Olá! Tudo bem? Aqui é a Jéssica da Coon! 😊 Como posso te ajudar hoje?"
     },
     "camila_ferreira": {
         "id": "camila_ferreira",
@@ -77,8 +77,8 @@ ATTENDANTS: Dict[str, Dict[str, Any]] = {
         "role": "Supervisora Comercial & Retenção",
         "avatar": "/camila_avatar.jpg",
         "department": "Supervisão Comercial",
-        "badge": "Supervisora Co.on",
-        "greeting": "Olá! Aqui é a Camila Ferreira, supervisora de relacionamento da Co.on. A Jéssica me passou seu caso e estou aqui para te dar total atenção! 🤝"
+        "badge": "Supervisora Coon",
+        "greeting": "Olá! Aqui é a Camila Ferreira, supervisora de relacionamento da Coon. A Jéssica me passou seu caso e estou aqui para te dar total atenção! 🤝"
     },
     "rodrigo_silva": {
         "id": "rodrigo_silva",
@@ -86,8 +86,8 @@ ATTENDANTS: Dict[str, Dict[str, Any]] = {
         "role": "Supervisor Técnico & Engenharia",
         "avatar": "/rodrigo_avatar.jpg",
         "department": "Suporte Técnico de Softwares",
-        "badge": "Engenharia Co.on",
-        "greeting": "Olá! Rodrigo Silva por aqui, supervisor técnico da Co.on. Já estou com o seu chamado na tela. Vamos resolver isso juntos! 🛠️"
+        "badge": "Engenharia Coon",
+        "greeting": "Olá! Rodrigo Silva por aqui, supervisor técnico da Coon. Já estou com o seu chamado na tela. Vamos resolver isso juntos! 🛠️"
     },
     "eduardo_mendes": {
         "id": "eduardo_mendes",
@@ -95,8 +95,8 @@ ATTENDANTS: Dict[str, Dict[str, Any]] = {
         "role": "Gerente de Operações & Atendimento Executivo",
         "avatar": "/eduardo_avatar.jpg",
         "department": "Gabinete de Operações",
-        "badge": "Gerência Co.on",
-        "greeting": "Olá! Sou o Eduardo Mendes, gerente de operações da Co.on. Assumi o seu atendimento pessoalmente para garantir que você tenha a melhor solução."
+        "badge": "Gerência Coon",
+        "greeting": "Olá! Sou o Eduardo Mendes, gerente de operações da Coon. Assumi o seu atendimento pessoalmente para garantir que você tenha a melhor solução."
     }
 }
 
@@ -140,7 +140,7 @@ def record_bot_ticket(session_id: str, attendant_id: str, category: str, summary
     c.execute("""
     INSERT INTO bot_tickets (ticket_code, session_id, client_name, client_contact, attendant_id, category, summary, status, created_at, created_at_iso)
     VALUES (?, ?, ?, ?, ?, ?, ?, 'aberto', ?, ?)
-    """, (tcode, session_id, client_name or "Cliente Co.on", client_contact or "", attendant_id, category, summary, now_ts, now_iso))
+    """, (tcode, session_id, client_name or "Cliente Coon", client_contact or "", attendant_id, category, summary, now_ts, now_iso))
     conn.commit()
     conn.close()
     return tcode
@@ -188,7 +188,7 @@ def process_bot_turn(req: BotChatRequest) -> BotChatResponse:
         ticket_code = record_bot_ticket(session_id, next_attendant["id"], "cancelamento", f"Solicitação de cancelamento: {req.message}", req.client_name or "", req.client_contact or "")
         
         text = (
-            f"Compreendo perfeitamente o seu pedido e o seu momento. Aqui na Co.on o respeito a você é prioridade absoluta — **não temos nenhuma pegadinha, multa ou burocracia oculta.** 💬\n\n"
+            f"Compreendo perfeitamente o seu pedido e o seu momento. Aqui na Coon o respeito a você é prioridade absoluta — **não temos nenhuma pegadinha, multa ou burocracia oculta.** 💬\n\n"
             f"Já registrei o seu protocolo formal **{ticket_code}**.\n\n"
             f"Antes de finalizarmos no sistema, posso te ouvir com carinho? Me conta o que aconteceu: foi redução temporária de custos ou alguma funcionalidade que sentiu falta? Se você preferir, podemos fazer uma **pausa temporária da mensalidade** (mantendo seu histórico salvo) ou aplicar uma condição especial. Mas fique 100% em paz: se a sua decisão for mesmo cancelar, eu já concluo para você agora mesmo com total transparência e respeito! ✨"
         )
@@ -212,18 +212,18 @@ def process_bot_turn(req: BotChatRequest) -> BotChatResponse:
         if next_attendant["id"] == "camila_ferreira":
             text = (
                 f"Que excelente falar com você! Aqui é a Camila. Temos soluções pensadas exatamente para cada momento do seu negócio e com certeza uma delas vai se encaixar como uma luva para você! 🚀✨\n\n"
-                f"Confira os nossos planos oficiais do **Studio Co.on**:\n\n"
+                f"Confira os nossos planos oficiais do **Studio Coon**:\n\n"
                 f"• **infer.coon** (Engenharia de Avaliações ABNT NBR 14653): a partir de **R$ 199/mês** (Laudos em 3 minutos, auditoria de 8 premissas e SisDEA compliance);\n"
                 f"• **cob.coon** (Cobrança Humanoide via WhatsApp): a partir de **R$ 249/mês** (Recupere recebíveis em atraso com taxa de sucesso >45%);\n"
                 f"• **ad.coon** (Inteligência Criativa de Anúncios): a partir de **R$ 199/mês**;\n"
                 f"• **growth.coon** (Fechamento Comercial & Prospecção): a partir de **R$ 299/mês**;\n"
-                f"• **Combo Studio Co.on Completo**: Acesso ilimitado a todos os softwares da holding com condição especial.\n\n"
+                f"• **Combo Studio Coon Completo**: Acesso ilimitado a todos os softwares da holding com condição especial.\n\n"
                 f"Aceitamos **Pix com ativação imediata**, Cartão de Crédito em até 12x e faturamento PJ. Me conta: qual software te chamou mais atenção ou qual área você quer acelerar hoje? 💡"
             )
         else:
             text = (
                 f"Temos diversos planos incríveis e com certeza um deles vai dar muito certo para o que você precisa! 🚀😊\n\n"
-                f"Nossos softwares verticais começam a partir de **R$ 199/mês**, e você pode contratar individualmente ou levar o **Combo Studio Co.on** com todas as ferramentas integradas.\n\n"
+                f"Nossos softwares verticais começam a partir de **R$ 199/mês**, e você pode contratar individualmente ou levar o **Combo Studio Coon** com todas as ferramentas integradas.\n\n"
                 f"Qual software você tem mais interesse em conhecer agora? O de **Engenharia de Avaliações (infer.coon)**, o de **Cobrança (cob.coon)**, o de **Anúncios (ad.coon)** ou o de **Prospecção (growth.coon)**?"
             )
         
@@ -231,7 +231,7 @@ def process_bot_turn(req: BotChatRequest) -> BotChatResponse:
             {"label": "💎 infer.coon (Engenharia ABNT)", "action": "quero infer"},
             {"label": "📱 cob.coon (Cobrança WhatsApp)", "action": "quero cob"},
             {"label": "🚀 growth.coon (Vendas Rápidas)", "action": "quero growth"},
-            {"label": "💼 Combo Studio Co.on Completo", "action": "combo completo"}
+            {"label": "💼 Combo Studio Coon Completo", "action": "combo completo"}
         ]
 
     # ----------------------------------------------------
@@ -265,21 +265,21 @@ def process_bot_turn(req: BotChatRequest) -> BotChatResponse:
         
         if "abnt" in msg or "nbr" in msg or "laudo" in msg or "caixa" in msg or "justiça" in msg or "perícia" in msg:
             text = (
-                f"Excelente pergunta! Essa é uma das principais garantias da Co.on! 🛡️📄\n\n"
+                f"Excelente pergunta! Essa é uma das principais garantias da Coon! 🛡️📄\n\n"
                 f"Todos os laudos e relatórios gerados pela nossa plataforma de engenharia (**infer.coon**) seguem **100% rigorosamente as normas ABNT NBR 14653-1 e 14653-2** com auditoria automática de 8 pressupostos estatísticos (incluindo normalidade de resíduos, multicolinearidade e autocorrelação de Durbin-Watson).\n\n"
                 f"Por isso, eles têm **plena validade judicial e aceitação bancária em instituições como Caixa Econômica Federal, Banco do Brasil e peritos judiciais** em todo o Brasil. Você tem total segurança técnica e pericial em cada clique! ✨"
             )
         elif "google" in msg or "anthropic" in msg or "segurança" in msg or "seguranca" in msg or "lgpd" in msg:
             text = (
                 f"Nossa infraestrutura é do mais alto padrão Big Tech! 🔒🌐\n\n"
-                f"A **Co.on Participações Ltda.** realiza um investimento contínuo e maciço em infraestrutura em nuvem, servidores de alta disponibilidade e parcerias com as tecnologias mais avançadas da **Google** e **Anthropic**.\n\n"
+                f"A **Coon Participações Ltda.** realiza um investimento contínuo e maciço em infraestrutura em nuvem, servidores de alta disponibilidade e parcerias com as tecnologias mais avançadas da **Google** e **Anthropic**.\n\n"
                 f"Além disso, todos os dados são blindados com criptografia de ponta a ponta (TLS 1.3), bancos de dados isolados e **conformidade integral com a LGPD e diretrizes da ANPD**. Seus dados e laudos estão em ambiente Fort Knox! 🛡️"
             )
         else:
             text = (
                 f"Que bom que você perguntou! Adoro explicar sobre o nosso ecossistema! 😊✨\n\n"
-                f"A **Co.on Participações Ltda.** (liderada pelo nosso Presidente Daniel Soares Correia) é uma holding de tecnologia focada em criar softwares que eliminam a burocracia e aumentam o lucro de profissionais e empresas.\n\n"
-                f"Dentro do nosso **Studio Co.on** (www.coon.com.br), você tem desde engenharia de avaliações periciais automatizada até robôs de cobrança ativa no WhatsApp e inteligência de vendas.\n\n"
+                f"A **Coon Participações Ltda.** (liderada pelo nosso Presidente Daniel Soares Correia) é uma holding de tecnologia focada em criar softwares que eliminam a burocracia e aumentam o lucro de profissionais e empresas.\n\n"
+                f"Dentro do nosso **Studio Coon** (www.coon.com.br), você tem desde engenharia de avaliações periciais automatizada até robôs de cobrança ativa no WhatsApp e inteligência de vendas.\n\n"
                 f"Gostaria de ver uma demonstração de como funciona na prática ou prefere conhecer os planos?"
             )
         
@@ -295,7 +295,7 @@ def process_bot_turn(req: BotChatRequest) -> BotChatResponse:
     elif is_gratitude:
         text = (
             f"Eu que agradeço imensamente pelo seu carinho e pelo contato! 🥰✨\n\n"
-            f"É sempre uma alegria enorme poder te atender e te ajudar. Aqui na Co.on, cuidamos de cada cliente com dedicação absoluta.\n\n"
+            f"É sempre uma alegria enorme poder te atender e te ajudar. Aqui na Coon, cuidamos de cada cliente com dedicação absoluta.\n\n"
             f"Se precisar de mais qualquer coisa — seja tirar uma dúvida, ver um plano ou bater um papo —, pode me chamar aqui a qualquer hora. Tenha um dia maravilhoso e muito abençoado! 🚀💎"
         )
         actions = [
@@ -309,7 +309,7 @@ def process_bot_turn(req: BotChatRequest) -> BotChatResponse:
     else:
         text = (
             f"Olá! Tudo bem com você? Que alegria te receber por aqui! 😊✨\n\n"
-            f"Aqui é a **Jéssica Santos**, da equipe de atendimento e sucesso da **Co.on**.\n\n"
+            f"Aqui é a **Jéssica Santos**, da equipe de atendimento e sucesso da **Coon**.\n\n"
             f"Estou à sua total disposição para te ajudar hoje! No que posso ser útil? Posso te apresentar os nossos planos, tirar dúvidas sobre as ferramentas, dar suporte técnico ou te encaminhar diretamente para a nossa supervisão no WhatsApp. Como prefere começar? 🚀"
         )
         actions = [
@@ -348,7 +348,7 @@ def process_bot_turn(req: BotChatRequest) -> BotChatResponse:
 
     # Formatar URL do WhatsApp com resumo
     protocol_text = f" Protocolo: {ticket_code}." if ticket_code else ""
-    wa_msg = f"Olá! Estava conversando com a {next_attendant['name']} no site da Co.on.{protocol_text} Gostaria de atendimento humano."
+    wa_msg = f"Olá! Estava conversando com a {next_attendant['name']} no site da Coon.{protocol_text} Gostaria de atendimento humano."
     # Número padrão configurável (depois linkamos ao número exato que o Presidente indicar)
     wa_number = os.getenv("COON_WHATSAPP_PHONE", "5511980000001")
     whatsapp_url = f"https://wa.me/{wa_number}?text={wa_msg.replace(' ', '%20')}"

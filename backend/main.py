@@ -156,7 +156,7 @@ from backend.integrations_hub import (
     dispatch_universal_webhook
 )
 
-# Inicializa as tabelas da holding Co.on Participações Ltda., observatório e P&D
+# Inicializa as tabelas da holding Coon Participações Ltda., observatório e P&D
 init_telemetry_and_access_tables()
 init_financial_tables()
 init_innovation_tables()
@@ -1785,7 +1785,7 @@ def serve_admin_panel():
 @app.get("/governance", response_class=HTMLResponse)
 @app.get("/governanca", response_class=HTMLResponse)
 def serve_governance_panel():
-    """Painel Corporativo de Governança, Equipe e P&D da Co.on Participações Ltda."""
+    """Painel Corporativo de Governança, Equipe e P&D da Coon Participações Ltda."""
     gov_file = os.path.join(FRONTEND_DIR, "governance.html")
     if os.path.exists(gov_file):
         with open(gov_file, "r", encoding="utf-8") as f:
@@ -2234,7 +2234,7 @@ def api_admin_csuite_history(request: Request, limit: int = 50):
 def api_admin_governance_pipeline(request: Request):
     """Lista as oportunidades e teses de novos softwares rentáveis catalogados pelo Dr. Gabriel Silveira (P&D)."""
     if not check_admin_auth(request):
-        raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria Co.on.")
+        raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria Coon.")
     pipeline = list_software_pipeline()
     return {"pipeline": pipeline, "total": len(pipeline)}
 
@@ -2242,7 +2242,7 @@ def api_admin_governance_pipeline(request: Request):
 def api_admin_approve_software(pipeline_id: int, request: Request):
     """Chancela formal do Presidente Daniel Soares Correia para aprovar um software para desenvolvimento imediato."""
     if not check_admin_auth(request):
-        raise HTTPException(status_code=401, detail="Acesso restrito à Presidência Co.on.")
+        raise HTTPException(status_code=401, detail="Acesso restrito à Presidência Coon.")
     res = approve_software_idea(pipeline_id)
     if not res.get("success"):
         raise HTTPException(status_code=404, detail=res.get("message"))
@@ -2252,7 +2252,7 @@ def api_admin_approve_software(pipeline_id: int, request: Request):
 def api_admin_claude_review(payload: ClaudeReviewRequest, request: Request):
     """Convocação formal do Prof. Dr. Claude Valois para emissão de Segunda Opinião e Auditoria Cognitiva."""
     if not check_admin_auth(request):
-        raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria Co.on.")
+        raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria Coon.")
     res = execute_claude_review(payload)
     return res
 
@@ -2260,7 +2260,7 @@ def api_admin_claude_review(payload: ClaudeReviewRequest, request: Request):
 def api_admin_next_meeting(request: Request):
     """Retorna a próxima reunião executiva agendada (ex.: Segunda-feira 08:30)."""
     if not check_admin_auth(request):
-        raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria Co.on.")
+        raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria Coon.")
     meeting = get_next_scheduled_meeting()
     return meeting
 
@@ -2268,7 +2268,7 @@ def api_admin_next_meeting(request: Request):
 def api_admin_list_meetings(request: Request, limit: int = 10):
     """Lista o histórico de reuniões semanais de produção e atas."""
     if not check_admin_auth(request):
-        raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria Co.on.")
+        raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria Coon.")
     meetings = list_weekly_meetings(limit=limit)
     return {"meetings": meetings, "total": len(meetings)}
 
@@ -2276,7 +2276,7 @@ def api_admin_list_meetings(request: Request, limit: int = 10):
 def api_admin_approve_meeting(meeting_id: int, request: Request):
     """Presidente Daniel aprova formalmente a ata e o relatório de produção da semana."""
     if not check_admin_auth(request):
-        raise HTTPException(status_code=401, detail="Acesso restrito à Presidência Co.on.")
+        raise HTTPException(status_code=401, detail="Acesso restrito à Presidência Coon.")
     res = approve_weekly_production_meeting(meeting_id)
     return res
 
@@ -2289,7 +2289,7 @@ class FaleComPayload(BaseModel):
     name: str = Field(..., min_length=2, description="Nome do remetente")
     email: str = Field(..., description="E-mail do remetente")
     message: str = Field(..., min_length=3, description="Mensagem")
-    subject: Optional[str] = Field("Contato Oficial via Portal Co.on", description="Assunto")
+    subject: Optional[str] = Field("Contato Oficial via Portal Coon", description="Assunto")
     phone: Optional[str] = Field(None, description="Telefone ou WhatsApp")
 
 @app.post("/api/contact/falecom")
@@ -2313,7 +2313,7 @@ def api_send_falecom_message(payload: FaleComPayload):
 def api_list_falecom_messages(request: Request, limit: int = 50):
     """Lista mensagens recebidas pelo e-mail oficial falecom@coon.com.br."""
     if not check_admin_auth(request):
-        raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria Co.on.")
+        raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria Coon.")
     messages = list_falecom_messages(limit=limit)
     return {"messages": messages, "total": len(messages), "recipient": "falecom@coon.com.br"}
 
@@ -2331,7 +2331,7 @@ def api_bot_chat(payload: BotChatRequest):
 def api_bot_tickets(request: Request, limit: int = 50):
     """Retorna os chamados e protocolos abertos pelo bot para auditoria da presidência."""
     if not check_admin_auth(request):
-        raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria Co.on.")
+        raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria Coon.")
     tickets = list_recent_bot_tickets(limit=limit)
     return {"tickets": tickets, "total": len(tickets)}
 
@@ -2465,7 +2465,7 @@ def api_admin_wave2_compile_briefing(request: Request):
 
 @app.get("/api/integrations/status")
 def api_integrations_status():
-    """Retorna o status operacional das 4 camadas de integração da Co.on."""
+    """Retorna o status operacional das 4 camadas de integração da Coon."""
     return get_integrations_dashboard_status()
 
 class TurnstileVerifyPayload(BaseModel):
@@ -2522,16 +2522,16 @@ def api_integrations_geo(address: str = Query(..., description="Endereço para g
 
 @app.get("/api/mcp/manifest")
 def api_mcp_manifest():
-    """Catálogo oficial de ferramentas expostas pelo Servidor MCP da Co.on (Anthropic/Claude/Gemini)."""
+    """Catálogo oficial de ferramentas expostas pelo Servidor MCP da Coon (Anthropic/Claude/Gemini)."""
     return {
         "schema_version": "1.0",
         "server_name": "coon-valuation-mcp",
-        "description": "Servidor de Ferramentas Periciais ABNT NBR 14653 e Inteligência Imobiliária da Co.on",
+        "description": "Servidor de Ferramentas Periciais ABNT NBR 14653 e Inteligência Imobiliária da Coon",
         "tools": list_registered_mcp_tools()
     }
 
 # ==============================================================================
-# ENTREGA DE FRONTEND E PÁGINAS ESTÁTICAS DA CO.ON
+# ENTREGA DE FRONTEND E PÁGINAS ESTÁTICAS DA COON
 # ==============================================================================
 frontend_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend")
 

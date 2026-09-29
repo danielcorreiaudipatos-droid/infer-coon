@@ -1,6 +1,6 @@
 """
 Módulo de Segurança Fort Knox & Rate-Limiting Perimetral.
-Holding: Co.on Participações Ltda. (www.coon.com.br)
+Holding: Coon Participações Ltda. (www.coon.com.br)
 Comandado pelo Diretor de Segurança da Informação & Compliance: Dr. Victor Canto (CISO).
 
 Implementa:

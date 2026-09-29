@@ -1,6 +1,6 @@
 """
 Script de Validação e Testes Automatizados da Onda 1 & Autorização Plena da Vice-Presidência
-Holding: Co.on Participações Ltda. (www.coon.com.br)
+Holding: Coon Participações Ltda. (www.coon.com.br)
 Comandante em Chefe: Presidente Daniel Soares Correia
 """
 
@@ -47,7 +47,7 @@ from backend.bot_engine import (
 def run_tests():
     print("=" * 70)
     print("🚀 INICIANDO BATERIA DE HOMOLOGAÇÃO: ONDA 1 & DECRETO DA VICE-PRESIDÊNCIA")
-    print("Holding: Co.on Participações Ltda. (www.coon.com.br)")
+    print("Holding: Coon Participações Ltda. (www.coon.com.br)")
     print("=" * 70)
 
     # -------------------------------------------------------------------------
@@ -191,7 +191,7 @@ def run_tests():
 
     print("\n" + "=" * 70)
     print("🏆 TODAS AS VALIDAÇÕES DA ONDA 1 FORAM CONCLUÍDAS COM SUCESSO ABSOLUTO!")
-    print("O Conselho Executivo e a Holding Co.on Participações Ltda. estão 100% operacionais.")
+    print("O Conselho Executivo e a Holding Coon Participações Ltda. estão 100% operacionais.")
     print("=" * 70)
 
 if __name__ == "__main__":

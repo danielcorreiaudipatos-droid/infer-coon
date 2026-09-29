@@ -1,6 +1,6 @@
 """
 Canal Oficial de Atendimento e Mensagens: falecom@coon.com.br
-Holding: Co.on Participações Ltda. (www.coon.com.br)
+Holding: Coon Participações Ltda. (www.coon.com.br)
 """
 
 import os
@@ -52,7 +52,7 @@ def save_falecom_message(
     c = conn.cursor()
     now_ts = time.time()
     now_iso = time.strftime("%Y-%m-%d %H:%M:%S")
-    clean_subject = (subject or "Mensagem via Portal Co.on").strip()
+    clean_subject = (subject or "Mensagem via Portal Coon").strip()
     
     c.execute("""
     INSERT INTO falecom_messages (name, email, phone, subject, message, recipient, status, created_at, created_at_iso)
@@ -68,7 +68,7 @@ def save_falecom_message(
         "ticket_id": ticket_id,
         "recipient": "falecom@coon.com.br",
         "created_at": now_iso,
-        "message": "Sua mensagem foi recebida com sucesso pelo canal oficial falecom@coon.com.br. O gabinete e a equipe Co.on responderão prontamente."
+        "message": "Sua mensagem foi recebida com sucesso pelo canal oficial falecom@coon.com.br. O gabinete e a equipe Coon responderão prontamente."
     }
 
 def list_falecom_messages(limit: int = 50) -> List[Dict[str, Any]]:

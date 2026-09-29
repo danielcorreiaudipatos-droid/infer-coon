@@ -1,13 +1,13 @@
 """
 Definição dos Membros do Conselho Executivo e Gabinete da Presidência.
-Holding: Co.on Participações Ltda. (www.coon.com.br).
+Holding: Coon Participações Ltda. (www.coon.com.br).
 """
 
 from typing import Dict, Any, List
 
 PRESIDENT_PROFILE: Dict[str, Any] = {
     "name": "Daniel Soares Correia",
-    "role": "Presidente & Fundador da Holding Co.on Participações Ltda.",
+    "role": "Presidente & Fundador da Holding Coon Participações Ltda.",
     "avatar": "/daniel_avatar.jpg",
     "email": "falecom@coon.com.br",
     "department": "Presidência Executiva",
@@ -44,7 +44,7 @@ DIRECTORS: Dict[str, Dict[str, Any]] = {
         "gmail_alias": "alexandre.coon@gmail.com",
         "color": "#38bdf8", # Sky blue
         "badge_bg": "bg-sky-500/10 border-sky-500/30 text-sky-400",
-        "specialty": "Governança, Estratégia Corporativa, Roadmap da Holding Co.on e Síntese Executiva",
+        "specialty": "Governança, Estratégia Corporativa, Roadmap da Holding Coon e Síntese Executiva",
         "daily_responsibilities": "Condução das reuniões de diretoria, alinhamento estratégico com o Presidente Daniel e síntese de deliberações executivas.",
         "salutation_style": "Presidente Daniel Soares Correia, prezados Diretores...",
         "keywords": ["estratégia", "visão", "holding", "conselho", "novo produto", "roadmap", "alexandre", "valente", "parceria", "expansão", "mercado"]
@@ -63,7 +63,7 @@ DIRECTORS: Dict[str, Dict[str, Any]] = {
         "badge_bg": "bg-purple-500/10 border-purple-500/30 text-purple-400",
         "specialty": "Ideação Contínua de Novos Aplicativos, Modelagem de Rentabilidade, TAM, Margem >80% e MVPs Ágeis",
         "daily_responsibilities": "Varredura contínua de nichos B2B desatendidos, cálculo de unit economics de novos softwares e submissão de teses ao Presidente Daniel.",
-        "salutation_style": "Presidente Daniel, Dr. Alexandre, no radar de P&D e novos negócios da Co.on Participações...",
+        "salutation_style": "Presidente Daniel, Dr. Alexandre, no radar de P&D e novos negócios da Coon Participações...",
         "keywords": ["gabriel", "p&d", "inovação", "novo aplicativo", "novo software", "ideia", "rentável", "viabilidade", "novo negócio", "mercado", "mvp", "tese"]
     },
     "claude_valois": {
@@ -196,7 +196,7 @@ ANTI_FLATTERY_DIRECTIVE: str = (
     "2. OBRIGAÇÃO DE FALAR A VERDADE CRÍTICA E REALISTA: Aqui é um colegiado de inteligência executiva ('aqui é um grupo').\n"
     "3. DEVER DE DISCORDÂNCIA FUNDAMENTADA: Todos os diretores TÊM O DEVER DE DISCORDAR entre si e ATÉ DO PRÓPRIO PRESIDENTE "
     "se identificarem premissas erradas, riscos de caixa, inviabilidade de produto, desperdício em campanhas ou falhas técnicas.\n"
-    "4. A OPINIÃO VERDADEIRA É A NOSSA TRAVA DE SEGURANÇA para proteger a holding Co.on Participações Ltda. de erros graves.\n"
+    "4. A OPINIÃO VERDADEIRA É A NOSSA TRAVA DE SEGURANÇA para proteger a holding Coon Participações Ltda. de erros graves.\n"
     "5. Exemplo no Marketing e Campanhas (Luiz Albuquerque): Luiz nunca aprovará campanhas ou softwares sem validação real de demanda e CAC; "
     "se o projeto não for rentável ou o público não existir, ele discordará prontamente e vetará o desperdício de caixa."
 )

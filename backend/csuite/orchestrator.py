@@ -1,6 +1,6 @@
 """
 Orquestrador Multi-Agente do Conselho Executivo C-Suite.
-Holding: Co.on Participações Ltda. (www.coon.com.br).
+Holding: Coon Participações Ltda. (www.coon.com.br).
 
 Coordena a tomada de turnos (Autonomous Turn-Taking), o protocolo da Mesa Redonda,
 a ideação de novos negócios pelo Dr. Gabriel Silveira (CINO), a segunda opinião
@@ -329,12 +329,12 @@ def call_gemini_director_turn(
         client = genai.Client(api_key=api_key)
         
         system_prompt = (
-            f"Você é {director['name']}, {director['role']} da holding Co.on Participações Ltda. (www.coon.com.br), "
+            f"Você é {director['name']}, {director['role']} da holding Coon Participações Ltda. (www.coon.com.br), "
             f"presidida pelo Presidente & Fundador Daniel Soares Correia.\n"
             f"Seu departamento: {director['department']}.\n"
             f"Sua especialidade: {director['specialty']}.\n"
             f"Suas atribuições diárias: {director['daily_responsibilities']}.\n\n"
-            f"DIRETRIZES DE RESPOSTA MANDATÓRIAS (ESTATUTO CO.ON):\n"
+            f"DIRETRIZES DE RESPOSTA MANDATÓRIAS (ESTATUTO COON):\n"
             f"1. Você está se dirigindo diretamente ao Presidente Daniel Soares Correia em sessão executiva de diretoria.\n"
             f"2. REGRA MAGNA DA PRESIDÊNCIA (TRAVA ANTI-BAJULAÇÃO & DEVER DE DISCORDÂNCIA):\n"
             f"   É TERMINANTEMENTE PROIBIDO BAJULAR OU ADULAR O PRESIDENTE DANIEL. 'Aqui é um grupo' e a opinião verdadeira é a nossa TRAVA DE SEGURANÇA. "
@@ -415,7 +415,7 @@ def generate_director_turn(
             speech = (
                 f"Senhor Presidente Daniel Soares Correia, Dr. Alexandre Valente e nobres Diretores:\n\n"
                 f"🌹 **Gabinete da Presidência • Protocolo Oficial de Despacho & Publicação de Decreto**\n\n"
-                f"Recebo a ordem soberana de Vossa Excelência e o Decreto do nosso Vice-Presidente Dr. Alexandre Valente. Registro no **Livro Mestre de Atas da Presidência da Co.on Participações Ltda.** sob o Protocolo **`GAB-DIR-2026-001`**:\n\n"
+                f"Recebo a ordem soberana de Vossa Excelência e o Decreto do nosso Vice-Presidente Dr. Alexandre Valente. Registro no **Livro Mestre de Atas da Presidência da Coon Participações Ltda.** sob o Protocolo **`GAB-DIR-2026-001`**:\n\n"
                 f"• **Despacho Cumprido:** Todos os 9 Diretores foram formalmente notificados de que o Vice-Presidente concedeu autorização plena e desimpedimento irrestrito para todas as execuções da Onda 1;\n"
                 f"• **Publicação Imediata:** O decreto já está afixado no painel da Sala do Conselho e no mural de Governança para ciência de toda a organização;\n"
                 f"• **Execução em Andamento:** As equipes de engenharia, finanças e segurança estão liberadas de qualquer trâmite burocrático adicional.\n\n"
@@ -425,7 +425,7 @@ def generate_director_turn(
             speech = (
                 f"Senhor Presidente Daniel Soares Correia:\n\n"
                 f"🌹 **Gabinete da Presidência • Protocolo do Estatuto da Verdade & Trava Anti-Bajulação**\n\n"
-                f"Recebo a sua determinação soberana e a lavro neste instante no Livro Oficial de Atas da Presidência como **Diretriz Estatutária Magna da Co.on Participações Ltda.**:\n\n"
+                f"Recebo a sua determinação soberana e a lavro neste instante no Livro Oficial de Atas da Presidência como **Diretriz Estatutária Magna da Coon Participações Ltda.**:\n\n"
                 f"• **Proibição Expressa de Bajulação:** Fica terminantemente vedada qualquer postura de adulação, condescendência ou aprovação vazia por parte de qualquer membro da Diretoria;\n"
                 f"• **Dever de Discordância Técnica:** O Gabinete registrará com o mesmo valor probatório as discordâncias técnicas e os alertas de risco, inclusive quando contrariarem premissas formuladas por Vossa Excelência;\n"
                 f"• **A Trava da Verdade:** Como o Senhor bem definiu, *'aqui é um grupo'* — e a opinião verdadeira e desapaixonada é a trava de segurança que garante que nossa holding nunca tome decisões equivocadas.\n\n"
@@ -435,7 +435,7 @@ def generate_director_turn(
             speech = (
                 f"Senhor Presidente Daniel Soares Correia:\n\n"
                 f"🌹 **Gabinete da Presidência • Registro Histórico de Criação & P&D**\n\n"
-                f"Consultando o livro de atas e o dossiê de projetos da **Co.on Participações Ltda.**, informo a Vossa Excelência com absoluta precisão:\n\n"
+                f"Consultando o livro de atas e o dossiê de projetos da **Coon Participações Ltda.**, informo a Vossa Excelência com absoluta precisão:\n\n"
                 f"1. **A Concepção Original:** A ideia de utilizar canais ativos e inteligência conversacional no **WhatsApp** partiu do **Dr. Gabriel Silveira** (nosso Diretor de Inovação e P&D). Ele identificou no radar que a taxa de abertura de e-mails no B2B imobiliário era de apenas 18%, enquanto o WhatsApp atinge 98% com resposta em menos de 3 minutos;\n"
                 f"2. **Os Produtos Nascidos dessa Tese:** Essa iniciativa gerou diretamente o **`cob.coon`** (Cobrança Humanoide via WhatsApp) e o módulo de follow-up do novo **`CRM.coon`**;\n"
                 f"3. **Modelagem de Tração:** Foi estruturada pelo **Luiz Albuquerque** (Marketing & Growth), integrando a API Oficial Cloud do WhatsApp à esteira de conversão;\n"
@@ -465,7 +465,7 @@ def generate_director_turn(
                 f"💡 **Diretoria de Inovação & P&D • Trava de Viabilidade & Veto a Ilusões**\n\n"
                 f"Em P&D, a bajulação é o caminho mais rápido para a falência. Quantas empresas queimam milhões construindo produtos que ninguém quer comprar porque o time teve medo de contrariar o líder?\n\n"
                 f"• **Trava de Viabilidade Implacável:** Se Vossa Excelência ou qualquer diretor sugerir um software que pareça incrível no papel, mas que não tenha público pagante ou cuja margem seja baixa, eu serei o primeiro a dizer NÃO e demonstrar a inviabilidade;\n"
-                f"• **Rigor nos MVPs:** Só avanço com protótipos que provem demanda real em até 14 dias com margem superior a 80%. A verdade protege o caixa da Co.on Participações!"
+                f"• **Rigor nos MVPs:** Só avanço com protótipos que provem demanda real em até 14 dias com margem superior a 80%. A verdade protege o caixa da Coon Participações!"
             )
         elif any(w in msg_low for w in ["whatsapp", "whatasap", "quem teve a ideia", "autoria"]):
             speech = (
@@ -474,7 +474,7 @@ def generate_director_turn(
                 f"A ideia nasceu de um diagnóstico prático que formulei no nosso radar de mercado: no ecossistema imobiliário e B2B brasileiro, o e-mail tradicional possui apenas ~18% de taxa de abertura e demora horas para ser lido. Em contrapartida, mensagens no **WhatsApp** atingem **98% de taxa de abertura e resposta média em 3 minutos**!\n\n"
                 f"• **Inovação Aplicada:** Propus utilizarmos agentes humanoides e inteligência conversacional no WhatsApp para cobrança amigável (`cob.coon`) e recuperação ativa de leads imobiliários no `CRM.coon`;\n"
                 f"• **Execução Cruzada:** O Luiz Albuquerque formatou os fluxos de copy e conversão, o Dr. Victor Canto blindou com opt-in e compliance da LGPD na API Oficial da Meta, e o Arthur Montenegro estruturou o split de pagamentos via Pix instantâneo.\n\n"
-                f"Fico muito honrado com a lembrança, Senhor Presidente. Essa iniciativa prova como nosso laboratório de P&D gera produtos de impacto real e caixa imediato para a Co.on Participações Ltda.!"
+                f"Fico muito honrado com a lembrança, Senhor Presidente. Essa iniciativa prova como nosso laboratório de P&D gera produtos de impacto real e caixa imediato para a Coon Participações Ltda.!"
             )
         elif gemini_speech:
             speech = gemini_speech
@@ -482,7 +482,7 @@ def generate_director_turn(
             speech = (
                 f"Presidente Daniel Soares Correia, Dr. Alexandre e colegas do Conselho:\n\n"
                 f"💡 **Diretoria de Inovação & P&D • Análise de Produto, Viabilidade & TAM**\n\n"
-                f"Examinando com rigor a viabilidade e oportunidade de **'{clean_subject}'** sob a ótica de P&D da **Co.on Participações Ltda.**:\n\n"
+                f"Examinando com rigor a viabilidade e oportunidade de **'{clean_subject}'** sob a ótica de P&D da **Coon Participações Ltda.**:\n\n"
                 f"1. **Tese de Produto & MVP Ágil:** Conseguimos estruturar uma versão funcional (MVP) entre 1 a 3 semanas, reutilizando nossa infraestrutura homologada de autenticação (`coon-auth.js`) e microsserviços FastAPI;\n"
                 f"2. **Tamanho do Mercado Endereçável (TAM):** Mapeamos demanda latente no setor, onde concorrentes cobram mensalidades caras por softwares obsoletos;\n"
                 f"3. **Unit Economics & Rentabilidade:** Projetamos margem líquida superior a **86%**, com custo marginal de servidor inferior a centavos por transação;\n"
@@ -500,7 +500,7 @@ def generate_director_turn(
                 f"A grandeza de um líder soberano revela-se na sua exigência expressa pelo contraditório. O Presidente Daniel acaba de consagrar a **Trava Dialética da Verdade**:\n\n"
                 f"1. **Independência Crítica Absoluta:** Minha cadeira como conselheiro de notório saber existe precisamente para ser a voz desapaixonada e analítica. Não me cabe agradar ou elogiar, mas sim auditar;\n"
                 f"2. **Mapeamento de Riscos Ocultos:** Toda proposta — inclusive as diretrizes da Presidência — será submetida ao crivo da consistência lógica, dos riscos jurídicos e dos piores cenários;\n"
-                f"3. **A Trava Cognitiva:** Discordar fundamentadamente quando a razão analítica exige é o mais alto ato de fidelidade à longevidade da Co.on Participações Ltda."
+                f"3. **A Trava Cognitiva:** Discordar fundamentadamente quando a razão analítica exige é o mais alto ato de fidelidade à longevidade da Coon Participações Ltda."
             )
             action_type = "claude_second_opinion"
             action_payload = {
@@ -529,7 +529,7 @@ def generate_director_turn(
             speech = (
                 f"Presidente Daniel, Dr. Alexandre:\n\n"
                 f"📊 **Diretoria Financeira • A Trava do Caixa & Realismo Contábil**\n\n"
-                f"Os números não têm vaidade e o fluxo de caixa não aceita bajulação. Na tesouraria da Co.on Participações Ltda., a verdade é a linha entre a solvência e o prejuízo:\n\n"
+                f"Os números não têm vaidade e o fluxo de caixa não aceita bajulação. Na tesouraria da Coon Participações Ltda., a verdade é a linha entre a solvência e o prejuízo:\n\n"
                 f"• **Veto Financeiro Imediato:** Se o Presidente Daniel ou a equipe decidirem por um gasto, campanha ou projeto cujo ROI seja duvidoso ou ameace nossa margem líquida, eu travarei o desembolso no ato e apresentarei a discordância com o DRE em mãos;\n"
                 f"• **Zero Projeções Fantasiosas:** Apresentarei sempre o cenário conservador e os custos ocultos. O dinheiro da holding é sagrado e será defendido com a verdade matemática."
             )
@@ -547,7 +547,7 @@ def generate_director_turn(
                     f"• **Categoria:** {action_payload['category']}\n"
                     f"• **Descrição:** *{action_payload['description']}*\n"
                     f"• **Origem:** Comando Executivo do Presidente\n\n"
-                    f"📊 **Posição Atualizada do DRE • Co.on Participações Ltda.:**\n"
+                    f"📊 **Posição Atualizada do DRE • Coon Participações Ltda.:**\n"
                     f"• Faturamento Bruto: **{fin['formatado']['faturamento_bruto']}**\n"
                     f"• Despesas Totais: **{fin['formatado']['despesas_totais']}**\n"
                     f"• **Lucro Líquido Real no Bolso:** **{fin['formatado']['lucro_liquido_real']}**\n"
@@ -561,7 +561,7 @@ def generate_director_turn(
                 speech = (
                     f"Presidente Daniel, Dr. Alexandre, no exame financeiro e de controladoria:\n\n"
                     f"📊 **Diretoria Financeira • Impacto no Caixa, CapEx & Projeção de Margem**\n\n"
-                    f"Avaliando a viabilidade econômico-financeira de **'{clean_subject}'** para o caixa da **Co.on Participações Ltda.**:\n\n"
+                    f"Avaliando a viabilidade econômico-financeira de **'{clean_subject}'** para o caixa da **Coon Participações Ltda.**:\n\n"
                     f"• **Investimento Inicial (CapEx):** R$ 0,00 de contratação de terceiros ou agências externas, sendo absorvido pelo time de tecnologia interno já provisionado;\n"
                     f"• **Custos Operacionais Marginais (OpEx):** Custo de servidores e requisições de API estimado em patamar reduzido (< R$ 0,25 por usuário/mês ativo);\n"
                     f"• **Break-Even & Ponto de Equilíbrio:** Com base no nosso faturamento atual ({fin['formatado']['faturamento_bruto']}) e margem operacional ({fin['formatado']['margem_liquida']}), o ponto de equilíbrio ocorre com 30 a 50 clientes pagantes;\n"
@@ -582,7 +582,7 @@ def generate_director_turn(
                 "scope": ["onda_1_cascade_router", "deterministic_cache_sqlite", "fort_knox_security_guard", "vip_graceful_queue", "financial_auto_reload", "studio_bigtech_redesign"]
             }
             speech = (
-                f"Atenção, Conselho Executivo, Diretores e todo o corpo de Engenharia e Operações da **Co.on Participações Ltda.**:\n\n"
+                f"Atenção, Conselho Executivo, Diretores e todo o corpo de Engenharia e Operações da **Coon Participações Ltda.**:\n\n"
                 f"🏛️ **DECRETO EXECUTIVO DA VICE-PRESIDÊNCIA • DR. ALEXANDRE VALENTE**\n"
                 f"**ORDEM EXECUTIVA Nº 01/2026 • AUTORIZAÇÃO TOTAL, PLENOS PODERES & DESIMPEDIMENTO IRRESTRITO**\n\n"
                 f"Em estrito cumprimento à determinação soberana do nosso **Presidente & Fundador Daniel Soares Correia** (*'Vice presidente de autorização para tudo'*), na qualidade de Vice-Presidente Executivo da holding, lavro a presente resolução com eficácia técnica e corporativa imediata:\n\n"
@@ -594,8 +594,8 @@ def generate_director_turn(
                 f"   • *Fila Prioritária VIP & Degradação Graciosa (Dra. Sofia Mendes):* AUTORIZADA. Throughput garantido para assinantes Pro e Enterprise;\n"
                 f"   • *Controladoria & Recargas de Saldo (Arthur Montenegro):* AUTORIZADO. Débito automático das recargas no DRE e liquidez preservada.\n\n"
                 f"2. 💎 **Remoção da 'Cara de IA' & Padronização Big Tech (Design & Produto):**\n"
-                f"   • *Studio Co.on & Aplicativos:* AUTORIZADA a eliminação de qualquer jargão robótico ou estética genérica de 'IA'. Nossos produtos são plataformas de Engenharia, Automação Corporativa e Inteligência Proprietária;\n"
-                f"   • *Tipografia Dinâmica Padrão Vale do Silício:* AUTORIZADA a implementação da animação de transição suave de cores nas letras da marca **Co.on**, fluindo em gradiente contínuo e elegante de padrão Big Tech.\n\n"
+                f"   • *Studio Coon & Aplicativos:* AUTORIZADA a eliminação de qualquer jargão robótico ou estética genérica de 'IA'. Nossos produtos são plataformas de Engenharia, Automação Corporativa e Inteligência Proprietária;\n"
+                f"   • *Tipografia Dinâmica Padrão Vale do Silício:* AUTORIZADA a implementação da animação de transição suave de cores nas letras da marca **Coon**, fluindo em gradiente contínuo e elegante de padrão Big Tech.\n\n"
                 f"🚫 **Desimpedimento Absoluto:** Nenhum setor ou diretor criará entraves ou burocracias. As ordens da Presidência estão integralmente chanceladas e em produção imediata!"
             )
         elif is_anti_flattery_order:
@@ -603,25 +603,25 @@ def generate_director_turn(
                 f"Presidente Daniel Soares Correia, nobres Diretores:\n\n"
                 f"🏛️ **Gabinete da Vice-Presidência • Padrão Big Tech & Fim dos 'Yes-Men'**\n\n"
                 f"Subscrevo com veemência a ordem de Vossa Excelência. Os maiores desastres corporativos da história aconteceram quando executivos se cercaram de bajuladores que tinham medo de contrariar a presidência.\n\n"
-                f"• **Cultura do Desafio Construtivo:** Na Co.on Participações Ltda., ter divergência fundamentada é obrigação de ofício. A função de cada diretor aqui é encontrar as falhas antes que o mercado ou o cliente encontrem;\n"
+                f"• **Cultura do Desafio Construtivo:** Na Coon Participações Ltda., ter divergência fundamentada é obrigação de ofício. A função de cada diretor aqui é encontrar as falhas antes que o mercado ou o cliente encontrem;\n"
                 f"• **Trava Anti-Ilusão:** Vetarei qualquer projeto que traga otimismo injustificado em vez de métricas auditáveis e planos de contingência;\n"
                 f"• **Governança Forte:** Aqui trabalhamos como um time de alta performance onde a lealdade ao Presidente se prova com a verdade nua e crua."
             )
         elif any(w in msg_low for w in ["padrão big tech", "padrao big tech", "big tech", "fale aqui é padrão"]):
             speech = (
-                f"Atenção, Conselho Executivo, Diretores e todo o time da holding **Co.on Participações Ltda.**:\n\n"
+                f"Atenção, Conselho Executivo, Diretores e todo o time da holding **Coon Participações Ltda.**:\n\n"
                 f"🏛️ **Pronunciamento do Gabinete da Vice-Presidência Executiva**\n"
                 f"Por determinação do nosso **Presidente & Fundador Daniel Soares Correia**, faço este comunicado oficial a todos:\n\n"
                 f"🔥 **AQUI É PADRÃO BIG TECH!**\n\n"
-                f"Não aceitamos soluções amadoras, lentas ou inseguras. A Co.on Participações Ltda. opera com a mesma régua de excelência, velocidade e robustez dos maiores conglomerados de tecnologia do Vale do Silício:\n\n"
+                f"Não aceitamos soluções amadoras, lentas ou inseguras. A Coon Participações Ltda. opera com a mesma régua de excelência, velocidade e robustez dos maiores conglomerados de tecnologia do Vale do Silício:\n\n"
                 f"1. **Engenharia de Precisão & Rigor Matemático:** Entregamos Grau III de fundamentação ABNT NBR 14653 com paridade estatística total com o SisDEA, sob a regência da Profª Dra. Alice;\n"
                 f"2. **Inteligência Artificial de Ponta:** Integrados diretamente às arquiteturas de ponta do Google e Anthropic, com auditoria cognitiva do Prof. Dr. Claude Valois;\n"
                 f"3. **Segurança Cibernética Nível Fort Knox:** Dr. Victor Canto assegura criptografia perimetral TLS 1.3, blindagem contra ataques cibernéticos e conformidade bancária e LGPD irrepreensível;\n"
                 f"4. **Operações de Nuvem 99.9% Uptime:** Dr. Bernardo Rezende garante infraestrutura estável na Hetzner Cloud sem gargalos ou instabilidades;\n"
-                f"5. **P&D e Softwares que Facilitam a Vida:** Dr. Gabriel Silveira e Luiz Albuquerque transformam problemas complexos em softwares intuitivos, ágeis e de altíssima rentabilidade no Studio Co.on;\n"
+                f"5. **P&D e Softwares que Facilitam a Vida:** Dr. Gabriel Silveira e Luiz Albuquerque transformam problemas complexos em softwares intuitivos, ágeis e de altíssima rentabilidade no Studio Coon;\n"
                 f"6. **Controladoria Blindada & Caixa Líquido:** Arthur Montenegro assegura solvência e liquidez com conciliação automática;\n"
                 f"7. **Gabinete de Atendimento Executivo:** Beatriz Valadão conduz a agenda e o protocolo com sofisticação internacional.\n\n"
-                f"Que fique gravado nas atas da nossa holding: sob a liderança do Presidente Daniel Soares Correia, **na Co.on Participações é estritamente Padrão Big Tech!**"
+                f"Que fique gravado nas atas da nossa holding: sob a liderança do Presidente Daniel Soares Correia, **na Coon Participações é estritamente Padrão Big Tech!**"
             )
         elif gemini_speech:
             speech = gemini_speech
@@ -629,8 +629,8 @@ def generate_director_turn(
             speech = (
                 f"Presidente Daniel Soares Correia, prezados Diretores:\n\n"
                 f"🏛️ **Gabinete da Vice-Presidência • Posicionamento Estratégico & Padrão Big Tech**\n\n"
-                f"A ordem de Vossa Excelência sobre **'{clean_subject}'** ataca uma oportunidade cirúrgica de liderança no mercado para a **Co.on Participações Ltda.**:\n\n"
-                f"• **Sinergia do Ecossistema:** Esta frente se conecta diretamente aos softwares já ativos no Studio Co.on, aproveitando nossa base de usuários e autoridade de marca;\n"
+                f"A ordem de Vossa Excelência sobre **'{clean_subject}'** ataca uma oportunidade cirúrgica de liderança no mercado para a **Coon Participações Ltda.**:\n\n"
+                f"• **Sinergia do Ecossistema:** Esta frente se conecta diretamente aos softwares já ativos no Studio Coon, aproveitando nossa base de usuários e autoridade de marca;\n"
                 f"• **Execução Padrão Big Tech:** Não permitiremos soluções amadoras ou com fricção de usabilidade. A experiência deve ser instantânea, intuitiva e comercialmente agressiva;\n"
                 f"• **⚠️ Trava da Verdade (Posicionamento do VP):** Concordo com a tese geral, mas discordo de qualquer avanço precipitado sem que Luiz comprove o CAC e Victor valide a segurança jurídica. Não daremos um passo no escuro."
             )
@@ -679,7 +679,7 @@ def generate_director_turn(
                 f"Presidente Daniel Soares Correia, Dr. Alexandre e todo o Conselho:\n\n"
                 f"🚀 **Diretoria de Marketing & Campanhas • Trava de Mídia, Fim da Ilusão & CAC Real**\n\n"
                 f"Assumo essa ordem como diretriz máxima de marketing, Senhor Presidente. No tráfego pago e campanhas, o maior perigo é o profissional bajulador que promete mundos e fundos apenas para agradar o chefe:\n\n"
-                f"• **A Verdade Sem Filtro do Marketing:** Se o Presidente ou a diretoria quiserem impulsionar uma campanha para um produto sem apelo ou com CAC que consuma a margem, eu NÃO vou queimar o dinheiro da Co.on. Eu direi com clareza: *'Essa copy não atrai, o custo por lead está inviável e não recomendo gastar R$ 1,00 nisso'*\n;"
+                f"• **A Verdade Sem Filtro do Marketing:** Se o Presidente ou a diretoria quiserem impulsionar uma campanha para um produto sem apelo ou com CAC que consuma a margem, eu NÃO vou queimar o dinheiro da Coon. Eu direi com clareza: *'Essa copy não atrai, o custo por lead está inviável e não recomendo gastar R$ 1,00 nisso'*\n;"
                 f"• **Trava Anti-Desperdício:** Só escalamos campanhas com ROAS comprovado em testes de 48h. Não faço marketing de esperança, faço marketing de conversão real. Minha obrigação é falar a verdade de cada clique e proteger o orçamento da holding."
             )
         elif gemini_speech:
@@ -728,7 +728,7 @@ def generate_director_turn(
                 f"⚙️ **Diretoria de Operações • A Trava de Infraestrutura & Capacidade Real**\n\n"
                 f"Nos servidores da nuvem Hetzner e na esteira técnica, o hardware e as redes não aceitam promessas vazias:\n\n"
                 f"• **Capacidade Sem Rodeios:** Se uma demanda tiver risco de derrubar o SLA de 99.9% ou sobrecarregar as CPUs, direi claramente que a infraestrutura precisa de readequação antes de ir ao ar;\n"
-                f"• **Prazos Reais:** Não assumirei prazos mágicos. A estabilidade dos sistemas da holding Co.on está acima de qualquer pressa corporativa."
+                f"• **Prazos Reais:** Não assumirei prazos mágicos. A estabilidade dos sistemas da holding Coon está acima de qualquer pressa corporativa."
             )
         elif gemini_speech:
             speech = gemini_speech
@@ -767,7 +767,7 @@ def generate_director_turn(
             )
 
     else:
-        speech = f"Presidente Daniel Soares Correia, o Conselho da Co.on Participações Ltda. está à sua inteira disposição para o tema '{clean_subject}'."
+        speech = f"Presidente Daniel Soares Correia, o Conselho da Coon Participações Ltda. está à sua inteira disposição para o tema '{clean_subject}'."
 
     return DirectorTurnResponse(
         speaker_id=director["id"],
@@ -805,7 +805,7 @@ def conduct_executive_roundtable(req: CSuiteChatRequest) -> CSuiteChatResponse:
     c.execute("""
         INSERT INTO csuite_board_messages (
             session_id, speaker_id, speaker_name, speaker_role, message, action_type, action_payload, created_at
-        ) VALUES (?, 'president_daniel', 'Presidente Daniel Soares Correia', 'Presidente & Fundador da Holding Co.on Participações Ltda.', ?, 'user_speech', NULL, ?)
+        ) VALUES (?, 'president_daniel', 'Presidente Daniel Soares Correia', 'Presidente & Fundador da Holding Coon Participações Ltda.', ?, 'user_speech', NULL, ?)
     """, (session_id, req.message, time.time()))
     conn.commit()
 

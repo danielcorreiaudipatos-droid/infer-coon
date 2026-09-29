@@ -1,6 +1,6 @@
 """
 Módulo de Roteamento Inteligente em Cascata & Cache Determinístico de IA.
-Holding: Co.on Participações Ltda. (www.coon.com.br)
+Holding: Coon Participações Ltda. (www.coon.com.br)
 Proponentes do Conselho Executivo:
 - Dr. Gabriel Silveira (Diretor de P&D): Roteamento em Cascata (Flash vs Pro/Sonnet)
 - Profª Dra. Alice, PhD (Diretora de Engenharia): Cache Determinístico no SQLite
