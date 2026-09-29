@@ -41,63 +41,65 @@
     const style = document.createElement('style');
     style.id = 'coonBotStyles';
     style.textContent = `
-      /* Botão Flutuante */
+      /* Botão Flutuante (Atendimento Online) */
       #coonBotLauncher {
         position: fixed;
-        bottom: 24px;
-        right: 24px;
+        bottom: 42px;
+        right: 28px;
         z-index: 99999;
         display: flex;
         align-items: center;
         gap: 10px;
         background: #0f172a;
         color: #ffffff;
-        padding: 6px 14px 6px 6px;
+        padding: 7px 16px 7px 10px;
         border-radius: 9999px;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.35), 0 6px 12px -4px rgba(0, 0, 0, 0.2);
         cursor: pointer;
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.15);
         user-select: none;
       }
       #coonBotLauncher:hover {
         transform: translateY(-2px) scale(1.02);
-        box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.45);
         background: #1e293b;
+        border-color: rgba(16, 185, 129, 0.4);
       }
-      .coon-avatar-pulse {
+      .coon-launcher-icon-box {
         position: relative;
-        width: 44px;
-        height: 44px;
+        width: 34px;
+        height: 34px;
         border-radius: 9999px;
-        overflow: hidden;
-        border: 2px solid #10b981;
-      }
-      .coon-avatar-pulse img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        background: rgba(16, 185, 129, 0.12);
+        border: 1.5px solid #10b981;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #34d399;
+        flex-shrink: 0;
       }
       .coon-online-dot {
         position: absolute;
-        bottom: 1px;
-        right: 1px;
-        width: 11px;
-        height: 11px;
+        bottom: -1px;
+        right: -1px;
+        width: 10px;
+        height: 10px;
         background: #10b981;
         border-radius: 9999px;
         border: 2px solid #0f172a;
+        box-shadow: 0 0 6px #10b981;
       }
 
       /* Janela do Chat */
       #coonChatModal {
         position: fixed;
-        bottom: 84px;
-        right: 24px;
+        bottom: 102px;
+        right: 28px;
         width: 380px;
         max-width: calc(100vw - 32px);
         height: 560px;
-        max-height: calc(100vh - 110px);
+        max-height: calc(100vh - 124px);
         background: #ffffff;
         border-radius: 24px;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
@@ -154,11 +156,16 @@
         user-select: none;
       }
 
-      /* Balões de Mensagem */
+      /* Balões de Mensagem (Aparecimento limpo, instantâneo e humanizado) */
       .coon-msg-row {
         display: flex;
         align-items: flex-end;
         gap: 8px;
+        animation: coonMsgFadeIn 0.22s ease-out forwards;
+      }
+      @keyframes coonMsgFadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
       }
       .coon-msg-user {
         justify-content: flex-end;
@@ -297,15 +304,17 @@
     const container = document.createElement('div');
     container.id = 'coonBotContainer';
     container.innerHTML = `
-      <!-- Launcher Flutuante (Jéssica) -->
-      <div id="coonBotLauncher" onclick="toggleCoonChat()">
-        <div class="coon-avatar-pulse">
-          <img id="coonLauncherAvatar" src="/jessica_avatar.jpg" alt="Jéssica Santos">
+      <!-- Launcher Flutuante (Apenas Atendimento Online) -->
+      <div id="coonBotLauncher" onclick="toggleCoonChat()" title="Atendimento Online Co.on">
+        <div class="coon-launcher-icon-box">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+          </svg>
           <span class="coon-online-dot"></span>
         </div>
-        <div class="flex flex-col text-left">
-          <span class="text-xs font-bold leading-tight" id="coonLauncherName">Jéssica Santos</span>
-          <span class="text-[10px] text-emerald-400 font-medium">Atendimento Co.on • Online</span>
+        <div class="flex flex-col text-left pr-1">
+          <span class="text-xs font-bold leading-tight text-white tracking-wide">Atendimento Online</span>
+          <span class="text-[10px] text-emerald-400 font-medium">Equipe Co.on • Online</span>
         </div>
       </div>
 
@@ -502,12 +511,14 @@
   }
 
   function updateAttendantUI(attendant) {
-    document.getElementById('coonLauncherAvatar').src = attendant.avatar;
-    document.getElementById('coonLauncherName').innerText = attendant.name;
-    document.getElementById('coonChatHeaderAvatar').src = attendant.avatar;
-    document.getElementById('coonChatHeaderName').innerText = attendant.name;
-    document.getElementById('coonChatHeaderRole').innerText = attendant.role;
-    document.getElementById('coonChatInput').placeholder = `Escreva para ${attendant.name.split(' ')[0]}...`;
+    const chatAvatar = document.getElementById('coonChatHeaderAvatar');
+    if (chatAvatar) chatAvatar.src = attendant.avatar;
+    const chatName = document.getElementById('coonChatHeaderName');
+    if (chatName) chatName.innerText = attendant.name;
+    const chatRole = document.getElementById('coonChatHeaderRole');
+    if (chatRole) chatRole.innerText = attendant.role;
+    const chatInput = document.getElementById('coonChatInput');
+    if (chatInput) chatInput.placeholder = `Escreva para ${attendant.name.split(' ')[0]}...`;
   }
 
   function showTypingIndicator() {

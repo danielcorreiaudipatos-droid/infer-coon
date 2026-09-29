@@ -33,52 +33,53 @@
     }
 
     /* ======================================================== */
-    /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: TRANSIÇÃO SUAVE DE CORES COON */
+    /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: PASSAGEM DE LUZ DENTRO DAS LETRAS COON */
+    /* Calibração Exigida: Não muito forte mas perceptível */
     /* ======================================================== */
-    @keyframes coonSmoothSpectrum {
+    @keyframes coonLetterPassage {
       0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
+        background-position: 180% 0;
       }
       100% {
-        background-position: 0% 50%;
+        background-position: -80% 0;
       }
     }
 
     @keyframes coonDotPulse {
       0%, 100% {
         color: #10b981;
-        filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.5));
+        filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.45));
         transform: scale(1);
       }
       50% {
         color: #06b6d4;
-        filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.7));
-        transform: scale(1.18);
+        filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.7));
+        transform: scale(1.15);
       }
     }
 
     .gemini-wordmark, .coon-gradient, .coon-bigtech-logo {
       display: inline-block;
       background: linear-gradient(
-        90deg,
-        #1d4ed8 0%,
-        #2563eb 15%,
-        #0ea5e9 30%,
-        #10b981 45%,
-        #6366f1 60%,
-        #8b5cf6 75%,
-        #06b6d4 90%,
-        #1d4ed8 100%
+        115deg,
+        #0f172a 0%,
+        #1e293b 24%,
+        #1d4ed8 36%,
+        #0284c7 43%,
+        #38bdf8 47%,
+        rgba(255, 255, 255, 0.92) 50%,
+        #34d399 53%,
+        #10b981 57%,
+        #059669 64%,
+        #1e293b 76%,
+        #0f172a 100%
       );
-      background-size: 300% 100%;
+      background-size: 260% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: -0.055em;
-      animation: coonSmoothSpectrum 7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+      animation: coonLetterPassage 4.2s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
       will-change: background-position;
       transition: transform 0.3s ease;
     }
@@ -89,7 +90,9 @@
 
     .coon-dot-animated {
       display: inline-block;
-      animation: coonDotPulse 7s ease-in-out infinite alternate;
+      -webkit-text-fill-color: #10b981;
+      color: #10b981;
+      animation: coonDotPulse 4.2s ease-in-out infinite alternate;
       will-change: color, filter, transform;
     }
   </style>
