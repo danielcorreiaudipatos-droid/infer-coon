@@ -139,6 +139,22 @@ from backend.security_guard import (
     check_security_rate_limit,
     get_security_guard_metrics
 )
+from backend.integrations_hub import (
+    init_integrations_tables,
+    get_integrations_dashboard_status,
+    verify_turnstile_token,
+    create_payment_charge,
+    PaymentChargeRequest,
+    send_whatsapp_message,
+    WhatsAppMessageRequest,
+    send_resend_email,
+    EmailSendRequest,
+    lookup_cep_brasilapi,
+    lookup_cnpj_brasilapi,
+    geocode_location_pericial,
+    list_registered_mcp_tools,
+    dispatch_universal_webhook
+)
 
 # Inicializa as tabelas da holding Co.on Participações Ltda., observatório e P&D
 init_telemetry_and_access_tables()
@@ -149,6 +165,7 @@ init_falecom_tables()
 init_bot_tables()
 init_ai_router_tables()
 init_security_tables()
+init_integrations_tables()
 
 OFFICIAL_SITE_URL = os.getenv("OFFICIAL_SITE_URL", "https://www.coon.com.br")
 COON_MASTER_KEY = os.getenv("COON_MASTER_KEY", "coon2026master")
@@ -2441,6 +2458,77 @@ def api_admin_wave2_compile_briefing(request: Request):
     if not check_admin_auth(request):
         raise HTTPException(status_code=401, detail="Acesso restrito à Diretoria COON.")
     return compile_weekly_presidential_briefing()
+
+# ==============================================================================
+# HUB DE INTEGRAÇÕES ESTRATÉGICAS (4 CAMADAS: DEFESA, COMUNICAÇÃO, INTELIGÊNCIA, MCP)
+# ==============================================================================
+
+@app.get("/api/integrations/status")
+def api_integrations_status():
+    """Retorna o status operacional das 4 camadas de integração da Co.on."""
+    return get_integrations_dashboard_status()
+
+class TurnstileVerifyPayload(BaseModel):
+    token: str
+    remote_ip: Optional[str] = None
+
+@app.post("/api/integrations/turnstile/verify")
+def api_integrations_turnstile(payload: TurnstileVerifyPayload):
+    """Valida token do Cloudflare Turnstile anti-bot de forma invisível."""
+    return verify_turnstile_token(payload.token, payload.remote_ip)
+
+@app.post("/api/integrations/payment/create-charge")
+def api_integrations_payment_charge(charge: PaymentChargeRequest):
+    """Gera cobrança via Pix ou Cartão com Asaas / Mercado Pago (PCI-DSS)."""
+    return create_payment_charge(charge)
+
+@app.post("/api/integrations/whatsapp/send")
+def api_integrations_whatsapp_send(req: WhatsAppMessageRequest, request: Request):
+    """Dispara mensagem oficial via Evolution API / Z-API."""
+    if not check_admin_auth(request):
+        raise HTTPException(status_code=401, detail="Acesso restrito.")
+    return send_whatsapp_message(req)
+
+@app.post("/api/integrations/email/send")
+def api_integrations_email_send(req: EmailSendRequest, request: Request):
+    """Envia e-mail autenticado com DKIM/SPF via Resend API."""
+    if not check_admin_auth(request):
+        raise HTTPException(status_code=401, detail="Acesso restrito.")
+    return send_resend_email(req)
+
+@app.get("/api/integrations/cep/{cep}")
+def api_integrations_cep(cep: str):
+    """Consulta CEP instantaneamente via BrasilAPI."""
+    res = lookup_cep_brasilapi(cep)
+    if not res.get("success"):
+        raise HTTPException(status_code=404, detail=res.get("error", "CEP não encontrado."))
+    return res
+
+@app.get("/api/integrations/cnpj/{cnpj}")
+def api_integrations_cnpj(cnpj: str):
+    """Valida situação cadastral de empresa na Receita Federal via BrasilAPI."""
+    res = lookup_cnpj_brasilapi(cnpj)
+    if not res.get("success"):
+        raise HTTPException(status_code=404, detail=res.get("error", "CNPJ não encontrado."))
+    return res
+
+@app.get("/api/integrations/geo/lookup")
+def api_integrations_geo(address: str = Query(..., description="Endereço para geocodificação pericial")):
+    """Geocodifica endereço para determinação de Grau III ABNT NBR 14653."""
+    res = geocode_location_pericial(address)
+    if not res.get("success"):
+        raise HTTPException(status_code=400, detail=res.get("error", "Falha na geolocalização."))
+    return res
+
+@app.get("/api/mcp/manifest")
+def api_mcp_manifest():
+    """Catálogo oficial de ferramentas expostas pelo Servidor MCP da Co.on (Anthropic/Claude/Gemini)."""
+    return {
+        "schema_version": "1.0",
+        "server_name": "coon-valuation-mcp",
+        "description": "Servidor de Ferramentas Periciais ABNT NBR 14653 e Inteligência Imobiliária da Co.on",
+        "tools": list_registered_mcp_tools()
+    }
 
 # ==============================================================================
 # ENTREGA DE FRONTEND E PÁGINAS ESTÁTICAS DA CO.ON
