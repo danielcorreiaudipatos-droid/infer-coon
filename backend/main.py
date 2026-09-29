@@ -2580,5 +2580,46 @@ if os.path.exists(frontend_path):
     def serve_admin():
         return FileResponse(os.path.join(frontend_path, "admin.html"))
 
+    @app.get("/onmail", response_class=FileResponse)
+    def serve_onmail():
+        return FileResponse(os.path.join(frontend_path, "onmail.html"))
+
+    # ==============================================================================
+    # ENDPOINTS DA PLATAFORMA ONMAIL (E-MAIL + WHATSAPP)
+    # ==============================================================================
+    @app.get("/api/onmail/plans")
+    def api_onmail_plans():
+        """Retorna os planos oficiais do OnMail da Coon Participações."""
+        from backend.onmail_engine import ONMAIL_PLANS
+        return {"success": True, "plans": ONMAIL_PLANS}
+
+    @app.post("/api/onmail/simulate")
+    def api_onmail_simulate(req: dict):
+        """Simula o fluxo completo de um e-mail recebido e o despacho no WhatsApp."""
+        from backend.onmail_engine import EmailSimulationRequest, simulate_onmail_flow
+        sim_req = EmailSimulationRequest(**req)
+        return simulate_onmail_flow(sim_req)
+
+    @app.post("/api/onmail/webhook")
+    def api_onmail_webhook(payload: dict):
+        """Webhook para recepção de e-mails via Cloudflare Email Routing / Postfix."""
+        from backend.onmail_engine import EmailSimulationRequest, simulate_onmail_flow
+        # Mapeia campos do webhook
+        sender = payload.get("from") or payload.get("sender") or "contato@cliente.com.br"
+        recipient = payload.get("to") or payload.get("recipient") or "empresa@coon.com.br"
+        subject = payload.get("subject") or "Novo E-mail Recebido"
+        body = payload.get("text") or payload.get("body") or "Conteúdo do e-mail recebido."
+        raw_attachments = payload.get("attachments") or []
+        
+        sim_req = EmailSimulationRequest(
+            sender=sender,
+            recipient=recipient,
+            subject=subject,
+            body_text=body,
+            attachments=raw_attachments
+        )
+        result = simulate_onmail_flow(sim_req)
+        return {"status": "processed", "result": result}
+
     # Monta todos os ativos estáticos (imagens, CSS, JS, áudios)
     app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend_static")

@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnMail by Coon — E-mail Corporativo com Ponte para WhatsApp</title>
+  <meta name="description" content="O e-mail corporativo inteligente que está sempre ON no seu WhatsApp. Triagem automática de anexos, sem taxas de API e com alta entregabilidade.">
+  
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            coon: {
+              emerald: '#10b981',
+              emeraldHover: '#059669',
+              dark: '#0f172a',
+              darker: '#0B0F19',
+              slate: '#1e293b',
+              border: '#e2e8f0',
+              borderDark: '#334155'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Script Dark Mode Imediato (Zero FOUC) -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('coon_theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Scrollbar sutil estilo Gmail */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .dark ::-webkit-scrollbar-thumb { background: #334155; }
+
+    /* Efeito de Feixe no logotipo OnMail */
+    .onmail-wordmark {
+      position: relative;
+      display: inline-block;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(90deg, #0f172a 0%, #0f172a 35%, #0284c7 48%, #10b981 52%, #0f172a 65%, #0f172a 100%);
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: onmailLetterPassage 8s linear infinite;
+    }
+    .dark .onmail-wordmark {
+      background: linear-gradient(90deg, #f8fafc 0%, #f8fafc 35%, #38bdf8 48%, #34d399 52%, #f8fafc 65%, #f8fafc 100%);
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: onmailLetterPassage 8s linear infinite;
+    }
+    @keyframes onmailLetterPassage {
+      0% { background-position: 100% 50%; }
+      100% { background-position: -150% 50%; }
+    }
+
+    .onmail-dot {
+      display: inline-block;
+      color: #10b981 !important;
+      -webkit-text-fill-color: #10b981 !important;
+      animation: onmailPulseDot 2.4s ease-in-out infinite;
+    }
+    @keyframes onmailPulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(1.15); }
+    }
+
+    /* Linha ativa estilo Gmail */
+    .gmail-row {
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .gmail-row:hover {
+      box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 3px 0 rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.15);
+      z-index: 10;
+    }
+    .dark .gmail-row:hover {
+      box-shadow: inset 1px 0 0 #334155, inset -1px 0 0 #334155, 0 1px 3px 0 rgba(0,0,0,.6);
+    }
+    .gmail-row.active-row {
+      background-color: #f2f6fc !important;
+    }
+    .dark .gmail-row.active-row {
+      background-color: #1e293b !important;
+    }
+
+    /* Simulação de WhatsApp */
+    .wa-bubble-in {
+      background: #ffffff;
+      border-radius: 0 12px 12px 12px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .dark .wa-bubble-in {
+      background: #1f2c34;
+      color: #e9edef;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-[#0B0F19] text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+  <!-- CABEÇALHO ESTILO GOOGLE WORKSPACE COM IDENTIDADE COON -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur border-b border-slate-200 dark:border-slate-800 px-4 lg:px-8 py-2.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- LOGO & PRODUTO -->
+      <div class="flex items-center space-x-3">
+        <a href="/portal" class="flex items-center space-x-2 group" title="Voltar ao Portal Coon">
+          <div class="w-8 h-8 rounded-lg bg-slate-900 dark:bg-white flex items-center justify-center font-bold text-white dark:text-slate-900 text-sm tracking-tighter">
+            c<span class="text-emerald-400">.</span>
+          </div>
+        </a>
+        <div class="h-5 w-[1px] bg-slate-300 dark:bg-slate-700"></div>
+        <div class="flex items-baseline space-x-1.5">
+          <span class="text-xl tracking-tight onmail-wordmark">onmail<span class="onmail-dot">.</span></span>
+          <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide uppercase">by Coon</span>
+        </div>
+      </div>
+
+      <!-- BARRA DE PESQUISA GOOGLE-STYLE -->
+      <div class="hidden md:flex flex-1 max-w-xl mx-4">
+        <div class="w-full flex items-center bg-slate-100 dark:bg-slate-800/80 rounded-full px-4 py-2 border border-transparent focus-within:border-emerald-500 focus-within:bg-white dark:focus-within:bg-slate-800 transition">
+          <svg class="w-4 h-4 text-slate-400 shrink-0 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="Pesquisar e-mails, remetentes VIP ou anexos no OnMail..." class="w-full bg-transparent text-xs text-slate-700 dark:text-slate-200 focus:outline-none">
+          <span class="text-[10px] text-slate-400 border border-slate-300 dark:border-slate-700 px-1.5 py-0.5 rounded ml-2">/</span>
+        </div>
+      </div>
+
+      <!-- AÇÕES DO TOPO: MODO ESCURO / LINKS / LOGIN -->
+      <div class="flex items-center space-x-2.5">
+        <!-- Alternador de Tema Lua / Sol -->
+        <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Alternar Modo Escuro/Claro">
+          <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg id="sunIcon" class="w-4 h-4 hidden dark:block text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9h-1m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+
+        <a href="#planos" class="hidden sm:inline-flex text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-emerald-500 dark:hover:text-emerald-400 px-3 py-1.5 transition">Planos & Preços</a>
+        
+        <a href="/studio" class="text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-2.5 py-1.5 transition">Studio Coon</a>
+
+        <a href="#planos" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-full transition shadow-sm flex items-center space-x-1.5">
+          <span>Criar Conta Grátis</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION CONCISA -->
+  <section class="pt-8 pb-6 px-4 max-w-7xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-3 py-1 rounded-full text-xs font-semibold mb-3">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+      <span>Novo Produto Oficial Coon • Tecnologia de E-mail com Despacho no WhatsApp</span>
+    </div>
+    <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white max-w-4xl mx-auto leading-tight">
+      O e-mail corporativo inteligente que está <span class="text-emerald-600 dark:text-emerald-400">sempre ON</span> no seu WhatsApp.
+    </h1>
+    <p class="mt-3 text-sm md:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+      Tenha seu endereço profissional <strong class="text-slate-900 dark:text-white">@suaempresa.com.br</strong> e receba na hora as mensagens e anexos de clientes no seu WhatsApp, com compactação automática e sem pagar taxas da Meta.
+    </p>
+  </section>
+
+  <!-- SIMULADOR INTERATIVO GMAIL + WHATSAPP (A PEÇA CENTRAL PARA TIKTOK / CLIENTES) -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 pb-16">
+    
+    <!-- BARRA DE CONTROLE DO SIMULADOR (TESTAR CENÁRIOS) -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center space-x-2">
+        <span class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Simulador em Tempo Real:
+        </span>
+        <span class="text-xs text-slate-500 dark:text-slate-400">Escolha um exemplo para ver a ponte de e-mail e WhatsApp funcionando ao vivo:</span>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        <button onclick="loadScenario(1)" id="btnScen1" class="text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500/30 text-emerald-700 dark:text-emerald-300 transition">
+          📄 1. Proposta Única (PDF 3.5 MB)
+        </button>
+        <button onclick="loadScenario(2)" id="btnScen2" class="text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition">
+          📦 2. Vistoria & Fotos (ZIP 33.5 MB)
+        </button>
+        <button onclick="loadScenario(3)" id="btnScen3" class="text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition">
+          ☁️ 3. Arquivo Pesado (Link 84 MB)
+        </button>
+      </div>
+    </div>
+
+    <!-- WORKSPACE DUPLO: GMAIL À ESQUERDA + WHATSAPP À DIREITA -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- INTERFACE CLIENTE DE E-MAIL (ESTILO GMAIL LIMPO COM IDENTIDADE COON) - 7 COLUNAS -->
+      <div class="lg:col-span-7 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col h-[580px]">
+        
+        <!-- Barra Superior da Caixa Postal -->
+        <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/70 dark:bg-slate-900/90">
+          <div class="flex items-center space-x-2">
+            <span class="w-3 h-3 rounded-full bg-red-400"></span>
+            <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+            <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+            <span class="ml-2 text-xs font-bold text-slate-700 dark:text-slate-300">Caixa de Entrada • contato@suaempresa.com.br</span>
+          </div>
+          <div class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+            Ponte WhatsApp: Ativa
+          </div>
+        </div>
+
+        <div class="flex flex-1 overflow-hidden">
+          <!-- Sidebar Lateral estilo Gmail -->
+          <div class="w-48 border-r border-slate-200 dark:border-slate-800 p-3 hidden sm:flex flex-col justify-between shrink-0 bg-slate-50/40 dark:bg-slate-900/50">
+            <div class="space-y-1">
+              <button class="w-full mb-3 flex items-center justify-center space-x-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs py-2 px-3 rounded-xl shadow-xs transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>Escrever</span>
+              </button>
+
+              <div class="flex items-center justify-between px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
+                <span class="flex items-center gap-2">📥 Entrada</span>
+                <span class="text-[10px] bg-emerald-600 text-white px-1.5 py-0.2 rounded-full">3</span>
+              </div>
+              <div class="flex items-center px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-medium cursor-pointer">
+                <span>⭐ Com Estrela</span>
+              </div>
+              <div class="flex items-center justify-between px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-medium cursor-pointer">
+                <span class="flex items-center gap-1.5">🏷️ Remetentes VIP</span>
+                <span class="text-[10px] text-emerald-600 font-bold">2 ativos</span>
+              </div>
+              <div class="flex items-center px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-medium cursor-pointer">
+                <span>📤 Enviados</span>
+              </div>
+              <div class="flex items-center px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-medium cursor-pointer">
+                <span>📋 Rascunhos</span>
+              </div>
+            </div>
+
+            <!-- Medidor de Espaço Google-Style -->
+            <div class="pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500">
+              <div class="flex justify-between mb-1">
+                <span>Armazenamento</span>
+                <span class="font-bold">0.4 GB / 10 GB</span>
+              </div>
+              <div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                <div class="bg-emerald-500 h-full w-[4%]"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lista e Leitura de E-mails estilo Gmail -->
+          <div class="flex-1 flex flex-col overflow-hidden">
+            
+            <!-- Lista de E-mails -->
+            <div class="border-b border-slate-200 dark:border-slate-800 divide-y divide-slate-100 dark:divide-slate-800/80 bg-white dark:bg-slate-900 shrink-0">
+              
+              <!-- E-mail 1 -->
+              <div onclick="selectEmail(1)" id="emailRow1" class="gmail-row active-row p-3 flex items-center justify-between gap-3 text-xs">
+                <div class="flex items-center space-x-2 shrink-0">
+                  <input type="checkbox" class="rounded border-slate-300 text-emerald-600">
+                  <span class="text-amber-400">★</span>
+                  <span class="font-bold text-slate-900 dark:text-white">Diretoria Bancária</span>
+                  <span class="text-[9px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1 rounded font-semibold border border-emerald-500/20">VIP</span>
+                </div>
+                <div class="flex-1 truncate">
+                  <span class="font-bold text-slate-900 dark:text-white">Contrato de Financiamento Aprovado</span>
+                  <span class="text-slate-500 dark:text-slate-400 ml-1">— Segue em anexo a minuta final para assinatura...</span>
+                </div>
+                <div class="shrink-0 flex items-center space-x-2">
+                  <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.5 rounded">📎 PDF (3.5 MB)</span>
+                  <span class="text-[11px] text-slate-400">14:15</span>
+                </div>
+              </div>
+
+              <!-- E-mail 2 -->
+              <div onclick="selectEmail(2)" id="emailRow2" class="gmail-row p-3 flex items-center justify-between gap-3 text-xs">
+                <div class="flex items-center space-x-2 shrink-0">
+                  <input type="checkbox" class="rounded border-slate-300 text-emerald-600">
+                  <span class="text-slate-300 dark:text-slate-600">☆</span>
+                  <span class="font-bold text-slate-900 dark:text-white">Engenharia Pericial</span>
+                  <span class="text-[9px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1 rounded font-semibold border border-emerald-500/20">VIP</span>
+                </div>
+                <div class="flex-1 truncate">
+                  <span class="font-bold text-slate-900 dark:text-white">Vistoria Técnica & Fotos de Campo</span>
+                  <span class="text-slate-500 dark:text-slate-400 ml-1">— Enviando o laudo completo ABNT NBR 14653 e 4 fotos...</span>
+                </div>
+                <div class="shrink-0 flex items-center space-x-2">
+                  <span class="text-[10px] text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/60 px-1.5 py-0.5 rounded">📦 4 Anexos (.ZIP)</span>
+                  <span class="text-[11px] text-slate-400">13:42</span>
+                </div>
+              </div>
+
+              <!-- E-mail 3 -->
+              <div onclick="selectEmail(3)" id="emailRow3" class="gmail-row p-3 flex items-center justify-between gap-3 text-xs">
+                <div class="flex items-center space-x-2 shrink-0">
+                  <input type="checkbox" class="rounded border-slate-300 text-emerald-600">
+                  <span class="text-slate-300 dark:text-slate-600">☆</span>
+                  <span class="font-semibold text-slate-800 dark:text-slate-200">Studio Arquitetura</span>
+                </div>
+                <div class="flex-1 truncate">
+                  <span class="text-slate-800 dark:text-slate-200">Projeto Executivo BIM 3D</span>
+                  <span class="text-slate-500 dark:text-slate-400 ml-1">— Arquivos estruturais e plantas em alta definição...</span>
+                </div>
+                <div class="shrink-0 flex items-center space-x-2">
+                  <span class="text-[10px] text-blue-600 dark:text-blue-400 font-semibold bg-blue-50 dark:bg-blue-950/60 px-1.5 py-0.5 rounded">☁️ Link R2 (84 MB)</span>
+                  <span class="text-[11px] text-slate-400">11:05</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Painel de Leitura do E-mail Selecionado -->
+            <div class="p-4 flex-1 overflow-y-auto bg-slate-50/30 dark:bg-slate-900/40">
+              <div class="flex items-start justify-between mb-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+                <div>
+                  <h3 id="readSubject" class="text-base font-bold text-slate-900 dark:text-white leading-tight">Contrato de Financiamento Aprovado</h3>
+                  <div class="text-xs text-slate-500 mt-1 flex items-center space-x-2">
+                    <span id="readFrom">De: <strong>diretoria@banco.com.br</strong></span>
+                    <span>•</span>
+                    <span>Para: <strong>voce@suaempresa.com.br</strong></span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span id="readTime" class="text-xs text-slate-400">Hoje às 14:15</span>
+                  <div id="readVipBadge" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">⭐ Remetente VIP (Disparo Imediato)</div>
+                </div>
+              </div>
+
+              <!-- Corpo do Texto -->
+              <div id="readBody" class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed space-y-2 mb-4">
+                Olá! Tudo bem? Segue formalizado o contrato de prestação de serviços e a minuta de financiamento aprovada para a sua empresa. Favor revisar as cláusulas 4 e 7 antes da assinatura digital.
+              </div>
+
+              <!-- Cartão de Anexo estilo Gmail -->
+              <div id="readAttachmentBox" class="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                  <div id="attIconBox" class="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center font-bold text-xs">PDF</div>
+                  <div>
+                    <div id="attName" class="text-xs font-bold text-slate-900 dark:text-white">contrato_final_aprovado.pdf</div>
+                    <div id="attSize" class="text-[11px] text-slate-500">3.5 MB • Triagem: Envio Direto ao WhatsApp</div>
+                  </div>
+                </div>
+                <button class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">Download</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- SIMULAÇÃO VISUAL DO WHATSAPP (O QUE O CLIENTE RECEBE NO CELULAR) - 5 COLUNAS -->
+      <div class="lg:col-span-5 bg-slate-900 rounded-3xl p-3 border-4 border-slate-800 shadow-2xl relative">
+        
+        <!-- Notificação Superior do Celular -->
+        <div class="bg-[#121b22] text-white rounded-2xl overflow-hidden flex flex-col h-[556px]">
+          
+          <!-- Topo do WhatsApp -->
+          <div class="bg-[#202c33] px-3.5 py-3 flex items-center justify-between border-b border-slate-800">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-white text-xs">
+                OM
+              </div>
+              <div>
+                <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span>OnMail Alertas</span>
+                  <svg class="w-3.5 h-3.5 text-emerald-400 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                </div>
+                <div class="text-[10px] text-emerald-400">Instância Hetzner • R$ 0,00 Meta</div>
+              </div>
+            </div>
+            <div class="text-[10px] text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded-full">
+              Tempo Real ⚡
+            </div>
+          </div>
+
+          <!-- Corpo da Conversa com Papel de Parede Sutil do WhatsApp -->
+          <div class="flex-1 p-3.5 overflow-y-auto space-y-3 bg-[#0b141a] text-slate-100 font-sans text-xs">
+            
+            <div class="text-center my-1">
+              <span class="bg-[#182229] text-[10px] text-slate-400 px-2.5 py-1 rounded-md">Hoje</span>
+            </div>
+
+            <!-- Balão de WhatsApp Recebido -->
+            <div class="wa-bubble-in p-3.5 max-w-[95%]">
+              
+              <!-- Cabeçalho do E-mail -->
+              <div class="flex items-center justify-between text-[11px] text-emerald-600 dark:text-emerald-400 font-bold mb-1.5">
+                <span id="waHeaderTitle">📩 Novo E-mail Recebido no OnMail!</span>
+                <span class="text-[9px] text-slate-400 font-normal">14:15</span>
+              </div>
+
+              <div class="space-y-1 text-slate-800 dark:text-slate-200 text-xs">
+                <div><strong>De:</strong> <span id="waFrom">diretoria@banco.com.br</span></div>
+                <div><strong>Assunto:</strong> <span id="waSubject">Contrato de Financiamento Aprovado</span></div>
+              </div>
+
+              <!-- Resumo da Mensagem -->
+              <div class="mt-2 pt-2 border-t border-slate-100 dark:border-slate-700/60 text-xs text-slate-600 dark:text-slate-300">
+                <div class="text-[10px] text-slate-400 font-semibold mb-0.5">RESUMO DA MENSAGEM:</div>
+                <p id="waBodyPreview" class="leading-relaxed">
+                  Olá! Tudo bem? Segue formalizado o contrato de prestação de serviços e a minuta de financiamento aprovada para a sua empresa...
+                </p>
+              </div>
+
+              <!-- Anexo no WhatsApp -->
+              <div id="waAttachmentPreview" class="mt-3 p-2.5 bg-slate-100 dark:bg-[#111b21] rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                <div class="flex items-center space-x-2.5 truncate">
+                  <span id="waAttBadge" class="text-lg">📄</span>
+                  <div class="truncate">
+                    <div id="waAttTitle" class="font-bold text-slate-900 dark:text-white truncate">contrato_final_aprovado.pdf</div>
+                    <div id="waAttSub" class="text-[10px] text-slate-400">3.5 MB • Documento Pronto</div>
+                  </div>
+                </div>
+                <button class="bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 hover:bg-emerald-500 transition">
+                  Abrir
+                </button>
+              </div>
+
+              <!-- Rodapé da Mensagem -->
+              <div class="mt-2 text-[9px] text-slate-400 text-right flex items-center justify-between">
+                <span>⚡ OnMail • Coon Participações Ltda.</span>
+                <span class="text-emerald-400">✓✓</span>
+              </div>
+
+            </div>
+
+            <!-- Dica de Engenharia -->
+            <div id="waTechNote" class="bg-[#182229] border border-slate-800 rounded-xl p-2.5 text-[11px] text-slate-300">
+              💡 <strong>Regra de Triagem Ativada:</strong> Como é apenas 1 arquivo de 3.5 MB (limite até 15 MB), o arquivo foi encaminhado imediatamente como documento nativo no WhatsApp.
+            </div>
+
+          </div>
+
+          <!-- Rodapé do Celular -->
+          <div class="bg-[#202c33] p-2.5 text-center text-[10px] text-slate-400 border-t border-slate-800">
+            Você visualizou este alerta em tempo real sem abrir o computador.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TABELA COMPARATIVA DE PLANOS (TRANSPARÊNCIA TOTAL) -->
+    <section id="planos" class="pt-20">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          Planos transparentes para cada estágio da sua empresa.
+        </h2>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
+          Comece gratuitamente no plano Start e faça upgrade quando sua equipe precisar de mais contas e alertas ilimitados.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        
+        <!-- PLANO 1: START (GRATUITO) -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Entrada / Degustação</div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mt-1">OnMail Start</h3>
+            <div class="mt-4 flex items-baseline">
+              <span class="text-3xl font-extrabold text-slate-900 dark:text-white">R$ 0</span>
+              <span class="text-xs text-slate-500 ml-1">/ para sempre</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mt-2">Ideal para autônomos e peritos que querem testar o alerta no celular.</p>
+
+            <ul class="mt-6 space-y-2.5 text-xs text-slate-700 dark:text-slate-300">
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> 1 conta de e-mail corporativo (2 GB)
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> <strong>Até 2 Remetentes VIP</strong> no WhatsApp
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> Resumo diário às 18h dos demais e-mails
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> Triagem de anexos de até 15 MB
+              </li>
+              <li class="flex items-center gap-2 text-slate-400">
+                <span>✕</span> Múltiplas contas de equipe
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-8">
+            <button onclick="handleSubscribe('start')" class="w-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold text-xs py-3 rounded-xl transition">
+              Ativar Grátis Agora
+            </button>
+          </div>
+        </div>
+
+        <!-- PLANO 2: EMPRESARIAL BASE (MAIS POPULAR) -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border-2 border-emerald-500 shadow-xl flex flex-col justify-between relative">
+          <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-extrabold uppercase px-3 py-0.5 rounded-full tracking-wider">
+            Mais Escolhido
+          </div>
+          <div>
+            <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Para Empresas & Imobiliárias</div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mt-1">Empresarial Base</h3>
+            <div class="mt-4 flex items-baseline">
+              <span class="text-3xl font-extrabold text-slate-900 dark:text-white">R$ 49,90</span>
+              <span class="text-xs text-slate-500 ml-1">/ mês</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mt-2">Para quem já possui domínio próprio e quer sua equipe 100% no WhatsApp.</p>
+
+            <ul class="mt-6 space-y-2.5 text-xs text-slate-700 dark:text-slate-300">
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> <strong>Até 5 contas corporativas</strong> (10 GB)
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> <strong>Alertas ILIMITADOS no WhatsApp</strong>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> Empacotamento automático de arquivos em .ZIP
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> Links temporários na nuvem para arquivos >60 MB
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> Anti-spam corporativo e SPF/DMARC ativo
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-8">
+            <button onclick="handleSubscribe('business')" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-3 rounded-xl transition shadow-md">
+              Contratar com Ativação Imediata
+            </button>
+          </div>
+        </div>
+
+        <!-- PLANO 3: EMPRESARIAL ANUAL + DOMÍNIO INCLUSO -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-bold text-sky-600 dark:text-sky-400 uppercase tracking-wider">Economia Máxima (2 Meses Off)</div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mt-1">Empresarial Anual</h3>
+            <div class="mt-4 flex items-baseline">
+              <span class="text-3xl font-extrabold text-slate-900 dark:text-white">R$ 499</span>
+              <span class="text-xs text-slate-500 ml-1">/ ano à vista</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mt-2">Solução completa com 1 domínio .com.br novo incluso pela Coon.</p>
+
+            <ul class="mt-6 space-y-2.5 text-xs text-slate-700 dark:text-slate-300">
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> <strong>Tudo do plano Empresarial</strong>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> <strong>1 Domínio .com.br INCLUSO</strong> (sem custo de registro)
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> Gestão técnica total de DNS e SSL pela Coon
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> Suporte VIP direto com a equipe Coon
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-500 font-bold">✓</span> Economia de R$ 100 ao ano
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-8">
+            <button onclick="handleSubscribe('business_annual')" class="w-full bg-slate-900 dark:bg-slate-100 dark:text-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-3 rounded-xl transition shadow-xs">
+              Garantir Plano Anual + Domínio
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ARQUITETURA DE CONFIABILIDADE (SEM TERCEIROS CAROS) -->
+    <section class="mt-20 p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm max-w-5xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-8">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Como o OnMail garante estabilidade e custo zero de API?</h3>
+        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">
+          Nossa arquitetura conecta o que há de mais moderno em nuvem e mensageria corporativa.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+          <div class="text-2xl mb-2">🛡️</div>
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white">Cloudflare Email Routing</h4>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Recepção de e-mails em milissegundos com barreira anti-spam de nível global.</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+          <div class="text-2xl mb-2">⚡</div>
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white">Evolution API Própria</h4>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Disparo direto via WhatsApp auto-hospedado na VPS Hetzner, sem cobrança por mensagem.</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+          <div class="text-2xl mb-2">📦</div>
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white">Triagem Inteligente de Anexos</h4>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Arquivos até 15 MB diretos, múltiplos em .ZIP e links temporários com tráfego gratuito.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- RODAPÉ INSTITUCIONAL COON -->
+  <footer class="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-900 py-8 px-4 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <strong>OnMail</strong> é um produto oficial da <strong>Coon Participações Ltda.</strong> • Todos os direitos reservados 2026.
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="/portal" class="hover:text-slate-900 dark:hover:text-white transition">Portal Central</a>
+        <a href="/studio" class="hover:text-slate-900 dark:hover:text-white transition">Studio Coon</a>
+        <a href="/imob" class="hover:text-slate-900 dark:hover:text-white transition">imob.coon</a>
+        <a href="/infer" class="hover:text-slate-900 dark:hover:text-white transition">infer.coon</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT DE INTERAÇÃO DO SIMULADOR E TEMA -->
+  <script>
+    // Alternar tema Dark/Light com persistência
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        localStorage.setItem('coon_theme', 'light');
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('coon_theme', 'dark');
+      }
+    }
+
+    // Cenários de simulação do OnMail
+    const scenarios = {
+      1: {
+        id: 1,
+        sender: 'diretoria@banco.com.br',
+        subject: 'Contrato de Financiamento Aprovado',
+        time: 'Hoje às 14:15',
+        vip: true,
+        body: 'Olá! Tudo bem? Segue formalizado o contrato de prestação de serviços e a minuta de financiamento aprovada para a sua empresa. Favor revisar as cláusulas 4 e 7 antes da assinatura digital.',
+        attName: 'contrato_final_aprovado.pdf',
+        attSize: '3.5 MB • Triagem: Envio Direto ao WhatsApp',
+        attType: 'PDF',
+        attTypeClass: 'bg-red-50 text-red-600',
+        waHeader: '⭐ *[VIP] E-mail Prioritário Recebido!*',
+        waAttBadge: '📄',
+        waAttTitle: 'contrato_final_aprovado.pdf',
+        waAttSub: '3.5 MB • Documento Pronto',
+        waTechNote: '💡 <strong>Regra de Triagem Ativada:</strong> Como é apenas 1 arquivo de 3.5 MB (limite até 15 MB), o arquivo foi encaminhado imediatamente como documento nativo no WhatsApp.'
+      },
+      2: {
+        id: 2,
+        sender: 'perito@engenharia.com.br',
+        subject: 'Vistoria Técnica & Fotos de Campo',
+        time: 'Hoje às 13:42',
+        vip: true,
+        body: 'Prezados, finalizei a inspeção predial. Em anexo o laudo preliminar em PDF, a planilha de dados de mercado e as 4 fotos da fachada e fissuras.',
+        attName: 'Anexos_Email_Vistoria.zip',
+        attSize: '33.5 MB • Triagem: Compactação Automática (.ZIP)',
+        attType: 'ZIP',
+        attTypeClass: 'bg-amber-50 text-amber-600',
+        waHeader: '⭐ *[VIP] E-mail Prioritário Recebido!*',
+        waAttBadge: '📦',
+        waAttTitle: 'Anexos_Email_Vistoria.zip',
+        waAttSub: '33.5 MB • 4 Arquivos Compactados',
+        waTechNote: '💡 <strong>Regra de Triagem Ativada:</strong> Como o e-mail continha 4 anexos somando 33.5 MB, nosso motor gerou um arquivo .ZIP único na memória para não floodar seu WhatsApp com 4 notificações.'
+      },
+      3: {
+        id: 3,
+        sender: 'projeto@arquitetura.com.br',
+        subject: 'Projeto Executivo BIM 3D',
+        time: 'Hoje às 11:05',
+        vip: false,
+        body: 'Segue o modelo 3D completo em formato Revit (.rvt) e as pranchas em alta resolução. O arquivo é extenso para preservar os detalhes de iluminação e estrutura.',
+        attName: 'projeto_executivo_bim_3d.rvt',
+        attSize: '84.0 MB • Triagem: Link Seguro Temporário (Cloudflare R2)',
+        attType: 'R2',
+        attTypeClass: 'bg-blue-50 text-blue-600',
+        waHeader: '📩 *Novo E-mail Recebido no OnMail!*',
+        waAttBadge: '☁️',
+        waAttTitle: 'https://onmail.coon.com.br/d/8f9a2b7c-expira-48h',
+        waAttSub: '84.0 MB • Link Seguro de Download (Expira em 48h)',
+        waTechNote: '💡 <strong>Regra de Triagem Ativada:</strong> Como o arquivo excedeu 60 MB, o OnMail fez upload para o Cloudflare R2 e enviou o link seguro de download, protegendo a memória do seu smartphone e com custo zero de banda!'
+      }
+    };
+
+    function selectEmail(id) {
+      loadScenario(id);
+    }
+
+    function loadScenario(id) {
+      const s = scenarios[id];
+      if (!s) return;
+
+      // Atualiza botões
+      [1, 2, 3].forEach(i => {
+        const btn = document.getElementById('btnScen' + i);
+        const row = document.getElementById('emailRow' + i);
+        if (btn) {
+          if (i === id) {
+            btn.className = 'text-xs font-bold px-3 py-1.5 rounded-lg border border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 transition';
+          } else {
+            btn.className = 'text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition';
+          }
+        }
+        if (row) {
+          if (i === id) row.classList.add('active-row');
+          else row.classList.remove('active-row');
+        }
+      });
+
+      // Atualiza leitura do e-mail
+      document.getElementById('readSubject').innerText = s.subject;
+      document.getElementById('readFrom').innerHTML = `De: <strong>${s.sender}</strong>`;
+      document.getElementById('readTime').innerText = s.time;
+      document.getElementById('readBody').innerText = s.body;
+      document.getElementById('readVipBadge').style.display = s.vip ? 'block' : 'none';
+
+      document.getElementById('attName').innerText = s.attName;
+      document.getElementById('attSize').innerText = s.attSize;
+      const attIcon = document.getElementById('attIconBox');
+      attIcon.innerText = s.attType;
+      attIcon.className = `w-9 h-9 rounded-lg flex items-center justify-center font-bold text-xs ${s.attTypeClass}`;
+
+      // Atualiza WhatsApp
+      document.getElementById('waHeaderTitle').innerText = s.waHeader;
+      document.getElementById('waFrom').innerText = s.sender;
+      document.getElementById('waSubject').innerText = s.subject;
+      document.getElementById('waBodyPreview').innerText = s.body.substring(0, 160) + '...';
+
+      document.getElementById('waAttBadge').innerText = s.waAttBadge;
+      document.getElementById('waAttTitle').innerText = s.waAttTitle;
+      document.getElementById('waAttSub').innerText = s.waAttSub;
+      document.getElementById('waTechNote').innerHTML = s.waTechNote;
+    }
+
+    function handleSubscribe(planId) {
+      if (planId === 'start') {
+        alert('🎉 Parabéns! Sua conta OnMail Start (Gratuita) foi ativada. Você pode cadastrar até 2 Remetentes VIP para receber notificações imediatas no WhatsApp.');
+      } else if (planId === 'business') {
+        alert('💼 Plano OnMail Empresarial Base (R$ 49,90/mês). Redirecionando para ativação com Pix instantâneo no Studio Coon...');
+      } else {
+        alert('🚀 Plano OnMail Empresarial Anual (R$ 499/ano). Nosso suporte Coon entrará em contato para registrar e configurar o seu domínio .com.br gratuito!');
+      }
+    }
+  </script>
+
+  <!-- ROBÔ DE ATENDIMENTO ONLINE COON -->
+  <script src="/coon-bot.js"></script>
+
+</body>
+</html>
