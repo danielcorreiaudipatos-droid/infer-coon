@@ -1,0 +1,43 @@
+<!-- ==========================================================================
+     integracao/botao-admin-teste.html — botão "Testar o app" do PAINEL DO ADMINISTRADOR
+     --------------------------------------------------------------------------
+     Colar dentro do admin.html do servidor COON (RAE Pericial\nuvem\admin.html),
+     onde quiser que o botão apareça. Não precisa de mais nada: o teste em si
+     está em inferencia/web/js/teste-app.js, que já vai no pacote do Infer.
+
+     O botão abre o Infer em outra janela com ?teste=completo. Lá roda:
+       1) funcionalidade de cada etapa, 2) todos os botões, 3) layout;
+     mostra o relatório e devolve o resumo para cá. Aqui aparece a frase:
+       "Tudo funcionando."  ou  "Precisa de correção em: … — providenciar."
+     O teste usa dados sintéticos e devolve o projeto aberto intacto.
+     ========================================================================== -->
+<section id="testeInfer" style="border:1px solid #d0d7de;border-radius:10px;padding:14px;margin:12px 0">
+  <b>COON Infer — teste completo</b>
+  <p style="margin:6px 0 10px;color:#555">Confere todas as etapas, todos os botões e o layout. Leva de 3 a 5 minutos.</p>
+  <button type="button" id="btTestarInfer">Testar o app</button>
+  <div id="resultadoTesteInfer" style="margin-top:10px"></div>
+</section>
+<script>
+(function () {
+  var saida = document.getElementById('resultadoTesteInfer');
+  document.getElementById('btTestarInfer').addEventListener('click', function () {
+    saida.textContent = 'Testando… a janela do teste abre ao lado; aguarde o resultado aqui.';
+    window.open('/inferencia/?teste=completo', 'testeCoonInfer', 'width=1200,height=850');
+  });
+  // resumo enviado pela janela do teste (só aceita mensagem do próprio site)
+  window.addEventListener('message', function (ev) {
+    if (ev.origin !== location.origin || !ev.data || ev.data.tipo !== 'coon-infer-teste') return;
+    var r = ev.data.resumo;
+    saida.innerHTML = '';
+    var frase = document.createElement('p');
+    frase.style.cssText = 'font-size:16px;font-weight:700;margin:0 0 6px;color:' + (r.aprovado ? '#1e7b45' : '#b3261e');
+    frase.textContent = (r.aprovado ? '✓ ' : '✗ ') + r.mensagem;
+    var det = document.createElement('p');
+    det.style.cssText = 'margin:0;color:#555';
+    det.textContent = 'Versão ' + r.versao + ' · funcionalidade ' + r.funcionalidade.ok + '/' + r.funcionalidade.casos +
+      ' · botões ' + r.botoes.ok + '/' + r.botoes.acoes + ' · layout ' + r.layout.ok + '/' + r.layout.abas + ' abas · ' +
+      new Date(r.quando).toLocaleString('pt-BR');
+    saida.appendChild(frase); saida.appendChild(det);
+  });
+})();
+</script>
