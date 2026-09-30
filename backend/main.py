@@ -1788,7 +1788,7 @@ def serve_portal(host: Optional[str] = Header(None)):
                 with open(fpath, "r", encoding="utf-8") as f:
                     return HTMLResponse(content=f.read())
         elif h.startswith("onmail.") or h.startswith("mail."):
-            fpath = os.path.join(FRONTEND_DIR, "onmail.html")
+            fpath = os.path.join(FRONTEND_DIR, "onmail_landing.html")
             if os.path.exists(fpath):
                 with open(fpath, "r", encoding="utf-8") as f:
                     return HTMLResponse(content=f.read())
@@ -1808,7 +1808,7 @@ def serve_portal(host: Optional[str] = Header(None)):
 @app.get("/mail", response_class=HTMLResponse)
 def serve_onmail_app():
     """Página Oficial do OnMail by Coon - A 1ª tecnologia a integrar e-mail corporativo ao WhatsApp."""
-    onmail_file = os.path.join(FRONTEND_DIR, "onmail.html")
+    onmail_file = os.path.join(FRONTEND_DIR, "onmail_landing.html")
     if os.path.exists(onmail_file):
         with open(onmail_file, "r", encoding="utf-8") as f:
             return HTMLResponse(content=f.read())
@@ -2718,7 +2718,12 @@ if os.path.exists(frontend_path):
 
     @app.api_route("/onmail", methods=["GET", "HEAD"], response_class=FileResponse)
     def serve_onmail():
+        return FileResponse(os.path.join(frontend_path, "onmail_landing.html"))
+
+    @app.api_route("/onmail/cx", methods=["GET", "HEAD"], response_class=FileResponse)
+    def serve_onmail_cx():
         return FileResponse(os.path.join(frontend_path, "onmail.html"))
+
 
     @app.api_route("/news", methods=["GET", "HEAD"], response_class=FileResponse)
     def serve_news():

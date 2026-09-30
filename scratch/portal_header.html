@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studio Coon | Coon Participações 2026</title>
+  
+  <meta name="description" content="Studio Coon • Softwares Especializados e Ecossistemas Digitais da Coon Participações Ltda. Brasil.">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='18' font-size='18' font-weight='bold' fill='%2310b981'>c</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+
+  <!-- Inicialização: Reconhecimento Automático do Modo Escuro/Claro (Chrome, Mozilla, Safari, Edge, Windows, Android) -->
+  <script>
+    (function() {
+      function getActiveTheme() {
+        const savedTheme = localStorage.getItem('coon_theme');
+        if (savedTheme === 'dark') return 'dark';
+        if (savedTheme === 'light') return 'light';
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      }
+
+      if (getActiveTheme() === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+          if (!localStorage.getItem('coon_theme')) {
+            if (e.matches) {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
+            if (typeof updateThemeIcons === 'function') updateThemeIcons();
+          }
+        });
+      }
+    })();
+  </script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts: Inter / Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #faf9fd;
+      background-image: 
+        radial-gradient(at 5% 5%, rgba(139, 92, 246, 0.20) 0px, transparent 50%),
+        radial-gradient(at 95% 8%, rgba(217, 70, 239, 0.16) 0px, transparent 50%),
+        radial-gradient(at 50% 35%, rgba(245, 158, 11, 0.12) 0px, transparent 55%),
+        radial-gradient(at 85% 88%, rgba(168, 85, 247, 0.18) 0px, transparent 50%),
+        radial-gradient(at 15% 90%, rgba(244, 63, 94, 0.14) 0px, transparent 50%);
+      background-attachment: fixed;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Modalidade Escura (Dark Mode) Oficial Coon */
+    html.dark body {
+      background-color: #0b0f19;
+      background-image: 
+        radial-gradient(at 5% 5%, rgba(99, 102, 241, 0.18) 0px, transparent 50%),
+        radial-gradient(at 95% 8%, rgba(168, 85, 247, 0.16) 0px, transparent 50%),
+        radial-gradient(at 50% 35%, rgba(16, 185, 129, 0.10) 0px, transparent 55%),
+        radial-gradient(at 85% 88%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 15% 90%, rgba(2, 132, 199, 0.14) 0px, transparent 50%);
+      color: #f1f5f9;
+    }
+
+    /* ======================================================== */
+    /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: PASSAGEM DE LUZ DENTRO DAS LETRAS COON */
+    /* Calibração Uniforme: Todas as letras lentas e suaves por igual (linear 8s) */
+    /* ======================================================== */
+    @keyframes coonLetterPassage {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -50% 0;
+      }
+    }
+
+    @keyframes coonDotPulse {
+      0%, 100% {
+        color: #10b981;
+        filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.45));
+        transform: scale(1);
+      }
+      50% {
+        color: #06b6d4;
+        filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.7));
+        transform: scale(1.15);
+      }
+    }
+
+    .gemini-wordmark, .coon-gradient, .coon-bigtech-logo {
+      display: inline-block;
+      background: linear-gradient(
+        115deg,
+        #0f172a 0%,
+        #1e293b 22%,
+        #1d4ed8 35%,
+        #0284c7 43%,
+        #38bdf8 47%,
+        rgba(255, 255, 255, 0.90) 50%,
+        #34d399 53%,
+        #10b981 57%,
+        #059669 65%,
+        #1e293b 78%,
+        #0f172a 100%
+      );
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.055em;
+      animation: coonLetterPassage 8s linear infinite;
+      will-change: background-position;
+      transition: transform 0.3s ease;
+    }
+
+    .gemini-wordmark:hover, .coon-bigtech-logo:hover {
+      transform: scale(1.02);
+    }
+
+    html.dark .gemini-wordmark, html.dark .coon-gradient, html.dark .coon-bigtech-logo {
+      background: linear-gradient(
+        115deg,
+        #f8fafc 0%,
+        #cbd5e1 22%,
+        #93c5fd 35%,
+        #38bdf8 43%,
+        #67e8f9 47%,
+        rgba(255, 255, 255, 0.98) 50%,
+        #6ee7b7 53%,
+        #34d399 57%,
+        #10b981 65%,
+        #94a3b8 78%,
+        #f8fafc 100%
+      );
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: coonLetterPassage 8s linear infinite;
+    }
+
+    .coon-dot-animated {
+      display: inline-block;
+      -webkit-text-fill-color: #10b981;
+      color: #10b981;
+      animation: coonDotPulse 4s ease-in-out infinite alternate;
+      will-change: color, filter, transform;
+    }
+
+    /* Dropdown do App Launcher (9 Pontinhos Estilo Google Workspace) */
+    .app-drawer-shadow {
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 2px 10px -2px rgba(0, 0, 0, 0.05);
+    }
+    html.dark .app-drawer-shadow {
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.7), 0 2px 10px -2px rgba(0, 0, 0, 0.4);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800 selection:bg-slate-900 selection:text-white">
+
+  <!-- ======================================================== -->
+  <!-- 1. BARRA SUPERIOR (ESTILO GOOGLE: LINKS + 9 PONTINHOS + BOTÃO) -->
+  <!-- ======================================================== -->
+  <header class="w-full px-6 py-4 flex items-center justify-between relative z-30">
+    <!-- Lado Esquerdo Discreto (Identificação Sutil) -->
+    <div class="flex items-center space-x-3 text-xs text-slate-500 dark:text-slate-400 font-medium">
+      <button onclick="openAboutModal()" class="hover:text-slate-900 dark:hover:text-white transition flex items-center space-x-1.5 font-semibold text-slate-700 dark:text-slate-200">
+        <i data-lucide="info" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400"></i>
+        <span>Sobre a Empresa</span>
+      </button>
+      <button onclick="openContactModal()" class="hover:text-slate-900 dark:hover:text-white transition">Contato</button>
+      
+      <!-- Atendimento Online no WhatsApp (Símbolo Executivo) -->
+      <a href="https://wa.me/5531999999999?text=Ol%C3%A1!%20Sou%20cliente%20Coon%20e%20gostaria%20de%20atendimento." target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition shadow-2xs" title="Atendimento Executivo Coon via WhatsApp">
