@@ -1,0 +1,15 @@
+{
+  "name": "coon-infer",
+  "version": "1.1.0",
+  "private": true,
+  "description": "COON Infer — avaliação de imóveis por inferência estatística (ABNT NBR 14.653-2)",
+  "type": "module",
+  "main": "servidor/server.mjs",
+  "scripts": {
+    "start": "node servidor/server.mjs",
+    "teste-local": "node --env-file-if-exists=.env servidor/server.mjs",
+    "teste-motor": "node testes/teste-motor.cjs && python testes/conferir_statsmodels.py",
+    "codigo-completo": "node scripts/juntar-codigo.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
