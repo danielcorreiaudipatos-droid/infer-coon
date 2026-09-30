@@ -5,17 +5,17 @@
 // =============================================================================
 
 const CHAVE_PRINCIPAL = process.env.GEMINI_API_KEY;
-const CHAVE_BACKUP    = process.env.GEMINI_API_KEY_BACKUP;
 
-const MODELO_FAST = process.env.GEMINI_MODEL_FAST || 'gemini-3.8-flash';
+const MODELO_FAST = process.env.GEMINI_MODEL_FAST || 'gemini-2.5-flash';
 const MODELO_PRO  = process.env.GEMINI_MODEL_PRO  || 'gemini-2.5-pro';
 
 function urlGemini(modelo, chave) {
   return `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${chave}`;
 }
 
-// ── Chamada com fallback automático ──────────────────────────────────────────
+// ── Chamada direta com a chave gratuita ──────────────────────────────────────
 async function chamarGemini(modelo, systemPrompt, userMessage, imagensBase64 = []) {
+
   const parts = [{ text: userMessage }];
   for (const img of imagensBase64) {
     parts.push({ inline_data: { mime_type: img.mimeType, data: img.data } });
@@ -26,34 +26,14 @@ async function chamarGemini(modelo, systemPrompt, userMessage, imagensBase64 = [
     generationConfig: { temperature: 0.2, maxOutputTokens: 4096 }
   };
 
-  const chaves = [CHAVE_PRINCIPAL, CHAVE_BACKUP].filter(Boolean);
-  let ultimoErro;
-
-  for (const chave of chaves) {
-    try {
-      const res = await fetch(urlGemini(modelo, chave), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-      if (!res.ok) {
-        const txt = await res.text();
-        // cota esgotada ou erro temporário → tenta próxima chave
-        if (res.status === 429 || res.status === 403) {
-          ultimoErro = new Error(`Chave ${chave.slice(0,12)}... erro ${res.status}`);
-          continue;
-        }
-        throw new Error(`Gemini ${res.status}: ${txt}`);
-      }
-      const json = await res.json();
-      return json.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-    } catch (err) {
-      ultimoErro = err;
-      // se ainda tem chave backup, continua; senão lança
-      if (chave === chaves[chaves.length - 1]) throw ultimoErro;
-    }
-  }
-  throw ultimoErro;
+  const res = await fetch(urlGemini(modelo, CHAVE_PRINCIPAL), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error(`Gemini ${res.status}: ${await res.text()}`);
+  const json = await res.json();
+  return json.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
 }
 
 // ── 1. Quadro de Dúvidas (Flash — resposta rápida) ──────────────────────────
