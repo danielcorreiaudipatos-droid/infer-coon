@@ -1,0 +1,65 @@
+<!doctype html>
+<!-- =============================================================================
+     web/index.html — página única do COON Infer
+     Carrega o motor (mesmos arquivos que o servidor usa) e depois a tela.
+     Nenhum script embutido: a política de segurança do servidor proíbe.
+     ============================================================================= -->
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COON Infer</title>
+  <meta name="description" content="Avaliação de imóveis por inferência estatística conforme a ABNT NBR 14.653-2.">
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="marca"><span class="logo">COON</span> Infer</div>
+    <div class="projeto-atual" id="tituloProjeto">Projeto sem nome</div>
+    <nav class="arquivo" aria-label="Arquivo">
+      <button class="botao-laudo" data-aba="laudo" title="Gerar o laudo de avaliação completo em Word ou PDF">Laudo completo</button>
+      <button data-acao="novo">Novo</button>
+      <button data-acao="meusProjetos">Meus projetos</button>
+      <button class="principal" data-acao="salvarNuvem">Salvar</button>
+      <button class="leve" data-acao="exportarExcel" title="Todas as planilhas do trabalho em .xlsx">Exportar Excel</button>
+      <button class="leve" data-acao="exportarPDF" title="Relatório completo com gráficos; na impressão escolha Salvar como PDF">Exportar PDF</button>
+      <button class="leve" data-acao="baixarProjeto" title="Baixar o projeto em arquivo .json">Baixar</button>
+      <label class="botao leve" title="Abrir um projeto .json do computador">Abrir arquivo<input type="file" id="arqProjeto" accept=".json" hidden></label>
+    </nav>
+    <span id="statusNuvem" class="status off">conectando…</span>
+  </header>
+
+  <nav id="abas" class="abas" aria-label="Etapas"></nav>
+  <main id="conteudo" class="conteudo"></main>
+
+  <!-- motor estatístico (ordem importa: cada arquivo usa os anteriores) -->
+  <script src="motor/00-base.js"></script>
+  <script src="motor/01-matriz.js"></script>
+  <script src="motor/02-distribuicoes.js"></script>
+  <script src="motor/03-transformacoes.js"></script>
+  <script src="motor/04-regressao.js"></script>
+  <script src="motor/05-diagnosticos.js"></script>
+  <script src="motor/06-busca-modelos.js"></script>
+  <script src="motor/07-nbr14653.js"></script>
+  <script src="motor/08-projecao.js"></script>
+  <script src="motor/09-rna.js"></script>
+  <script src="motor/10-dados.js"></script>
+  <script src="motor/11-operar-variaveis.js"></script>
+  <script src="motor/12-pesquisa-mercado.js"></script>
+  <script src="motor/13-graficos.js"></script>
+  <script src="motor/14-relatorio.js"></script>
+  <script src="motor/15-conferencia.js"></script>
+  <script src="motor/16-avancado.js"></script>
+  <script src="motor/17-planilha.js"></script>
+  <script src="motor/18-laudo.js"></script>
+  <script src="motor/19-tipos-laudo.js"></script>
+  <script src="motor/20-inventario.js"></script>
+  <script src="motor/21-modelos-laudo.js"></script>
+  <script src="motor/22-estilos-laudo.js"></script>
+  <script src="motor/23-etapas.js"></script>
+  <!-- tela -->
+  <script src="js/nuvem.js"></script>
+  <script src="js/interface.js"></script>
+  <script src="js/teste-botoes.js"></script>
+</body>
+</html>

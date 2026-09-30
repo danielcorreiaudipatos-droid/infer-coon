@@ -1,0 +1,5 @@
+.env
+.dados-locais/
+node_modules/
+testes/saida-motor.json
+.env.dev
