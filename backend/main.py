@@ -1655,13 +1655,17 @@ if os.path.exists(FRONTEND_DIR):
 
 INFERENCIA_DIR = os.path.join(FRONTEND_DIR, "inferencia")
 if os.path.exists(INFERENCIA_DIR):
+    # v1.1.0: arquivos estáticos estão em inferencia/web/
+    web_dir = os.path.join(INFERENCIA_DIR, "web")
     motor_dir = os.path.join(INFERENCIA_DIR, "motor")
     if os.path.exists(motor_dir):
         app.mount("/inferencia/motor", StaticFiles(directory=motor_dir), name="inferencia_motor")
-    css_dir = os.path.join(INFERENCIA_DIR, "css")
+    # CSS: tenta web/css primeiro (v1.1.0), fallback para css/ (v1.0)
+    css_dir = os.path.join(web_dir, "css") if os.path.exists(os.path.join(web_dir, "css")) else os.path.join(INFERENCIA_DIR, "css")
     if os.path.exists(css_dir):
         app.mount("/inferencia/css", StaticFiles(directory=css_dir), name="inferencia_css")
-    js_dir = os.path.join(INFERENCIA_DIR, "js")
+    # JS: tenta web/js primeiro (v1.1.0), fallback para js/ (v1.0)
+    js_dir = os.path.join(web_dir, "js") if os.path.exists(os.path.join(web_dir, "js")) else os.path.join(INFERENCIA_DIR, "js")
     if os.path.exists(js_dir):
         app.mount("/inferencia/js", StaticFiles(directory=js_dir), name="inferencia_js")
 
@@ -1887,16 +1891,18 @@ def serve_cob_app():
 @app.get("/app", response_class=HTMLResponse)
 @app.get("/workbench", response_class=HTMLResponse)
 def serve_inferencia_app():
-    """Página Oficial do CO.ON Inferência NBR 14653-2 Completo (9 Abas, Laudo Word/PDF e Motor JS Puro)."""
+    """Página Oficial do COON Infer NBR 14653-2 Completo (17 modelos, 20 estilos, Motor JS Puro)."""
+    # v1.1.0: index.html fica em inferencia/web/
+    inf_file_v110 = os.path.join(FRONTEND_DIR, "inferencia", "web", "index.html")
+    if os.path.exists(inf_file_v110):
+        with open(inf_file_v110, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    # fallback v1.0
     inf_file = os.path.join(FRONTEND_DIR, "inferencia", "index.html")
     if os.path.exists(inf_file):
         with open(inf_file, "r", encoding="utf-8") as f:
             return HTMLResponse(content=f.read())
-    index_file = os.path.join(FRONTEND_DIR, "index.html")
-    if os.path.exists(index_file):
-        with open(index_file, "r", encoding="utf-8") as f:
-            return HTMLResponse(content=f.read())
-    return HTMLResponse("<h1>Infer.coon Bancada Operacional.</h1>")
+    return HTMLResponse("<h1>COON Infer — Bancada Operacional.</h1>")
 
 @app.get("/infer", response_class=HTMLResponse)
 @app.get("/infer-home", response_class=HTMLResponse)
