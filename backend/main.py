@@ -2747,11 +2747,11 @@ if os.path.exists(frontend_path):
 
     @app.api_route("/inferencia", methods=["GET", "HEAD"], response_class=FileResponse)
     def serve_inferencia():
-        return FileResponse(os.path.join(frontend_path, "inferencia", "index.html"))
+        return FileResponse(os.path.join(frontend_path, "infer_landing.html"))
 
     @app.api_route("/inferencia-bancada", methods=["GET", "HEAD"], response_class=FileResponse)
     def serve_inferencia_bancada():
-        return FileResponse(os.path.join(frontend_path, "inferencia", "index.html"))
+        return FileResponse(os.path.join(frontend_path, "infer_landing.html"))
 
     # ==============================================================================
     # ENDPOINTS ONNEWS (COON NEWS) & NEWSLETTER GRATUITA (RECEBA A NOSSA NEWSLETTER)
