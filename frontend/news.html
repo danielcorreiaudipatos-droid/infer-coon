@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnNews — O Dia em Dados | Agro, Mercado & Bolso</title>
+  <meta name="description" content="Terminal diário de dados, cotações do Agro (Boi, Novilha, Soja, Café), Câmbio, Cripto, as 2 Capas do Brasil e Radar Regional com 3 atualizações diárias (07h, 12h30 e 17h).">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons Premium Suite -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              green: '#059669',
+              red: '#dc2626',
+              dark: '#0f172a',
+              card: '#ffffff',
+              border: '#e2e8f0'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Inicialização: Reconhecimento Automático do Modo Escuro/Claro (Chrome, Mozilla, Safari, Edge, Windows, Android) -->
+  <script>
+    (function() {
+      function getActiveTheme() {
+        const saved = localStorage.getItem('coon_theme');
+        if (saved === 'dark') return 'dark';
+        if (saved === 'light') return 'light';
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      }
+
+      if (getActiveTheme() === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+          if (!localStorage.getItem('coon_theme')) {
+            if (e.matches) {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
+          }
+        });
+      }
+    })();
+  </script>
+
+  <!-- Tipografia Nobre Editorial -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,700;1,6..72,400&family=JetBrains+Mono:wght@500;700&display=swap');
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #fafafa;
+    }
+    .dark body {
+      background-color: #0b0f17;
+    }
+    
+    .font-editorial {
+      font-family: 'Newsreader', Georgia, serif;
+    }
+    
+    .font-mono-num {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ======================================================== */
+    /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: PASSAGEM DE LUZ DENTRO DAS LETRAS COON */
+    /* Calibração Uniforme: Todas as letras lentas e suaves por igual (linear 8s) */
+    /* ======================================================== */
+    @keyframes coonLetterPassage {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -50% 0;
+      }
+    }
+
+    @keyframes coonDotPulse {
+      0%, 100% {
+        color: #10b981;
+        filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.45));
+        transform: scale(1);
+      }
+      50% {
+        color: #06b6d4;
+        filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.7));
+        transform: scale(1.15);
+      }
+    }
+
+    .gemini-wordmark, .coon-gradient, .coon-bigtech-logo {
+      display: inline-block;
+      background: linear-gradient(
+        115deg,
+        #0f172a 0%,
+        #1e293b 22%,
+        #1d4ed8 35%,
+        #0284c7 43%,
+        #38bdf8 47%,
+        rgba(255, 255, 255, 0.90) 50%,
+        #34d399 53%,
+        #10b981 57%,
+        #059669 65%,
+        #1e293b 78%,
+        #0f172a 100%
+      );
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.04em;
+      animation: coonLetterPassage 8s linear infinite;
+      will-change: background-position;
+      transition: transform 0.3s ease;
+    }
+
+    .gemini-wordmark:hover, .coon-bigtech-logo:hover {
+      transform: scale(1.02);
+    }
+
+    html.dark .gemini-wordmark, html.dark .coon-gradient, html.dark .coon-bigtech-logo {
+      background: linear-gradient(
+        115deg,
+        #f8fafc 0%,
+        #cbd5e1 22%,
+        #93c5fd 35%,
+        #38bdf8 43%,
+        #67e8f9 47%,
+        rgba(255, 255, 255, 0.98) 50%,
+        #6ee7b7 53%,
+        #34d399 57%,
+        #10b981 65%,
+        #94a3b8 78%,
+        #f8fafc 100%
+      );
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: coonLetterPassage 8s linear infinite;
+    }
+
+    .coon-dot-animated {
+      display: inline-block;
+      -webkit-text-fill-color: #10b981;
+      color: #10b981;
+      animation: coonDotPulse 4s ease-in-out infinite alternate;
+      will-change: color, filter, transform;
+    }
+
+    /* Tabela limpa e minimalista sem poluição */
+    .data-table th {
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .dark .data-table th {
+      color: #94a3b8;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .data-table td {
+      padding: 0.85rem 1rem;
+      font-size: 0.875rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .dark .data-table td {
+      border-bottom: 1px solid #1e293b/60;
+    }
+
+    .data-table tr:hover td {
+      background-color: #f8fafc;
+    }
+    .dark .data-table tr:hover td {
+      background-color: #111827;
+    }
+
+    /* Abas de turnos limpas */
+    .edition-btn {
+      transition: all 0.15s ease-in-out;
+      border-bottom: 2px solid transparent;
+    }
+    .edition-btn.active {
+      border-bottom-color: #059669;
+      color: #059669;
+      font-weight: 700;
+    }
+    .dark .edition-btn.active {
+      border-bottom-color: #10b981;
+      color: #10b981;
+    }
+  </style>
+</head>
+<body class="text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+  <!-- ======================================================== -->
+  <!-- 1. BARRA SUPERIOR INSTITUCIONAL (DISCRETA E SÓBRIA) -->
+  <!-- ======================================================== -->
+  <aside aria-label="Barra de Informações Rápidas" class="bg-white dark:bg-[#0f172a] border-b border-slate-200 dark:border-slate-800 text-xs px-4 lg:px-8 py-2">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-slate-500 dark:text-slate-400">
+      
+      <!-- Data & Horário de Brasília -->
+      <div class="flex items-center gap-3">
+        <span id="currentDateStr" class="font-medium text-slate-700 dark:text-slate-300">Carregando data...</span>
+        <span class="text-slate-300 dark:text-slate-700">•</span>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="liveStatusText" class="font-medium">Horário de Brasília</span>
+        </span>
+      </div>
+
+      <!-- Links Rápidos e Alternador de Tema -->
+      <div class="flex items-center gap-4">
+        <a href="/portal" class="inline-flex items-baseline group" title="Ir para o Portal Coon">
+          <span class="text-xs font-black tracking-tighter gemini-wordmark">coon<span class="coon-dot-animated text-emerald-500">.</span></span>
+        </a>
+        <a href="/onmail" class="hover:text-slate-900 dark:hover:text-white transition flex items-center gap-1">
+          <span>✉️</span> <span>OnMail</span>
+        </a>
+        <a href="/admin" class="hover:text-amber-600 dark:hover:text-amber-400 font-semibold transition flex items-center gap-1">
+          <span>👑</span> <span>Admin</span>
+        </a>
+        <span class="text-slate-300 dark:text-slate-700">•</span>
+        <button onclick="toggleTheme()" class="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white cursor-pointer" title="Alternar tema">
+          <span id="themeBtnText">🌙 Escuro</span>
+        </button>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ======================================================== -->
+  <!-- 2. CABEÇALHO EDITORIAL & SELETOR DAS 3 EDIÇÕES -->
+  <!-- ======================================================== -->
+  <header class="bg-white dark:bg-[#0f172a] border-b border-slate-200 dark:border-slate-800 px-4 lg:px-8 pt-6 pb-4">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- Marca Principal OnNews -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4">
+        <div>
+          <a href="/onnews" class="group inline-flex items-baseline gap-2">
+            <span class="text-3xl sm:text-4xl font-black tracking-tight gemini-wordmark">
+              onnews<span class="coon-dot-animated text-emerald-500">.</span>
+            </span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+              Terminal de Dados
+            </span>
+          </a>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            O Dia em Dados • Agropecuária, Câmbio, Cripto & Mercado em 30 segundos.
+          </p>
+        </div>
+
+        <!-- Botão Rápido de Inscrição na Newsletter -->
+        <div class="flex items-center gap-2">
+          <a href="#newsletterSection" class="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition shadow-xs flex items-center gap-1.5">
+            <span>📬</span> <span>Receber Newsletter Grátis</span>
+          </a>
+          <button onclick="refreshDataManual()" id="refreshBtn" class="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Atualizar dados agora">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- SELETOR DOS 3 TURNOS DIÁRIOS (07h, 12h30, 17h) -->
+      <nav class="flex items-center gap-6 overflow-x-auto no-scrollbar pt-2 text-sm">
+        <button onclick="selectEdition('morning')" id="btnEdMorning" class="edition-btn pb-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white flex items-center gap-1.5 cursor-pointer">
+          <span>☀️</span>
+          <span>07h00 • Abertura</span>
+          <span id="badgeMorning" class="hidden text-[10px] bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold px-1.5 py-0.2 rounded">AO VIVO</span>
+        </button>
+
+        <button onclick="selectEdition('lunch')" id="btnEdLunch" class="edition-btn pb-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white flex items-center gap-1.5 cursor-pointer">
+          <span>🍽️</span>
+          <span>12h30 • Balanço do Almoço</span>
+          <span id="badgeLunch" class="hidden text-[10px] bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold px-1.5 py-0.2 rounded">AO VIVO</span>
+        </button>
+
+        <button onclick="selectEdition('closing')" id="btnEdClosing" class="edition-btn pb-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white flex items-center gap-1.5 cursor-pointer">
+          <span>🌙</span>
+          <span>17h00 • Fechamento Oficial</span>
+          <span id="badgeClosing" class="hidden text-[10px] bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold px-1.5 py-0.2 rounded">AO VIVO</span>
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- BARRA DE ABAS PRINCIPAIS DO APP ONNEWS (CLIQUE RÁPIDO) -->
+  <!-- ======================================================== -->
+  <nav id="onnewsTabBar" class="sticky top-0 z-30 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 lg:px-8 py-2.5 shadow-2xs">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
+      <!-- Abas de Navegação -->
+      <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-0.5 text-xs font-semibold">
+        <button onclick="switchTab('cotacoes')" id="tabBtn_cotacoes" class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition cursor-pointer flex items-center gap-1.5 bg-slate-900 text-white dark:bg-emerald-600 shadow-xs">
+          <span>📊</span> <span>Cotações & Agro</span>
+        </button>
+        <button onclick="switchTab('brasil')" id="tabBtn_brasil" class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition cursor-pointer flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+          <span>🇧🇷</span> <span>Capas do Brasil</span>
+        </button>
+        <button onclick="switchTab('clima')" id="tabBtn_clima" class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition cursor-pointer flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+          <span>🌦️</span> <span>Radar Clima & Polos (mm)</span>
+        </button>
+        <button onclick="switchTab('compra')" id="tabBtn_compra" class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition cursor-pointer flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+          <span>💡</span> <span>Poder de Compra</span>
+        </button>
+        <button onclick="switchTab('whatsapp')" id="tabBtn_whatsapp" class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition cursor-pointer flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+          <span>📲</span> <span>WhatsApp (17:30)</span>
+          <span class="text-[9px] bg-emerald-500 text-white px-1.5 py-0.2 rounded-full uppercase font-bold">Novo</span>
+        </button>
+        <button onclick="switchTab('tudo')" id="tabBtn_tudo" class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition cursor-pointer flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+          <span>👁️</span> <span>Ver Tudo</span>
+        </button>
+      </div>
+
+      <!-- Ação Rápida WhatsApp Compartilhar (Direita) -->
+      <button onclick="shareOnWhatsApp()" class="hidden md:inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-lg text-xs font-semibold shrink-0 cursor-pointer shadow-xs transition" title="Compartilhar resumo no WhatsApp">
+        <span>📲</span> <span>Enviar Resumo</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ======================================================== -->
+  <!-- 3. CORPO PRINCIPAL COM ARQUITETURA LIMPA -->
+  <!-- ======================================================== -->
+  <main class="max-w-6xl mx-auto w-full px-4 lg:px-8 py-6 space-y-8 flex-1">
+
+    <!-- DESCRITIVO DISCRETO DA EDIÇÃO SELECIONADA -->
+    <div id="editionInfoBox" class="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-[#0f172a] p-3 rounded-lg border border-slate-200 dark:border-slate-800">
+      <div class="flex items-center gap-2">
+        <strong id="activeEditionTitle" class="text-slate-900 dark:text-white font-semibold">Edição em Carregamento</strong>
+        <span class="text-slate-300 dark:text-slate-700">•</span>
+        <span id="activeEditionDesc">Carregando indicadores...</span>
+      </div>
+      <div id="lastUpdatedLabel" class="mt-1 sm:mt-0 text-slate-400 font-mono-num">
+        Atualizado às --:--
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 4. O PLACAR EM DADOS: ONTEM VS HOJE (MERCADO & AGRO) -->
+    <!-- ======================================================== -->
+    <section id="sec-cotacoes" class="bg-white dark:bg-[#0f172a] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs">
+      
+      <div class="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>📊</span> <span>O Placar em Dados: Ontem vs Hoje</span>
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">
+            Comparativo direto sem viés: preços de fechamento anterior vs cotação atual.
+          </p>
+        </div>
+
+        <!-- Indicador de Paridade e Compartilhar WhatsApp -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <div id="fuelPill" class="inline-flex items-center gap-2 text-xs bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/80 text-emerald-800 dark:text-emerald-300 px-3 py-1.5 rounded-lg">
+            <span>⛽</span>
+            <span id="fuelPillText"><strong>Bomba:</strong> Etanol a 65,0% da Gasolina — <strong>Abasteça com Etanol!</strong></span>
+          </div>
+          <button onclick="shareOnWhatsApp()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs" title="Compartilhar resumo no WhatsApp">
+            <span>📲</span> <span>Enviar no WhatsApp</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TABELA UNIFICADA DE DADOS (SEM POLUIÇÃO DE CARDS) -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse data-table">
+          <thead>
+            <tr class="bg-slate-50/70 dark:bg-slate-900/60">
+              <th>Indicador</th>
+              <th>Unidade</th>
+              <th class="text-right">Ontem</th>
+              <th class="text-right">Hoje</th>
+              <th class="text-right">Variação</th>
+              <th class="text-center hidden md:table-cell">Tendência</th>
+              <th class="text-right hidden sm:table-cell">Referência</th>
+            </tr>
+          </thead>
+          <tbody id="marketTableBody">
+            <!-- Renderizado via JavaScript -->
+            <tr>
+              <td colspan="6" class="text-center py-8 text-slate-400 text-sm">Carregando cotações em tempo real...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- NOTA DE RODAPÉ DO PLACAR: RELAÇÃO DE TROCA -->
+      <div class="bg-slate-50/50 dark:bg-slate-900/40 p-3 px-5 border-t border-slate-100 dark:border-slate-800/80 text-xs text-slate-500 dark:text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span>🥩🌾</span>
+          <span id="purchasingPowerText"><strong>Relação de Troca:</strong> 1 @ de Boi Gordo compra 3,88 sacas de milho (confinamento favorável).</span>
+        </div>
+        <div class="text-[11px] text-slate-400">
+          Fonte: B3, Cepea/Esalq, Banco Central do Brasil e APIs Públicas.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 5. AS 2 CAPAS DO BRASIL (SEM ENROLAÇÃO) -->
+    <!-- ======================================================== -->
+    <section id="sec-brasil" class="space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <span>🇧🇷</span> <span>As 2 Capas do Brasil</span>
+        </h2>
+        <span class="text-xs text-slate-400">Apenas os 2 fatos que movem o país hoje</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="top2Container">
+        <!-- Card 1 -->
+        <article class="bg-white dark:bg-[#0f172a] p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+              <span class="font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider text-[10px]">Agência Brasil • Economia</span>
+              <span>Hoje às 07:00</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white leading-snug hover:text-emerald-600 transition">
+              <a href="#" target="_blank">Exportações do Agronegócio registram superávit histórico com avanço de café e complexo grãos</a>
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mt-2 line-clamp-2 leading-relaxed">
+              Embarques consolidados e sustentação de preços no mercado internacional impulsionam a balança comercial brasileira neste trimestre.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+            <a href="#" target="_blank" class="text-slate-700 dark:text-slate-300 font-medium hover:underline flex items-center gap-1">
+              <span>Ler fonte oficial</span> <span>→</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="bg-white dark:bg-[#0f172a] p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+              <span class="font-semibold text-blue-600 dark:text-sky-400 uppercase tracking-wider text-[10px]">G1 • Finanças</span>
+              <span>Hoje às 07:15</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white leading-snug hover:text-blue-600 transition">
+              <a href="#" target="_blank">Copom mantém foco na trajetória fiscal e câmbio para balizar decisões de juros</a>
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mt-2 line-clamp-2 leading-relaxed">
+              Mercado acompanha projeções de inflação e fluxo de capital estrangeiro antes da divulgação da ata oficial do Banco Central.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+            <a href="#" target="_blank" class="text-slate-700 dark:text-slate-300 font-medium hover:underline flex items-center gap-1">
+              <span>Ler fonte oficial</span> <span>→</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 6. RADAR REGIONAL & PREVISÃO DE CHUVA (MM) -->
+    <!-- ======================================================== -->
+    <section id="sec-clima" class="bg-white dark:bg-[#0f172a] rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div>
+          <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>📍</span> <span>Clima Hiperlocal & Notícias por Polo Regional</span>
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">
+            Digite <strong>qualquer município do Brasil</strong> para clima milimétrico (temperatura e volume de chuva em mm). Caso sua cidade seja menor, conectamos automaticamente ao polo regional mais próximo.
+          </p>
+        </div>
+
+        <!-- Seletor Rápido de Polos Regionais -->
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          <button onclick="selectRegion('triangulo')" id="regBtn_triangulo" class="px-2.5 py-1 text-xs rounded-lg font-medium border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white cursor-pointer">
+            Triângulo/MG
+          </button>
+          <button onclick="selectRegion('goias')" id="regBtn_goias" class="px-2.5 py-1 text-xs rounded-lg font-medium border border-transparent text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer">
+            Goiás/DF
+          </button>
+          <button onclick="selectRegion('matogrosso')" id="regBtn_matogrosso" class="px-2.5 py-1 text-xs rounded-lg font-medium border border-transparent text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer">
+            Mato Grosso
+          </button>
+          <button onclick="selectRegion('sp_interior')" id="regBtn_sp_interior" class="px-2.5 py-1 text-xs rounded-lg font-medium border border-transparent text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer">
+            Interior SP
+          </button>
+          <button onclick="selectRegion('parana')" id="regBtn_parana" class="px-2.5 py-1 text-xs rounded-lg font-medium border border-transparent text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer">
+            Paraná/Sul
+          </button>
+        </div>
+      </div>
+
+      <!-- BARRA DE BUSCA DE QUALQUER CIDADE + GPS + CHIPS RÁPIDOS -->
+      <div class="space-y-2.5 bg-slate-50/70 dark:bg-slate-900/40 p-3.5 rounded-xl border border-slate-200/70 dark:border-slate-800">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <div class="relative flex-1">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+              🔍
+            </span>
+            <input 
+              type="text" 
+              id="citySearchInput" 
+              placeholder="Digite sua cidade (ex: Patos de Minas, Lagoa Formosa, Carmo do Paranaíba, Rio Verde, Franca...)" 
+              class="w-full pl-9 pr-4 py-2 text-xs sm:text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"
+              onkeydown="if(event.key === 'Enter') searchCustomCity()"
+            >
+          </div>
+          <button 
+            onclick="searchCustomCity()" 
+            class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
+          >
+            <span>Buscar Cidade</span>
+          </button>
+          <button 
+            onclick="useGpsLocation()" 
+            class="px-3.5 py-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer border border-slate-200 dark:border-slate-700 whitespace-nowrap"
+            title="Usar minha localização atual (GPS)"
+          >
+            <span>📍</span> <span>Meu Local (GPS)</span>
+          </button>
+        </div>
+
+        <!-- Chips de Cidades Rápidas -->
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1 text-xs">
+          <span class="text-[11px] font-semibold text-slate-400 whitespace-nowrap mr-1">Atalhos:</span>
+          <button onclick="selectQuickCity('Patos de Minas')" class="city-chip px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 border border-slate-200/60 dark:border-slate-700/60 transition cursor-pointer text-xs font-medium">Patos de Minas</button>
+          <button onclick="selectQuickCity('Lagoa Formosa')" class="city-chip px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 border border-slate-200/60 dark:border-slate-700/60 transition cursor-pointer text-xs font-medium">Lagoa Formosa</button>
+          <button onclick="selectQuickCity('Uberlândia')" class="city-chip px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 border border-slate-200/60 dark:border-slate-700/60 transition cursor-pointer text-xs font-medium">Uberlândia</button>
+          <button onclick="selectQuickCity('Rio Verde')" class="city-chip px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 border border-slate-200/60 dark:border-slate-700/60 transition cursor-pointer text-xs font-medium">Rio Verde</button>
+          <button onclick="selectQuickCity('Ribeirão Preto')" class="city-chip px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 border border-slate-200/60 dark:border-slate-700/60 transition cursor-pointer text-xs font-medium">Ribeirão Preto</button>
+          <button onclick="selectQuickCity('Dourados')" class="city-chip px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 border border-slate-200/60 dark:border-slate-700/60 transition cursor-pointer text-xs font-medium">Dourados</button>
+          <button onclick="selectQuickCity('Londrina')" class="city-chip px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 border border-slate-200/60 dark:border-slate-700/60 transition cursor-pointer text-xs font-medium">Londrina</button>
+          <button onclick="selectQuickCity('São Paulo')" class="city-chip px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 border border-slate-200/60 dark:border-slate-700/60 transition cursor-pointer text-xs font-medium">São Paulo</button>
+        </div>
+      </div>
+
+      <!-- CONTEÚDO DA REGIÃO SELECIONADA -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+        
+        <!-- Bloco Clima & Chuva (5 Colunas) -->
+        <div class="md:col-span-5 bg-slate-50 dark:bg-slate-900/60 p-4 rounded-lg border border-slate-100 dark:border-slate-800">
+          <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span id="regionCityName" class="font-bold text-slate-800 dark:text-white text-sm">Patos de Minas, MG</span>
+            <span id="regionWeatherLabel">Parcialmente Nublado</span>
+          </div>
+
+          <div class="mt-3 flex items-baseline gap-3">
+            <span id="regionTempLarge" class="text-3xl font-extrabold text-slate-900 dark:text-white font-mono-num">25°C</span>
+            <div class="text-xs text-slate-500">
+              <span>Máx: <strong id="regionTempMax" class="text-slate-800 dark:text-slate-200">28°C</strong></span> • 
+              <span>Mín: <strong id="regionTempMin" class="text-slate-800 dark:text-slate-200">18°C</strong></span>
+            </div>
+          </div>
+
+          <!-- Radar de Chuva (mm) -->
+          <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between text-xs">
+            <span class="flex items-center gap-1.5 text-blue-600 dark:text-sky-400 font-semibold">
+              <span>🌧️</span> <span>Volume de Chuva:</span>
+            </span>
+            <span id="regionRainMm" class="font-mono-num font-bold text-slate-900 dark:text-white">0 mm (15% prob.)</span>
+          </div>
+
+          <!-- Polo de Referência Inteligente -->
+          <div class="mt-2.5 pt-2 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between text-[11px]">
+            <span class="text-slate-400 flex items-center gap-1">
+              <span>🏛️</span> <span>Polo Regional:</span>
+            </span>
+            <span id="poloRefText" class="font-semibold text-emerald-700 dark:text-emerald-400">Patos de Minas & Alto Paranaíba</span>
+          </div>
+        </div>
+
+        <!-- Bloco Manchetes Regionais (7 Colunas) -->
+        <div class="md:col-span-7 space-y-3" id="regionNewsContainer">
+          <div class="p-3 border-b border-slate-100 dark:border-slate-800/80">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">Agro Paranaíba</span>
+            <h4 class="text-sm font-semibold text-slate-900 dark:text-white hover:text-emerald-600 transition">
+              Bacia leiteira de Patos de Minas e região do Alto Paranaíba amplia processamento e captação
+            </h4>
+          </div>
+          <div class="p-3">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">Notícias do Cerrado</span>
+            <h4 class="text-sm font-semibold text-slate-900 dark:text-white hover:text-emerald-600 transition">
+              Escoamento de grãos e leilões de reposição de gado movimentam negócios no Triângulo e Paranaíba
+            </h4>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 7. SEÇÃO DEDICADA: PODER DE COMPRA & BARTER -->
+    <!-- ======================================================== -->
+    <section id="sec-compra" class="bg-white dark:bg-[#0f172a] rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-5">
+      <div class="border-b border-slate-100 dark:border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>💡</span> <span>Poder de Compra & Barter: Agro, Leite & Bolso</span>
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">
+            Relações de troca e paridades calculadas em tempo real com base no Cepea, Conseleite, B3 e mercado físico.
+          </p>
+        </div>
+        <span class="text-[11px] font-mono-num text-slate-400 bg-slate-50 dark:bg-slate-800/60 px-2.5 py-1 rounded-md border border-slate-100 dark:border-slate-700">
+          Atualização Contínua
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <!-- Card 1: Boi x Milho (Confinamento) -->
+        <div class="p-4 rounded-xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-2">
+          <div class="flex items-center justify-between text-xs text-slate-500">
+            <span class="font-bold text-slate-800 dark:text-slate-200">🥩🌾 Boi x Milho</span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-semibold text-[10px] bg-emerald-50 dark:bg-emerald-950 px-1.5 py-0.5 rounded">Favorável</span>
+          </div>
+          <div class="text-2xl font-black text-slate-900 dark:text-white font-mono-num">
+            3,88 <span class="text-xs font-normal text-slate-500">sc / @</span>
+          </div>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-snug">
+            1 arroba de boi gordo compra 3,88 sacas de milho em Campinas/SP. Margem atrativa para nutrição intensiva.
+          </p>
+        </div>
+
+        <!-- Card 2: Reposição Pecuária (Boi x Bezerro) -->
+        <div class="p-4 rounded-xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-2">
+          <div class="flex items-center justify-between text-xs text-slate-500">
+            <span class="font-bold text-slate-800 dark:text-slate-200">🐂 Reposição Nelore</span>
+            <span class="text-slate-500 text-[10px] bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">Equilibrado</span>
+          </div>
+          <div class="text-2xl font-black text-slate-900 dark:text-white font-mono-num">
+            2,05 <span class="text-xs font-normal text-slate-500">cab / boi 18@</span>
+          </div>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-snug">
+            Um boi gordo pronto de 18@ compra 2,05 bezerros desmamados Nelore na praça de MS/GO/MG.
+          </p>
+        </div>
+
+        <!-- Card 3: Soja x Adubo / Fertilizante -->
+        <div class="p-4 rounded-xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-2">
+          <div class="flex items-center justify-between text-xs text-slate-500">
+            <span class="font-bold text-slate-800 dark:text-slate-200">🌱 Soja x Fertilizante</span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-semibold text-[10px] bg-emerald-50 dark:bg-emerald-950 px-1.5 py-0.5 rounded">Oportunidade</span>
+          </div>
+          <div class="text-2xl font-black text-slate-900 dark:text-white font-mono-num">
+            18,2 <span class="text-xs font-normal text-slate-500">sc / ton KCl</span>
+          </div>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-snug">
+            Relação de troca para fertilizantes cloreto/NPK recua 4% no mês, facilitando compras da safra seguinte.
+          </p>
+        </div>
+
+        <!-- Card 4: Paridade da Bomba Etanol vs Gasolina -->
+        <div class="p-4 rounded-xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-2">
+          <div class="flex items-center justify-between text-xs text-slate-500">
+            <span class="font-bold text-slate-800 dark:text-slate-200">⛽ Termômetro da Bomba</span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-semibold text-[10px] bg-emerald-50 dark:bg-emerald-950 px-1.5 py-0.5 rounded">Etanol Vence</span>
+          </div>
+          <div class="text-2xl font-black text-slate-900 dark:text-white font-mono-num">
+            65,0% <span class="text-xs font-normal text-emerald-600">(-5% vs teto 70%)</span>
+          </div>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-snug">
+            Etanol hidratado abaixo de 70% da gasolina comum em SP, MG e GO. <strong>Abasteça com etanol</strong> para economizar.
+          </p>
+        </div>
+
+        <!-- Card 5: Cadeia do Leite (Porteira vs Varejo) -->
+        <div class="p-4 rounded-xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-2">
+          <div class="flex items-center justify-between text-xs text-slate-500">
+            <span class="font-bold text-slate-800 dark:text-slate-200">🥛 Leite: Campo x Mercado</span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-semibold text-[10px] bg-emerald-50 dark:bg-emerald-950 px-1.5 py-0.5 rounded">Porteira R$ 2,74</span>
+          </div>
+          <div class="text-2xl font-black text-slate-900 dark:text-white font-mono-num">
+            +70,8% <span class="text-xs font-normal text-slate-500">spread varejo</span>
+          </div>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-snug">
+            Produtor recebe <strong>R$ 2,74/L</strong> na porteira e consumidor paga <strong>R$ 4,68/L</strong> no supermercado. Indústria e varejo absorvem R$ 1,94/L.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 8. SEÇÃO: WHATSAPP 17:30 & NEWSLETTER GRATUITA -->
+    <!-- ======================================================== -->
+    <section id="sec-whatsapp" class="bg-slate-900 text-white dark:bg-[#0f172a] rounded-xl p-6 sm:p-8 border border-slate-800 shadow-md">
+      <div class="max-w-3xl mx-auto space-y-6">
+        
+        <div class="text-center space-y-3">
+          <div class="inline-flex items-center gap-1.5 text-emerald-400 text-xs font-bold uppercase tracking-wider bg-emerald-950/80 px-3 py-1 rounded-full border border-emerald-800/60">
+            <span>📲</span> <span>Despacho Oficial às 17:30 no WhatsApp & 3 Edições por E-mail</span>
+          </div>
+
+          <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+            Receba o OnNews no seu WhatsApp ou E-mail
+          </h3>
+
+          <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
+            O resumo essencial do seu dia: cotações de Boi, Grãos, Dólar, Bitcoin, previsão de chuva em mm e as 2 notícias do Brasil direto no seu e-mail e <strong>às 17:30 pelo WhatsApp</strong>.
+          </p>
+        </div>
+
+        <!-- Seletor de Canal com Abas Rápidas -->
+        <div class="flex items-center justify-center gap-2">
+          <button type="button" onclick="setNewsFormChannel('whatsapp')" id="newsTabWa" class="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center gap-1.5 cursor-pointer shadow-xs">
+            <span>💬</span> <span>Pelo WhatsApp (17:30)</span>
+          </button>
+          <button type="button" onclick="setNewsFormChannel('email')" id="newsTabEmail" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer">
+            <span>✉️</span> <span>Por E-mail (3 Edições)</span>
+          </button>
+        </div>
+
+        <!-- Formulário em Linha Única -->
+        <form onsubmit="handleSubscribe(event)" class="flex flex-col sm:flex-row gap-2 max-w-lg mx-auto">
+          <input 
+            type="tel" 
+            id="subInput" 
+            required 
+            placeholder="Seu WhatsApp com DDD (ex: 34 99999-9999)" 
+            class="flex-1 px-4 py-2.5 rounded-lg bg-slate-800 text-white placeholder-slate-400 text-sm border border-slate-700 focus:outline-none focus:border-emerald-500"
+          >
+          <button 
+            type="submit" 
+            id="subBtn" 
+            class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 font-bold text-white text-sm rounded-lg transition shrink-0 cursor-pointer shadow-xs"
+          >
+            Receber no WhatsApp
+          </button>
+        </form>
+
+        <div id="subSuccess" class="hidden text-center text-xs font-semibold text-emerald-400 pt-2">
+          ✅ Inscrição confirmada! Você receberá o OnNews pontualmente.
+        </div>
+
+        <!-- Card de Prévia WhatsApp & Botão de Compartilhar Agora -->
+        <div class="mt-6 p-4 rounded-xl bg-slate-800/80 border border-slate-700/80 max-w-lg mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div class="text-left text-xs">
+            <span class="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Acesso Instantâneo</span>
+            <strong class="text-white">Quer enviar esta edição agora para um amigo ou grupo?</strong>
+          </div>
+          <button onclick="shareOnWhatsApp()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-xs whitespace-nowrap">
+            <span>📲</span> <span>Enviar no WhatsApp</span>
+          </button>
+        </div>
+
+        <div class="text-[11px] text-slate-500 flex items-center justify-center gap-4 pt-1">
+          <span>🔒 100% Grátis</span>
+          <span>•</span>
+          <span>🛡️ Sem Spam</span>
+          <span>•</span>
+          <span>⚡ Cancele quando quiser</span>
+        </div>
+
+      </div>
+    </section>
+
+        <div class="text-[11px] text-slate-500 flex items-center justify-center gap-4 pt-1">
+          <span>🔒 100% Grátis</span>
+          <span>•</span>
+          <span>🛡️ Sem Spam</span>
+          <span>•</span>
+          <span>⚡ Cancele quando quiser</span>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- 8. RODAPÉ SÓBRIO & INSTITUCIONAL -->
+  <!-- ======================================================== -->
+  <footer class="bg-white dark:bg-[#0f172a] border-t border-slate-200 dark:border-slate-800 py-6 px-4 lg:px-8 text-xs text-slate-400 text-center">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div>
+        <strong>OnNews</strong> by <a href="/portal" class="text-slate-600 dark:text-slate-300 font-semibold hover:underline">Coon Participações Ltda.</a>
+        <span class="text-slate-300 dark:text-slate-700 mx-2">|</span>
+        <span>Uberlândia, MG • Brasil</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/onmail" class="hover:text-slate-600 dark:hover:text-slate-300">OnMail</a>
+        <a href="/studio" class="hover:text-slate-600 dark:hover:text-slate-300">Studio Softwares</a>
+        <a href="/admin" class="hover:text-amber-500 font-semibold">Painel Master</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- 9. JAVASCRIPT ULTRA-ENXUTO & REATIVO -->
+  <!-- ======================================================== -->
+  <script>
+    let globalMarketData = null;
+    let currentSelectedEdition = 'morning';
+
+    // 1. Alternador de Tema Claro / Escuro
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('coon_theme', isDark ? 'dark' : 'light');
+      updateThemeBtnText();
+    }
+
+    function updateThemeBtnText() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const el = document.getElementById('themeBtnText');
+      if (el) el.textContent = isDark ? '☀️ Claro' : '🌙 Escuro';
+    }
+
+    // 2. Data Atual por Extenso
+    function renderCurrentDate() {
+      const now = new Date();
+      const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+      const dateStr = now.toLocaleDateString('pt-BR', options);
+      const el = document.getElementById('currentDateStr');
+      if (el) {
+        el.textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+      }
+    }
+
+    // 3. Carregamento dos Dados do Mercado e 3 Edições
+    async function fetchMarketData(editionId) {
+      try {
+        const url = editionId ? `/api/news/market?edition=${editionId}` : '/api/news/market';
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Falha HTTP');
+        globalMarketData = await res.json();
+        renderMarketView();
+      } catch (err) {
+        console.warn('Erro ao carregar dados do mercado:', err);
+      }
+    }
+
+    // 4. Renderização do Placar de Dados "Ontem vs Hoje"
+    function renderMarketView() {
+      if (!globalMarketData) return;
+
+      const ctx = globalMarketData.edition_context || {};
+      const activeId = currentSelectedEdition || ctx.active_id || 'morning';
+
+      // Atualiza botões de turno
+      ['morning', 'lunch', 'closing'].forEach(id => {
+        const btn = document.getElementById(`btnEd${id.charAt(0).toUpperCase() + id.slice(1)}`);
+        const badge = document.getElementById(`badge${id.charAt(0).toUpperCase() + id.slice(1)}`);
+        if (btn) {
+          if (id === activeId) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        }
+        if (badge) {
+          if (id === ctx.active_id) {
+            badge.classList.remove('hidden');
+          } else {
+            badge.classList.add('hidden');
+          }
+        }
+      });
+
+      // Descrição da edição
+      const snapshot = (globalMarketData.editions_snapshots && globalMarketData.editions_snapshots[activeId]) || {};
+      const titleEl = document.getElementById('activeEditionTitle');
+      const descEl = document.getElementById('activeEditionDesc');
+      const updatedEl = document.getElementById('lastUpdatedLabel');
+
+      if (titleEl) titleEl.textContent = snapshot.title || ctx.active_name || 'Edição do Dia';
+      if (descEl) descEl.textContent = snapshot.highlight || ctx.description || '';
+      if (updatedEl) updatedEl.textContent = `Atualizado às ${globalMarketData.updated_at || ctx.current_time_br || '--:--'}`;
+
+    // Função para gerar micro-gráfico (sparkline SVG) de tendência
+    function getSparklineSvg(direction) {
+      const isUp = direction === 'up';
+      const isDown = direction === 'down';
+      const color = isUp ? '#059669' : (isDown ? '#dc2626' : '#94a3b8');
+      const pathData = isUp 
+        ? 'M2 14 L14 10 L28 12 L42 6 L56 2' 
+        : (isDown ? 'M2 2 L14 6 L28 4 L42 10 L56 14' : 'M2 8 L14 8 L28 8 L42 8 L56 8');
+      return `
+        <svg width="58" height="16" viewBox="0 0 58 16" fill="none" class="inline-block opacity-85">
+          <path d="${pathData}" stroke="${color}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `;
+    }
+
+    // 4. Renderização do Placar de Dados "Ontem vs Hoje"
+    function renderMarketView() {
+      if (!globalMarketData) return;
+
+      const ctx = globalMarketData.edition_context || {};
+      const activeId = currentSelectedEdition || ctx.active_id || 'morning';
+
+      // Atualiza botões de turno
+      ['morning', 'lunch', 'closing'].forEach(id => {
+        const btn = document.getElementById(`btnEd${id.charAt(0).toUpperCase() + id.slice(1)}`);
+        const badge = document.getElementById(`badge${id.charAt(0).toUpperCase() + id.slice(1)}`);
+        if (btn) {
+          if (id === activeId) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        }
+        if (badge) {
+          if (id === ctx.active_id) {
+            badge.classList.remove('hidden');
+          } else {
+            badge.classList.add('hidden');
+          }
+        }
+      });
+
+      // Descrição da edição
+      const snapshot = (globalMarketData.editions_snapshots && globalMarketData.editions_snapshots[activeId]) || {};
+      const titleEl = document.getElementById('activeEditionTitle');
+      const descEl = document.getElementById('activeEditionDesc');
+      const updatedEl = document.getElementById('lastUpdatedLabel');
+
+      if (titleEl) titleEl.textContent = snapshot.title || ctx.active_name || 'Edição do Dia';
+      if (descEl) descEl.textContent = snapshot.highlight || ctx.description || '';
+      if (updatedEl) updatedEl.textContent = `Atualizado às ${globalMarketData.updated_at || ctx.current_time_br || '--:--'}`;
+
+      // Tabela de Dados (Ontem vs Hoje)
+      const tbody = document.getElementById('marketTableBody');
+      if (!tbody) return;
+
+      let rowsHtml = '';
+
+      // Seção 1: Agropecuária & Commodities (@ • kg • sc)
+      rowsHtml += `
+        <tr class="bg-slate-50/60 dark:bg-slate-900/40">
+          <td colspan="7" class="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 py-2.5 px-4">
+            🌾 Agropecuária & Commodities (@ e kg • sc e kg)
+          </td>
+        </tr>
+      `;
+      (globalMarketData.agro || []).forEach(item => {
+        const isUp = item.direction === 'up';
+        const isDown = item.direction === 'down';
+        const dirColor = isUp ? 'text-emerald-600 dark:text-emerald-400' : (isDown ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400');
+        const arrow = isUp ? '▲' : (isDown ? '▼' : '—');
+
+        rowsHtml += `
+          <tr>
+            <td>
+              <div class="font-semibold text-slate-900 dark:text-white">${item.commodity}</div>
+              ${item.detail ? `<div class="text-[11px] text-slate-400">${item.detail}</div>` : ''}
+            </td>
+            <td class="text-slate-500 text-xs">${item.unit}</td>
+            <td class="text-right font-mono-num text-slate-500 text-xs">${item.yesterday}</td>
+            <td class="text-right font-mono-num font-bold text-slate-900 dark:text-white">${item.today}</td>
+            <td class="text-right font-mono-num font-semibold ${dirColor} text-xs">${arrow} ${item.change}</td>
+            <td class="text-center hidden md:table-cell">${getSparklineSvg(item.direction)}</td>
+            <td class="text-right text-xs text-slate-400 hidden sm:table-cell">${item.source || 'Cepea/B3'}</td>
+          </tr>
+        `;
+      });
+
+      // Seção 2: Cadeia do Leite (Porteira vs Varejo)
+      rowsHtml += `
+        <tr class="bg-slate-50/60 dark:bg-slate-900/40">
+          <td colspan="7" class="text-xs font-bold uppercase tracking-wider text-teal-700 dark:text-teal-400 py-2.5 px-4">
+            🥛 Cadeia do Leite (Porteira ao Produtor vs Supermercado)
+          </td>
+        </tr>
+      `;
+      (globalMarketData.milk || []).forEach(item => {
+        const isUp = item.direction === 'up';
+        const isDown = item.direction === 'down';
+        const dirColor = isUp ? 'text-emerald-600 dark:text-emerald-400' : (isDown ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400');
+        const arrow = isUp ? '▲' : (isDown ? '▼' : '—');
+
+        rowsHtml += `
+          <tr>
+            <td>
+              <div class="font-semibold text-slate-900 dark:text-white">${item.commodity}</div>
+              ${item.detail ? `<div class="text-[11px] text-slate-400">${item.detail}</div>` : ''}
+            </td>
+            <td class="text-slate-500 text-xs">${item.unit}</td>
+            <td class="text-right font-mono-num text-slate-500 text-xs">${item.yesterday}</td>
+            <td class="text-right font-mono-num font-bold text-slate-900 dark:text-white">${item.today}</td>
+            <td class="text-right font-mono-num font-semibold ${dirColor} text-xs">${arrow} ${item.change}</td>
+            <td class="text-center hidden md:table-cell">${getSparklineSvg(item.direction)}</td>
+            <td class="text-right text-xs text-slate-400 hidden sm:table-cell">${item.source || 'Cepea/Conseleite'}</td>
+          </tr>
+        `;
+      });
+
+      // Seção 3: Índices Oficiais de Inflação & Aluguel
+      rowsHtml += `
+        <tr class="bg-slate-50/60 dark:bg-slate-900/40">
+          <td colspan="7" class="text-xs font-bold uppercase tracking-wider text-purple-700 dark:text-purple-400 py-2.5 px-4">
+            📈 Índices Oficiais de Inflação & Aluguel (IPCA • IGP-M • INPC • Selic • Poupança)
+          </td>
+        </tr>
+      `;
+      (globalMarketData.indices || []).forEach(item => {
+        const isUp = item.direction === 'up';
+        const isDown = item.direction === 'down';
+        const dirColor = isUp ? 'text-emerald-600 dark:text-emerald-400' : (isDown ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400');
+        const arrow = isUp ? '▲' : (isDown ? '▼' : '—');
+
+        rowsHtml += `
+          <tr>
+            <td>
+              <div class="font-semibold text-slate-900 dark:text-white">${item.name}</div>
+              ${item.detail ? `<div class="text-[11px] text-slate-400">${item.detail}</div>` : ''}
+            </td>
+            <td class="text-slate-500 text-xs">${item.unit}</td>
+            <td class="text-right font-mono-num text-slate-500 text-xs">${item.yesterday}</td>
+            <td class="text-right font-mono-num font-bold text-slate-900 dark:text-white">${item.today}</td>
+            <td class="text-right font-mono-num font-semibold ${dirColor} text-xs">${arrow} ${item.change}</td>
+            <td class="text-center hidden md:table-cell">${getSparklineSvg(item.direction)}</td>
+            <td class="text-right text-xs text-slate-400 hidden sm:table-cell">${item.source || 'IBGE/FGV/BCB'}</td>
+          </tr>
+        `;
+      });
+
+      // Seção 4: Câmbio, Bolsas & Juros
+      rowsHtml += `
+        <tr class="bg-slate-50/60 dark:bg-slate-900/40">
+          <td colspan="7" class="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-sky-400 py-2.5 px-4">
+            💵 Câmbio & Mercados Globais
+          </td>
+        </tr>
+      `;
+      (globalMarketData.financial || []).forEach(item => {
+        const isUp = item.direction === 'up';
+        const isDown = item.direction === 'down';
+        const dirColor = isUp ? 'text-emerald-600 dark:text-emerald-400' : (isDown ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400');
+        const arrow = isUp ? '▲' : (isDown ? '▼' : '—');
+
+        rowsHtml += `
+          <tr>
+            <td>
+              <div class="font-semibold text-slate-900 dark:text-white">${item.name}</div>
+              ${item.detail ? `<div class="text-[11px] text-slate-400">${item.detail}</div>` : ''}
+            </td>
+            <td class="text-slate-500 text-xs">${item.unit}</td>
+            <td class="text-right font-mono-num text-slate-500 text-xs">${item.yesterday}</td>
+            <td class="text-right font-mono-num font-bold text-slate-900 dark:text-white">${item.today}</td>
+            <td class="text-right font-mono-num font-semibold ${dirColor} text-xs">${arrow} ${item.change}</td>
+            <td class="text-center hidden md:table-cell">${getSparklineSvg(item.direction)}</td>
+            <td class="text-right text-xs text-slate-400 hidden sm:table-cell">${item.source || 'Banco Central'}</td>
+          </tr>
+        `;
+      });
+
+      // Seção 5: Ativos Digitais
+      rowsHtml += `
+        <tr class="bg-slate-50/60 dark:bg-slate-900/40">
+          <td colspan="7" class="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 py-2.5 px-4">
+            ₿ Ativos Digitais (Cripto)
+          </td>
+        </tr>
+      `;
+      (globalMarketData.crypto || []).forEach(item => {
+        const isUp = item.direction === 'up';
+        const isDown = item.direction === 'down';
+        const dirColor = isUp ? 'text-emerald-600 dark:text-emerald-400' : (isDown ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400');
+        const arrow = isUp ? '▲' : (isDown ? '▼' : '—');
+
+        rowsHtml += `
+          <tr>
+            <td>
+              <div class="font-semibold text-slate-900 dark:text-white">${item.name}</div>
+              ${item.detail ? `<div class="text-[11px] text-slate-400">${item.detail}</div>` : ''}
+            </td>
+            <td class="text-slate-500 text-xs">${item.unit}</td>
+            <td class="text-right font-mono-num text-slate-500 text-xs">${item.yesterday}</td>
+            <td class="text-right font-mono-num font-bold text-slate-900 dark:text-white">${item.today}</td>
+            <td class="text-right font-mono-num font-semibold ${dirColor} text-xs">${arrow} ${item.change}</td>
+            <td class="text-center hidden md:table-cell">${getSparklineSvg(item.direction)}</td>
+            <td class="text-right text-xs text-slate-400 hidden sm:table-cell">Mercado Spot</td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = rowsHtml;
+
+      // Paridade de combustível e poder de compra
+      if (globalMarketData.fuel_parity) {
+        const fp = globalMarketData.fuel_parity;
+        const fuelText = document.getElementById('fuelPillText');
+        if (fuelText) {
+          fuelText.innerHTML = `<strong>Bomba:</strong> Etanol a ${fp.ratio} da Gasolina — <strong>${fp.recommended}</strong> (${fp.saving_pct} economia)`;
+        }
+      }
+      if (globalMarketData.purchasing_power) {
+        const pp = globalMarketData.purchasing_power;
+        const ppEl = document.getElementById('purchasingPowerText');
+        if (ppEl) {
+          ppEl.innerHTML = `<strong>Relação de Troca:</strong> ${pp.boi_milho} (${pp.indicator}) • <strong>Leite:</strong> ${pp.leite_spread || ''}`;
+        }
+      }
+    }
+
+    // 5. Seleção de Turnos (07h, 12h30, 17h)
+    function selectEdition(id) {
+      currentSelectedEdition = id;
+      renderMarketView();
+    }
+
+    // 6. Carregamento das 2 Capas do Brasil
+    async function fetchTop2Brazil() {
+      try {
+        const res = await fetch('/api/news/top2-brazil');
+        if (!res.ok) return;
+        const data = await res.json();
+        const top2 = data.top2 || [];
+        if (top2.length >= 2) {
+          const container = document.getElementById('top2Container');
+          if (container) {
+            container.innerHTML = top2.map((item, idx) => `
+              <article class="bg-white dark:bg-[#0f172a] p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+                    <span class="font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider text-[10px]">${item.source_name} • ${item.category || 'Brasil'}</span>
+                    <span>${item.published_at || 'Hoje'}</span>
+                  </div>
+                  <h3 class="text-base font-bold text-slate-900 dark:text-white leading-snug hover:text-emerald-600 transition">
+                    <a href="${item.source_url}" target="_blank" rel="noopener noreferrer">${item.title}</a>
+                  </h3>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 mt-2 line-clamp-2 leading-relaxed">
+                    ${item.summary}
+                  </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+                  <a href="${item.source_url}" target="_blank" rel="noopener noreferrer" class="text-slate-700 dark:text-slate-300 font-medium hover:underline flex items-center gap-1">
+                    <span>Ler na fonte</span> <span>→</span>
+                  </a>
+                </div>
+              </article>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        console.warn('Erro ao carregar top 2 brasil:', err);
+      }
+    }
+
+    // 7. Atualização do Painel Regional & Clima Hiperlocal
+    function updateRegionalDisplay(data) {
+      if (!data) return;
+      const cityEl = document.getElementById('regionCityName');
+      const tempEl = document.getElementById('regionTempLarge');
+      const maxEl = document.getElementById('regionTempMax');
+      const minEl = document.getElementById('regionTempMin');
+      const rainEl = document.getElementById('regionRainMm');
+      const labelEl = document.getElementById('regionWeatherLabel');
+      const poloTextEl = document.getElementById('poloRefText');
+      const newsContainer = document.getElementById('regionNewsContainer');
+
+      const w = data.weather || {};
+      if (cityEl) cityEl.textContent = data.city || data.region_name || 'Sua Cidade';
+      if (tempEl) tempEl.textContent = `${w.temperature ?? 25}°C`;
+      if (maxEl) maxEl.textContent = `${w.temp_max ?? 28}°C`;
+      if (minEl) minEl.textContent = `${w.temp_min ?? 18}°C`;
+      if (rainEl) rainEl.textContent = w.rain_summary || `${w.rain_mm || '0 mm'} (${w.rain_prob || 0}% prob.)`;
+      if (labelEl) labelEl.textContent = `${w.weather_icon || '🌤️'} ${w.weather_label || 'Estável'}`;
+      if (poloTextEl) poloTextEl.textContent = data.polo_name || data.polo_city || data.region_name || 'Polo Regional';
+
+      if (newsContainer && data.articles) {
+        newsContainer.innerHTML = data.articles.map(art => `
+          <div class="p-3 border-b border-slate-100 dark:border-slate-800/80 last:border-0">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">${art.source}</span>
+            <h4 class="text-sm font-semibold text-slate-900 dark:text-white hover:text-emerald-600 transition">
+              ${art.title}
+            </h4>
+          </div>
+        `).join('');
+      }
+    }
+
+    // 7.1. Seleção por Botão de Polo Regional
+    async function selectRegion(regionKey) {
+      ['triangulo', 'goias', 'matogrosso', 'sp_interior', 'parana'].forEach(k => {
+        const btn = document.getElementById(`regBtn_${k}`);
+        if (btn) {
+          if (k === regionKey) {
+            btn.className = 'px-2.5 py-1 text-xs rounded-lg font-medium border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white cursor-pointer';
+          } else {
+            btn.className = 'px-2.5 py-1 text-xs rounded-lg font-medium border border-transparent text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer';
+          }
+        }
+      });
+
+      try {
+        const res = await fetch(`/api/news/regional?region=${regionKey}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        updateRegionalDisplay(data);
+        const input = document.getElementById('citySearchInput');
+        if (input) input.value = data.city;
+      } catch (e) {
+        console.warn('Erro ao buscar dados regionais:', e);
+      }
+    }
+
+    // 7.2. Busca de Qualquer Cidade Brasileira (Hiperlocal)
+    async function searchCustomCity(overrideName) {
+      const input = document.getElementById('citySearchInput');
+      const cityName = (overrideName || (input ? input.value : '')).trim();
+      if (!cityName) return;
+
+      const cityEl = document.getElementById('regionCityName');
+      if (cityEl) cityEl.textContent = `Buscando ${cityName}...`;
+
+      try {
+        const res = await fetch(`/api/news/regional?city=${encodeURIComponent(cityName)}`);
+        if (!res.ok) throw new Error('Falha na resposta HTTP');
+        const data = await res.json();
+        updateRegionalDisplay(data);
+        if (input && !overrideName) input.value = data.city;
+      } catch (err) {
+        console.warn('Erro ao buscar cidade customizada:', err);
+        if (cityEl) cityEl.textContent = cityName;
+      }
+    }
+
+    // 7.3. Atalho de Cidade Rápida
+    function selectQuickCity(cityName) {
+      const input = document.getElementById('citySearchInput');
+      if (input) input.value = cityName;
+      searchCustomCity(cityName);
+    }
+
+    // 7.4. Usar Localização Atual via GPS
+    async function useGpsLocation() {
+      if (!navigator.geolocation) {
+        alert('Seu navegador não suporta geolocalização por GPS.');
+        return;
+      }
+      const cityEl = document.getElementById('regionCityName');
+      if (cityEl) cityEl.textContent = 'Obtendo GPS...';
+
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          try {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            const res = await fetch(`/api/news/regional?lat=${lat}&lon=${lon}`);
+            if (!res.ok) return;
+            const data = await res.json();
+            updateRegionalDisplay(data);
+            const input = document.getElementById('citySearchInput');
+            if (input) input.value = data.city;
+          } catch (e) {
+            console.warn('Erro ao buscar clima via GPS:', e);
+          }
+        },
+        (err) => {
+          console.warn('GPS negado ou com erro:', err);
+          alert('GPS indisponível ou permissão não concedida. Digite sua cidade no campo de busca.');
+          if (cityEl) cityEl.textContent = 'Patos de Minas, MG';
+        },
+        { timeout: 7000 }
+      );
+    }
+
+    // 7.5. Compartilhar no WhatsApp
+    function shareOnWhatsApp() {
+      if (!globalMarketData) return;
+      const ctx = globalMarketData.edition_context || {};
+      let text = `*OnNews — O Dia em Dados*\n_${ctx.active_name || 'Edição do Dia'}_\n\n`;
+
+      text += `🌾 *AGRO & COMMODITIES (@ e kg):*\n`;
+      (globalMarketData.agro || []).slice(0, 4).forEach(item => {
+        const arrow = item.direction === 'up' ? '▲' : (item.direction === 'down' ? '▼' : '—');
+        text += `• *${item.commodity}*: ${item.today} (${arrow} ${item.change})\n`;
+      });
+
+      if (globalMarketData.milk && globalMarketData.milk.length) {
+        text += `\n🥛 *CADEIA DO LEITE:*\n`;
+        (globalMarketData.milk || []).forEach(item => {
+          text += `• *${item.commodity}*: ${item.today}\n`;
+        });
+        text += `• *Spread Varejo*: +70,8% (R$ 1,94/L de margem entre porteira e supermercado)\n`;
+      }
+
+      if (globalMarketData.indices && globalMarketData.indices.length) {
+        text += `\n📈 *ÍNDICES DE INFLAÇÃO & JUROS:*\n`;
+        (globalMarketData.indices || []).slice(0, 4).forEach(item => {
+          text += `• *${item.name}*: ${item.today}\n`;
+        });
+      }
+
+      text += `\n💵 *CÂMBIO & BOLSAS:*\n`;
+      (globalMarketData.financial || []).slice(0, 2).forEach(item => {
+        const arrow = item.direction === 'up' ? '▲' : (item.direction === 'down' ? '▼' : '—');
+        text += `• *${item.name}*: ${item.today} (${arrow} ${item.change})\n`;
+      });
+
+      if (globalMarketData.fuel_parity) {
+        text += `\n⛽ *Bomba:* ${globalMarketData.fuel_parity.recommended} (${globalMarketData.fuel_parity.ratio})\n`;
+      }
+
+      text += `\nConfira o placar completo com clima hiperlocal (mm de chuva) e notícias do seu polo em:\nhttps://coon.com.br/onnews`;
+      
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
+    // 8. Revarredura Manual
+    async function refreshDataManual() {
+      const btn = document.getElementById('refreshBtn');
+      if (btn) btn.classList.add('animate-spin');
+      await Promise.all([fetchMarketData(currentSelectedEdition), fetchTop2Brazil(), selectRegion('triangulo')]);
+      if (btn) {
+        setTimeout(() => btn.classList.remove('animate-spin'), 600);
+      }
+    }
+
+    // 8.1. Navegação por Abas do OnNews ("por aba para clicar não ficar difícil achar")
+    let currentActiveTab = 'cotacoes';
+
+    function switchTab(tabId) {
+      currentActiveTab = tabId;
+      const tabs = ['cotacoes', 'brasil', 'clima', 'compra', 'whatsapp', 'tudo'];
+      const sections = {
+        cotacoes: document.getElementById('sec-cotacoes'),
+        brasil: document.getElementById('sec-brasil'),
+        clima: document.getElementById('sec-clima'),
+        compra: document.getElementById('sec-compra'),
+        whatsapp: document.getElementById('sec-whatsapp')
+      };
+
+      // Atualiza estilo dos botões das abas
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tabBtn_${t}`);
+        if (!btn) return;
+        if (t === tabId) {
+          btn.className = "tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition cursor-pointer flex items-center gap-1.5 bg-slate-900 text-white dark:bg-emerald-600 shadow-xs font-bold";
+        } else {
+          btn.className = "tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition cursor-pointer flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium";
+        }
+      });
+
+      // Controla visibilidade das seções
+      if (tabId === 'tudo') {
+        Object.values(sections).forEach(sec => {
+          if (sec) sec.classList.remove('hidden');
+        });
+      } else {
+        Object.keys(sections).forEach(key => {
+          const sec = sections[key];
+          if (!sec) return;
+          if (key === tabId) {
+            sec.classList.remove('hidden');
+          } else {
+            sec.classList.add('hidden');
+          }
+        });
+      }
+
+      // Atualiza hash da URL sem scroll brusco
+      try {
+        history.replaceState(null, null, `#${tabId}`);
+      } catch (e) {}
+    }
+
+    // 8.2. Seletor de Canal na Newsletter do OnNews
+    let currentNewsFormChannel = 'whatsapp';
+
+    function setNewsFormChannel(ch) {
+      currentNewsFormChannel = ch;
+      const tabWa = document.getElementById('newsTabWa');
+      const tabEmail = document.getElementById('newsTabEmail');
+      const input = document.getElementById('subInput');
+      const btn = document.getElementById('subBtn');
+
+      if (ch === 'whatsapp') {
+        if (tabWa) tabWa.className = "px-3.5 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center gap-1.5 cursor-pointer shadow-xs";
+        if (tabEmail) tabEmail.className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer";
+        if (input) {
+          input.placeholder = "Seu WhatsApp com DDD (ex: 34 99999-9999)";
+          input.type = "tel";
+        }
+        if (btn) btn.innerText = "Receber no WhatsApp";
+      } else {
+        if (tabEmail) tabEmail.className = "px-3.5 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center gap-1.5 cursor-pointer shadow-xs";
+        if (tabWa) tabWa.className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer";
+        if (input) {
+          input.placeholder = "Digite seu melhor e-mail (ex: seu.nome@onmail.br)";
+          input.type = "email";
+        }
+        if (btn) btn.innerText = "Receber por E-mail";
+      }
+    }
+
+    // 9. Formulário de Inscrição (E-mail ou WhatsApp 17:30)
+    async function handleSubscribe(e) {
+      e.preventDefault();
+      const input = document.getElementById('subInput');
+      const btn = document.getElementById('subBtn');
+      const success = document.getElementById('subSuccess');
+      const val = input ? input.value.trim() : '';
+      if (!val) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+
+      const isWa = currentNewsFormChannel === 'whatsapp' || (!val.includes('@') && val.replace(/\D/g, '').length >= 8);
+      const payload = isWa
+        ? { phone: val, channel: 'whatsapp', frequency: 'fechamento-17h30', city: 'São Paulo, SP' }
+        : { email: val, channel: 'email', frequency: '3-edicoes', city: 'São Paulo, SP' };
+
+      try {
+        const res = await fetch('/api/news/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          if (success) {
+            success.classList.remove('hidden');
+            success.innerText = isWa 
+              ? '✅ Inscrição confirmada! Você receberá o OnNews às 17:30 no seu WhatsApp.'
+              : '✅ Inscrição confirmada! Você receberá o OnNews no seu e-mail.';
+          }
+          if (input) input.value = '';
+          btn.textContent = '✓ Inscrito!';
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = isWa ? 'Receber no WhatsApp' : 'Receber por E-mail';
+          }, 3500);
+        } else {
+          alert(data.detail || data.message || 'Não foi possível registrar a inscrição. Verifique os dados digitados.');
+          btn.disabled = false;
+          btn.textContent = isWa ? 'Receber no WhatsApp' : 'Receber por E-mail';
+        }
+      } catch (err) {
+        alert('Erro ao conectar com o servidor. Tente novamente.');
+        btn.disabled = false;
+        btn.textContent = isWa ? 'Receber no WhatsApp' : 'Receber por E-mail';
+      }
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', () => {
+      updateThemeBtnText();
+      renderCurrentDate();
+      fetchMarketData();
+      fetchTop2Brazil();
+      selectRegion('triangulo');
+
+      // Verifica se há hash na URL para abrir a aba correspondente
+      const initialHash = window.location.hash.replace('#', '');
+      if (['cotacoes', 'brasil', 'clima', 'compra', 'whatsapp', 'tudo'].includes(initialHash)) {
+        switchTab(initialHash);
+      } else {
+        switchTab('cotacoes');
+      }
+    });
+  </script>
+
+</body>
+</html>

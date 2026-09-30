@@ -126,6 +126,65 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #475569;
     }
+
+    /* Carimbo Oficial de Lançamento até 30 de Outubro */
+    @keyframes stampSlam {
+      0% { opacity: 0; transform: scale(2.8) rotate(-32deg); filter: blur(5px); }
+      50% { opacity: 0.95; transform: scale(0.92) rotate(-8deg); filter: blur(0); }
+      75% { transform: scale(1.08) rotate(-11deg); box-shadow: 0 0 25px rgba(220, 38, 38, 0.6); }
+      100% { opacity: 0.96; transform: scale(1) rotate(-9.5deg); box-shadow: 0 0 0 transparent; }
+    }
+
+    .coon-stamp-october {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem 0.75rem;
+      border: 3px double #ef4444;
+      border-radius: 8px;
+      color: #f87171;
+      background: rgba(69, 10, 10, 0.75);
+      backdrop-filter: blur(6px);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transform: rotate(-9.5deg);
+      transform-origin: center center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.25);
+    }
+    .coon-stamp-october:hover {
+      transform: scale(1.08) rotate(-6deg);
+      border-color: #f87171;
+      box-shadow: 0 8px 24px -2px rgba(239, 68, 68, 0.45);
+    }
+    .coon-stamp-october .coon-stamp-inner {
+      border: 1.5px dashed #f87171;
+      border-radius: 5px;
+      padding: 3px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(127, 29, 29, 0.3);
+    }
+    .coon-stamp-october .stamp-seal-badge {
+      position: absolute;
+      bottom: -7px;
+      right: -8px;
+      font-size: 7px;
+      font-weight: 900;
+      color: #fff;
+      background-color: #ef4444;
+      padding: 1px 4px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      transform: rotate(4deg);
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-black">
@@ -161,6 +220,22 @@
           <i data-lucide="wallet" class="w-3.5 h-3.5 text-emerald-400"></i>
           <span>Caixa & Lucro (Arthur)</span>
         </button>
+        <button onclick="scrollToSection('sec-onmail')" class="px-2 py-1.5 rounded-xl text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition flex items-center space-x-1.5 font-bold">
+          <i data-lucide="mail" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>OnMail & Domínios</span>
+        </button>
+        <button onclick="scrollToSection('sec-traffic')" class="px-2 py-1.5 rounded-xl text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 transition flex items-center space-x-1.5 font-bold">
+          <i data-lucide="trending-up" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>Tráfego & Captação</span>
+        </button>
+        <button onclick="scrollToSection('sec-onnews-control')" class="px-2 py-1.5 rounded-xl text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition flex items-center space-x-1.5 font-bold">
+          <span class="text-sm">📰</span>
+          <span>OnNews 3 Turnos</span>
+        </button>
+        <button onclick="scrollToSection('sec-antigravity-bridge')" class="px-2 py-1.5 rounded-xl text-violet-400 bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/30 transition flex items-center space-x-1.5 font-bold">
+          <span class="text-sm">⚡</span>
+          <span>Antigravity Remoto</span>
+        </button>
         <a href="/governance" class="px-2 py-1.5 rounded-xl text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 transition flex items-center space-x-1.5 font-bold">
           <i data-lucide="shield" class="w-3.5 h-3.5 text-purple-400"></i>
           <span>Governança & Equipe</span>
@@ -185,6 +260,12 @@
             <div class="text-[9px] text-amber-400 font-mono leading-tight">Presidente & Fundador</div>
           </div>
         </div>
+
+        <!-- Botão Baixar para o Celular -->
+        <button onclick="openCoonInstallModal('Cockpit Admin Coon', 'https://coon.com.br/admin', '👑')" class="px-3 py-2 bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 hover:border-emerald-500/50 font-bold rounded-xl transition flex items-center space-x-1.5 shadow-xs cursor-pointer" title="Baixar Painel Admin para Celular (PWA & APK)">
+          <span class="text-sm">📱</span>
+          <span class="hidden sm:inline">Baixar no Celular</span>
+        </button>
 
         <button onclick="exportAllToExcel()" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl transition flex items-center space-x-1.5 shadow-lg shadow-emerald-500/10 cursor-pointer">
           <i data-lucide="download" class="w-3.5 h-3.5"></i>
@@ -892,7 +973,7 @@
 
     </div>
 
-    <!-- 4. CENTRAL DOS 6 APLICATIVOS DA HOLDING COON (CONTROLE OPERACIONAL) -->
+    <!-- 4. CENTRAL DOS 8 APLICATIVOS DA HOLDING COON (CONTROLE OPERACIONAL) -->
     <div id="sec-apps" class="space-y-4">
       <div class="flex items-center justify-between">
         <div>
@@ -903,7 +984,7 @@
           <p class="text-xs text-slate-400">Monitore o funcionamento, latência, versões e usuários conectados em cada software</p>
         </div>
         <span class="text-xs font-mono text-emerald-400 font-bold bg-emerald-500/10 px-3 py-1 rounded-xl border border-emerald-500/20">
-          6/6 Motores Online
+          8/8 Motores Online
         </span>
       </div>
 
@@ -1140,7 +1221,614 @@
           </div>
         </div>
 
+        <!-- 8. onmail. by Coon -->
+        <div class="dark-card rounded-2xl p-5 space-y-3.5 border border-emerald-500/30 shadow-lg shadow-emerald-950/20">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
+                <i data-lucide="mail" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-white flex items-center space-x-1.5">
+                  <span>onmail.</span>
+                  <span class="text-[10px] text-emerald-400 font-bold">by Coon</span>
+                </h3>
+                <span class="text-[10px] text-slate-400 font-mono">E-mail Corporativo & Ponte WhatsApp</span>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold">Lançamento</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-xs bg-slate-800/40 p-2.5 rounded-xl text-slate-300">
+            <div>
+              <span class="text-[10px] text-slate-400 block">Contas Registradas:</span>
+              <span class="font-mono font-bold text-white" id="cardOnMailTotalAccounts">7 contas</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-400 block">Receita Recorrente:</span>
+              <span class="font-mono font-bold text-emerald-400" id="cardOnMailMrr">R$ 299,60</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-xs pt-1">
+            <a href="/onmail" target="_blank" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center space-x-1">
+              <span>Abrir onmail.</span>
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+            <button onclick="scrollToSection('sec-onmail')" class="text-slate-300 hover:text-white font-medium text-[11px] underline">Painel Completo</button>
+          </div>
+        </div>
+
       </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 4.1. GESTÃO ESTRATÉGICA DO ONMAIL & DOMÍNIOS CORPORATIVOS -->
+    <!-- ======================================================== -->
+    <div id="sec-onmail" class="dark-card rounded-2xl p-6 space-y-6 border border-emerald-500/30 shadow-2xl shadow-emerald-950/20">
+      
+      <!-- Topo da Seção OnMail -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div>
+          <div class="flex items-center space-x-2.5">
+            <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+            <h2 class="text-lg font-black text-white flex items-center space-x-2">
+              <i data-lucide="mail" class="w-5 h-5 text-emerald-400"></i>
+              <span>OnMail & Domínios Corporativos • Gestão Central</span>
+            </h2>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold font-mono">Ponte WhatsApp Ativa</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">
+            Supervisão de contas gratuitas sem números, planos corporativos Pro & Business, alertas no WhatsApp e gestão de domínios .com.br da Coon Participações.
+          </p>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <a href="/onmail" target="_blank" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 border border-slate-700">
+            <span>Abrir Landing Page</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+          <button onclick="openNewOnMailModal()" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs transition flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-emerald-500/20">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>+ Nova Conta OnMail</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Cards de Indicadores do OnMail -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
+          <span class="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Total de Contas Registradas</span>
+          <div class="text-2xl font-black text-white font-mono" id="onmailKpiTotal">7 contas</div>
+          <span class="text-[10px] text-emerald-400 font-semibold flex items-center space-x-1">
+            <i data-lucide="check" class="w-3 h-3"></i>
+            <span id="onmailKpiActive">100% ativas no sistema</span>
+          </span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
+          <span class="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Distribuição de Planos</span>
+          <div class="text-sm font-bold text-white pt-1" id="onmailKpiDist">
+            <span class="text-emerald-400">3 Start</span> • <span class="text-sky-400">2 Pro</span> • <span class="text-purple-400">2 Business</span>
+          </div>
+          <span class="text-[10px] text-slate-400">Corporativos com domínio e suporte</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
+          <span class="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Domínios .com.br Gerenciados</span>
+          <div class="text-2xl font-black text-white font-mono" id="onmailKpiDomains">5 domínios</div>
+          <span class="text-[10px] text-sky-400 font-semibold">DNS, MX, SPF e SSL auditados</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-emerald-500/30 space-y-1.5">
+          <span class="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Receita Recorrente OnMail</span>
+          <div class="text-2xl font-black text-emerald-400 font-mono" id="onmailKpiMrr">R$ 299,60</div>
+          <span class="text-[10px] text-emerald-300 font-semibold" id="onmailKpiArr">R$ 3.595,20 / ano projetado</span>
+        </div>
+
+      </div>
+
+      <!-- Tabela de Contas OnMail em Tempo Real -->
+      <div class="space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h3 class="text-sm font-bold text-white flex items-center space-x-1.5">
+            <i data-lucide="users" class="w-4 h-4 text-emerald-400"></i>
+            <span>Contas OnMail Ativas na Holding</span>
+          </h3>
+
+          <div class="flex items-center space-x-2">
+            <input 
+              type="text" 
+              id="onmailSearchInput" 
+              placeholder="Buscar por titular, endereço @, telefone..." 
+              oninput="filterOnMailTable(this.value)"
+              class="w-56 sm:w-64 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+            >
+            <button onclick="fetchOnMailAdminData()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700" title="Atualizar Contas">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5" id="onmailRefreshIcon"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-800/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <tr>
+                <th class="py-2.5 px-3">Titular / Empresa</th>
+                <th class="py-2.5 px-3">Endereço de E-mail</th>
+                <th class="py-2.5 px-3">WhatsApp Conectado</th>
+                <th class="py-2.5 px-3">Plano</th>
+                <th class="py-2.5 px-3">Remetentes VIP</th>
+                <th class="py-2.5 px-3">Status</th>
+                <th class="py-2.5 px-3 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="onmailTableBody" class="divide-y divide-slate-800 font-sans">
+              <!-- Preenchido via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Domínios .com.br Gerenciados & Infraestrutura DNS -->
+      <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <span class="text-xs font-bold text-white flex items-center space-x-1.5">
+            <i data-lucide="globe" class="w-4 h-4 text-sky-400"></i>
+            <span>Infraestrutura de Domínios Corporativos (.com.br) & Roteamento</span>
+          </span>
+          <span class="text-[10px] text-emerald-400 font-mono font-bold">100% em Conformidade Registro.br</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 text-xs" id="onmailDomainsListContainer">
+          <!-- Injetado dinamicamente -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 4.2. CENTRO DE AQUISIÇÃO, TRÁFEGO PAGO & CAPTAÇÃO DE RECURSOS -->
+    <!-- ======================================================== -->
+    <div id="sec-traffic" class="dark-card rounded-2xl p-6 space-y-6 border border-amber-500/30 shadow-2xl shadow-amber-950/20">
+      
+      <!-- Topo: Tese Estratégica & Carimbo Oficial de 30 de Outubro -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div class="space-y-1">
+          <div class="flex items-center space-x-2.5">
+            <span class="w-3 h-3 rounded-full bg-amber-400 animate-pulse"></span>
+            <h2 class="text-lg font-black text-white flex items-center space-x-2">
+              <i data-lucide="trending-up" class="w-5 h-5 text-amber-400"></i>
+              <span>Centro de Aquisição, Tráfego Pago & Decisão de Captação</span>
+            </h2>
+            <span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-bold font-mono">Conselho C-Suite</span>
+          </div>
+          <p class="text-xs text-slate-400">
+            Simulador de conversão de anúncios (Google Search & Meta Ads), análise de CAC vs LTV e parecer formal da Diretoria sobre captação externa vs bootstrapping.
+          </p>
+        </div>
+
+        <!-- CARIMBO OFICIAL ATÉ 30 DE OUTUBRO -->
+        <div class="flex items-center space-x-3">
+          <div class="coon-stamp-october cursor-pointer" onclick="alert('★ CARIMBO OFICIAL COON PARTICIPAÇÕES ★\n\nDesconto promocional de 40% nos planos anuais do OnMail Pro e Business.\nGarantido até 30 de outubro de 2026.\n\nEstratégia de Aquisição: Pagamento à vista antecipado (D+1) financia o tráfego pago sem necessidade de investidor.')" title="Clique para ver o carimbo oficial!">
+            <div class="coon-stamp-inner">
+              <span class="text-[7px] font-black tracking-widest text-red-400">★ CARIMBADO OFICIAL ★</span>
+              <span class="text-[12px] font-black tracking-tight leading-none my-0.5 text-red-300">40% DE DESCONTO</span>
+              <span class="text-[8px] font-black tracking-wider leading-none text-red-400">ATÉ 30 DE OUTUBRO</span>
+            </div>
+            <span class="stamp-seal-badge">COON 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pergunta do Presidente Daniel em Destaque -->
+      <div class="p-4 rounded-2xl bg-gradient-to-r from-amber-950/40 via-slate-900/60 to-slate-900/40 border border-amber-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-start space-x-3.5">
+          <img src="/daniel_avatar.jpg" alt="Presidente Daniel Soares Correia" class="w-11 h-11 rounded-full object-cover border-2 border-amber-400 shadow-md shrink-0">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-bold text-white">Presidente Daniel Soares Correia</span>
+              <span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold">Consulta Executiva</span>
+            </div>
+            <p class="text-sm font-semibold text-amber-200 mt-0.5 italic">
+              "captar dinheiro para rodar tráfego o que acham equipe"
+            </p>
+          </div>
+        </div>
+
+        <div class="shrink-0">
+          <span class="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold font-mono">
+            Veredito: BOOTSTRAPPING APROVADO ✅
+          </span>
+        </div>
+      </div>
+
+      <!-- SIMULADOR INTERATIVO DE TRÁFEGO PAGO -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Controles do Simulador (5 Colunas) -->
+        <div class="lg:col-span-5 p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
+          <div>
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center space-x-1.5">
+              <i data-lucide="sliders" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Parâmetros da Campanha de Anúncios</span>
+            </h3>
+            <p class="text-[11px] text-slate-400 mt-0.5">Defina a verba de tráfego pago (Google Search + Meta Ads)</p>
+          </div>
+
+          <!-- Presets de Orçamento -->
+          <div>
+            <label class="block text-[11px] text-slate-300 font-semibold mb-1.5">Orçamento Sugerido:</label>
+            <div class="grid grid-cols-3 gap-1.5">
+              <button onclick="setTrafficPreset(500)" class="py-2 px-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 hover:text-amber-300 text-slate-300 border border-slate-700 text-xs font-mono font-bold transition">R$ 500</button>
+              <button onclick="setTrafficPreset(1500)" class="py-2 px-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-mono font-bold transition">R$ 1.500 ⭐</button>
+              <button onclick="setTrafficPreset(3000)" class="py-2 px-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 hover:text-amber-300 text-slate-300 border border-slate-700 text-xs font-mono font-bold transition">R$ 3.000</button>
+              <button onclick="setTrafficPreset(5000)" class="py-2 px-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 hover:text-amber-300 text-slate-300 border border-slate-700 text-xs font-mono font-bold transition">R$ 5.000</button>
+              <button onclick="setTrafficPreset(10000)" class="py-2 px-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 hover:text-amber-300 text-slate-300 border border-slate-700 text-xs font-mono font-bold transition">R$ 10.000</button>
+              <button onclick="setTrafficPreset(25000)" class="py-2 px-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 hover:text-amber-300 text-slate-300 border border-slate-700 text-xs font-mono font-bold transition">R$ 25.000</button>
+            </div>
+          </div>
+
+          <!-- Input Manual de Verba -->
+          <div>
+            <label class="block text-[11px] text-slate-300 font-semibold mb-1">Verba de Tráfego (R$):</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-slate-400 font-mono font-bold text-xs">R$</span>
+              <input 
+                type="number" 
+                id="inputTrafficBudget" 
+                value="1500" 
+                step="100" 
+                min="100" 
+                oninput="runTrafficSimulation(this.value)"
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl py-2 pl-9 pr-3 text-white font-mono font-bold text-sm focus:border-amber-500 focus:outline-none"
+              >
+            </div>
+          </div>
+
+          <!-- CPC Médio -->
+          <div>
+            <label class="block text-[11px] text-slate-300 font-semibold mb-1">Custo por Clique Médio (CPC B2B):</label>
+            <select id="selectTrafficCpc" onchange="runTrafficSimulation(document.getElementById('inputTrafficBudget').value)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-xs">
+              <option value="2.50">R$ 2,50 (Meta Ads - Instagram/Facebook)</option>
+              <option value="3.20" selected>R$ 3,20 (Misto Google Search + Meta Ads)</option>
+              <option value="4.50">R$ 4,50 (Google Search Alta Concorrência)</option>
+            </select>
+          </div>
+
+          <!-- Botão para Lançar no Caixa do Arthur -->
+          <div class="pt-2 border-t border-slate-800">
+            <button onclick="injectTrafficExpenseIntoCashFlow()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer shadow-lg shadow-amber-500/20">
+              <i data-lucide="wallet" class="w-4 h-4"></i>
+              <span>Lançar Verba no Caixa do Arthur</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Resultados da Simulação em Tempo Real (7 Colunas) -->
+        <div class="lg:col-span-7 p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="text-xs font-bold text-white uppercase tracking-wider">Projeção Financeira & Retorno de Caixa</h3>
+              <p class="text-[11px] text-slate-400">Modelo Anual Antecipado com 40% OFF até 30 de Outubro</p>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-mono font-bold text-xs" id="simRoiBadge">ROI: +191.6%</span>
+          </div>
+
+          <!-- Grade de Resultados -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            
+            <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <span class="text-[10px] text-slate-400 block font-mono">Cliques Estimados</span>
+              <span class="text-base font-black text-white font-mono" id="simClicks">468 cliques</span>
+              <span class="text-[10px] text-slate-400 block">Tráfego qualificado</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <span class="text-[10px] text-slate-400 block font-mono">Contas Gratuitas (Start)</span>
+              <span class="text-base font-black text-emerald-400 font-mono" id="simFreeLeads">74 contas</span>
+              <span class="text-[10px] text-emerald-400 block">Base limpa sem números</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <span class="text-[10px] text-slate-400 block font-mono">Vendas OnMail Anuais</span>
+              <span class="text-base font-black text-white font-mono" id="simPayingCustomers">5 clientes</span>
+              <span class="text-[10px] text-sky-400 block" id="simSalesDetail">2 Pro + 3 Business</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-950/70 border border-emerald-500/30 space-y-1">
+              <span class="text-[10px] text-emerald-300 block font-mono">Caixa Gerado À Vista (D+1)</span>
+              <span class="text-lg font-black text-emerald-400 font-mono" id="simRevenue">R$ 2.874,00</span>
+              <span class="text-[10px] text-slate-400 block">Recebido no ato da compra</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-950/70 border border-emerald-500/30 space-y-1">
+              <span class="text-[10px] text-emerald-300 block font-mono">Lucro Líquido Real</span>
+              <span class="text-lg font-black text-emerald-300 font-mono" id="simNetProfit">+ R$ 1.374,00</span>
+              <span class="text-[10px] text-emerald-400 font-bold block">Após pagar os anúncios!</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <span class="text-[10px] text-slate-400 block font-mono">CAC vs LTV</span>
+              <span class="text-sm font-black text-white font-mono" id="simCacLtv">CAC R$ 300 | LTV R$ 1.797</span>
+              <span class="text-[10px] text-emerald-400 block" id="simLtvRatio">Relação: 6.0x (Excelente)</span>
+            </div>
+
+          </div>
+
+          <!-- Conclusão Chave do Simulador -->
+          <div class="p-3 rounded-xl bg-amber-950/30 border border-amber-500/30 text-xs text-amber-200/90 leading-relaxed">
+            💡 <strong>Ponto de Inflexão Financeira:</strong> Bastam apenas <strong>2 a 3 vendas do OnMail Business Anual (R$ 718,80 à vista)</strong> para cobrir 100% da verba de R$ 1.500 de tráfego. Como o cliente paga os 12 meses adiantados, o dinheiro entra no caixa da Coon no dia seguinte (D+1), autofinanciando a próxima campanha.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MESA REDONDA DA DIRETORIA C-SUITE (PARECERES FORMAIS) -->
+      <div class="space-y-3 pt-2">
+        <div class="border-b border-slate-800 pb-2 flex items-center justify-between">
+          <span class="text-xs font-bold text-white uppercase tracking-wider flex items-center space-x-1.5">
+            <i data-lucide="crown" class="w-4 h-4 text-sky-400"></i>
+            <span>Pareceres Formais do Conselho Executivo C-Suite para o Presidente Daniel</span>
+          </span>
+          <span class="text-[10px] text-slate-400 font-mono">Decisão Unânime da Diretoria</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Lucas Albuquerque (Tráfego) -->
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-blue-500/30 space-y-2">
+            <div class="flex items-center space-x-2.5">
+              <img src="/lucas_avatar.jpg" alt="Lucas Albuquerque" class="w-8 h-8 rounded-full object-cover border border-blue-400">
+              <div>
+                <span class="text-xs font-bold text-white block">Lucas Albuquerque</span>
+                <span class="text-[10px] text-blue-400 font-mono">Head de Tráfego & ad.coon</span>
+              </div>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              "Presidente Daniel, com a proposta irresistível de <strong>'1 Domínio .com.br Incluso + Até 20 E-mails por R$ 59,90/mês'</strong> e o apelo viral de <strong>'E-mail limpo sem números'</strong>, um orçamento piloto de R$ 1.000 a R$ 2.500 no Google Search e Meta Ads já trará as primeiras 5 a 10 vendas anuais. Cada 2 vendas anuais já colocam R$ 1.437 em caixa limpo, pagando os anúncios do mês seguinte."
+            </p>
+          </div>
+
+          <!-- Arthur Montenegro (CFO) -->
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-emerald-500/30 space-y-2">
+            <div class="flex items-center space-x-2.5">
+              <img src="/arthur_avatar.jpg" alt="Arthur Montenegro" class="w-8 h-8 rounded-full object-cover border border-emerald-400">
+              <div>
+                <span class="text-xs font-bold text-white block">Arthur Montenegro</span>
+                <span class="text-[10px] text-emerald-400 font-mono">CFO & Controladoria Financeira</span>
+              </div>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              "Vender equity da Coon agora para investidor seria queimar valor. Como cobramos 12 meses adiantados no cartão e Pix (R$ 718,80 à vista), o fluxo de caixa é D+1. O próprio cliente paga a campanha do próximo. Captação de investidor só deve ser feita após batermos R$ 100k de MRR, onde a holding valerá 10x mais."
+            </p>
+          </div>
+
+          <!-- Dr. Alexandre Toledo (Jurídico) -->
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-sky-500/30 space-y-2">
+            <div class="flex items-center space-x-2.5">
+              <img src="/alexandre_avatar.jpg" alt="Dr. Alexandre Toledo" class="w-8 h-8 rounded-full object-cover border border-sky-400">
+              <div>
+                <span class="text-xs font-bold text-white block">Dr. Alexandre Toledo</span>
+                <span class="text-[10px] text-sky-400 font-mono">Jurídico & Compliance Societário</span>
+              </div>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              "Mantenha 100% das cotas na sua mão, Presidente. Contratos de mútuo conversível ou investidores-anjo trazem amarras desnecessárias no momento em que seu produto tem tração própria e custo de infraestrutura quase zero na Hetzner. A independência societária é o maior ativo da Coon."
+            </p>
+          </div>
+
+          <!-- Dra. Alice (IA & Estratégia) -->
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-purple-500/30 space-y-2">
+            <div class="flex items-center space-x-2.5">
+              <img src="/alice_avatar.jpg" alt="Dra. Alice" class="w-8 h-8 rounded-full object-cover border border-purple-400">
+              <div>
+                <span class="text-xs font-bold text-white block">Dra. Alice</span>
+                <span class="text-[10px] text-purple-400 font-mono">Diretora de Inteligência Artificial & Operações</span>
+              </div>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              "Nossos robôs de triagem inteligente e a mensageria automatizada no WhatsApp processam milhares de e-mails com custo marginal de R$ 0,001 por mensagem. O modelo é perfeitamente escalável no tráfego pago sem gargalos operacionais."
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 4.3. ONNEWS • TERMINAL DE DADOS & 3 EDIÇÕES DIÁRIAS (PILOTO AUTOMÁTICO) -->
+    <!-- ======================================================== -->
+    <div id="sec-onnews-control" class="dark-card rounded-2xl p-6 space-y-6 border border-emerald-500/30 shadow-2xl shadow-emerald-950/20">
+      
+      <!-- Cabeçalho OnNews Control -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div>
+          <div class="flex items-center space-x-2.5">
+            <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+            <h2 class="text-base sm:text-lg font-black text-white flex items-center space-x-2">
+              <span>📰 OnNews • Terminal de Dados & 3 Edições Diárias</span>
+            </h2>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold font-mono">Piloto Automático Alice AI</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">
+            Motor autônomo na nuvem Hetzner: roda pontualmente às <strong>07h00 (Abertura)</strong>, <strong>12h30 (Almoço)</strong> e <strong>17h00 (Fechamento)</strong>. Custo operacional: R$ 0,00.
+          </p>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <a href="/onnews" target="_blank" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 border border-slate-700">
+            <span>Visualizar Portal</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+          <button onclick="triggerAdminNewsRefresh()" id="btnAdminNewsRefresh" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs transition flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-emerald-500/20 active:scale-95">
+            <span class="text-sm">🔄</span>
+            <span>Forçar Atualização Agora (Celular/APK)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3 Turnos do OnNews -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-amber-400 font-bold">☀️ Edição 07h00</span>
+            <span class="text-[10px] text-slate-500 font-mono">07:00 BRT</span>
+          </div>
+          <div class="text-sm font-bold text-white">Abertura dos Mercados & Café</div>
+          <p class="text-[11px] text-slate-400">Fechamento de ontem vs abertura, câmbio, radar de chuva (mm) e as 2 capas do Brasil.</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-sky-400 font-bold">🍽️ Edição 12h30</span>
+            <span class="text-[10px] text-slate-500 font-mono">12:30 BRT</span>
+          </div>
+          <div class="text-sm font-bold text-white">Balanço do Almoço & CBOT</div>
+          <p class="text-[11px] text-slate-400">Chicago futuros (soja/milho), dólar intermediário, paridade da bomba (etanol x gasolina).</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-purple-400 font-bold">🌙 Edição 17h00</span>
+            <span class="text-[10px] text-slate-500 font-mono">17:00 BRT</span>
+          </div>
+          <div class="text-sm font-bold text-white">Fechamento Oficial B3 & Cepea</div>
+          <p class="text-[11px] text-slate-400">Arroba do boi, novilha, grãos, Ibovespa e cripto com o placar final do dia consolidado.</p>
+        </div>
+      </div>
+
+      <!-- Feedback Dinâmico da Revarredura -->
+      <div id="adminNewsRefreshMsg" class="hidden p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-xs text-emerald-300 flex items-center justify-between">
+        <span id="adminNewsRefreshMsgText">Atualizado com sucesso!</span>
+        <span class="text-[10px] text-slate-400 font-mono" id="adminNewsRefreshMsgTime"></span>
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 4.4. ANTIGRAVITY AI CONSOLE & BRIDGE REMOTO VIA CELULAR / NOTEBOOK -->
+    <!-- ======================================================== -->
+    <div id="sec-antigravity-bridge" class="dark-card rounded-2xl p-6 space-y-6 border border-violet-500/30 shadow-2xl shadow-violet-950/20">
+      
+      <!-- Cabeçalho do Console Antigravity -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div>
+          <div class="flex items-center space-x-2.5">
+            <span class="w-3 h-3 rounded-full bg-violet-400 animate-pulse"></span>
+            <h2 class="text-base sm:text-lg font-black text-white flex items-center space-x-2">
+              <span>⚡ Console Antigravity AI • Bridge Remoto (Mobile & Desktop)</span>
+            </h2>
+            <span class="text-[10px] font-mono font-bold bg-violet-500/20 text-violet-300 px-2 py-0.5 rounded-full border border-violet-500/30">
+              Controle Mestre
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
+            Permite ao Presidente Daniel enviar instruções em linguagem natural, disparar rotinas, auditar bancos de dados e comandar os agentes diretamente do <strong>celular</strong> ou de <strong>outro computador</strong> com este PC conectado.
+          </p>
+        </div>
+
+        <!-- Indicador de Status do Bridge em Tempo Real -->
+        <div class="flex items-center gap-3 shrink-0">
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span class="text-slate-300 font-medium">Bridge: <strong class="text-emerald-400">PC Principal Conectado</strong></span>
+          </div>
+          <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400 font-mono">
+            <span>🖥️ Acer-Win11 • Hetzner Active</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explicação das 2 Modalidades de Funcionamento -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
+          <div class="flex items-center gap-2 text-xs font-bold text-violet-300">
+            <span>🟢 Modo 1: Bridge com PC Ligado (Poder Total Antigravity)</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Quando este computador estiver ligado, o comando enviado pelo seu celular trafega com criptografia até este nó. O Antigravity edita código, faz commits no Git, cria novas telas e executa scripts locais e remotos automaticamente.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
+          <div class="flex items-center gap-2 text-xs font-bold text-sky-300">
+            <span>☁️ Modo 2: Nuvem 24/7 na Hetzner (Alice AI & FastAPI)</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Se este PC for desligado, o painel alterna transparentemente para a <strong>Alice AI</strong> rodando 24 horas por dia no servidor Hetzner, permitindo consultar métricas, redefinir senhas, bloquear IPs e supervisionar os clientes.
+          </p>
+        </div>
+      </div>
+
+      <!-- Terminal / Chat Interativo do Antigravity -->
+      <div class="rounded-xl bg-slate-950 border border-slate-800 overflow-hidden font-mono text-xs">
+        
+        <!-- Barra de Título do Terminal -->
+        <div class="bg-slate-900/90 px-4 py-2 border-b border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+            <span class="text-slate-300 font-bold ml-2">antigravity-session://coon-uberlandia</span>
+          </div>
+          <span class="text-slate-500">Latency: 14ms • TLS 1.3 Secure</span>
+        </div>
+
+        <!-- Janela de Mensagens e Saídas -->
+        <div id="antigravityConsoleLog" class="p-4 space-y-3 min-h-[220px] max-h-[350px] overflow-y-auto text-slate-300">
+          <div class="text-slate-500">// Sessão Antigravity Remote Bridge iniciada com sucesso.</div>
+          <div class="text-slate-500">// Aguardando comandos do Presidente Daniel...</div>
+          <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/80 space-y-1">
+            <div class="text-emerald-400 font-bold flex items-center gap-1.5">
+              <span>🤖 Antigravity AI:</span>
+              <span class="text-[10px] text-slate-500">Pronto para execução remota</span>
+            </div>
+            <div class="text-slate-300">
+              Presidente Daniel, você pode comandar alterações, pedir relatórios do OnMail, auditar a blindagem militar Fort Knox ou checar os dados do OnNews por aqui de qualquer lugar.
+            </div>
+          </div>
+        </div>
+
+        <!-- Caixa de Entrada de Comandos -->
+        <form onsubmit="handleAntigravityRemoteCommand(event)" class="p-3 bg-slate-900 border-t border-slate-800 flex gap-2">
+          <div class="relative flex-1">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-violet-400 font-bold">❯</span>
+            <input 
+              type="text" 
+              id="antigravityPromptInput" 
+              placeholder="Digite sua ordem para o Antigravity (ex: 'Status geral dos servidores', 'Auditar segurança', 'Quantos novos e-mails hoje?')..."
+              class="w-full pl-8 pr-4 py-2.5 bg-slate-950 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 text-xs focus:outline-none focus:border-violet-500"
+            >
+          </div>
+          <button 
+            type="submit" 
+            id="antigravitySendBtn"
+            class="px-5 py-2.5 bg-violet-600 hover:bg-violet-500 active:scale-95 text-white font-bold rounded-lg text-xs transition flex items-center gap-1.5 shrink-0 cursor-pointer"
+          >
+            <span>Executar</span>
+            <span>↵</span>
+          </button>
+        </form>
+
+      </div>
+
+      <!-- Atalhos de Comandos Rápidos -->
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Atalhos Rápidos:</span>
+        <button onclick="dispatchQuickAgCommand('Status dos Servidores & Uptime')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 hover:border-slate-600 transition">
+          🖥️ Status Servidores
+        </button>
+        <button onclick="dispatchQuickAgCommand('Auditoria de Segurança Fort Knox WAF')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 hover:border-slate-600 transition">
+          🛡️ Auditoria Fort Knox
+        </button>
+        <button onclick="dispatchQuickAgCommand('Relatório de Contas OnMail')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 hover:border-slate-600 transition">
+          ✉️ Relatório OnMail
+        </button>
+        <button onclick="dispatchQuickAgCommand('Cotações do Agro & Mercado OnNews')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 hover:border-slate-600 transition">
+          🌾 Cotações OnNews
+        </button>
+      </div>
+
     </div>
 
     <!-- ======================================================== -->
@@ -1628,6 +2316,59 @@
         <button type="button" id="btnAdminConfirmReload" onclick="executeAdminApiReload()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl transition flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-emerald-500/20">
           <i data-lucide="check" class="w-4 h-4"></i>
           <span>Confirmar e Carregar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: NOVA CONTA ONMAIL (ADMIN MASTER) -->
+  <!-- ======================================================== -->
+  <div id="modalNewOnMail" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-emerald-500/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center space-x-2">
+          <span class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+          </span>
+          <div>
+            <h3 class="text-sm font-bold text-white">Criar Nova Conta OnMail</h3>
+            <p class="text-[10px] text-slate-400">Ativação instantânea de e-mail corporativo</p>
+          </div>
+        </div>
+        <button onclick="closeNewOnMailModal()" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Nome Completo / Empresa:</label>
+          <input type="text" id="newOnMailName" placeholder="Ex: Dra. Juliana Rocha" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Endereço de E-mail Desejado:</label>
+          <input type="text" id="newOnMailAddress" placeholder="ex: juliana@onmail.br ou juliana@empresa.com.br" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-mono">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">WhatsApp para Alertas:</label>
+          <input type="text" id="newOnMailWhatsapp" placeholder="5511999990000" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-mono">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Plano Escolhido:</label>
+          <select id="newOnMailPlan" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-semibold">
+            <option value="start">OnMail Start (Gratuito - E-mail Pessoal sem Números)</option>
+            <option value="pro">OnMail Pro (R$ 49,90/mês ou R$ 29,90 anual - Até 5 Contas)</option>
+            <option value="business" selected>OnMail Business (R$ 99,90/mês ou R$ 59,90 anual - Domínio Incluso + 20 Contas)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-800">
+        <button onclick="closeNewOnMailModal()" class="px-3.5 py-2 text-slate-400 hover:text-white font-semibold">Cancelar</button>
+        <button onclick="saveNewOnMailAccount()" id="btnSaveOnMail" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-emerald-500/20">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          <span>Criar e Ativar Conta</span>
         </button>
       </div>
     </div>
@@ -2893,8 +3634,367 @@
 
         // 6. Consulta Gestão de Caixa & DRE Real do Arthur Montenegro (CFO)
         await fetchCashFlowData();
+
+        // 7. Consulta Métricas e Contas do OnMail
+        await fetchOnMailAdminData();
+
+        // 8. Executa Simulação de Tráfego Pago da Presidência
+        await runTrafficSimulation(currentTrafficBudget);
       } catch (err) {
         console.warn("Aviso: Backend local / Hetzner não respondeu em tempo real. Exibindo dados locais:", err);
+      }
+    }
+
+    // ========================================================
+    // GESTÃO ONMAIL & DOMÍNIOS CORPORATIVOS
+    // ========================================================
+    let onmailAccountsData = [];
+
+    async function fetchOnMailAdminData() {
+      const masterKey = getMasterKey();
+      try {
+        const [resMetrics, resAccs] = await Promise.all([
+          fetch('/api/admin/onmail/metrics', { headers: { 'X-Coon-Master-Key': masterKey } }),
+          fetch('/api/onmail/accounts')
+        ]);
+
+        if (resMetrics.ok) {
+          const mData = await resMetrics.json();
+          const m = mData.metrics || {};
+          if (document.getElementById("onmailKpiTotal")) document.getElementById("onmailKpiTotal").innerText = `${m.total_accounts || 0} contas`;
+          if (document.getElementById("onmailKpiActive")) document.getElementById("onmailKpiActive").innerText = `${m.active_accounts || 0} ativas no sistema`;
+          if (document.getElementById("onmailKpiDist")) {
+            document.getElementById("onmailKpiDist").innerHTML = `
+              <span class="text-emerald-400 font-bold">${m.start_count || 0} Start</span> • 
+              <span class="text-sky-400 font-bold">${m.pro_count || 0} Pro</span> • 
+              <span class="text-purple-400 font-bold">${m.business_count || 0} Business</span>
+            `;
+          }
+          if (document.getElementById("onmailKpiDomains")) document.getElementById("onmailKpiDomains").innerText = `${m.managed_domains_count || 0} domínios`;
+          if (document.getElementById("onmailKpiMrr")) document.getElementById("onmailKpiMrr").innerText = m.mrr_formatted || "R$ 0,00";
+          if (document.getElementById("onmailKpiArr")) document.getElementById("onmailKpiArr").innerText = `${m.arr_formatted || "R$ 0,00"} / ano projetado`;
+
+          if (document.getElementById("cardOnMailTotalAccounts")) document.getElementById("cardOnMailTotalAccounts").innerText = `${m.total_accounts || 0} contas`;
+          if (document.getElementById("cardOnMailMrr")) document.getElementById("cardOnMailMrr").innerText = m.mrr_formatted || "R$ 0,00";
+
+          renderOnMailDomains(m.managed_domains || []);
+        }
+
+        if (resAccs.ok) {
+          const aData = await resAccs.json();
+          onmailAccountsData = aData.accounts || [];
+          renderOnMailAccountsTable(onmailAccountsData);
+        }
+      } catch (err) {
+        console.warn("Erro ao buscar dados do OnMail no admin:", err);
+      }
+    }
+
+    function renderOnMailAccountsTable(list) {
+      const tbody = document.getElementById("onmailTableBody");
+      if (!tbody) return;
+
+      if (!list || list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-500 text-xs">Nenhuma conta OnMail registrada.</td></tr>`;
+        return;
+      }
+
+      const planBadges = {
+        'start': '<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold">Start (Grátis)</span>',
+        'pro': '<span class="px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 text-[10px] font-bold">Pro (R$ 49,90)</span>',
+        'business': '<span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[10px] font-bold">Business + Domínio</span>'
+      };
+
+      tbody.innerHTML = list.map(a => {
+        const isBlocked = a.status === 'blocked';
+        const vips = Array.isArray(a.vip_senders) && a.vip_senders.length > 0 ? a.vip_senders.join(', ') : 'Resumo das 18h';
+        return `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="py-2.5 px-3 font-semibold text-white">${a.name}</td>
+            <td class="py-2.5 px-3 font-mono text-emerald-400 font-semibold">${a.clean_address || a.email}</td>
+            <td class="py-2.5 px-3 font-mono text-slate-400">${a.whatsapp || '—'}</td>
+            <td class="py-2.5 px-3">${planBadges[a.plan] || a.plan}</td>
+            <td class="py-2.5 px-3 text-slate-400 text-[11px] truncate max-w-xs" title="${vips}">${vips}</td>
+            <td class="py-2.5 px-3">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${!isBlocked ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">
+                ${!isBlocked ? 'Ativo 🟢' : 'Bloqueado 🔴'}
+              </span>
+            </td>
+            <td class="py-2.5 px-3 text-right">
+              <button onclick="toggleOnMailAccountStatus(${a.id}, '${isBlocked ? 'active' : 'blocked'}')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer ${!isBlocked ? 'bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-700' : 'bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-700'}">
+                ${!isBlocked ? 'Bloquear' : 'Liberar'}
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function renderOnMailDomains(domains) {
+      const container = document.getElementById("onmailDomainsListContainer");
+      if (!container) return;
+      container.innerHTML = domains.map(d => `
+        <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+          <div class="flex items-center space-x-1.5 font-bold text-white truncate" title="${d}">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span class="truncate">${d}</span>
+          </div>
+          <div class="text-[9px] text-slate-400 font-mono">
+            MX • SPF • DKIM • SSL
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterOnMailTable(query) {
+      const q = query.toLowerCase().trim();
+      const filtered = onmailAccountsData.filter(a => 
+        (a.name && a.name.toLowerCase().includes(q)) || 
+        (a.email && a.email.toLowerCase().includes(q)) ||
+        (a.clean_address && a.clean_address.toLowerCase().includes(q)) ||
+        (a.whatsapp && a.whatsapp.includes(q)) ||
+        (a.plan && a.plan.toLowerCase().includes(q))
+      );
+      renderOnMailAccountsTable(filtered);
+    }
+
+    async function toggleOnMailAccountStatus(id, newStatus) {
+      const masterKey = getMasterKey();
+      if (!confirm(`Deseja alterar o status desta conta OnMail para: ${newStatus.toUpperCase()}?`)) return;
+      try {
+        const res = await fetch(`/api/admin/onmail/accounts/${id}/toggle-status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Coon-Master-Key': masterKey },
+          body: JSON.stringify({ status: newStatus })
+        });
+        if (res.ok) {
+          await fetchOnMailAdminData();
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    function openNewOnMailModal() {
+      const m = document.getElementById("modalNewOnMail");
+      if (m) {
+        m.classList.remove("hidden");
+        m.classList.add("flex");
+        lucide.createIcons();
+      }
+    }
+
+    function closeNewOnMailModal() {
+      const m = document.getElementById("modalNewOnMail");
+      if (m) {
+        m.classList.add("hidden");
+        m.classList.remove("flex");
+      }
+    }
+
+    async function saveNewOnMailAccount() {
+      const name = document.getElementById("newOnMailName")?.value.trim();
+      const address = document.getElementById("newOnMailAddress")?.value.trim().toLowerCase();
+      const whatsapp = document.getElementById("newOnMailWhatsapp")?.value.trim();
+      const plan = document.getElementById("newOnMailPlan")?.value || 'start';
+
+      if (!name || !address) {
+        alert("Preencha o nome e o endereço de e-mail.");
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/onmail/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email: address,
+            clean_address: address,
+            whatsapp: whatsapp || '5511999990000',
+            plan,
+            vip_senders: []
+          })
+        });
+        if (res.ok) {
+          alert(`✅ Conta OnMail ativada com sucesso para ${name} (${address})!`);
+          closeNewOnMailModal();
+          await fetchOnMailAdminData();
+        }
+      } catch (err) {
+        alert("Erro ao cadastrar conta OnMail.");
+      }
+    }
+
+    // ========================================================
+    // SIMULADOR DE TRÁFEGO PAGO & CAPTAÇÃO (PRESIDÊNCIA)
+    // ========================================================
+    let currentTrafficBudget = 1500;
+
+    function setTrafficPreset(val) {
+      const input = document.getElementById("inputTrafficBudget");
+      if (input) input.value = val;
+      runTrafficSimulation(val);
+    }
+
+    async function runTrafficSimulation(budget) {
+      const val = parseFloat(budget) || 1500;
+      currentTrafficBudget = val;
+      const cpc = parseFloat(document.getElementById("selectTrafficCpc")?.value || '3.20');
+
+      try {
+        const res = await fetch('/api/admin/traffic/simulate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ budget: val, avg_cpc: cpc })
+        });
+
+        if (res.ok) {
+          const sim = await res.json();
+          if (document.getElementById("simClicks")) document.getElementById("simClicks").innerText = `${sim.estimated_clicks} cliques`;
+          if (document.getElementById("simFreeLeads")) document.getElementById("simFreeLeads").innerText = `${sim.free_leads} contas`;
+          if (document.getElementById("simPayingCustomers")) document.getElementById("simPayingCustomers").innerText = `${sim.total_paying_customers} clientes`;
+          if (document.getElementById("simSalesDetail")) document.getElementById("simSalesDetail").innerText = `${sim.pro_annual_sales} Pro + ${sim.business_annual_sales} Business`;
+          if (document.getElementById("simRevenue")) document.getElementById("simRevenue").innerText = sim.total_revenue_formatted;
+          if (document.getElementById("simNetProfit")) {
+            document.getElementById("simNetProfit").innerText = `${sim.net_profit >= 0 ? '+' : ''} ${sim.net_profit_formatted}`;
+            document.getElementById("simNetProfit").className = `text-lg font-black font-mono ${sim.net_profit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+          }
+          if (document.getElementById("simCacLtv")) document.getElementById("simCacLtv").innerText = `CAC ${sim.cac_formatted} | LTV ${sim.ltv_formatted}`;
+          if (document.getElementById("simLtvRatio")) document.getElementById("simLtvRatio").innerText = `Relação: ${sim.ltv_to_cac_ratio}x (Excelente)`;
+          if (document.getElementById("simRoiBadge")) document.getElementById("simRoiBadge").innerText = `ROI: ${sim.roi_percent}%`;
+        }
+      } catch (e) {
+        console.warn("Erro no simulador de tráfego:", e);
+      }
+    }
+
+    async function injectTrafficExpenseIntoCashFlow() {
+      const masterKey = getMasterKey();
+      if (!masterKey) {
+        alert("Sessão master expirada.");
+        return;
+      }
+
+      if (!confirm(`Deseja lançar R$ ${currentTrafficBudget.toFixed(2)} de verba para Campanha de Tráfego Pago do OnMail no livro caixa da holding?`)) return;
+
+      try {
+        const res = await fetch('/api/admin/financial/transactions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Coon-Master-Key': masterKey
+          },
+          body: JSON.stringify({
+            type: 'expense',
+            category: 'marketing_ads',
+            amount: currentTrafficBudget,
+            description: `Investimento Piloto em Tráfego Pago OnMail (Google & Meta Ads - 40% OFF até 30 de Outubro)`,
+            source: 'manual_admin'
+          })
+        });
+
+        if (res.ok) {
+          alert(`✅ Verba de R$ ${currentTrafficBudget.toFixed(2)} lançada com sucesso no caixa do Arthur Montenegro!`);
+          await fetchCashFlowData();
+        }
+    // ========================================================
+    // COMANDO REMOTO ANTIGRAVITY (MOBILE & DESKTOP BRIDGE)
+    // ========================================================
+    async function handleAntigravityRemoteCommand(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById("antigravityPromptInput");
+      const btn = document.getElementById("antigravitySendBtn");
+      const consoleLog = document.getElementById("antigravityConsoleLog");
+      const cmd = input.value.trim();
+      if (!cmd) return;
+
+      input.value = "";
+      btn.disabled = true;
+      btn.innerHTML = `<span>Processando...</span>`;
+
+      // Exibe a mensagem do usuário no console
+      const userBubble = document.createElement("div");
+      userBubble.className = "p-2.5 rounded-lg bg-violet-950/40 border border-violet-800/60 space-y-1";
+      userBubble.innerHTML = `
+        <div class="text-violet-300 font-bold flex items-center justify-between">
+          <span>👑 Daniel (Presidente):</span>
+          <span class="text-[10px] text-slate-500">${new Date().toLocaleTimeString()}</span>
+        </div>
+        <div class="text-white">${escapeHtml(cmd)}</div>
+      `;
+      consoleLog.appendChild(userBubble);
+      consoleLog.scrollTop = consoleLog.scrollHeight;
+
+      try {
+        const masterKey = getMasterKey();
+        const resp = await fetch("/api/admin/antigravity/execute", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Coon-Master-Key": masterKey || "coon2026master"
+          },
+          body: JSON.stringify({ command: cmd })
+        });
+        const data = await resp.json();
+
+        const agBubble = document.createElement("div");
+        agBubble.className = "p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 space-y-1 animate-in fade-in duration-200";
+        agBubble.innerHTML = `
+          <div class="text-emerald-400 font-bold flex items-center justify-between">
+            <span>⚡ Antigravity AI Engine:</span>
+            <span class="text-[10px] text-slate-500">${data.mode || 'Bridge Remoto'} • ${new Date().toLocaleTimeString()}</span>
+          </div>
+          <div class="text-slate-200 leading-relaxed whitespace-pre-wrap">${data.response || data.message || 'Comando processado com sucesso.'}</div>
+        `;
+        consoleLog.appendChild(agBubble);
+        consoleLog.scrollTop = consoleLog.scrollHeight;
+      } catch (err) {
+        const errBubble = document.createElement("div");
+        errBubble.className = "p-2.5 rounded-lg bg-rose-950/40 border border-rose-800/60 space-y-1 text-rose-300";
+        errBubble.innerHTML = `<div>Erro ao conectar ao bridge remoto: ${err.message}. Verifique a conexão com o servidor.</div>`;
+        consoleLog.appendChild(errBubble);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Executar</span><span>↵</span>`;
+      }
+    }
+
+    function dispatchQuickAgCommand(text) {
+      document.getElementById("antigravityPromptInput").value = text;
+      handleAntigravityRemoteCommand();
+    }
+
+    async function triggerAdminNewsRefresh() {
+      const btn = document.getElementById("btnAdminNewsRefresh");
+      const msgBox = document.getElementById("adminNewsRefreshMsg");
+      const msgText = document.getElementById("adminNewsRefreshMsgText");
+      const msgTime = document.getElementById("adminNewsRefreshMsgTime");
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="animate-spin text-sm">🔄</span><span>Revarrendo Cotações & Feeds...</span>`;
+      }
+
+      try {
+        const resp = await fetch("/api/admin/news/refresh", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" }
+        });
+        const data = await resp.json();
+        if (msgBox) {
+          msgBox.classList.remove("hidden");
+          if (msgText) msgText.textContent = `✅ ${data.message || 'OnNews atualizado com sucesso!'}`;
+          if (msgTime) msgTime.textContent = data.updated_at || new Date().toLocaleTimeString();
+        }
+      } catch (err) {
+        alert("Erro ao revarrer OnNews: " + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<span class="text-sm">🔄</span><span>Forçar Atualização Agora (Celular/APK)</span>`;
+        }
       }
     }
 
@@ -2916,8 +4016,11 @@
       renderFinancialTable(transactionsData);
       initCharts();
       await fetchAdminData();
+      await fetchOnMailAdminData();
+      await runTrafficSimulation(1500);
     });
   </script>
   <script src="/static/coon-bot.js"></script>
+  <script src="/coon-mobile-install.js"></script>
 </body>
 </html>

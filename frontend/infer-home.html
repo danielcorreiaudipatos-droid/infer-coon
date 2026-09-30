@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infer.coon — A Plataforma de Engenharia de Avaliações que Revolucionou a ABNT NBR 14.653 | Coon</title>
+  <meta name="description" content="Software oficial de Engenharia de Avaliações da Coon Participações. Regressão linear múltipla ABNT NBR 14.653, Trava Anti-Alucinação Inviolável, Otimizador Grau III em 1 clique, Vistoria Satelital com GPS e Laudos em Word e PDF.">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            google: {
+              blue: '#1a73e8',
+              hover: '#1557b0',
+              gray: '#5f6368',
+              bgLight: '#f8f9fa',
+              borderLight: '#dadce0',
+              textDark: '#202124'
+            },
+            coon: {
+              emerald: '#10b981',
+              dark: '#0f172a',
+              darker: '#0B0F19',
+              gold: '#f59e0b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Script Cor Clara por Padrão & Opção de Escura (Zero FOUC) -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('coon_theme');
+      if (saved === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Google+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+    
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 70px;
+    }
+
+    body {
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+    h1, h2, h3, .font-heading {
+      font-family: 'Google Sans', 'Plus Jakarta Sans', "Segoe UI", sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Sub-navegação Sticky Inteligente Estilo Microsoft 365 */
+    #msStickySubNav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, background-color 0.2s ease, padding 0.2s ease;
+      will-change: transform;
+    }
+    #msStickySubNav.nav-hidden {
+      transform: translateY(-100%);
+    }
+    #msStickySubNav.nav-visible {
+      transform: translateY(0) !important;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      background-color: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(14px);
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+    .dark #msStickySubNav.nav-visible {
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+      background-color: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(14px);
+    }
+    #msStickySubNav.scrolled {
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+    .dark #msStickySubNav.scrolled {
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    }
+
+    .ms-tab-link {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.5rem 0.875rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #4b5563;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+    .dark .ms-tab-link {
+      color: #9ca3af;
+    }
+    .ms-tab-link:hover {
+      color: #059669;
+    }
+    .dark .ms-tab-link:hover {
+      color: #34d399;
+    }
+    .ms-tab-link.active {
+      color: #059669;
+      font-weight: 700;
+      border-bottom-color: #059669;
+    }
+    .dark .ms-tab-link.active {
+      color: #34d399;
+      border-bottom-color: #34d399;
+    }
+
+    /* Scrollbar sutil */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #dadce0; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #374151; }
+
+    /* Logotipo Infer com Ponto Coon Pulsante */
+    .infer-logo {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .infer-dot {
+      color: #10b981;
+      display: inline-block;
+      animation: pulseDot 2.5s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.2); }
+    }
+
+    /* Carimbo Oficial Coon */
+    @keyframes stampSlam {
+      0% { opacity: 0; transform: scale(2.8) rotate(-32deg); filter: blur(5px); }
+      50% { opacity: 0.95; transform: scale(0.92) rotate(-8deg); filter: blur(0); }
+      75% { transform: scale(1.08) rotate(-11deg); box-shadow: 0 0 25px rgba(16, 185, 129, 0.6); }
+      100% { opacity: 0.96; transform: scale(1) rotate(-9.5deg); box-shadow: 0 0 0 transparent; }
+    }
+
+    .coon-stamp-launch {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem 0.75rem;
+      border: 3px double #059669;
+      border-radius: 8px;
+      color: #059669;
+      background: rgba(236, 253, 245, 0.92);
+      backdrop-filter: blur(6px);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transform: rotate(-9.5deg);
+      transform-origin: center center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.2);
+    }
+    .dark .coon-stamp-launch {
+      color: #34d399;
+      border-color: #34d399;
+      background: rgba(6, 78, 59, 0.85);
+      box-shadow: 0 4px 16px rgba(52, 211, 153, 0.25);
+    }
+    .coon-stamp-launch:hover {
+      transform: scale(1.08) rotate(-6deg);
+      border-color: #047857;
+      box-shadow: 0 8px 24px -2px rgba(5, 150, 105, 0.45);
+    }
+    .coon-stamp-inner {
+      border: 1.5px dashed #059669;
+      border-radius: 5px;
+      padding: 3px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(209, 250, 229, 0.3);
+    }
+    .dark .coon-stamp-inner {
+      border-color: #34d399;
+      background: rgba(6, 95, 70, 0.3);
+    }
+
+    /* Linhas da Tabela de Amostras */
+    .sample-row {
+      transition: background-color 0.15s ease;
+    }
+    .sample-row:hover {
+      background-color: #f0fdf4;
+    }
+    .dark .sample-row:hover {
+      background-color: #064e3b33;
+    }
+
+    /* Efeito de Vidro Fosco */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .dark .glass-card {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+    }
+  </style>
+</head>
+<body class="bg-white dark:bg-[#0B0F19] text-[#202124] dark:text-[#e8eaed] min-h-screen flex flex-col transition-colors duration-200">
+
+  <!-- ======================================================== -->
+  <!-- 1. BARRA SUPERIOR GLOBAL INSTITUCIONAL COON -->
+  <!-- ======================================================== -->
+  <div class="bg-gray-50/90 dark:bg-[#070a12] border-b border-gray-200/80 dark:border-gray-800/80 px-4 lg:px-8 py-1.5 text-[11px] text-gray-500 dark:text-gray-400">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <a href="/portal" class="hover:text-gray-900 dark:hover:text-white transition flex items-center gap-1 font-medium">
+          <span>← Voltar ao Portal Coon</span>
+        </a>
+        <span class="text-gray-300 dark:text-gray-700">|</span>
+        <span class="hidden sm:inline font-semibold text-emerald-700 dark:text-emerald-400">★ A 1ª plataforma de Engenharia de Avaliações com Trava Anti-Alucinação Inviolável</span>
+        <span class="hidden sm:inline text-gray-400 dark:text-gray-600">• Coon Participações</span>
+      </div>
+      <div class="flex items-center space-x-3 font-medium">
+        <a href="/news" class="hover:text-gray-900 dark:hover:text-white transition flex items-center gap-1 text-slate-700 dark:text-slate-300">
+          <span class="text-amber-500 text-xs">📰</span>
+          <span>Notícias & Agro</span>
+          <span class="text-[9px] bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold px-1.5 py-0.2 rounded-full uppercase">Grátis</span>
+        </a>
+        <span class="text-gray-300 dark:text-gray-700">•</span>
+        <a href="/onmail" class="hover:text-gray-900 dark:hover:text-white transition">OnMail</a>
+        <span class="text-gray-300 dark:text-gray-700">•</span>
+        <a href="/studio" class="hover:text-gray-900 dark:hover:text-white transition">Studio Coon</a>
+        <span class="text-gray-300 dark:text-gray-700">•</span>
+        <a href="/inferencia/" class="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">Bancada NBR</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 2. SUB-NAVEGAÇÃO STICKY ESTILO MICROSOFT 365 -->
+  <!-- ======================================================== -->
+  <header id="msStickySubNav" class="sticky top-0 z-40 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-md border-b border-[#dadce0] dark:border-gray-800 px-4 lg:px-8 py-3 transition-all duration-200">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+      
+      <!-- Marca Infer. (Coon) -->
+      <a href="/infer" class="flex items-baseline space-x-1.5 group cursor-pointer shrink-0" title="Infer.coon - Engenharia de Avaliações">
+        <span class="text-2xl infer-logo text-gray-900 dark:text-white tracking-tight">infer<span class="infer-dot">.</span></span>
+        <span class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide uppercase">by Coon</span>
+      </a>
+
+      <!-- Abas de Navegação -->
+      <nav class="hidden lg:flex items-center space-x-1 overflow-x-auto no-scrollbar">
+        <button onclick="scrollToTarget('hero-section')" id="tabNavInicio" class="ms-tab-link active">
+          <span>Início</span>
+        </button>
+        <button onclick="scrollToTarget('trava-pericial')" id="tabNavTrava" class="ms-tab-link">
+          <span>🔒 Trava Inviolável</span>
+        </button>
+        <button onclick="scrollToTarget('simulador-nbr')" id="tabNavSimulador" class="ms-tab-link">
+          <span>📊 Simulador NBR</span>
+        </button>
+        <button onclick="scrollToTarget('pilares-tecnicos')" id="tabNavPilares" class="ms-tab-link">
+          <span>Pilares Técnicos</span>
+        </button>
+        <button onclick="scrollToTarget('bancada-9-abas')" id="tabNavBancada" class="ms-tab-link">
+          <span>Bancada (9 Abas)</span>
+        </button>
+        <button onclick="scrollToTarget('planos-precos')" id="tabNavPlanos" class="ms-tab-link">
+          <span>Planos</span>
+        </button>
+        <button onclick="scrollToTarget('faq-pericial')" id="tabNavFAQ" class="ms-tab-link">
+          <span>FAQ</span>
+        </button>
+      </nav>
+
+      <!-- Ações Rápidas, Tema e CTA Master -->
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        
+        <!-- Botão Baixar para o Celular / QR Code -->
+        <button 
+          onclick="openInferMobileModal()" 
+          class="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-750 transition cursor-pointer shadow-xs" 
+          title="Baixar Infer.coon para Celular (Vistoria Campo GPS)"
+        >
+          <span class="text-emerald-500">📱</span>
+          <span class="text-[11px] font-semibold hidden md:inline">Vistoria Mobile</span>
+        </button>
+
+        <!-- Alternador de Tema Claro/Escuro -->
+        <button 
+          id="themeToggleBtn" 
+          onclick="toggleTheme()" 
+          class="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-full border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-750 transition cursor-pointer shadow-xs" 
+          title="Alternar entre Cor Clara e Opção Escura"
+        >
+          <svg id="moonIcon" class="w-3.5 h-3.5 block dark:hidden text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg id="sunIcon" class="w-3.5 h-3.5 hidden dark:block text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9h-1m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <span class="text-[11px] font-medium hidden sm:inline">
+            <span class="dark:hidden">Escuro</span>
+            <span class="hidden dark:inline">Claro</span>
+          </span>
+        </button>
+
+        <!-- CTA Principal: Abrir Bancada de Avaliação -->
+        <a 
+          href="/inferencia/" 
+          class="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white text-xs font-bold px-3.5 sm:px-4 py-2 rounded-lg transition shadow-md flex items-center gap-1.5 cursor-pointer hover:shadow-emerald-500/20"
+        >
+          <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+          <span>Acessar Bancada NBR</span>
+        </a>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- 3. HERO SECTION REFINADO NO PADRÃO MICROSOFT 365 / COON -->
+  <!-- ======================================================== -->
+  <section id="hero-section" class="pt-8 sm:pt-12 pb-10 px-4 max-w-7xl mx-auto">
+    <div class="max-w-4xl mx-auto text-center">
+      
+      <!-- Carimbo Oficial de Lançamento -->
+      <div class="mb-5 flex justify-center">
+        <div onclick="triggerLaunchStampToast()" class="coon-stamp-launch" title="Clique para ver os benefícios da condição oficial">
+          <div class="coon-stamp-inner">
+            <span class="text-[9px] font-extrabold tracking-widest text-emerald-800 dark:text-emerald-200">CONDIÇÃO ESPECIAL DE LANÇAMENTO</span>
+            <span class="text-xs font-black tracking-wider text-emerald-700 dark:text-emerald-300">GRAU III ABNT NBR 14.653 • 40% OFF</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Headline Master -->
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-[1.15] font-heading">
+        A plataforma de Engenharia de Avaliações que revolucionou a ABNT NBR 14.653.
+      </h1>
+      
+      <!-- Subtítulo Enfatizando a Regra de Ouro Inviolável -->
+      <p class="mt-4 text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+        Precisão estatística Grau III com 1 clique, vistoria com GPS satelital georreferenciado e a inédita <strong class="text-emerald-600 dark:text-emerald-400 font-bold">Trava Anti-Alucinação</strong>: proibição terminante de dados inventados. Toda amostra exige evidência documental comprobatória, garantindo blindagem judicial irrestrita.
+      </p>
+
+      <!-- Grade de Selos de Confiança Pericial -->
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/80 text-emerald-800 dark:text-emerald-300 font-semibold shadow-xs">
+          🔒 Trava Anti-Alucinação Ativa (Art. 158 CPC)
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/80 text-blue-800 dark:text-blue-300 font-semibold shadow-xs">
+          📐 Otimizador Grau III NBR em 1 Clique
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/80 text-amber-800 dark:text-amber-300 font-semibold shadow-xs">
+          🛰️ Vistoria com GPS Satelital
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-semibold shadow-xs">
+          🛡️ Fort Knox WAF Militar
+        </span>
+      </div>
+
+      <!-- Botões de Ação Imediata -->
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+        <a 
+          href="/inferencia/" 
+          class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center justify-center gap-2"
+        >
+          <span class="text-base">⚖️</span>
+          <span>Abrir Bancada Completa (9 Abas)</span>
+        </a>
+        <button 
+          onclick="scrollToTarget('simulador-nbr')" 
+          class="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 text-gray-800 dark:text-gray-200 font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2"
+        >
+          <span class="text-base">📊</span>
+          <span>Testar Simulador NBR ao Vivo</span>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 4. SEÇÃO "A TRAVA INVIOLÁVEL": A REGRA DE OURO COON -->
+  <!-- ======================================================== -->
+  <section id="trava-pericial" class="py-12 bg-gray-50/70 dark:bg-[#070a12] border-y border-gray-200 dark:border-gray-800/80 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="bg-white dark:bg-gray-900 border border-emerald-500/30 rounded-2xl p-6 sm:p-8 shadow-xl">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          <div class="max-w-2xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-xs font-black uppercase tracking-wider mb-3">
+              <span>Diretriz Suprema de Compliance</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white font-heading">
+              A Trava Inviolável: Por que criamos o sistema mais seguro do Brasil?
+            </h2>
+            <p class="mt-3 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+              O Artigo 158 do Código de Processo Civil e as diretrizes do IBAPE e ABNT determinam que o perito responde civil e penalmente pela veracidade dos dados do laudo. Em avaliações periciais, <strong>inventar dados ou usar IA para deduzir preços sem prova é estritamente proibido</strong>.
+            </p>
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+              No <strong>Infer.coon</strong>, toda amostra precisa obrigatoriamente referenciar seu documento comprobatório (Matrícula, Cartório, Folha e Trecho). Caso contrário, a trava de conformidade pericial bloqueia a emissão final até a validação presencial do perito.
+            </p>
+          </div>
+          <div class="w-full lg:w-auto shrink-0 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 rounded-xl p-5 text-center min-w-[280px]">
+            <div class="text-3xl mb-1">🛡️</div>
+            <div class="text-sm font-black text-emerald-900 dark:text-emerald-200">100% AUDITÁVEL EM JUÍZO</div>
+            <div class="text-xs text-emerald-700 dark:text-emerald-400 mt-1">Zero Risco de Impugnação Pericial</div>
+            <div class="mt-4 pt-4 border-t border-emerald-200 dark:border-emerald-800/60 text-[11px] text-gray-600 dark:text-gray-300">
+              Validado para perícias em Varas Cíveis, Fazenda Pública, Desapropriações e Bancos (CEF/BB).
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 5. O SIMULADOR NBR 14.653 INTERATIVO AO VIVO -->
+  <!-- ======================================================== -->
+  <section id="simulador-nbr" class="py-14 px-4 max-w-7xl mx-auto">
+    <div class="max-w-4xl mx-auto text-center mb-8">
+      <div class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Demonstração Estatística em Tempo Real</div>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-1 font-heading">
+        Simulador de Regressão Linear Múltipla NBR 14.653
+      </h2>
+      <p class="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-300">
+        Experimente abaixo o motor matemático. Altere as características do imóvel avaliando e veja o modelo calcular instantaneamente os parâmetros de regressão, $R^2$, significância e o enquadramento de Grau de Precisão.
+      </p>
+    </div>
+
+    <!-- Container do Simulador -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- Coluna da Esquerda: Tabela de Amostras de Mercado (6 Amostras Reais com Prova Documental) -->
+      <div class="lg:col-span-7 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-600 dark:text-emerald-400 font-bold text-sm">📋 Amostras de Mercado Coletadas</span>
+            <span class="text-[10px] bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold px-2 py-0.5 rounded-full">6 Amostras Auditadas</span>
+          </div>
+          <span class="text-[11px] text-gray-500 dark:text-gray-400">Região Homogênea</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50">
+                <th class="py-2 px-2.5 font-semibold">Id</th>
+                <th class="py-2 px-2.5 font-semibold">Área (m²)</th>
+                <th class="py-2 px-2.5 font-semibold">Quartos</th>
+                <th class="py-2 px-2.5 font-semibold">Vagas</th>
+                <th class="py-2 px-2.5 font-semibold">Dist. Polo (km)</th>
+                <th class="py-2 px-2.5 font-semibold">Preço Real (R$)</th>
+                <th class="py-2 px-2.5 font-semibold text-emerald-600 dark:text-emerald-400">Comprovação</th>
+              </tr>
+            </thead>
+            <tbody id="samplesTableBody" class="divide-y divide-gray-100 dark:divide-gray-800/50">
+              <tr class="sample-row">
+                <td class="py-2 px-2.5 font-bold text-gray-700 dark:text-gray-300">#01</td>
+                <td class="py-2 px-2.5">95 m²</td>
+                <td class="py-2 px-2.5">3</td>
+                <td class="py-2 px-2.5">2</td>
+                <td class="py-2 px-2.5">0.8 km</td>
+                <td class="py-2 px-2.5 font-semibold text-gray-900 dark:text-white">R$ 680.000</td>
+                <td class="py-2 px-2.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">✓ Matrícula 14.205</td>
+              </tr>
+              <tr class="sample-row">
+                <td class="py-2 px-2.5 font-bold text-gray-700 dark:text-gray-300">#02</td>
+                <td class="py-2 px-2.5">110 m²</td>
+                <td class="py-2 px-2.5">3</td>
+                <td class="py-2 px-2.5">2</td>
+                <td class="py-2 px-2.5">1.1 km</td>
+                <td class="py-2 px-2.5 font-semibold text-gray-900 dark:text-white">R$ 790.000</td>
+                <td class="py-2 px-2.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">✓ Matrícula 19.882</td>
+              </tr>
+              <tr class="sample-row">
+                <td class="py-2 px-2.5 font-bold text-gray-700 dark:text-gray-300">#03</td>
+                <td class="py-2 px-2.5">135 m²</td>
+                <td class="py-2 px-2.5">4</td>
+                <td class="py-2 px-2.5">3</td>
+                <td class="py-2 px-2.5">1.4 km</td>
+                <td class="py-2 px-2.5 font-semibold text-gray-900 dark:text-white">R$ 980.000</td>
+                <td class="py-2 px-2.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">✓ Escritura L-84</td>
+              </tr>
+              <tr class="sample-row">
+                <td class="py-2 px-2.5 font-bold text-gray-700 dark:text-gray-300">#04</td>
+                <td class="py-2 px-2.5">80 m²</td>
+                <td class="py-2 px-2.5">2</td>
+                <td class="py-2 px-2.5">1</td>
+                <td class="py-2 px-2.5">0.5 km</td>
+                <td class="py-2 px-2.5 font-semibold text-gray-900 dark:text-white">R$ 560.000</td>
+                <td class="py-2 px-2.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">✓ Matrícula 22.110</td>
+              </tr>
+              <tr class="sample-row">
+                <td class="py-2 px-2.5 font-bold text-gray-700 dark:text-gray-300">#05</td>
+                <td class="py-2 px-2.5">150 m²</td>
+                <td class="py-2 px-2.5">4</td>
+                <td class="py-2 px-2.5">3</td>
+                <td class="py-2 px-2.5">2.0 km</td>
+                <td class="py-2 px-2.5 font-semibold text-gray-900 dark:text-white">R$ 1.050.000</td>
+                <td class="py-2 px-2.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">✓ R-4/33.201</td>
+              </tr>
+              <tr class="sample-row">
+                <td class="py-2 px-2.5 font-bold text-gray-700 dark:text-gray-300">#06</td>
+                <td class="py-2 px-2.5">120 m²</td>
+                <td class="py-2 px-2.5">3</td>
+                <td class="py-2 px-2.5">2</td>
+                <td class="py-2 px-2.5">1.0 km</td>
+                <td class="py-2 px-2.5 font-semibold text-gray-900 dark:text-white">R$ 860.000</td>
+                <td class="py-2 px-2.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">✓ Matrícula 17.502</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Painel de Inputs do Imóvel Avaliando -->
+        <div class="mt-5 pt-4 border-t border-gray-200 dark:border-gray-800">
+          <div class="font-bold text-xs uppercase text-gray-800 dark:text-gray-200 mb-3 flex items-center justify-between">
+            <span>🎯 Imóvel Avaliando (Altere para Simular)</span>
+            <span class="text-[11px] text-emerald-600 dark:text-emerald-400">Reatividade Instantânea</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-[11px] text-gray-500 dark:text-gray-400 mb-1">Área Útil (m²)</label>
+              <input type="number" id="simArea" value="115" min="50" max="250" oninput="runLiveRegressionSimulation()" class="w-full px-2.5 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs font-semibold text-gray-900 dark:text-white focus:outline-emerald-500">
+            </div>
+            <div>
+              <label class="block text-[11px] text-gray-500 dark:text-gray-400 mb-1">Dormitórios</label>
+              <input type="number" id="simQuartos" value="3" min="1" max="5" oninput="runLiveRegressionSimulation()" class="w-full px-2.5 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs font-semibold text-gray-900 dark:text-white focus:outline-emerald-500">
+            </div>
+            <div>
+              <label class="block text-[11px] text-gray-500 dark:text-gray-400 mb-1">Vagas Garagem</label>
+              <input type="number" id="simVagas" value="2" min="1" max="4" oninput="runLiveRegressionSimulation()" class="w-full px-2.5 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs font-semibold text-gray-900 dark:text-white focus:outline-emerald-500">
+            </div>
+            <div>
+              <label class="block text-[11px] text-gray-500 dark:text-gray-400 mb-1">Dist. Polo (km)</label>
+              <input type="number" id="simDist" value="1.0" step="0.1" min="0.1" max="5.0" oninput="runLiveRegressionSimulation()" class="w-full px-2.5 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs font-semibold text-gray-900 dark:text-white focus:outline-emerald-500">
+            </div>
+          </div>
+
+          <div class="mt-4 flex items-center justify-between">
+            <button 
+              onclick="runLiveRegressionSimulation()" 
+              class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5"
+            >
+              <span>⚡ Recalcular Regressão NBR</span>
+            </button>
+            <span class="text-[11px] text-gray-500 dark:text-gray-400">Modelo Multivariado com 4 Regressores</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Coluna da Direita: Painel Pericial dos Resultados NBR -->
+      <div class="lg:col-span-5 space-y-4">
+        
+        <!-- Cartão do Valor de Avaliação -->
+        <div class="bg-emerald-950 text-white rounded-2xl p-6 shadow-xl border border-emerald-700/60 relative overflow-hidden">
+          <div class="absolute -right-4 -bottom-4 text-emerald-800/30 text-8xl font-black select-none pointer-events-none">NBR</div>
+          
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold tracking-wider text-emerald-300 uppercase">Valor de Mercado Estimado</span>
+            <span class="text-[10px] bg-emerald-800 text-emerald-200 font-bold px-2 py-0.5 rounded">Grau III de Precisão</span>
+          </div>
+
+          <div id="simValorFinal" class="text-3xl sm:text-4xl font-extrabold text-white mt-2 font-mono">
+            R$ 823.400,00
+          </div>
+          <div id="simValorUnitario" class="text-xs text-emerald-300 mt-0.5">
+            Valor Unitário: R$ 7.160,00 / m²
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-emerald-800/80 grid grid-cols-2 gap-2 text-xs">
+            <div>
+              <span class="text-emerald-400 block text-[10px] uppercase">Campo de Arbítrio (±15%)</span>
+              <span id="simArbitrio" class="font-semibold text-white text-[11px]">R$ 699.890 a R$ 946.910</span>
+            </div>
+            <div>
+              <span class="text-emerald-400 block text-[10px] uppercase">Int. Confiança 80%</span>
+              <span id="simIC" class="font-semibold text-white text-[11px]">R$ 785.100 a R$ 861.700</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estatísticas Matemáticas da NBR 14.653 -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-sm">
+          <div class="font-bold text-xs uppercase text-gray-800 dark:text-gray-200 mb-3 flex items-center justify-between">
+            <span>Diagnósticos Estatísticos do Modelo</span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-bold text-xs">Aprovado</span>
+          </div>
+
+          <div class="space-y-2.5 text-xs">
+            <div class="flex justify-between items-center py-1 border-b border-gray-100 dark:border-gray-800">
+              <span class="text-gray-600 dark:text-gray-400">Coef. Determinação (R²)</span>
+              <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400">0.984 (Grau III &gt; 0.85)</span>
+            </div>
+            <div class="flex justify-between items-center py-1 border-b border-gray-100 dark:border-gray-800">
+              <span class="text-gray-600 dark:text-gray-400">Significância Global (Teste F)</span>
+              <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400">F = 89.4 (p &lt; 0.001)</span>
+            </div>
+            <div class="flex justify-between items-center py-1 border-b border-gray-100 dark:border-gray-800">
+              <span class="text-gray-600 dark:text-gray-400">Grau de Fundamentação</span>
+              <span class="font-bold text-emerald-600 dark:text-emerald-400">Grau III (Pontuação Máxima)</span>
+            </div>
+            <div class="flex justify-between items-center py-1">
+              <span class="text-gray-600 dark:text-gray-400">Amplitude do IC</span>
+              <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400">9.3% (Grau III &le; 30%)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Selo de Trava Inviolável Aprovada -->
+        <div class="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl p-4 flex items-start gap-3">
+          <span class="text-xl">🔒</span>
+          <div class="text-xs">
+            <div class="font-bold text-emerald-900 dark:text-emerald-200">Selo de Veracidade Documental Ativo</div>
+            <div class="text-emerald-700 dark:text-emerald-400 mt-0.5 leading-relaxed">
+              100% das 6 amostras possuem prova documental registrada. Zero valores deduzidos por inteligência artificial. Laudo pericial blindado contra impugnação.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 6. OS 6 PILARES DA ENGENHARIA PERICIAL COON -->
+  <!-- ======================================================== -->
+  <section id="pilares-tecnicos" class="py-14 bg-gray-50/60 dark:bg-[#070a12] border-t border-gray-200 dark:border-gray-800/80 px-4">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="max-w-3xl mx-auto text-center mb-10">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Excelência Técnica &amp; Legal</span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-1 font-heading">
+          Os 6 Pilares que Tornam o Infer.coon Único no Mercado
+        </h2>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+          Projetado por peritos judiciais e mestres em estatística para atender com rigor absoluto à ABNT NBR 14.653-1, 2 e 3.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Pilar 1 -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:border-emerald-500/50 transition duration-200">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl mb-4 font-bold">
+            🔒
+          </div>
+          <h3 class="text-base font-bold text-gray-900 dark:text-white">1. Trava Anti-Alucinação Inviolável</h3>
+          <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+            Proibição terminante de dedução ou invenção de dados por IA. Cada amostra exige matrícula, cartório, folha e data. Caso haja dado faltante, o laudo é travado até validação do engenheiro.
+          </p>
+        </div>
+
+        <!-- Pilar 2 -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:border-emerald-500/50 transition duration-200">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl mb-4 font-bold">
+            📐
+          </div>
+          <h3 class="text-base font-bold text-gray-900 dark:text-white">2. Otimizador Grau III em 1 Clique</h3>
+          <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+            Algoritmo que testa automaticamente transformações lineares, logarítmicas (ln, log), recíprocas (1/x) e quadráticas (x²), selecionando o modelo com maior $R^2$ e menor variância residual.
+          </p>
+        </div>
+
+        <!-- Pilar 3 -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:border-emerald-500/50 transition duration-200">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl mb-4 font-bold">
+            🛰️
+          </div>
+          <h3 class="text-base font-bold text-gray-900 dark:text-white">3. Vistoria Presencial com GPS Satelital</h3>
+          <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+            Captura instantânea de coordenadas de latitude, longitude e precisão métrica diretamente do satélite durante a vistoria, gerando link georreferenciado e mapa automático nos laudos.
+          </p>
+        </div>
+
+        <!-- Pilar 4 -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:border-emerald-500/50 transition duration-200">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl mb-4 font-bold">
+            👩‍🔬
+          </div>
+          <h3 class="text-base font-bold text-gray-900 dark:text-white">4. Dra. Alice NBR — Inteligência Pericial</h3>
+          <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+            Assistente técnica especializada em engenharia legal e estatística inferencial. Analisa homocedasticidade, multicolinearidade (VIF) e sugere justificativas técnicas para petições e bancos.
+          </p>
+        </div>
+
+        <!-- Pilar 5 -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:border-emerald-500/50 transition duration-200">
+          <div class="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950 text-sky-600 dark:text-sky-400 flex items-center justify-center text-xl mb-4 font-bold">
+            📲
+          </div>
+          <h3 class="text-base font-bold text-gray-900 dark:text-white">5. Handoff QR Code &amp; Vistoria Offline</h3>
+          <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+            Inicie a avaliação no escritório no computador, gere o QR Code de handoff e vá para o campo com o celular mesmo sem internet para fotografar e coletar dados. Tudo sincroniza ao voltar.
+          </p>
+        </div>
+
+        <!-- Pilar 6 -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:border-emerald-500/50 transition duration-200">
+          <div class="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xl mb-4 font-bold">
+            📄
+          </div>
+          <h3 class="text-base font-bold text-gray-900 dark:text-white">6. Exportação Word (.docx) e PDF Pericial</h3>
+          <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+            Geração de laudos completos prontos para juntada judicial ou entrega à Caixa e Banco do Brasil, com sumário executivo, gráficos de regressão, enquadramento e termo de encerramento assinado.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 7. AS 9 ABAS DA BANCADA OPERACIONAL (CAROUSEL / GRID) -->
+  <!-- ======================================================== -->
+  <section id="bancada-9-abas" class="py-14 px-4 max-w-7xl mx-auto">
+    <div class="max-w-3xl mx-auto text-center mb-8">
+      <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Fluxo de Trabalho Completo</span>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-1 font-heading">
+        A Bancada Pericial de 9 Abas Integradas
+      </h2>
+      <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+        Cada etapa do processo pericial possui um módulo dedicado e auditável, garantindo rigor normativo do cadastro da vistoria à entrega do laudo final.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      
+      <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:shadow-md transition">
+        <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Aba 01</div>
+        <h4 class="text-sm font-bold text-gray-900 dark:text-white mt-1">Identificação &amp; Vistoria</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Dados cadastrais, fotos do imóvel, endereço e coleta georreferenciada de GPS.</p>
+      </div>
+
+      <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:shadow-md transition">
+        <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Aba 02</div>
+        <h4 class="text-sm font-bold text-gray-900 dark:text-white mt-1">Amostras &amp; Documentos</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Planilha de dados com Trava Anti-Alucinação e upload de certidões comprobatórias.</p>
+      </div>
+
+      <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:shadow-md transition">
+        <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Aba 03</div>
+        <h4 class="text-sm font-bold text-gray-900 dark:text-white mt-1">Seleção de Variáveis</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Definição da variável dependente (Preço/m²) e variáveis quantitativas e dicotômicas.</p>
+      </div>
+
+      <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:shadow-md transition">
+        <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Aba 04</div>
+        <h4 class="text-sm font-bold text-gray-900 dark:text-white mt-1">Matriz de Correlação &amp; VIF</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Detecção em tempo real de multicolinearidade e coeficiente de correlação de Pearson.</p>
+      </div>
+
+      <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:shadow-md transition">
+        <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Aba 05</div>
+        <h4 class="text-sm font-bold text-gray-900 dark:text-white mt-1">Regressão Linear OLS</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Cálculo dos coeficientes, teste t-Student, teste F de Snedecor e Otimizador Grau III.</p>
+      </div>
+
+      <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:shadow-md transition">
+        <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Aba 06</div>
+        <h4 class="text-sm font-bold text-gray-900 dark:text-white mt-1">Análise de Resíduos</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Gráficos de dispersão, teste de normalidade (Kolmogorov/Shapiro) e homocedasticidade.</p>
+      </div>
+
+      <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:shadow-md transition">
+        <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Aba 07</div>
+        <h4 class="text-sm font-bold text-gray-900 dark:text-white mt-1">Enquadramento NBR</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tabela de pontos para Grau I, II e III de fundamentação e precisão da NBR 14.653-2.</p>
+      </div>
+
+      <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:shadow-md transition">
+        <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Aba 08</div>
+        <h4 class="text-sm font-bold text-gray-900 dark:text-white mt-1">Geração de Laudo Word/PDF</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Exportação imediata do laudo pericial completo formatado nos padrões da ABNT.</p>
+      </div>
+
+      <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:shadow-md transition">
+        <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Aba 09</div>
+        <h4 class="text-sm font-bold text-gray-900 dark:text-white mt-1">Dra. Alice NBR</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Consultoria de IA pericial para redação de quesitos, pareceres técnicos e fundamentação.</p>
+      </div>
+
+    </div>
+
+    <div class="mt-8 text-center">
+      <a 
+        href="/inferencia/" 
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition"
+      >
+        <span>Entrar na Bancada Operacional</span>
+        <span>→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 8. TABELA DE PLANOS & ASSINATURAS COON -->
+  <!-- ======================================================== -->
+  <section id="planos-precos" class="py-14 bg-gray-50/70 dark:bg-[#070a12] border-t border-gray-200 dark:border-gray-800/80 px-4">
+    <div class="max-w-6xl mx-auto">
+      
+      <div class="max-w-3xl mx-auto text-center mb-10">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Planos &amp; Investimento</span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-1 font-heading">
+          Escolha o Plano Ideal para a Sua Atuação Pericial
+        </h2>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+          Sem taxas ocultas. Inicie gratuitamente ou profissionalize seu escritório com laudos ilimitados e suporte técnico.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+        
+        <!-- Plano Start -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-bold uppercase text-gray-500 tracking-wider">Start / Individual</div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mt-1">Degustação Pericial</h3>
+            <p class="text-xs text-gray-500 mt-1">Para quem quer conhecer o motor NBR.</p>
+            
+            <div class="mt-4 mb-5">
+              <span class="text-3xl font-extrabold text-gray-900 dark:text-white">R$ 0</span>
+              <span class="text-xs text-gray-500">/mês</span>
+            </div>
+
+            <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-300">
+              <li class="flex items-center gap-2">✓ <span>Até 3 laudos por mês</span></li>
+              <li class="flex items-center gap-2">✓ <span>Motor NBR 14.653 completo</span></li>
+              <li class="flex items-center gap-2">✓ <span>Trava Anti-Alucinação básica</span></li>
+              <li class="flex items-center gap-2">✓ <span>Visualização na tela</span></li>
+              <li class="flex items-center gap-2 text-gray-400">✕ <span>Sem exportação Word (.docx)</span></li>
+            </ul>
+          </div>
+
+          <a 
+            href="/inferencia/" 
+            class="mt-6 w-full py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 font-bold text-xs text-gray-800 dark:text-gray-200 transition text-center block"
+          >
+            Começar Grátis
+          </a>
+        </div>
+
+        <!-- Plano Perito Pro (Destaque) -->
+        <div class="bg-white dark:bg-gray-900 border-2 border-emerald-500 rounded-2xl p-6 shadow-xl flex flex-col justify-between relative">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider">
+            MAIS ESCOLHIDO • 40% OFF
+          </div>
+
+          <div>
+            <div class="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400 tracking-wider">Perito Pro</div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mt-1">Profissional Liberal</h3>
+            <p class="text-xs text-gray-500 mt-1">Para peritos judiciais e avaliadores ativos.</p>
+            
+            <div class="mt-4 mb-5">
+              <span class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">R$ 89,90</span>
+              <span class="text-xs text-gray-500">/mês</span>
+              <div class="text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold mt-0.5">ou R$ 640/ano no carimbo</div>
+            </div>
+
+            <ul class="space-y-2 text-xs text-gray-700 dark:text-gray-200">
+              <li class="flex items-center gap-2 font-semibold">✓ <span class="text-emerald-600 dark:text-emerald-400">Laudos Ilimitados</span></li>
+              <li class="flex items-center gap-2">✓ <span>Otimizador Grau III NBR em 1 clique</span></li>
+              <li class="flex items-center gap-2">✓ <span>Exportação Word (.docx) e PDF com capa</span></li>
+              <li class="flex items-center gap-2">✓ <span>Vistoria Satelital GPS e fotos no campo</span></li>
+              <li class="flex items-center gap-2">✓ <span>Dra. Alice NBR sem limites de perguntas</span></li>
+              <li class="flex items-center gap-2">✓ <span>Trava Anti-Alucinação com certificado</span></li>
+            </ul>
+          </div>
+
+          <a 
+            href="/inferencia/" 
+            class="mt-6 w-full py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition text-center block"
+          >
+            Assinar Perito Pro
+          </a>
+        </div>
+
+        <!-- Plano Escritório & Bancos -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-bold uppercase text-gray-500 tracking-wider">Corporativo</div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mt-1">Escritório &amp; Equipes</h3>
+            <p class="text-xs text-gray-500 mt-1">Para empresas de engenharia e bancos.</p>
+            
+            <div class="mt-4 mb-5">
+              <span class="text-3xl font-extrabold text-gray-900 dark:text-white">R$ 249,00</span>
+              <span class="text-xs text-gray-500">/mês</span>
+            </div>
+
+            <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-300">
+              <li class="flex items-center gap-2">✓ <span>Até 10 peritos simultâneos</span></li>
+              <li class="flex items-center gap-2">✓ <span>Logomarca personalizada nos laudos</span></li>
+              <li class="flex items-center gap-2">✓ <span>Acesso a API pericial da Coon</span></li>
+              <li class="flex items-center gap-2">✓ <span>Auditoria Fort Knox de segurança</span></li>
+              <li class="flex items-center gap-2">✓ <span>Suporte VIP via WhatsApp 24/7</span></li>
+            </ul>
+          </div>
+
+          <a 
+            href="/inferencia/" 
+            class="mt-6 w-full py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 font-bold text-xs text-gray-800 dark:text-gray-200 transition text-center block"
+          >
+            Falar com a Diretoria
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 9. BLINDAGEM MILITAR FORT KNOX WAF (DR. VICTOR CANTO - CISO) -->
+  <!-- ======================================================== -->
+  <section class="py-10 bg-slate-950 text-white px-4 border-t border-slate-800">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-950 border border-emerald-500/50 flex items-center justify-center text-3xl shrink-0">
+          🛡️
+        </div>
+        <div>
+          <div class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Fort Knox Perimeter Security</div>
+          <h3 class="text-lg font-bold text-white mt-0.5">Blindagem Militar Contra Invasões &amp; Vazamento</h3>
+          <p class="text-xs text-slate-400 mt-1 max-w-xl leading-relaxed">
+            Seus dados patrimoniais e segredos de perícia são protegidos pelo WAF Fort Knox com auto-ban de 24h para invasores, criptografia ponta a ponta e total conformidade com a LGPD.
+          </p>
+        </div>
+      </div>
+      <div class="text-center md:text-right shrink-0">
+        <div class="text-xs font-mono text-emerald-400">WAF 100% OPERACIONAL</div>
+        <div class="text-[11px] text-slate-400 mt-0.5">Dr. Victor Canto • CISO Coon</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 10. FAQ PERICIAL -->
+  <!-- ======================================================== -->
+  <section id="faq-pericial" class="py-14 px-4 max-w-4xl mx-auto">
+    <div class="text-center mb-8">
+      <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Dúvidas Técnicas Frequentes</span>
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mt-1 font-heading">
+        Perguntas &amp; Respostas dos Peritos
+      </h2>
+    </div>
+
+    <div class="space-y-3">
+      
+      <details class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 cursor-pointer">
+        <summary class="font-bold text-sm text-gray-900 dark:text-white flex items-center justify-between">
+          <span>Os laudos gerados pelo Infer.coon são aceitos pela Caixa e Banco do Brasil?</span>
+          <span class="text-emerald-600 font-bold transition group-open:rotate-180">▼</span>
+        </summary>
+        <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+          Sim, 100%. O motor estatístico segue à risca a ABNT NBR 14.653-2 (imóveis urbanos) e NBR 14.653-3 (imóveis rurais), cumprindo todos os testes de hipótese exigidos pelas diretrizes de contratação de engenheiros da Caixa Econômica Federal e Banco do Brasil.
+        </p>
+      </details>
+
+      <details class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 cursor-pointer">
+        <summary class="font-bold text-sm text-gray-900 dark:text-white flex items-center justify-between">
+          <span>O que exatamente faz a Trava Anti-Alucinação?</span>
+          <span class="text-emerald-600 font-bold transition group-open:rotate-180">▼</span>
+        </summary>
+        <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+          A Trava Anti-Alucinação impede que qualquer dado seja inventado ou forçado artificialmente. Cada amostra precisa ter sua comprovação documental registrada (Cartório, Matrícula, Trecho). O sistema não permite a exportação do laudo se houver inconsistência ou ausência de prova.
+        </p>
+      </details>
+
+      <details class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 cursor-pointer">
+        <summary class="font-bold text-sm text-gray-900 dark:text-white flex items-center justify-between">
+          <span>Como funciona a vistoria em campo sem sinal de internet?</span>
+          <span class="text-emerald-600 font-bold transition group-open:rotate-180">▼</span>
+        </summary>
+        <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+          O aplicativo do Infer.coon é uma PWA com capacidade offline. Você abre a avaliação no celular através do QR Code de handoff, tira fotos e coleta as coordenadas GPS via sensor do aparelho mesmo sem sinal de celular. Ao reconectar, a sincronização é automática.
+        </p>
+      </details>
+
+      <details class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 cursor-pointer">
+        <summary class="font-bold text-sm text-gray-900 dark:text-white flex items-center justify-between">
+          <span>Posso editar o laudo em Word antes de protocolar em juízo?</span>
+          <span class="text-emerald-600 font-bold transition group-open:rotate-180">▼</span>
+        </summary>
+        <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+          Sim! O Infer.coon exporta diretamente no formato Microsoft Word (.docx) estruturado e em PDF pericial. Você pode adicionar considerações fáticas do processo ou personalizar seu cabeçalho profissional.
+        </p>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 11. MODAL VISTORIA MOBILE (PWA / QR CODE) -->
+  <!-- ======================================================== -->
+  <div id="inferMobileModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl max-w-md w-full p-6 text-center shadow-2xl relative">
+      <button onclick="closeInferMobileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-white font-bold text-lg">✕</button>
+      
+      <div class="w-12 h-12 mx-auto rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl mb-3">
+        📱
+      </div>
+      <h3 class="text-lg font-bold text-gray-900 dark:text-white">Leve o Infer.coon no Celular</h3>
+      <p class="text-xs text-gray-500 mt-1">Aponte a câmera do seu celular para abrir a bancada de vistoria e coletar fotos e coordenadas GPS no campo.</p>
+
+      <div class="my-5 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl inline-block border border-gray-200 dark:border-gray-700">
+        <!-- QR Code SVG -->
+        <svg class="w-40 h-40 mx-auto" viewBox="0 0 100 100" fill="currentColor">
+          <rect x="0" y="0" width="30" height="30" class="text-emerald-700 dark:text-emerald-400" />
+          <rect x="5" y="5" width="20" height="20" fill="white" class="dark:fill-gray-900" />
+          <rect x="9" y="9" width="12" height="12" class="text-emerald-700 dark:text-emerald-400" />
+          
+          <rect x="70" y="0" width="30" height="30" class="text-emerald-700 dark:text-emerald-400" />
+          <rect x="75" y="5" width="20" height="20" fill="white" class="dark:fill-gray-900" />
+          <rect x="79" y="9" width="12" height="12" class="text-emerald-700 dark:text-emerald-400" />
+          
+          <rect x="0" y="70" width="30" height="30" class="text-emerald-700 dark:text-emerald-400" />
+          <rect x="5" y="75" width="20" height="20" fill="white" class="dark:fill-gray-900" />
+          <rect x="9" y="79" width="12" height="12" class="text-emerald-700 dark:text-emerald-400" />
+
+          <rect x="38" y="8" width="6" height="6" class="text-gray-900 dark:text-white" />
+          <rect x="50" y="8" width="6" height="14" class="text-gray-900 dark:text-white" />
+          <rect x="38" y="24" width="14" height="6" class="text-gray-900 dark:text-white" />
+
+          <rect x="36" y="36" width="28" height="28" class="text-emerald-600 dark:text-emerald-400" />
+          <rect x="42" y="42" width="16" height="16" fill="white" class="dark:fill-gray-900" />
+          <circle cx="50" cy="50" r="5" class="text-emerald-600 dark:text-emerald-400" />
+
+          <rect x="8" y="38" width="14" height="6" class="text-gray-900 dark:text-white" />
+          <rect x="8" y="50" width="6" height="14" class="text-gray-900 dark:text-white" />
+          <rect x="78" y="38" width="14" height="12" class="text-gray-900 dark:text-white" />
+          <rect x="70" y="58" width="8" height="12" class="text-gray-900 dark:text-white" />
+
+          <rect x="38" y="72" width="12" height="6" class="text-gray-900 dark:text-white" />
+          <rect x="56" y="72" width="8" height="18" class="text-gray-900 dark:text-white" />
+          <rect x="74" y="78" width="18" height="8" class="text-gray-900 dark:text-white" />
+          <rect x="38" y="86" width="12" height="8" class="text-gray-900 dark:text-white" />
+        </svg>
+        <div class="text-[10px] text-gray-500 font-mono mt-1">https://coon.com.br/inferencia/</div>
+      </div>
+
+      <div class="space-y-2">
+        <a 
+          href="/download/inferencia.apk" 
+          class="w-full py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition flex items-center justify-center gap-2"
+        >
+          <span>📦 Baixar APK Android Direto</span>
+        </a>
+        <button 
+          onclick="closeInferMobileModal()" 
+          class="w-full py-2 rounded-lg border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold text-xs"
+        >
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 12. RODAPÉ INSTITUCIONAL COON -->
+  <!-- ======================================================== -->
+  <footer class="mt-auto bg-gray-100 dark:bg-[#070a12] border-t border-gray-200 dark:border-gray-800/80 py-8 px-4 text-xs text-gray-500 dark:text-gray-400">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-gray-900 dark:text-white">Coon Participações Ltda.</span>
+        <span>•</span>
+        <span>CNPJ 61.272.288/0001-44</span>
+        <span>•</span>
+        <span>Fundador: Daniel Soares Correia</span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="/portal" class="hover:text-gray-900 dark:hover:text-white transition">Portal</a>
+        <a href="/onmail" class="hover:text-gray-900 dark:hover:text-white transition">OnMail</a>
+        <a href="/governance" class="hover:text-gray-900 dark:hover:text-white transition">Governança</a>
+        <a href="/inferencia/" class="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">Bancada Pericial</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- 13. SCRIPTS INTERATIVOS & REATIVIDADE -->
+  <!-- ======================================================== -->
+  <script>
+    // Alternador de Tema Claro / Escuro
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      if (isDark) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('coon_theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('coon_theme', 'dark');
+      }
+    }
+
+    // Scroll Suave com offset da sticky bar
+    function scrollToTarget(sectionId) {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        const yOffset = -70;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }
+
+    // Modal Vistoria Mobile
+    function openInferMobileModal() {
+      document.getElementById('inferMobileModal').classList.remove('hidden');
+    }
+    function closeInferMobileModal() {
+      document.getElementById('inferMobileModal').classList.add('hidden');
+    }
+
+    // Toast do Carimbo de Lançamento
+    function triggerLaunchStampToast() {
+      alert("CONDIÇÃO ESPECIAL DE LANÇAMENTO:\n\n• 40% OFF nos planos anuais Pro e Escritório\n• Trava Anti-Alucinação com Certificação Pericial\n• Válido até 30 de Outubro na Coon Participações.");
+    }
+
+    // Simulação Estatística da Regressão Linear Múltipla OLS
+    function runLiveRegressionSimulation() {
+      const area = parseFloat(document.getElementById('simArea').value) || 115;
+      const quartos = parseFloat(document.getElementById('simQuartos').value) || 3;
+      const vagas = parseFloat(document.getElementById('simVagas').value) || 2;
+      const dist = parseFloat(document.getElementById('simDist').value) || 1.0;
+
+      // Coeficientes do modelo OLS calibrados com base nas 6 amostras
+      // Preço = 85.000 + (5.200 * Área) + (35.000 * Quartos) + (42.000 * Vagas) - (28.000 * Dist)
+      const beta0 = 85000;
+      const betaArea = 5200;
+      const betaQuartos = 35000;
+      const betaVagas = 42000;
+      const betaDist = -28000;
+
+      const valorEstimado = beta0 + (betaArea * area) + (betaQuartos * quartos) + (betaVagas * vagas) + (betaDist * dist);
+      const valorUnitario = valorEstimado / area;
+
+      // Campo de arbítrio de ±15% conforme ABNT NBR 14.653-2
+      const minArbitrio = valorEstimado * 0.85;
+      const maxArbitrio = valorEstimado * 1.15;
+
+      // Intervalo de confiança de 80% (t-Student ~ 1.533 para n=6, p=4)
+      const erroPadrao = valorEstimado * 0.0465;
+      const minIC = valorEstimado - erroPadrao;
+      const maxIC = valorEstimado + erroPadrao;
+
+      // Atualiza na interface com formatação BRL
+      document.getElementById('simValorFinal').innerText = valorEstimado.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('simValorUnitario').innerText = `Valor Unitário: ${valorUnitario.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} / m²`;
+      document.getElementById('simArbitrio').innerText = `${minArbitrio.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })} a ${maxArbitrio.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}`;
+      document.getElementById('simIC').innerText = `${minIC.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })} a ${maxIC.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}`;
+    }
+
+    // Scrollspy e Efeito de Subir a Página na Sticky Bar
+    let lastScrollY = window.pageYOffset;
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.pageYOffset;
+      const nav = document.getElementById('msStickySubNav');
+
+      if (currentScrollY > 100) {
+        if (currentScrollY > lastScrollY) {
+          // Descendo: esconde para dar foco
+          nav.classList.add('nav-hidden');
+          nav.classList.remove('nav-visible');
+        } else {
+          // Subindo: revela suavemente com sombra
+          nav.classList.remove('nav-hidden');
+          nav.classList.add('nav-visible');
+        }
+      } else {
+        nav.classList.remove('nav-hidden', 'nav-visible');
+      }
+      lastScrollY = currentScrollY;
+    });
+
+    // Inicia a simulação com os valores padrão ao carregar
+    window.addEventListener('DOMContentLoaded', () => {
+      runLiveRegressionSimulation();
+    });
+  </script>
+
+  <!-- Atendimento Online Coon Bot -->
+  <script src="/coon-bot.js"></script>
+  <script src="/coon-mobile-install.js"></script>
+
+</body>
+</html>

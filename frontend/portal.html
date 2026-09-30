@@ -19,14 +19,36 @@
     }
   </script>
 
-  <!-- Inicialização do Tema Dark / Light Instantâneo (Zero FOUC) -->
+  <!-- Inicialização: Reconhecimento Automático do Modo Escuro/Claro (Chrome, Mozilla, Safari, Edge, Windows, Android) -->
   <script>
     (function() {
-      const savedTheme = localStorage.getItem('coon_theme');
-      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      function getActiveTheme() {
+        const savedTheme = localStorage.getItem('coon_theme');
+        if (savedTheme === 'dark') return 'dark';
+        if (savedTheme === 'light') return 'light';
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      }
+
+      if (getActiveTheme() === 'dark') {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
+      }
+
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+          if (!localStorage.getItem('coon_theme')) {
+            if (e.matches) {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
+            if (typeof updateThemeIcons === 'function') updateThemeIcons();
+          }
+        });
       }
     })();
   </script>
@@ -167,17 +189,30 @@
   <!-- ======================================================== -->
   <header class="w-full px-6 py-4 flex items-center justify-between relative z-30">
     <!-- Lado Esquerdo Discreto (Identificação Sutil) -->
-    <div class="flex items-center space-x-4 text-xs text-slate-500 dark:text-slate-400 font-medium">
+    <div class="flex items-center space-x-3 text-xs text-slate-500 dark:text-slate-400 font-medium">
       <button onclick="openAboutModal()" class="hover:text-slate-900 dark:hover:text-white transition flex items-center space-x-1.5 font-semibold text-slate-700 dark:text-slate-200">
         <i data-lucide="info" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400"></i>
         <span>Sobre a Empresa</span>
       </button>
       <button onclick="openContactModal()" class="hover:text-slate-900 dark:hover:text-white transition">Contato</button>
+      
+      <!-- Atendimento Online no WhatsApp (Símbolo Executivo) -->
+      <a href="https://wa.me/5531999999999?text=Ol%C3%A1!%20Sou%20cliente%20Coon%20e%20gostaria%20de%20atendimento." target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition shadow-2xs" title="Atendimento Executivo Coon via WhatsApp">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+          <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+        </svg>
+        <span>Atendimento Online</span>
+      </a>
     </div>
 
-    <!-- Lado Direito: Modo Escuro (Lua) + 9 Pontinhos (App Launcher) + Acesso Direto -->
+    <!-- Lado Direito: Modo Escuro (Lua) + onnews. + onmail. + Painel Admin (Só para o Daniel) + 9 Pontinhos -->
     <div class="flex items-center space-x-2 sm:space-x-3">
-      
+
       <!-- Botão Modo Escuro / Claro (Lua / Sol) -->
       <button 
         id="themeToggleBtn" 
@@ -192,6 +227,37 @@
           </svg>
         </span>
       </button>
+
+      <!-- 1º: Acesso Direto ao OnNews (Sem o Grátis, Cinza Sóbrio) -->
+      <a 
+        href="/onnews" 
+        class="text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white px-2.5 py-1.5 rounded-full hover:bg-slate-200/60 dark:hover:bg-slate-800/80 transition flex items-center gap-1.5 tracking-tight"
+        title="OnNews — O Dia em Dados (Agro, Mercado & Cripto)"
+      >
+        <span class="text-slate-500 dark:text-slate-400">📰</span>
+        <span>onnews.</span>
+      </a>
+
+      <!-- 2º: Acesso Direto ao OnMail (Cinza Sóbrio) -->
+      <a 
+        href="/onmail" 
+        class="text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white px-2.5 py-1.5 rounded-full hover:bg-slate-200/60 dark:hover:bg-slate-800/80 transition flex items-center gap-1.5 tracking-tight"
+        title="Acessar OnMail - E-mail Corporativo Integrado ao WhatsApp"
+      >
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <span>onmail.</span>
+      </a>
+
+      <!-- 3º: Acesso ao Painel do Administrador Master (Visível apenas para o Presidente Daniel) -->
+      <a 
+        id="adminPortalLink"
+        href="/admin" 
+        class="hidden text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 px-2.5 py-1.5 rounded-full hover:bg-slate-200/60 dark:hover:bg-slate-800/80 transition items-center gap-1.5 tracking-tight"
+        title="Painel do Administrador Master (Exclusivo Presidência Coon)"
+      >
+        <span class="text-amber-500 text-xs">👑</span>
+        <span>Painel Admin</span>
+      </a>
 
       <!-- Botão dos 9 Pontinhos (Google Apps Launcher) -->
       <div class="relative">
@@ -300,15 +366,40 @@
               <p class="text-[10px] text-slate-500 leading-tight">Inteligência de Mídia & Tráfego Multicanal</p>
             </a>
 
-            <!-- onmail.coon (E-mail Corporativo & WhatsApp) -->
-            <a href="/onmail" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-emerald-300 transition flex flex-col justify-between group">
+            <!-- OnNews by Coon (Terminal de Dados, Clima, Agro, Mercado & Newsletter) -->
+            <a href="/onnews" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-slate-300 transition flex flex-col justify-between group">
               <div class="flex items-center space-x-2 mb-2">
-                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+                <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm">
+                  📰
+                </div>
+                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-slate-900 tracking-tight">onnews.</span>
+              </div>
+              <p class="text-[10px] text-slate-500 leading-tight">O Dia em Dados • Agro, Câmbio & Cripto em 30s</p>
+            </a>
+
+            <!-- onmail.coon (E-mail Corporativo & WhatsApp - Cor Cinza Padronizada) -->
+            <a href="/onmail" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-slate-300 transition flex flex-col justify-between group">
+              <div class="flex items-center space-x-2 mb-2">
+                <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
                   <i data-lucide="mail" class="w-4 h-4"></i>
                 </div>
-                <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-700">onmail</span>
+                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-slate-900 tracking-tight">onmail.</span>
               </div>
               <p class="text-[10px] text-slate-500 leading-tight">E-mail Corporativo & Despacho no WhatsApp</p>
+            </a>
+
+            <!-- Painel do Administrador Master (Visível apenas para o Presidente Daniel) -->
+            <a id="adminDrawerCard" href="/admin" class="hidden p-3 rounded-2xl hover:bg-slate-100 border border-amber-200 hover:border-amber-400 transition flex-col justify-between group bg-amber-50/10 col-span-2">
+              <div class="flex items-center space-x-2 mb-1">
+                <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xs">
+                  👑
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xs font-bold text-slate-900 group-hover:text-amber-900">Painel Master Admin</span>
+                  <span class="text-[9px] bg-amber-200 text-amber-900 font-bold px-1.5 py-0.2 rounded-full">Diretoria</span>
+                </div>
+              </div>
+              <p class="text-[10px] text-slate-500 leading-tight">Gestão Central da Holding, Tráfego, Finanças & Console Antigravity</p>
             </a>
 
           </div>
@@ -357,8 +448,8 @@
         </div>
       </div>
 
-      <!-- BOTÃO CENTRAL EXCLUSIVO: STUDIO COON -->
-      <div class="flex items-center justify-center">
+      <!-- BOTÕES CENTRAIS: STUDIO COON & FAÇA O SEU EMAIL ONMAIL.BR -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
         <a 
           href="/studio" 
           class="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 dark:bg-slate-800/90 dark:hover:bg-slate-750 dark:border dark:border-slate-700/80 text-white text-sm font-bold rounded-2xl shadow-xl shadow-slate-900/15 hover:scale-105 transition flex items-center space-x-2.5 group cursor-pointer"
@@ -367,6 +458,35 @@
           <span>Entrar no Studio Coon</span>
           <i data-lucide="arrow-right" class="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition"></i>
         </a>
+
+        <!-- CHAMADA OFICIAL ONMAIL.BR COM PRESTÍGIO E URGÊNCIA -->
+        <a 
+          href="/onmail" 
+          class="relative group px-5 py-3.5 bg-white/90 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-850 border border-slate-200/90 dark:border-slate-700/80 hover:border-emerald-400 dark:hover:border-emerald-500 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-xs sm:text-sm font-medium rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex items-center space-x-2.5 cursor-pointer"
+          title="Lançamento OnMail: Garanta os melhores nomes de e-mail antes que reservem o seu!"
+        >
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+          </span>
+          <i data-lucide="mail" class="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300"></i>
+          <span>Garanta seu email <strong class="font-bold text-slate-900 dark:text-white">onmail.br</strong></span>
+          <span class="text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-xs animate-pulse">Lançamento</span>
+          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
+        </a>
+      </div>
+
+      <!-- BOTÃO SÓBRIO & EXECUTIVO: RECEBA A NOSSA NEWSLETTER (ABRE JANELA CENTRALIZADA) -->
+      <div class="mt-4 flex items-center justify-center">
+        <button 
+          onclick="openNewsletterModal()" 
+          class="group inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 hover:bg-white dark:bg-slate-900/80 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-emerald-500 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white shadow-2xs hover:shadow-xs transition-all duration-200 cursor-pointer"
+          title="Receba a nossa Newsletter diária (E-mail ou WhatsApp 17:30)"
+        >
+          <span>📬</span>
+          <span>Receba a nossa Newsletter</span>
+          <span class="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">Inscrever Grátis</span>
+        </button>
       </div>
 
     </div>
@@ -607,9 +727,12 @@
         <div id="fcFeedback" class="hidden p-3 rounded-xl text-xs font-medium"></div>
 
         <div class="pt-1 flex items-center justify-between">
-          <a href="https://wa.me/5531999999999?text=Ol%C3%A1!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20as%20solu%C3%A7%C3%B5es%20da%20COON." target="_blank" class="text-xs text-emerald-600 hover:text-emerald-700 font-semibold flex items-center space-x-1">
-            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-            <span>WhatsApp</span>
+          <a href="https://wa.me/5531999999999?text=Ol%C3%A1!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20as%20solu%C3%A7%C3%B5es%20da%20COON." target="_blank" class="text-xs text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 font-semibold flex items-center space-x-1.5">
+            <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+              <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+            </svg>
+            <span>Atendimento Online (WhatsApp)</span>
           </a>
           <div class="flex items-center space-x-2">
             <button type="button" onclick="closeContactModal()" class="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-700 transition cursor-pointer">Cancelar</button>
@@ -766,6 +889,78 @@
       document.getElementById("productModal").classList.remove("hidden");
       document.getElementById("productModal").classList.add("flex");
     }
+
+    // Assinatura da Newsletter pelo Portal Coon (E-mail ou WhatsApp 17:30)
+    let currentPortalNewsChannel = 'email';
+
+    function setPortalNewsChannel(channel) {
+      currentPortalNewsChannel = channel;
+      const tabEmail = document.getElementById("pNewsTabEmail");
+      const tabWa = document.getElementById("pNewsTabWhatsapp");
+      const input = document.getElementById("portalNewsInput");
+      const btn = document.getElementById("portalNewsBtn");
+      
+      if (channel === 'whatsapp') {
+        tabWa.className = "px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-emerald-600 text-white transition flex items-center gap-1 cursor-pointer shadow-xs";
+        tabEmail.className = "px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 transition flex items-center gap-1 cursor-pointer";
+        input.placeholder = "Seu WhatsApp com DDD (ex: 34 99999-9999)";
+        input.type = "tel";
+        btn.innerText = "Receber no WhatsApp";
+      } else {
+        tabEmail.className = "px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-slate-900 text-white dark:bg-emerald-600 transition flex items-center gap-1 cursor-pointer shadow-xs";
+        tabWa.className = "px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 transition flex items-center gap-1 cursor-pointer";
+        input.placeholder = "Digite seu melhor e-mail (ex: seu.nome@onmail.br)";
+        input.type = "email";
+        btn.innerText = "Inscrever-se Grátis";
+      }
+    }
+
+    async function handlePortalNewsletter(e) {
+      e.preventDefault();
+      const input = document.getElementById("portalNewsInput");
+      const btn = document.getElementById("portalNewsBtn");
+      const success = document.getElementById("portalNewsSuccess");
+      const val = input.value.trim();
+      if (!val) return;
+
+      btn.disabled = true;
+      btn.innerText = "Inscrevendo...";
+
+      const isWa = currentPortalNewsChannel === 'whatsapp' || (!val.includes('@') && val.replace(/\D/g, '').length >= 8);
+      const payload = isWa
+        ? { phone: val, channel: 'whatsapp', frequency: 'fechamento-17h30', city: 'São Paulo, SP' }
+        : { email: val, channel: 'email', frequency: '3-edicoes', city: 'São Paulo, SP' };
+
+      try {
+        const resp = await fetch("/api/news/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await resp.json();
+        if (resp.ok && data.success) {
+          success.classList.remove("hidden");
+          success.innerText = isWa 
+            ? "✅ Inscrição realizada com sucesso! Você receberá o OnNews às 17:30 no WhatsApp." 
+            : "✅ Inscrição realizada com sucesso! Você receberá as edições no seu e-mail.";
+          input.value = "";
+          btn.innerText = "✓ Inscrito!";
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.innerText = isWa ? "Receber no WhatsApp" : "Inscrever-se Grátis";
+          }, 3500);
+        } else {
+          alert(data.detail || data.message || "Erro ao inscrever. Verifique os dados digitados.");
+          btn.disabled = false;
+          btn.innerText = isWa ? "Receber no WhatsApp" : "Inscrever-se Grátis";
+        }
+      } catch (err) {
+        alert("Erro de conexão ao inscrever na newsletter.");
+        btn.disabled = false;
+        btn.innerText = isWa ? "Receber no WhatsApp" : "Inscrever-se Grátis";
+      }
+    }
+
     // Alternador de Tema Dark / Light (Modo Lua / Sol)
     function updateThemeIcons() {
       const isDark = document.documentElement.classList.contains('dark');
@@ -793,8 +988,78 @@
     };
 
     updateThemeIcons();
+
+    // Revela acesso ao Painel Admin exclusivamente para o Presidente Daniel / Admin
+    function checkDanielAdminAccess() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("admin") === "1" || urlParams.get("daniel") === "1" || urlParams.get("master") === "1") {
+        localStorage.setItem("coon_is_admin", "true");
+        localStorage.setItem("is_daniel", "true");
+      }
+      
+      const isAdmin = localStorage.getItem("coon_is_admin") === "true" 
+                   || localStorage.getItem("is_daniel") === "true"
+                   || !!localStorage.getItem("coon_auth_token")
+                   || document.cookie.includes("coon_auth_token")
+                   || document.cookie.includes("is_admin=true");
+      
+      if (isAdmin) {
+        const adminLink = document.getElementById("adminPortalLink");
+        if (adminLink) {
+          adminLink.classList.remove("hidden");
+          adminLink.classList.add("inline-flex");
+        }
+        const adminDrawerCard = document.getElementById("adminDrawerCard");
+        if (adminDrawerCard) {
+          adminDrawerCard.classList.remove("hidden");
+          adminDrawerCard.classList.add("flex");
+        }
+      }
+    }
+    checkDanielAdminAccess();
   </script>
   <script src="/static/coon-auth.js"></script>
   <script src="/static/coon-bot.js"></script>
+
+  <!-- MODAL: NEWSLETTER -->
+  <div id="newsletterPortalModal" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-200 w-full max-w-sm overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+      <div class="flex items-center justify-between border-b border-slate-100 p-4">
+        <div class="flex items-center space-x-2">
+          <i data-lucide="mail" class="w-5 h-5 text-emerald-500"></i>
+          <h3 class="text-sm font-bold text-slate-900">Newsletter coon.</h3>
+        </div>
+        <button onclick="closeNewsletterModal()" class="text-slate-400 hover:text-slate-700 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <p class="text-xs text-slate-600 text-center">Receba nossas atualizações semanais diretamente no seu e-mail.</p>
+        <div class="space-y-3">
+          <input type="email" placeholder="Digite seu melhor e-mail" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-shadow">
+          <button class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 rounded-xl transition-colors shadow-lg shadow-emerald-500/30 text-sm">
+            Inscrever Grátis
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openNewsletterModal() {
+      const modal = document.getElementById('newsletterPortalModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+    function closeNewsletterModal() {
+      const modal = document.getElementById('newsletterPortalModal');
+      if (modal) {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+      }
+    }
+  </script>
 </body>
 </html>

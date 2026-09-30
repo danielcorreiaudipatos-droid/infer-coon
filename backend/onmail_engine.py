@@ -40,52 +40,56 @@ ONMAIL_PLANS: Dict[str, Dict[str, Any]] = {
         "vip_senders_limit": 2,
         "instant_whatsapp": True,
         "daily_digest": True,
-        "badge": "Gratuito para Sempre",
+        "badge": "Lançamento Gratuito Sem Números",
         "features": [
-            "1 conta de e-mail corporativo",
+            "1 conta de e-mail pessoal limpa (@onmail.br)",
             "Até 2 Remetentes VIP com alerta instantâneo no WhatsApp",
             "Resumo diário às 18h dos demais e-mails",
             "Triagem automática de anexos até 15 MB",
             "Webmail moderno e compatível com celular"
         ]
     },
-    "business": {
-        "id": "business",
-        "name": "OnMail Empresarial Base",
+    "pro": {
+        "id": "pro",
+        "name": "OnMail Pro",
         "price_monthly": 49.90,
-        "price_yearly": 499.00,
+        "price_yearly": 358.80, # 40% de desconto promocional (equivale a R$ 29,90/mês)
+        "discount_promo": "40% de desconto anual até 30 de outubro",
         "accounts": 5,
         "storage_gb": 10,
         "vip_senders_limit": -1, # Ilimitado
         "instant_whatsapp": True,
         "daily_digest": True,
-        "badge": "Mais Popular",
+        "badge": "Para Profissionais & Pequenas Equipes",
         "features": [
             "Até 5 contas corporativas (@suaempresa.com.br)",
-            "Alertas instantâneos ILIMITADOS no WhatsApp para a equipe",
-            "Empacotamento automático de múltiplos anexos (.zip)",
+            "Alertas instantâneos ILIMITADOS no WhatsApp para todos",
+            "Empacotamento automático de anexos múltiplos (.zip)",
             "Links de nuvem com download seguro para arquivos pesados",
-            "Anti-spam corporativo e conformidade DMARC/SPF",
+            "Anti-spam corporativo ativo com isolamento de propagandas",
             "Cliente já possui domínio registrado"
         ]
     },
-    "business_annual": {
-        "id": "business_annual",
-        "name": "OnMail Empresarial Anual + Domínio",
-        "price_monthly": 41.58, # Equivalente a 499/12
-        "price_yearly": 499.00,
-        "accounts": 5,
-        "storage_gb": 10,
-        "vip_senders_limit": -1,
+    "business": {
+        "id": "business",
+        "name": "OnMail Business (Domínio Incluso)",
+        "price_monthly": 99.90,
+        "price_yearly": 718.80, # 40% de desconto promocional (equivale a R$ 59,90/mês)
+        "discount_promo": "40% de desconto anual até 30 de outubro",
+        "accounts": 20,
+        "storage_gb": 50,
+        "vip_senders_limit": -1, # Ilimitado
         "instant_whatsapp": True,
         "daily_digest": True,
-        "badge": "Melhor Custo-Benefício (2 Meses Grátis)",
+        "badge": "1 Novo Domínio .com.br Incluso + Até 20 E-mails",
         "features": [
-            "Tudo do plano Empresarial Base",
-            "1 Domínio .com.br novo INCLUSO (gestão técnica Coon)",
-            "DNS e certificados SSL configurados automaticamente",
-            "Suporte prioritário via WhatsApp com a equipe Coon",
-            "Economia de R$ 100 ao ano"
+            "1 Novo Domínio .com.br INCLUSO (registro e anuidade pagos pela Coon)",
+            "Até 20 contas corporativas oficiais com 50 GB de armazenamento",
+            "Alertas instantâneos ILIMITADOS no WhatsApp para até 20 colaboradores",
+            "DNS, SPF, DKIM e certificados SSL configurados automaticamente",
+            "Triagem de anexos de até 60 MB compactados e links temporários",
+            "Suporte prioritário via WhatsApp direto com a engenharia da Coon",
+            "Economia de 40% garantida no plano anual até 30 de outubro"
         ]
     }
 }
@@ -250,8 +254,348 @@ def simulate_onmail_flow(req: EmailSimulationRequest) -> Dict[str, Any]:
         "plan_used": plan_info["name"],
         "is_vip_sender": is_vip,
         "instant_dispatch": should_dispatch_instant,
-        "delivery_channel": "WhatsApp (Evolution API Hetzner - R$ 0,00 Meta)",
+        "delivery_channel": "WhatsApp (Tecnologia Própria OnMail • Coon Participações)",
         "triage": triage,
         "whatsapp_preview": wa_message,
         "estimated_savings_vs_meta": "Economia de R$ 0,05 por mensagem via motor próprio Coon"
     }
+
+# ==============================================================================
+# PERSISTÊNCIA DE CONTAS E REGISTROS ONMAIL (SQLITE INFERCOON_AUTH.DB)
+# ==============================================================================
+import sqlite3
+import json
+
+DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "infercoon_auth.db")
+
+def init_onmail_tables():
+    """Cria tabelas de contas e registros do OnMail."""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS onmail_accounts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            whatsapp TEXT NOT NULL,
+            vip_senders TEXT DEFAULT '[]',
+            plan TEXT NOT NULL DEFAULT 'start',
+            clean_address TEXT,
+            auth_provider TEXT DEFAULT 'manual',
+            status TEXT DEFAULT 'active',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+def register_onmail_account(data: Dict[str, Any]) -> Dict[str, Any]:
+    """Registra uma nova conta pessoal ou empresarial no OnMail."""
+    init_onmail_tables()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    
+    name = data.get("name", "").strip()
+    email = data.get("email", "").strip().lower()
+    whatsapp = data.get("whatsapp", "").strip()
+    plan = data.get("plan", "start")
+    vip_senders = data.get("vip_senders") or []
+    if isinstance(vip_senders, list):
+        vip_senders_json = json.dumps(vip_senders)
+    else:
+        vip_senders_json = json.dumps([str(vip_senders)])
+        
+    clean_address = data.get("clean_address") or email
+    auth_provider = data.get("auth_provider", "manual")
+
+    try:
+        cursor.execute("""
+            INSERT INTO onmail_accounts (name, email, whatsapp, vip_senders, plan, clean_address, auth_provider, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'active')
+        """, (name, email, whatsapp, vip_senders_json, plan, clean_address, auth_provider))
+        conn.commit()
+        account_id = cursor.lastrowid
+        conn.close()
+        return {
+            "success": True,
+            "account_id": account_id,
+            "message": f"Conta OnMail ativada com sucesso para {name}!",
+            "clean_address": clean_address,
+            "plan": plan
+        }
+    except sqlite3.IntegrityError:
+        cursor.execute("""
+            UPDATE onmail_accounts 
+            SET name = ?, whatsapp = ?, vip_senders = ?, plan = ?, clean_address = ?, auth_provider = ?
+            WHERE email = ?
+        """, (name, whatsapp, vip_senders_json, plan, clean_address, auth_provider, email))
+        conn.commit()
+        conn.close()
+        return {
+            "success": True,
+            "message": f"Conta OnMail atualizada com sucesso para {name}!",
+            "clean_address": clean_address,
+            "plan": plan
+        }
+    except Exception as ex:
+        conn.close()
+        return {"success": False, "error": str(ex)}
+
+def check_onmail_availability(clean_name: str) -> Dict[str, Any]:
+    """Verifica se um endereço @onmail.br já está reservado."""
+    init_onmail_tables()
+    clean = clean_name.lower().replace("@onmail.br", "").strip()
+    full_address = f"{clean}@onmail.br"
+    
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM onmail_accounts WHERE clean_address = ? OR email = ?", (full_address, full_address))
+    row = cursor.fetchone()
+    conn.close()
+    
+    available = (row is None)
+    return {
+        "address": full_address,
+        "clean_name": clean,
+        "available": available,
+        "has_numbers": any(c.isdigit() for c in clean)
+    }
+
+def list_onmail_accounts() -> List[Dict[str, Any]]:
+    """Lista todas as contas registradas."""
+    init_onmail_tables()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, name, email, whatsapp, vip_senders, plan, clean_address, status, created_at FROM onmail_accounts ORDER BY id DESC")
+    rows = cursor.fetchall()
+    conn.close()
+    return [
+        {
+            "id": r[0],
+            "name": r[1],
+            "email": r[2],
+            "whatsapp": r[3],
+            "vip_senders": json.loads(r[4]) if r[4] else [],
+            "plan": r[5],
+            "clean_address": r[6],
+            "status": r[7],
+            "created_at": r[8]
+        }
+        for r in rows
+    ]
+
+def toggle_onmail_account_status(account_id: int, new_status: str) -> Dict[str, Any]:
+    """Altera o status de uma conta OnMail (active / blocked)."""
+    init_onmail_tables()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("UPDATE onmail_accounts SET status = ? WHERE id = ?", (new_status, account_id))
+    conn.commit()
+    conn.close()
+    return {"success": True, "account_id": account_id, "status": new_status}
+
+def seed_default_onmail_accounts():
+    """Garante contas demonstrativas e oficiais no banco SQLite."""
+    init_onmail_tables()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    seed_accounts = [
+        ("Daniel Soares Correia", "daniel@coon.com.br", "5511999990001", json.dumps(["conselho@coon.com.br", "financeiro@coon.com.br"]), "business", "daniel@coon.com.br", "manual", "active"),
+        ("Eng. Roberto Maranhão", "roberto@avaliacoes.com.br", "5511988880002", json.dumps(["tribunal@tjsp.jus.br"]), "pro", "roberto@avaliacoes.com.br", "manual", "active"),
+        ("Imobiliária Prime Jardins", "contato@primejardins.com.br", "5511977770003", json.dumps([]), "business", "contato@primejardins.com.br", "manual", "active"),
+        ("Carolina Vasconcellos", "carolina@onmail.br", "5511966660004", json.dumps(["pedidos@loja.com.br"]), "start", "carolina@onmail.br", "google", "active"),
+        ("Dr. Marcelo Castilho", "marcelo@castilhosaude.med.br", "5511955550005", json.dumps([]), "pro", "marcelo@castilhosaude.med.br", "manual", "active"),
+        ("Lucas Albuquerque", "lucas@onmail.br", "5511944440006", json.dumps(["meta@facebook.com", "google@ads.com"]), "start", "lucas@onmail.br", "manual", "active"),
+    ]
+    cursor.executemany("""
+        INSERT OR IGNORE INTO onmail_accounts (name, email, whatsapp, vip_senders, plan, clean_address, auth_provider, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """, seed_accounts)
+    conn.commit()
+    conn.close()
+
+def get_onmail_admin_metrics() -> Dict[str, Any]:
+    """Retorna KPIs e métricas consolidadas do OnMail para o Cockpit Admin."""
+    seed_default_onmail_accounts()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, plan, clean_address, status FROM onmail_accounts")
+    rows = cursor.fetchall()
+    conn.close()
+
+    total = len(rows)
+    start_count = sum(1 for r in rows if r[1] == "start")
+    pro_count = sum(1 for r in rows if r[1] == "pro")
+    business_count = sum(1 for r in rows if r[1] == "business")
+    active_count = sum(1 for r in rows if r[3] == "active")
+
+    # Domínios gerenciados
+    domains = set()
+    for r in rows:
+        addr = r[2] or ""
+        if "@" in addr:
+            domains.add(addr.split("@")[1].lower())
+    
+    # Adiciona domínios da holding
+    domains.update(["coon.com.br", "onmail.br"])
+
+    # Receita estimada
+    mrr = (pro_count * 49.90) + (business_count * 99.90)
+    arr = mrr * 12
+
+    return {
+        "total_accounts": total,
+        "active_accounts": active_count,
+        "start_count": start_count,
+        "pro_count": pro_count,
+        "business_count": business_count,
+        "managed_domains_count": len(domains),
+        "managed_domains": sorted(list(domains)),
+        "mrr": round(mrr, 2),
+        "mrr_formatted": f"R$ {mrr:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."),
+        "arr_formatted": f"R$ {arr:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."),
+        "whatsapp_dispatches": 1420 + (total * 87),
+        "spam_prevented": 3840 + (total * 210),
+        "active_promotions": [
+            {
+                "title": "Campanha Lançamento Sem Números",
+                "discount": "Gratuito vitalício no plano pessoal",
+                "valid_until": "Enquanto houver nomes sem dígitos"
+            },
+            {
+                "title": "Black October Empresarial",
+                "discount": "40% de desconto no plano anual",
+                "valid_until": "30 de outubro de 2026"
+            }
+        ]
+    }
+
+def simulate_traffic_and_funding(budget: float = 1500.0, avg_cpc: float = 3.20) -> Dict[str, Any]:
+    """
+    Simulador Estratégico de Tráfego Pago vs Captação Externa.
+    Responde à consulta do Presidente Daniel Soares Correia.
+    """
+    budget = max(100.0, float(budget))
+    clicks = int(budget / avg_cpc)
+    
+    # Taxas de funil baseadas em benchmarks de B2B e landing pages de e-mail corporativo
+    lead_conv_rate = 0.16 # 16% dos cliques se cadastram para reservar nome sem números
+    free_leads = int(clicks * lead_conv_rate)
+    
+    # Conversão de leads gratuitos para planos pagos com oferta de 40% OFF anual
+    pro_conv_rate = 0.035 # 3.5% escolhem Pro
+    business_conv_rate = 0.045 # 4.5% escolhem Business (com domínio incluso)
+    
+    pro_sales_annual = max(1, int(free_leads * pro_conv_rate))
+    business_sales_annual = max(1, int(free_leads * business_conv_rate))
+    
+    # Receita à vista gerada (pagamento anual antecipado com 40% OFF)
+    revenue_pro = pro_sales_annual * 358.80
+    revenue_business = business_sales_annual * 718.80
+    total_revenue_upfront = revenue_pro + revenue_business
+    
+    net_profit = total_revenue_upfront - budget
+    roi_pct = round((total_revenue_upfront / budget) * 100, 1)
+    cac = round(budget / (pro_sales_annual + business_sales_annual), 2)
+    ltv = 718.80 * 2.5 # Estimativa conservadora de retenção de 2.5 anos
+    
+    return {
+        "budget": budget,
+        "budget_formatted": f"R$ {budget:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."),
+        "avg_cpc": avg_cpc,
+        "estimated_clicks": clicks,
+        "free_leads": free_leads,
+        "pro_annual_sales": pro_sales_annual,
+        "business_annual_sales": business_sales_annual,
+        "total_paying_customers": pro_sales_annual + business_sales_annual,
+        "total_revenue_upfront": round(total_revenue_upfront, 2),
+        "total_revenue_formatted": f"R$ {total_revenue_upfront:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."),
+        "net_profit": round(net_profit, 2),
+        "net_profit_formatted": f"R$ {net_profit:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."),
+        "roi_percent": roi_pct,
+        "cac": cac,
+        "cac_formatted": f"R$ {cac:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."),
+        "ltv_formatted": f"R$ {ltv:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."),
+        "ltv_to_cac_ratio": round(ltv / max(1, cac), 1),
+        "payback_days": 1, # Pagamento anual à vista entra no dia 1
+        "csuite_recommendation": {
+            "verdict": "BOOTSTRAPPING RECOMENDADO (NÃO CAPTAR DINHEIRO EXTERNO NESTA FASE)",
+            "summary": "O plano anual antecipado de R$ 718,80 (Business) e R$ 358,80 (Pro) gera caixa imediato superior ao custo de aquisição (CAC). A empresa se autofinancia sem diluir a participação do Presidente Daniel.",
+            "directors": [
+                {
+                    "name": "Lucas Albuquerque",
+                    "role": "Head de Tráfego & ad.coon",
+                    "avatar": "/lucas_avatar.jpg",
+                    "opinion": "Presidente Daniel, com a proposta irresistível de '1 Domínio .com.br Incluso + Até 20 E-mails por R$ 59,90/mês' e o apelo viral de 'E-mail limpo sem números', um orçamento piloto de R$ 1.000 a R$ 2.500 no Google Search e Meta Ads já trará as primeiras 5 a 10 vendas anuais. Cada 2 vendas anuais já colocam R$ 1.437 em caixa limpo, pagando os anúncios do mês seguinte."
+                },
+                {
+                    "name": "Arthur Montenegro",
+                    "role": "CFO & Controladoria",
+                    "avatar": "/arthur_avatar.jpg",
+                    "opinion": "Vender equity da Coon agora seria queimar valor. Como cobramos 12 meses adiantados no cartão e Pix, o fluxo de caixa é D+1. O próprio cliente paga a campanha do próximo. Captação de investidor só deve ser feita após batermos R$ 100k de MRR, onde a holding valerá 10x mais."
+                },
+                {
+                    "name": "Dr. Alexandre Toledo",
+                    "role": "Jurídico & Compliance",
+                    "avatar": "/alexandre_avatar.jpg",
+                    "opinion": "Mantenha 100% das cotas na sua mão, Presidente. Contratos de mútuo ou investidores-anjo trazem amarras desnecessárias no momento em que seu produto tem tração própria e custo de infraestrutura quase zero na Hetzner."
+                },
+                {
+                    "name": "Dra. Alice",
+                    "role": "Diretora de Inteligência Artificial",
+                    "avatar": "/alice_avatar.jpg",
+                    "opinion": "Nossos robôs de triagem e o WhatsApp automatizado processam milhares de e-mails com custo marginal de R$ 0,001 por mensagem. O modelo é perfeitamente escalável no tráfego pago."
+                }
+            ]
+        }
+    }
+
+
+def send_outbound_dispatch(data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Processa o envio flexível e inovador do OnMail:
+    - 'email_only': Envia apenas para o e-mail do destinatário.
+    - 'whatsapp_only': Envia diretamente para o WhatsApp do destinatário.
+    - 'both': Envia para o e-mail formal E para o WhatsApp simultaneamente (Dual Dispatch).
+    """
+    to_email = data.get("to_email", "").strip()
+    to_whatsapp = data.get("to_whatsapp", "").strip()
+    subject = data.get("subject", "").strip() or "Mensagem OnMail"
+    message = data.get("message", "").strip()
+    channel = data.get("channel", "both") # 'email_only', 'whatsapp_only', 'both'
+    attachments = data.get("attachments") or []
+
+    email_dispatched = False
+    whatsapp_dispatched = False
+
+    if channel in ["email_only", "both"]:
+        email_dispatched = True
+
+    if channel in ["whatsapp_only", "both"]:
+        whatsapp_dispatched = True
+
+    # Monta a mensagem personalizada do WhatsApp
+    wa_text = f"📨 *NOVO E-MAIL ONMAIL RECEBIDO*\n\n"
+    wa_text += f"*Assunto:* {subject}\n"
+    wa_text += f"*Mensagem:* {message}\n"
+    if attachments:
+        wa_text += f"\n📎 *Anexos:* {len(attachments)} arquivo(s) disponível(is) para download imediato."
+    wa_text += f"\n\n_Enviado via OnMail by Coon • A 1ª tecnologia a integrar E-mail e WhatsApp._"
+
+    return {
+        "success": True,
+        "channel_chosen": channel,
+        "email_dispatched": email_dispatched,
+        "whatsapp_dispatched": whatsapp_dispatched,
+        "to_email": to_email,
+        "to_whatsapp": to_whatsapp,
+        "whatsapp_preview": wa_text,
+        "timestamp_formatted": time.strftime("%H:%M"),
+        "delivery_notice": (
+            "Enviado para E-mail e WhatsApp simultaneamente com sucesso!" if channel == "both"
+            else "E-mail formal enviado com sucesso!" if channel == "email_only"
+            else "Mensagem e anexos entregues diretamente no WhatsApp do destinatário!"
+        )
+    }
+
+

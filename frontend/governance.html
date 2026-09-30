@@ -174,6 +174,12 @@
           </div>
         </div>
 
+        <!-- Botão Baixar para o Celular -->
+        <button onclick="openCoonInstallModal('Governança Coon', 'https://coon.com.br/governance', '🏛️')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white rounded-xl border border-slate-700 hover:border-emerald-500/50 transition flex items-center space-x-1.5 font-bold cursor-pointer" title="Baixar Governança para Celular (PWA & APK)">
+          <span class="text-sm">📱</span>
+          <span class="hidden sm:inline">Baixar no Celular</span>
+        </button>
+
         <a href="/admin" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition flex items-center space-x-1.5 font-bold">
           <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-sky-400"></i>
           <span class="hidden sm:inline">Cockpit Master</span>
@@ -2395,5 +2401,6 @@ ${cfo.executive_statement}
     });
   </script>
   <script src="/static/coon-bot.js"></script>
+  <script src="/coon-mobile-install.js"></script>
 </body>
 </html>

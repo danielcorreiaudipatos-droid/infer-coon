@@ -129,6 +129,12 @@
           <span class="text-[11px] text-slate-600 font-medium">Lucas Albuquerque • <strong>Seu Estrategista</strong></span>
         </div>
 
+        <!-- Botão Baixar para o Celular -->
+        <button onclick="openCoonInstallModal('ad.coon', 'https://coon.com.br/ad', '📢')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer text-xs shadow-2xs font-semibold text-slate-700" title="Baixar ad.coon para Celular (PWA & APK)">
+          <span class="text-sm">📱</span>
+          <span class="hidden sm:inline">Baixar no Celular</span>
+        </button>
+
         <!-- Indicador de Plano & Limite de Postagens -->
         <button onclick="openPlansModal()" class="flex items-center space-x-2 px-3 py-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer text-xs shadow-2xs group">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -3729,5 +3735,6 @@
   </script>
   <script src="/static/coon-auth.js"></script>
   <script src="/static/coon-bot.js"></script>
+  <script src="/coon-mobile-install.js"></script>
 </body>
 </html>

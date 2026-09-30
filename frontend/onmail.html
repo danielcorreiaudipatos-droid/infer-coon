@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OnMail — E-mail Corporativo com Notificação no WhatsApp | Coon</title>
-  <meta name="description" content="Serviço de e-mail corporativo com integração nativa ao WhatsApp, filtro anti-spam e gestão inteligente de anexos para empresas.">
+  <title>OnMail — E-mail Corporativo | Coon</title>
+  <meta name="description" content="Webmail corporativo moderno integrado ao WhatsApp, com proteção anti-spam e gestão inteligente de anexos.">
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -33,14 +33,38 @@
     }
   </script>
 
-  <!-- Script Dark Mode Imediato (Zero FOUC) -->
+  <!-- Reconhecimento Automático de Tema (Chrome, Mozilla, Safari, Edge, Windows, Android) -->
   <script>
     (function() {
-      const saved = localStorage.getItem('coon_theme');
-      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      function getActiveTheme() {
+        const saved = localStorage.getItem('coon_theme');
+        if (saved === 'dark') return 'dark';
+        if (saved === 'light') return 'light';
+        // Detecção nativa do sistema / navegador do usuário (Mozilla ou Chrome)
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      }
+
+      if (getActiveTheme() === 'dark') {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
+      }
+
+      // Sincronização em tempo real se o usuário mudar o tema do Mozilla/Chrome ou do Windows/Android
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+          if (!localStorage.getItem('coon_theme')) {
+            if (e.matches) {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
+            if (typeof updateThemeUI === 'function') updateThemeUI();
+          }
+        });
       }
     })();
   </script>
@@ -55,639 +79,1007 @@
       font-family: 'Google Sans', 'Roboto', sans-serif;
     }
 
-    /* Scrollbar sutil estilo Google */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    /* ======================================================== */
+    /* TIPOGRAFIA DINÂMICA PADRÃO BIG TECH: PASSAGEM DE LUZ DENTRO DAS LETRAS COON */
+    /* Calibração Uniforme: Todas as letras lentas e suaves por igual (linear 8s) */
+    /* ======================================================== */
+    @keyframes coonLetterPassage {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -50% 0;
+      }
+    }
+
+    @keyframes coonDotPulse {
+      0%, 100% {
+        color: #10b981;
+        filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.45));
+        transform: scale(1);
+      }
+      50% {
+        color: #06b6d4;
+        filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.7));
+        transform: scale(1.15);
+      }
+    }
+
+    .gemini-wordmark, .coon-gradient, .coon-bigtech-logo {
+      display: inline-block;
+      background: linear-gradient(
+        115deg,
+        #0f172a 0%,
+        #1e293b 22%,
+        #1d4ed8 35%,
+        #0284c7 43%,
+        #38bdf8 47%,
+        rgba(255, 255, 255, 0.90) 50%,
+        #34d399 53%,
+        #10b981 57%,
+        #059669 65%,
+        #1e293b 78%,
+        #0f172a 100%
+      );
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.055em;
+      animation: coonLetterPassage 8s linear infinite;
+      will-change: background-position;
+      transition: transform 0.3s ease;
+    }
+
+    .gemini-wordmark:hover, .coon-bigtech-logo:hover {
+      transform: scale(1.02);
+    }
+
+    html.dark .gemini-wordmark, html.dark .coon-gradient, html.dark .coon-bigtech-logo {
+      background: linear-gradient(
+        115deg,
+        #f8fafc 0%,
+        #cbd5e1 22%,
+        #93c5fd 35%,
+        #38bdf8 43%,
+        #67e8f9 47%,
+        rgba(255, 255, 255, 0.98) 50%,
+        #6ee7b7 53%,
+        #34d399 57%,
+        #10b981 65%,
+        #94a3b8 78%,
+        #f8fafc 100%
+      );
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: coonLetterPassage 8s linear infinite;
+    }
+
+    .coon-dot-animated {
+      display: inline-block;
+      -webkit-text-fill-color: #10b981;
+      color: #10b981;
+      animation: coonDotPulse 4s ease-in-out infinite alternate;
+      will-change: color, filter, transform;
+    }
+
+    /* Scrollbar discreta padrão Google */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #dadce0; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #dadce0; border-radius: 3px; }
     .dark ::-webkit-scrollbar-thumb { background: #374151; }
 
-    /* Logotipo OnMail com Ponto Coon */
-    .onmail-logo {
-      font-family: 'Google Sans', sans-serif;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-    .onmail-dot {
-      color: #10b981;
-      display: inline-block;
-      animation: pulseDot 2.5s infinite;
-    }
-    @keyframes pulseDot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(1.15); }
-    }
-
-    /* Tabela plana de e-mails estilo Gmail */
-    .gmail-table tr {
-      border-bottom: 1px solid #e8eaed;
-      transition: background-color 0.1s ease;
-      cursor: pointer;
-    }
-    .dark .gmail-table tr {
-      border-bottom: 1px solid #1f2937;
-    }
-    .gmail-table tr:hover {
-      background-color: #f1f3f4;
-    }
-    .dark .gmail-table tr:hover {
-      background-color: #1f2937;
-    }
-    .gmail-table tr.selected {
-      background-color: #e8f0fe !important;
-    }
-    .dark .gmail-table tr.selected {
-      background-color: #1e3a5f !important;
-    }
-
-    /* Item de Navegação Lateral */
-    .gmail-nav-item {
+    /* Itens de Navegação Lateral */
+    .mail-nav-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 12px 6px 16px;
-      border-radius: 0 16px 16px 0;
+      padding: 7px 12px 7px 16px;
+      border-radius: 0 20px 20px 0;
       font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       color: #3c4043;
-      transition: background-color 0.15s;
+      transition: background-color 0.15s, color 0.15s;
     }
-    .dark .gmail-nav-item {
+    .dark .mail-nav-item {
       color: #d1d5db;
     }
-    .gmail-nav-item:hover {
+    .mail-nav-item:hover {
       background-color: #f1f3f4;
     }
-    .dark .gmail-nav-item:hover {
+    .dark .mail-nav-item:hover {
       background-color: #1f2937;
     }
-    .gmail-nav-item.active {
+    .mail-nav-item.active {
       background-color: #d3e3fd;
       color: #041e49;
       font-weight: 700;
     }
-    .dark .gmail-nav-item.active {
+    .dark .mail-nav-item.active {
       background-color: #1e3a5f;
       color: #93c5fd;
     }
+
+    /* Linha da Lista de E-mails */
+    .mail-row {
+      border-bottom: 1px solid #e8eaed;
+      transition: background-color 0.1s ease;
+      cursor: pointer;
+    }
+    .dark .mail-row {
+      border-bottom: 1px solid #1f2937;
+    }
+    .mail-row:hover {
+      background-color: #f8f9fa;
+    }
+    .dark .mail-row:hover {
+      background-color: #1e293b;
+    }
+    .mail-row.selected {
+      background-color: #e8f0fe !important;
+      border-left: 3px solid #1a73e8;
+    }
+    .dark .mail-row.selected {
+      background-color: #1e3a5f !important;
+      border-left: 3px solid #38bdf8;
+    }
   </style>
 </head>
-<body class="bg-white dark:bg-[#0B0F19] text-[#202124] dark:text-[#e8eaed] min-h-screen flex flex-col transition-colors duration-200">
+<body class="bg-[#f6f8fc] dark:bg-[#0B0F19] text-[#202124] dark:text-[#e8eaed] h-screen flex flex-col overflow-hidden transition-colors duration-200">
 
   <!-- ======================================================== -->
-  <!-- 1. CABEÇALHO GLOBAL ESTILO GOOGLE CLOUD / WORKSPACE -->
+  <!-- 1. BARRA SUPERIOR GLOBAL DO WEBMAIL (GOOGLE WORKSPACE CLEAN) -->
   <!-- ======================================================== -->
-  <header class="sticky top-0 z-40 bg-white dark:bg-[#0f172a] border-b border-[#dadce0] dark:border-gray-800 px-4 lg:px-8 py-2.5">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
-      
-      <!-- Lado Esquerdo: Marca & Seletor de Serviço -->
-      <div class="flex items-center space-x-3">
-        <a href="/portal" class="flex items-center space-x-2" title="Portal Coon">
-          <div class="w-8 h-8 rounded-lg bg-[#0f172a] dark:bg-white flex items-center justify-center font-bold text-white dark:text-[#0f172a] text-sm font-heading">
-            c<span class="text-emerald-400">.</span>
-          </div>
+  <header class="h-14 bg-white dark:bg-[#0f172a] border-b border-[#dadce0] dark:border-gray-800 px-4 flex items-center justify-between gap-4 shrink-0 z-30">
+    
+    <!-- Lado Esquerdo: Marca Coon / OnMail -->
+    <div class="flex items-center space-x-3 shrink-0">
+      <div class="flex items-center space-x-2">
+        <a href="/portal" class="flex items-baseline group" title="Ir para o Portal Coon">
+          <span class="text-2xl font-black tracking-tighter gemini-wordmark font-heading group-hover:opacity-90 transition">
+            coon<span class="coon-dot-animated text-emerald-500">.</span>
+          </span>
         </a>
-        <div class="h-5 w-[1px] bg-gray-300 dark:bg-gray-700"></div>
-        <div class="flex items-baseline space-x-1.5">
-          <span class="text-xl onmail-logo text-gray-900 dark:text-white">onmail<span class="onmail-dot">.</span></span>
-          <span class="text-[11px] font-medium text-gray-500 dark:text-gray-400 tracking-wide uppercase">Coon</span>
+        <span class="text-gray-300 dark:text-gray-700 text-lg font-light select-none">/</span>
+        <a href="/onmail" class="flex items-baseline" title="OnMail Webmail">
+          <span class="text-xl font-bold tracking-tight text-gray-900 dark:text-white font-heading">
+            onmail<span class="text-emerald-500">.</span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Centro: Barra de Pesquisa de Mensagens Realista -->
+    <div class="flex-1 max-w-2xl mx-2">
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         </div>
+        <input 
+          type="text" 
+          id="emailSearchInput"
+          oninput="filterEmails(this.value)"
+          placeholder="Pesquisar em todas as mensagens e anexos..." 
+          class="w-full pl-10 pr-10 py-2 bg-[#eaf1fb] dark:bg-[#1e293b] hover:bg-[#e1e9f6] focus:bg-white dark:focus:bg-[#0f172a] border border-transparent focus:border-[#1a73e8] rounded-full text-xs text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none transition shadow-2xs"
+        >
+        <button onclick="document.getElementById('emailSearchInput').value=''; filterEmails('');" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xs">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- Lado Direito: Ações, Status da Conexão e Perfil -->
+    <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+      
+      <!-- Badge de Status da Conexão WhatsApp -->
+      <div class="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300" title="Mensagens VIP disparam no seu celular">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>WhatsApp Ativo</span>
       </div>
 
-      <!-- Centro: Barra de Pesquisa Oficial Google-Style -->
-      <div class="hidden md:flex flex-1 max-w-2xl mx-4">
-        <div class="w-full flex items-center bg-[#f1f3f4] dark:bg-gray-800/80 rounded-lg px-4 py-2 border border-transparent focus-within:border-[#1a73e8] focus-within:bg-white dark:focus-within:bg-gray-800 focus-within:shadow-sm transition">
-          <svg class="w-4 h-4 text-gray-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input type="text" placeholder="Pesquisar mensagens, remetentes VIP ou anexos no OnMail..." class="w-full bg-transparent text-xs text-gray-800 dark:text-gray-200 focus:outline-none">
-          <span class="text-[10px] text-gray-400 border border-gray-300 dark:border-gray-600 px-1.5 py-0.5 rounded ml-2">/</span>
-        </div>
-      </div>
+      <!-- Alternador Modo Escuro / Claro (Com reconhecimento automático do Chrome / Mozilla) -->
+      <button 
+        id="themeToggleBtn" 
+        onclick="toggleTheme()" 
+        class="w-8 h-8 rounded-full flex items-center justify-center text-gray-600 dark:text-amber-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition" 
+        title="Alternar Modo Escuro / Claro (Reconhece Mozilla e Chrome)"
+      >
+        <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg id="sunIcon" class="w-4 h-4 hidden dark:block text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9h-1m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
 
-      <!-- Lado Direito: Ações & Alternador de Tema -->
-      <div class="flex items-center space-x-3">
-        <!-- Alternador Dark/Light (Lua / Sol) -->
-        <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition" title="Alternar Modo Escuro / Claro">
-          <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-          <svg id="sunIcon" class="w-4 h-4 hidden dark:block text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9h-1m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      <!-- Botão de Configurações do E-mail (Engrenagem) -->
+      <button 
+        onclick="openSettingsModal()" 
+        class="w-8 h-8 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition" 
+        title="Configurações do E-mail (Encaminhamento, WhatsApp, Assinatura)"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </button>
+
+      <!-- Botão Discreto de Planos Corporativos (Abre Modal sob demanda) -->
+      <button 
+        onclick="openPlansModal()" 
+        class="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer"
+        title="Conhecer Planos e Contratação Corporativa"
+      >
+        <span>💎</span>
+        <span>Planos</span>
+      </button>
+
+      <!-- Link OnNews -->
+      <a href="/onnews" class="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+        <span>📰</span>
+        <span>OnNews</span>
+      </a>
+
+      <!-- Link Exclusivo do Daniel (Admin) -->
+      <a id="adminOnmailLink" href="/admin" class="hidden text-xs font-semibold text-amber-600 dark:text-amber-400 px-2.5 py-1.5 rounded-full hover:bg-amber-50 dark:hover:bg-amber-950/40 transition items-center gap-1">
+        <span>👑</span>
+        <span>Admin</span>
+      </a>
+
+      <!-- Avatar / Perfil Coon com Menu Dropdown Interativo (Estilo Google Account) -->
+      <div class="relative">
+        <button 
+          id="onmailAvatarBtn"
+          onclick="toggleOnmailUserMenu()" 
+          class="w-8 h-8 rounded-full bg-slate-900 dark:bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-xs cursor-pointer hover:ring-2 hover:ring-emerald-400 transition" 
+          title="Conta Conectada: Daniel Soares Correia • Clique para ver opções ou sair"
+        >
+          DS
         </button>
 
-        <a href="#planos" class="hidden sm:inline-block text-xs font-medium text-gray-700 dark:text-gray-300 hover:text-[#1a73e8] px-2 py-1">Planos Corporativos</a>
-        
-        <a href="/studio" class="text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-2 py-1">Studio Coon</a>
+        <!-- Dropdown Flutuante do Perfil do Daniel / Usuário -->
+        <div 
+          id="onmailUserDropdown" 
+          class="hidden absolute right-0 top-11 w-64 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl p-3 z-50 animate-in fade-in zoom-in-95 duration-100 text-left"
+        >
+          <div class="flex items-center gap-2.5 pb-2.5 border-b border-gray-100 dark:border-gray-800">
+            <div class="w-9 h-9 rounded-full bg-slate-900 dark:bg-emerald-600 text-white flex items-center justify-center font-black text-xs font-mono shrink-0">
+              DS
+            </div>
+            <div class="overflow-hidden">
+              <div class="text-xs font-bold text-gray-900 dark:text-white truncate">Daniel Soares Correia</div>
+              <div class="text-[10px] text-gray-500 dark:text-gray-400 truncate font-mono">diretoria@coon.com.br</div>
+            </div>
+          </div>
 
-        <a href="#planos" class="bg-[#1a73e8] hover:bg-[#1557b0] text-white text-xs font-medium px-4 py-2 rounded-md transition shadow-xs">
-          Iniciar Gratuitamente
-        </a>
+          <div class="py-2 space-y-1 text-xs">
+            <a href="/portal" class="w-full px-2.5 py-1.5 text-left rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2 transition">
+              <span>🏠</span>
+              <span>Portal Principal Coon</span>
+            </a>
+            <a href="/admin" class="w-full px-2.5 py-1.5 text-left rounded-lg hover:bg-amber-50 dark:hover:bg-amber-950/40 font-semibold text-amber-700 dark:text-amber-400 flex items-center gap-2 transition">
+              <span>👑</span>
+              <span>Painel Master Admin</span>
+            </a>
+            <button onclick="handleOnmailSwitchAccount()" class="w-full px-2.5 py-1.5 text-left rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2 transition cursor-pointer">
+              <span>🔄</span>
+              <span>Trocar de Login</span>
+            </button>
+          </div>
+
+          <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
+            <button onclick="handleOnmailLogout()" class="w-full px-2.5 py-1.5 text-left rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 font-bold text-rose-600 dark:text-rose-400 flex items-center gap-2 transition cursor-pointer">
+              <span>🚪</span>
+              <span>Sair da Conta (Deslogar)</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
 
   <!-- ======================================================== -->
-  <!-- 2. APRESENTAÇÃO TIPO GOOGLE CLOUD (LIMPA, SÓBRIA & DIRETA) -->
+  <!-- 2. WORKSPACE COMPLETO DO E-MAIL (ESTILO GMAIL BIG TECH) -->
   <!-- ======================================================== -->
-  <section class="pt-10 pb-6 px-4 max-w-7xl mx-auto">
-    <div class="max-w-4xl mx-auto text-center">
-      <div class="inline-flex items-center gap-1.5 text-xs font-medium text-[#1a73e8] dark:text-sky-400 bg-blue-50 dark:bg-blue-950/40 px-3 py-1 rounded-full mb-3 border border-blue-200 dark:border-blue-900">
-        <span>Solução Corporativa Coon</span>
-        <span>•</span>
-        <span>Comunicação e Produtividade</span>
-      </div>
-      
-      <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight font-heading">
-        E-mail corporativo moderno integrado ao fluxo do WhatsApp.
-      </h1>
-      
-      <p class="mt-3 text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-        Gerencie suas contas <strong class="text-gray-900 dark:text-white font-medium">@suaempresa.com.br</strong> com proteção contra spam e receba notificações instantâneas no celular quando clientes prioritários enviarem propostas e documentos.
-      </p>
-
-      <!-- DESTAQUE EXCLUSIVO ONMAIL: FÁCIL INTEGRAÇÃO + DISPARO EXCLUSIVO -->
-      <div class="mt-6 max-w-3xl mx-auto p-3.5 bg-blue-50/70 dark:bg-blue-950/30 rounded-xl border border-blue-200/80 dark:border-blue-900/60 text-xs text-left flex items-start space-x-3">
-        <div class="w-8 h-8 rounded-lg bg-[#1a73e8] text-white flex items-center justify-center shrink-0 font-bold text-sm">
-          ⇄
-        </div>
-        <div class="flex-1">
-          <span class="font-bold text-gray-900 dark:text-white block mb-0.5">Fácil Integração com Qualquer E-mail (Gmail, Outlook, Yahoo, cPanel)</span>
-          <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-            Você não precisa abandonar sua conta de e-mail atual. Basta conectar o encaminhamento do seu Gmail ou Outlook para o <strong>OnMail</strong>. O processamento de mensagens e o <strong>envio de alertas com anexos no WhatsApp são exclusividade da nossa plataforma</strong>.
-          </p>
-        </div>
-      </div>
-
-      <!-- Indicadores de Segurança / Infraestrutura Google Cloud Style -->
-      <div class="mt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-gray-500 dark:text-gray-400">
-        <span class="flex items-center gap-1.5">
-          <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          Integração Simples com Gmail e Outlook
-        </span>
-        <span class="flex items-center gap-1.5">
-          <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          Alertas WhatsApp Exclusivos OnMail
-        </span>
-        <span class="flex items-center gap-1.5">
-          <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          Filtro Ativo de Spam e Lixo Eletrônico
-        </span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================================================== -->
-  <!-- 3. WORKSPACE GMAIL REALISTA (PLANO, SÓBRIO & SEM EXCESSO DE BOXES) -->
-  <!-- ======================================================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 pb-16">
+  <div class="flex-1 flex overflow-hidden">
     
-    <div class="bg-white dark:bg-[#111827] rounded-lg border border-[#dadce0] dark:border-gray-800 shadow-sm overflow-hidden flex flex-col md:flex-row h-[620px]">
+    <!-- COLUNA 1: NAVEGAÇÃO DE PASTAS & CONFIGURAÇÕES (210px) -->
+    <aside class="w-52 bg-white dark:bg-[#0f172a] border-r border-[#dadce0] dark:border-gray-800 flex flex-col justify-between p-3 shrink-0">
       
-      <!-- A. BARRA LATERAL ESTILO GMAIL AUTÊNTICO (COM LIXO ELETRÔNICO E SPAM) -->
-      <aside class="w-full md:w-56 border-r border-[#dadce0] dark:border-gray-800 p-3 shrink-0 flex flex-col justify-between bg-white dark:bg-[#111827]">
-        <div class="space-y-1">
-          
-          <!-- Botão Escrever Google Workspace -->
-          <div class="mb-4">
-            <button onclick="alert('Janela de nova mensagem aberta.');" class="inline-flex items-center space-x-3 bg-[#c2e7ff] dark:bg-[#1e3a5f] hover:shadow-md text-[#001d35] dark:text-sky-200 px-5 py-3 rounded-2xl text-xs font-semibold transition">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-              <span>Escrever</span>
-            </button>
-          </div>
+      <div>
+        <!-- Botão Novo E-mail (Escrever) -->
+        <button 
+          onclick="openComposeModal()" 
+          class="w-full mb-4 px-4 py-3 bg-[#c2e7ff] hover:bg-[#b3d7ef] dark:bg-[#1a73e8] dark:hover:bg-[#1557b0] text-[#001d35] dark:text-white rounded-2xl text-xs font-bold flex items-center space-x-3 shadow-xs hover:shadow-md transition cursor-pointer"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <span class="tracking-wide">Escrever</span>
+        </button>
 
-          <!-- Pastas Principais -->
-          <div onclick="switchFolder('inbox')" id="navInbox" class="gmail-nav-item active">
+        <!-- Lista de Pastas -->
+        <nav class="space-y-0.5">
+          <div onclick="switchFolder('inbox')" id="navInbox" class="mail-nav-item active">
             <div class="flex items-center space-x-3">
-              <svg class="w-4 h-4 text-gray-600 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H4.99c-1.11 0-1.98.89-1.98 2L3 19c0 1.1.88 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2zm0 12h-4c0 1.66-1.35 3-3 3s-3-1.34-3-3H4.99V5H19v10z"/></svg>
-              <span>Caixa de entrada</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+              <span>Entrada</span>
             </div>
-            <span class="text-xs font-bold text-gray-700 dark:text-gray-300">3</span>
+            <span class="text-xs font-bold text-gray-800 dark:text-white" id="badgeInboxCount">3</span>
           </div>
 
-          <div onclick="switchFolder('starred')" id="navStarred" class="gmail-nav-item">
+          <div onclick="switchFolder('vip')" id="navVip" class="mail-nav-item">
             <div class="flex items-center space-x-3">
-              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-              <span>Com estrela</span>
+              <span class="text-amber-500 text-xs">⭐</span>
+              <span>VIP • WhatsApp</span>
             </div>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold px-1.5 py-0.2 rounded-full">2</span>
           </div>
 
-          <div onclick="switchFolder('vip')" id="navVip" class="gmail-nav-item">
+          <div onclick="switchFolder('sent')" id="navSent" class="mail-nav-item">
             <div class="flex items-center space-x-3">
-              <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-              <span>Remetentes VIP</span>
-            </div>
-            <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950 px-1.5 py-0.5 rounded">2</span>
-          </div>
-
-          <div onclick="switchFolder('sent')" id="navSent" class="gmail-nav-item">
-            <div class="flex items-center space-x-3">
-              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
               <span>Enviados</span>
             </div>
           </div>
 
-          <div onclick="switchFolder('drafts')" id="navDrafts" class="gmail-nav-item">
+          <div onclick="switchFolder('drafts')" id="navDrafts" class="mail-nav-item">
             <div class="flex items-center space-x-3">
-              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               <span>Rascunhos</span>
             </div>
           </div>
 
-          <!-- LIXO ELETRÔNICO & SPAM SOLICITADO PELO PRESIDENTE -->
-          <div onclick="switchFolder('spam')" id="navSpam" class="gmail-nav-item">
+          <div onclick="switchFolder('spam')" id="navSpam" class="mail-nav-item">
             <div class="flex items-center space-x-3">
-              <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-              <span>Spam / Lixo Eletrônico</span>
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <span>Anti-Spam</span>
             </div>
-            <span class="text-[11px] font-bold text-amber-600 bg-amber-50 dark:bg-amber-950 px-1.5 py-0.5 rounded">8</span>
+            <span class="text-[10px] text-gray-400 font-mono">8</span>
           </div>
 
-          <div onclick="switchFolder('trash')" id="navTrash" class="gmail-nav-item">
+          <div onclick="switchFolder('trash')" id="navTrash" class="mail-nav-item">
             <div class="flex items-center space-x-3">
-              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
               <span>Lixeira</span>
             </div>
           </div>
-        </div>
-
-        <!-- Indicador de Armazenamento Google Workspace -->
-        <div class="pt-3 border-t border-[#dadce0] dark:border-gray-800 text-[11px] text-gray-500">
-          <div class="flex justify-between mb-1">
-            <span>Armazenamento</span>
-            <span class="font-medium text-gray-700 dark:text-gray-300">0.4 GB de 10 GB</span>
-          </div>
-          <div class="w-full bg-gray-200 dark:bg-gray-700 h-1 rounded-full overflow-hidden">
-            <div class="bg-[#1a73e8] h-full w-[4%]"></div>
-          </div>
-        </div>
-      </aside>
-
-      <!-- B. ÁREA CENTRAL: TABELA DE E-MAILS & LEITOR (ESTILO GMAIL FLUIDO) -->
-      <section class="flex-1 flex flex-col overflow-hidden bg-white dark:bg-[#111827] border-r border-[#dadce0] dark:border-gray-800">
-        
-        <!-- Barra de Ações Superior estilo Gmail -->
-        <div class="px-4 py-2 border-b border-[#dadce0] dark:border-gray-800 flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 bg-white dark:bg-[#111827]">
-          <div class="flex items-center space-x-4">
-            <input type="checkbox" class="rounded border-gray-300 text-[#1a73e8]">
-            <button onclick="refreshInbox()" title="Atualizar" class="hover:text-gray-900 dark:hover:text-white">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            </button>
-            <span id="folderTitle" class="font-bold text-gray-800 dark:text-gray-200">Caixa de entrada</span>
-          </div>
-
-          <div class="text-[11px] text-gray-500">
-            <span>1–3 de 3</span>
-          </div>
-        </div>
-
-        <!-- Tabela Plana de Mensagens -->
-        <div class="overflow-y-auto divide-y divide-[#e8eaed] dark:divide-gray-800" id="emailListContainer">
-          
-          <!-- E-mail 1 -->
-          <div onclick="openEmail(1)" id="row1" class="gmail-table-row px-4 py-2.5 flex items-center justify-between gap-3 text-xs hover:bg-[#f1f3f4] dark:hover:bg-gray-800 cursor-pointer selected">
-            <div class="flex items-center space-x-3 shrink-0">
-              <input type="checkbox" class="rounded border-gray-300 text-[#1a73e8]">
-              <span class="text-amber-400">★</span>
-              <span class="font-bold text-gray-900 dark:text-white w-32 truncate">Diretoria Bancária</span>
-            </div>
-            <div class="flex-1 truncate">
-              <span class="font-bold text-gray-900 dark:text-white">Contrato de Financiamento Aprovado</span>
-              <span class="text-gray-500 dark:text-gray-400 ml-1">— Segue formalizada a minuta contratual para assinatura digital...</span>
-            </div>
-            <div class="shrink-0 flex items-center space-x-2 text-gray-400">
-              <span class="text-[11px] bg-red-50 text-red-700 px-1.5 py-0.5 rounded font-medium border border-red-200">PDF (3.5 MB)</span>
-              <span class="text-[11px]">14:15</span>
-            </div>
-          </div>
-
-          <!-- E-mail 2 -->
-          <div onclick="openEmail(2)" id="row2" class="gmail-table-row px-4 py-2.5 flex items-center justify-between gap-3 text-xs hover:bg-[#f1f3f4] dark:hover:bg-gray-800 cursor-pointer">
-            <div class="flex items-center space-x-3 shrink-0">
-              <input type="checkbox" class="rounded border-gray-300 text-[#1a73e8]">
-              <span class="text-gray-300 dark:text-gray-600">☆</span>
-              <span class="font-bold text-gray-900 dark:text-white w-32 truncate">Engenharia Pericial</span>
-            </div>
-            <div class="flex-1 truncate">
-              <span class="font-bold text-gray-900 dark:text-white">Vistoria Técnica & Fotos de Campo</span>
-              <span class="text-gray-500 dark:text-gray-400 ml-1">— Laudo ABNT NBR 14653 finalizado com 4 fotos da vistoria predial...</span>
-            </div>
-            <div class="shrink-0 flex items-center space-x-2 text-gray-400">
-              <span class="text-[11px] bg-amber-50 text-amber-800 px-1.5 py-0.5 rounded font-medium border border-amber-200">4 Arquivos (.ZIP)</span>
-              <span class="text-[11px]">13:42</span>
-            </div>
-          </div>
-
-          <!-- E-mail 3 -->
-          <div onclick="openEmail(3)" id="row3" class="gmail-table-row px-4 py-2.5 flex items-center justify-between gap-3 text-xs hover:bg-[#f1f3f4] dark:hover:bg-gray-800 cursor-pointer">
-            <div class="flex items-center space-x-3 shrink-0">
-              <input type="checkbox" class="rounded border-gray-300 text-[#1a73e8]">
-              <span class="text-gray-300 dark:text-gray-600">☆</span>
-              <span class="font-medium text-gray-700 dark:text-gray-300 w-32 truncate">Studio Arquitetura</span>
-            </div>
-            <div class="flex-1 truncate">
-              <span class="text-gray-700 dark:text-gray-300">Modelagem Executiva BIM 3D</span>
-              <span class="text-gray-500 dark:text-gray-400 ml-1">— Arquivos estruturais e plantas complementares em alta resolução...</span>
-            </div>
-            <div class="shrink-0 flex items-center space-x-2 text-gray-400">
-              <span class="text-[11px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-medium border border-blue-200">Nuvem (84 MB)</span>
-              <span class="text-[11px]">11:05</span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Painel de Leitura da Mensagem Aberta (Google Workspace Clean) -->
-        <div class="flex-1 p-5 overflow-y-auto bg-white dark:bg-[#111827] border-t border-[#dadce0] dark:border-gray-800">
-          <div class="flex items-start justify-between pb-3 mb-3 border-b border-[#dadce0] dark:border-gray-800">
-            <div>
-              <h2 id="viewSubject" class="text-base font-bold text-gray-900 dark:text-white">Contrato de Financiamento Aprovado</h2>
-              <div class="text-xs text-gray-500 mt-1">
-                De: <strong id="viewFrom" class="text-gray-800 dark:text-gray-200">diretoria@banco.com.br</strong> 
-                • Para: <span class="text-gray-600 dark:text-gray-400">contato@suaempresa.com.br</span>
-              </div>
-            </div>
-            <div class="text-right">
-              <span id="viewTime" class="text-xs text-gray-400">14:15</span>
-              <div id="viewVipTag" class="text-[10px] text-emerald-600 font-bold">⭐ Remetente VIP • Notificação Imediata</div>
-            </div>
-          </div>
-
-          <div id="viewBody" class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed space-y-3 mb-6">
-            Olá! Tudo bem? Segue formalizado o contrato de prestação de serviços e a minuta de financiamento aprovada para a sua empresa. Favor revisar as cláusulas 4 e 7 antes da assinatura digital.
-          </div>
-
-          <!-- Linha de Anexos estilo Gmail -->
-          <div class="pt-3 border-t border-[#dadce0] dark:border-gray-800">
-            <span class="text-xs font-semibold text-gray-700 dark:text-gray-300 block mb-2">1 Anexo</span>
-            <div id="viewAttachmentLine" class="inline-flex items-center space-x-3 p-2.5 rounded-lg border border-[#dadce0] dark:border-gray-700 bg-[#f8f9fa] dark:bg-gray-800 text-xs">
-              <span id="viewAttIcon" class="text-red-600 font-bold">PDF</span>
-              <div>
-                <div id="viewAttName" class="font-medium text-gray-900 dark:text-white">contrato_final_aprovado.pdf</div>
-                <div id="viewAttMeta" class="text-[10px] text-gray-500">3.5 MB • Enviado diretamente ao WhatsApp</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </section>
-
-      <!-- C. PAINEL LATERAL DE INTEGRAÇÃO WHATSAPP (A PONTE DO ONMAIL) -->
-      <aside class="w-full md:w-80 bg-[#f8f9fa] dark:bg-[#0f172a] p-4 shrink-0 flex flex-col justify-between">
-        <div>
-          <!-- Cabeçalho da Conexão -->
-          <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#dadce0] dark:border-gray-800">
-            <div class="flex items-center space-x-2">
-              <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
-              <span class="text-xs font-bold text-gray-900 dark:text-white">Ponte WhatsApp Ativa</span>
-            </div>
-            <span class="text-[10px] text-gray-500 font-mono">Status: Conectado</span>
-          </div>
-
-          <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-normal mb-3">
-            O OnMail entrega resumos das mensagens e organiza arquivos pesados direto no seu celular:
-          </p>
-
-          <!-- Prévia da Notificação no WhatsApp do Cliente -->
-          <div class="bg-white dark:bg-[#1f2937] rounded-lg p-3 border border-[#dadce0] dark:border-gray-700 shadow-xs text-xs space-y-2">
-            <div class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider flex items-center justify-between">
-              <span id="waCardHeader">📩 Notificação no Celular</span>
-              <span class="text-gray-400 font-normal">14:15</span>
-            </div>
-
-            <div class="text-xs text-gray-800 dark:text-gray-200">
-              <div><strong>De:</strong> <span id="waCardSender">diretoria@banco.com.br</span></div>
-              <div><strong>Assunto:</strong> <span id="waCardSubject">Contrato de Financiamento Aprovado</span></div>
-            </div>
-
-            <div class="pt-2 border-t border-gray-100 dark:border-gray-700 text-[11px] text-gray-600 dark:text-gray-300">
-              <span class="text-[10px] text-gray-400 block font-medium">RESUMO ENVIADO:</span>
-              <p id="waCardBody" class="mt-0.5 leading-relaxed">
-                Olá! Tudo bem? Segue formalizado o contrato de prestação de serviços e a minuta de financiamento aprovada...
-              </p>
-            </div>
-
-            <div id="waCardAttBox" class="p-2 bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-between text-[11px]">
-              <span id="waCardAttTitle">📎 contrato_final_aprovado.pdf (3.5 MB)</span>
-              <span class="text-emerald-600 dark:text-emerald-400 font-bold">Pronto</span>
-            </div>
-          </div>
-
-          <!-- Explicação Anti-Spam Integrada Solicitada -->
-          <div class="mt-4 p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs">
-            <div class="font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5 mb-1">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-              <span>Proteção Ativa Anti-Spam</span>
-            </div>
-            <p class="text-[11px] text-emerald-700 dark:text-emerald-400 leading-relaxed">
-              E-mails de marketing, promoções e lixo eletrônico são retidos na pasta Spam e <strong>nunca disparam no seu WhatsApp</strong>. Apenas mensagens de trabalho chegam ao seu celular.
-            </p>
-          </div>
-        </div>
-
-        <div class="pt-3 border-t border-[#dadce0] dark:border-gray-800 text-center">
-          <span class="text-[10px] text-gray-400">OnMail • Tecnologia Coon Participações Ltda.</span>
-        </div>
-      </aside>
-
-    </div>
-
-    <!-- ======================================================== -->
-    <!-- 4. TABELA DE PLANOS CORPORATIVOS (TRANSPARÊNCIA TOTAL) -->
-    <!-- ======================================================== -->
-    <section id="planos" class="pt-20">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white font-heading">
-          Planos corporativos transparentes para sua operação.
-        </h2>
-        <p class="mt-2 text-xs md:text-sm text-gray-600 dark:text-gray-400">
-          Escolha o plano ideal para sua empresa. Upgrade e cancelamento sem burocracia.
-        </p>
+        </nav>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch">
+      <!-- Rodapé da Navegação: Configurações Rápidas -->
+      <div class="pt-3 border-t border-[#dadce0] dark:border-gray-800 space-y-1">
+        <button onclick="openSettingsModal()" class="w-full flex items-center space-x-2 text-left px-2 py-1.5 rounded-lg text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span>Configurações</span>
+        </button>
+        <div class="px-2 py-1 text-[10px] text-gray-400 font-mono">
+          OnMail v2.4 • Coon
+        </div>
+      </div>
+    </aside>
+
+    <!-- COLUNA 2: LISTA DE MENSAGENS RECEBIDAS (340px) -->
+    <section class="w-80 sm:w-96 bg-white dark:bg-[#111827] border-r border-[#dadce0] dark:border-gray-800 flex flex-col shrink-0">
+      
+      <!-- Topo da Lista: Barra de Ferramentas Estilo Gmail (Todos, Atualização, Ações) -->
+      <div class="h-12 px-3 border-b border-[#dadce0] dark:border-gray-800 flex items-center justify-between text-xs text-gray-600 dark:text-gray-300 relative z-20 bg-white/50 dark:bg-gray-900/50">
+        <div class="flex items-center space-x-1 sm:space-x-1.5">
+          
+          <!-- Dropdown Selecionar "Todos" (Checkbox + Seta Padrão Gmail) -->
+          <div class="relative inline-flex items-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 p-0.5 transition">
+            <label class="flex items-center cursor-pointer p-1" title="Selecionar todos">
+              <input 
+                type="checkbox" 
+                id="selectAllCheckbox" 
+                onchange="handleSelectAllToggle(this.checked)"
+                class="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#1a73e8] focus:ring-0 focus:ring-offset-0 cursor-pointer"
+              >
+            </label>
+            <button 
+              id="selectMenuBtn" 
+              onclick="toggleSelectDropdown(event)" 
+              class="p-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 transition"
+              title="Opções de seleção"
+            >
+              <svg class="w-2.5 h-2.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </button>
+            <span class="text-[11px] font-medium text-gray-700 dark:text-gray-200 ml-0.5 select-none" id="selectLabelText">Todos</span>
+
+            <!-- Menu Dropdown do "Todos" Estilo Gmail -->
+            <div 
+              id="selectDropdownMenu" 
+              class="hidden absolute left-0 top-9 w-36 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-800 py-1 z-50 text-xs text-gray-700 dark:text-gray-200"
+            >
+              <button onclick="selectByFilter('all')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 transition">Todos</button>
+              <button onclick="selectByFilter('none')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 transition">Nenhum</button>
+              <button onclick="selectByFilter('read')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 transition">Lidos</button>
+              <button onclick="selectByFilter('unread')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 transition">Não lidos</button>
+              <button onclick="selectByFilter('starred')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 transition">Com estrela</button>
+            </div>
+          </div>
+
+          <!-- Botão "Atualizar" / "Atualização" Padrão Gmail com Giro Circular -->
+          <button 
+            id="refreshInboxBtn"
+            onclick="refreshInbox()" 
+            class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white transition cursor-pointer" 
+            title="Atualizar mensagens (Gmail)"
+          >
+            <svg id="refreshIconSvg" class="w-4 h-4 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            <span class="text-xs font-semibold select-none">Atualização</span>
+          </button>
+
+          <!-- Ações em Lote (Marcar como lida, Excluir) -->
+          <div id="batchActionsSlot" class="hidden items-center space-x-1 pl-1 border-l border-gray-200 dark:border-gray-700">
+            <button onclick="markSelectedRead()" class="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300" title="Marcar como lida">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5"/></svg>
+            </button>
+            <button onclick="deleteSelected()" class="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-rose-600 dark:text-rose-400" title="Excluir selecionados">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Lado Direito: Paginação Estilo Gmail -->
+        <div class="flex items-center space-x-1 text-[11px] text-gray-500 dark:text-gray-400">
+          <span id="pageCountLabel" class="font-mono">1–3 de 3</span>
+          <button onclick="alert('Página inicial de mensagens')" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 hover:text-gray-700 transition" title="Mais recentes">
+            ‹
+          </button>
+          <button onclick="alert('Não há mensagens mais antigas')" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 hover:text-gray-700 transition" title="Mais antigas">
+            ›
+          </button>
+        </div>
+      </div>
+
+      <!-- Toast Flutuante de Atualização Estilo Google -->
+      <div id="gmailToast" class="hidden transition-all duration-300 py-1.5 px-3 bg-gray-900 text-white dark:bg-slate-800 dark:text-slate-100 text-[11px] font-medium flex items-center justify-between shadow-sm">
+        <span id="gmailToastText">🔄 Sincronizando com os servidores...</span>
+        <button onclick="hideGmailToast()" class="text-gray-400 hover:text-white ml-2 text-xs">✕</button>
+      </div>
+
+      <!-- Lista de Linhas de Mensagem -->
+      <div class="flex-1 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-800" id="emailList">
         
-        <!-- PLANO START (GRATUITO) -->
-        <div class="bg-white dark:bg-[#111827] rounded-lg p-6 border border-[#dadce0] dark:border-gray-800 flex flex-col justify-between">
-          <div>
-            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Entrada</span>
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white mt-1 font-heading">OnMail Start</h3>
-            <div class="mt-3 flex items-baseline">
-              <span class="text-3xl font-bold text-gray-900 dark:text-white">R$ 0</span>
-              <span class="text-xs text-gray-500 ml-1">/ para sempre</span>
-            </div>
-            <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">Para profissionais que desejam testar a integração com remetentes principais.</p>
-
-            <ul class="mt-6 space-y-2.5 text-xs text-gray-700 dark:text-gray-300">
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> 1 conta de e-mail corporativo (2 GB)
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> <strong>Até 2 Remetentes VIP</strong> no WhatsApp
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> Resumo diário às 18h dos demais e-mails
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> Filtro de spam e lixo eletrônico ativo
-              </li>
-            </ul>
+        <!-- Mensagem 1 (VIP - Banco do Brasil) -->
+        <div onclick="selectEmail(1)" id="row1" class="mail-row selected p-3 flex items-start gap-2.5">
+          <div class="pt-0.5 shrink-0" onclick="event.stopPropagation()">
+            <input 
+              type="checkbox" 
+              class="email-row-cb w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#1a73e8] focus:ring-0 cursor-pointer"
+              data-id="1"
+              onchange="handleRowCheckboxChange(1, this.checked)"
+            >
           </div>
-
-          <div class="mt-8">
-            <button onclick="alert('Conta OnMail Start ativada com sucesso!');" class="w-full bg-[#f1f3f4] dark:bg-gray-800 hover:bg-[#e8eaed] text-gray-900 dark:text-white font-medium text-xs py-2.5 rounded-md transition">
-              Começar Grátis
-            </button>
+          <div class="flex-1 min-w-0 flex flex-col gap-1">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-1.5 truncate">
+                <span class="text-amber-500 text-xs">⭐</span>
+                <span class="text-xs font-bold text-gray-900 dark:text-white truncate">Banco do Brasil • Diretoria</span>
+              </div>
+              <span class="text-[10px] text-gray-400 font-mono shrink-0">14:15</span>
+            </div>
+            <div class="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate">
+              Contrato de Financiamento Aprovado
+            </div>
+            <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">
+              Olá Daniel! Segue formalizado o contrato de prestação e minuta aprovada...
+            </div>
+            <div class="mt-1 flex items-center justify-between text-[10px]">
+              <span class="bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded font-medium border border-emerald-200 dark:border-emerald-800">
+                📲 Disparado no WhatsApp
+              </span>
+              <span class="text-gray-400 font-medium">📎 PDF (3.5 MB)</span>
+            </div>
           </div>
         </div>
 
-        <!-- PLANO EMPRESARIAL BASE (MAIS ESCOLHIDO) -->
-        <div class="bg-white dark:bg-[#111827] rounded-lg p-6 border-2 border-[#1a73e8] shadow-md flex flex-col justify-between relative">
-          <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#1a73e8] text-white text-[10px] font-bold uppercase px-3 py-0.5 rounded-full">
-            Mais Escolhido
+        <!-- Mensagem 2 (Eng. Marcos Paulo) -->
+        <div onclick="selectEmail(2)" id="row2" class="mail-row p-3 flex items-start gap-2.5">
+          <div class="pt-0.5 shrink-0" onclick="event.stopPropagation()">
+            <input 
+              type="checkbox" 
+              class="email-row-cb w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#1a73e8] focus:ring-0 cursor-pointer"
+              data-id="2"
+              onchange="handleRowCheckboxChange(2, this.checked)"
+            >
           </div>
-          <div>
-            <span class="text-xs font-bold text-[#1a73e8] uppercase tracking-wider">Empresas & Equipes</span>
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white mt-1 font-heading">Empresarial Base</h3>
-            <div class="mt-3 flex items-baseline">
-              <span class="text-3xl font-bold text-gray-900 dark:text-white">R$ 49,90</span>
-              <span class="text-xs text-gray-500 ml-1">/ mês</span>
+          <div class="flex-1 min-w-0 flex flex-col gap-1">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-1.5 truncate">
+                <span class="text-amber-500 text-xs">⭐</span>
+                <span class="text-xs font-bold text-gray-900 dark:text-white truncate">Eng. Marcos Paulo • Perícia</span>
+              </div>
+              <span class="text-[10px] text-gray-400 font-mono shrink-0">12:30</span>
             </div>
-            <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">Para quem já possui domínio próprio registrado e quer a equipe conectada.</p>
-
-            <ul class="mt-6 space-y-2.5 text-xs text-gray-700 dark:text-gray-300">
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> <strong>Até 5 contas corporativas</strong> (10 GB)
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> <strong>Alertas ilimitados no WhatsApp</strong> para toda a equipe
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> Compactação automática em .ZIP de múltiplos anexos
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> Links seguros de nuvem para arquivos pesados
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> Bloqueio rigoroso de phishing e lixo eletrônico
-              </li>
-            </ul>
-          </div>
-
-          <div class="mt-8">
-            <button onclick="alert('Redirecionando para ativação com Pix...');" class="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium text-xs py-2.5 rounded-md transition shadow-xs">
-              Contratar Empresarial
-            </button>
+            <div class="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate">
+              Laudo Técnico Preliminar e Plantas NBR
+            </div>
+            <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">
+              Finalizamos a coleta amostral pericial e a matriz de correlação conforme NBR 14653...
+            </div>
+            <div class="mt-1 flex items-center justify-between text-[10px]">
+              <span class="bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded font-medium border border-emerald-200 dark:border-emerald-800">
+                📲 Disparado no WhatsApp
+              </span>
+              <span class="text-gray-400 font-medium">📦 ZIP (18 MB)</span>
+            </div>
           </div>
         </div>
 
-        <!-- PLANO EMPRESARIAL ANUAL COM DOMÍNIO INCLUSO -->
-        <div class="bg-white dark:bg-[#111827] rounded-lg p-6 border border-[#dadce0] dark:border-gray-800 flex flex-col justify-between">
-          <div>
-            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Economia Anual</span>
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white mt-1 font-heading">Empresarial Anual</h3>
-            <div class="mt-3 flex items-baseline">
-              <span class="text-3xl font-bold text-gray-900 dark:text-white">R$ 499</span>
-              <span class="text-xs text-gray-500 ml-1">/ ano à vista</span>
-            </div>
-            <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">Solução completa com 1 domínio .com.br novo incluso sem custo adicional.</p>
-
-            <ul class="mt-6 space-y-2.5 text-xs text-gray-700 dark:text-gray-300">
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> <strong>Tudo do plano Empresarial</strong>
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> <strong>1 Domínio .com.br INCLUSO</strong> (sem taxas de registro)
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> Gestão técnica de DNS e certificados de segurança
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold">✓</span> Suporte prioritário via WhatsApp Coon
-              </li>
-            </ul>
+        <!-- Mensagem 3 (Arq. Fernanda Lima) -->
+        <div onclick="selectEmail(3)" id="row3" class="mail-row p-3 flex items-start gap-2.5">
+          <div class="pt-0.5 shrink-0" onclick="event.stopPropagation()">
+            <input 
+              type="checkbox" 
+              class="email-row-cb w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#1a73e8] focus:ring-0 cursor-pointer"
+              data-id="3"
+              onchange="handleRowCheckboxChange(3, this.checked)"
+            >
           </div>
-
-          <div class="mt-8">
-            <button onclick="alert('Redirecionando para plano Anual...');" class="w-full bg-gray-900 dark:bg-white dark:text-gray-900 hover:bg-gray-800 text-white font-medium text-xs py-2.5 rounded-md transition shadow-xs">
-              Garantir Anual + Domínio
-            </button>
+          <div class="flex-1 min-w-0 flex flex-col gap-1">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-1.5 truncate">
+                <span class="text-gray-300 dark:text-gray-600 text-xs">☆</span>
+                <span class="text-xs font-bold text-gray-900 dark:text-white truncate">Arq. Fernanda Lima</span>
+              </div>
+              <span class="text-[10px] text-gray-400 font-mono shrink-0">11:05</span>
+            </div>
+            <div class="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate">
+              Modelagem Executiva BIM 3D
+            </div>
+            <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">
+              Arquivos estruturais e plantas complementares em alta resolução para download...
+            </div>
+            <div class="mt-1 flex items-center justify-between text-[10px]">
+              <span class="bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded font-medium border border-blue-200 dark:border-blue-800">
+                Nuvem OnMail
+              </span>
+              <span class="text-gray-400 font-medium">84 MB</span>
+            </div>
           </div>
         </div>
 
       </div>
     </section>
 
-  </main>
+    <!-- COLUNA 3: PAINEL DE LEITURA DA MENSAGEM ABERTA (FLEX 1) -->
+    <main class="flex-1 bg-white dark:bg-[#0f172a] flex flex-col overflow-hidden">
+      
+      <!-- Cabeçalho do E-mail Aberto -->
+      <div class="p-4 sm:p-5 border-b border-[#dadce0] dark:border-gray-800 flex items-start justify-between gap-4">
+        <div>
+          <h2 id="viewSubject" class="text-base sm:text-lg font-bold text-gray-900 dark:text-white font-heading">
+            Contrato de Financiamento Aprovado
+          </h2>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+            <span>De: <strong id="viewFrom" class="text-gray-800 dark:text-gray-200">diretoria@banco.com.br</strong></span>
+            <span>•</span>
+            <span>Para: <span class="text-gray-600 dark:text-gray-400">diretoria@coon.com.br</span></span>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-end shrink-0">
+          <span id="viewTime" class="text-xs text-gray-400 font-mono">14:15 (Hoje)</span>
+          <div id="viewVipTag" class="mt-1 inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+            <span>⭐ Remetente VIP</span>
+            <span>• Notificado no Celular</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Ações Rápidas -->
+      <div class="px-5 py-2 border-b border-gray-100 dark:border-gray-800 flex items-center space-x-2 text-xs">
+        <button onclick="openReplyModal()" class="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium text-gray-700 dark:text-gray-200 transition flex items-center gap-1.5 cursor-pointer">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+          <span>Responder</span>
+        </button>
+        <button onclick="forwardToWhatsApp()" class="px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-bold transition flex items-center gap-1.5 cursor-pointer">
+          <span>📲</span>
+          <span>Reenviar ao WhatsApp</span>
+        </button>
+      </div>
+
+      <!-- Corpo da Mensagem -->
+      <div class="flex-1 p-5 overflow-y-auto space-y-4">
+        <div id="viewBody" class="text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed space-y-3">
+          Olá! Tudo bem? Segue formalizado o contrato de prestação de serviços e a minuta de financiamento aprovada para a sua empresa. Favor revisar as cláusulas 4 e 7 antes da assinatura digital.
+        </div>
+
+        <!-- Box de Anexos no E-mail -->
+        <div class="pt-4 border-t border-[#dadce0] dark:border-gray-800">
+          <span class="text-xs font-bold text-gray-700 dark:text-gray-300 block mb-2">1 Anexo Seguro</span>
+          <div id="viewAttachmentLine" class="inline-flex items-center space-x-3 p-3 rounded-xl border border-[#dadce0] dark:border-gray-700 bg-[#f8f9fa] dark:bg-gray-800/80 text-xs">
+            <span id="viewAttIcon" class="w-8 h-8 rounded-lg bg-red-100 text-red-700 font-bold flex items-center justify-center text-xs">PDF</span>
+            <div>
+              <div id="viewAttName" class="font-bold text-gray-900 dark:text-white">contrato_final_aprovado.pdf</div>
+              <div id="viewAttMeta" class="text-[10px] text-gray-500">3.5 MB • Enviado automaticamente ao seu WhatsApp</div>
+            </div>
+            <button onclick="alert('Download do anexo iniciado com sucesso!')" class="ml-4 px-2.5 py-1 bg-white dark:bg-gray-700 hover:bg-gray-100 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-semibold text-gray-700 dark:text-white transition cursor-pointer">
+              Baixar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caixa de Resposta Rápida no Rodapé -->
+      <div class="p-3 border-t border-[#dadce0] dark:border-gray-800 bg-[#f8f9fa] dark:bg-[#0B0F19] flex items-center gap-2">
+        <input 
+          type="text" 
+          id="quickReplyInput"
+          placeholder="Escreva uma resposta rápida para diretoria@banco.com.br..." 
+          class="flex-1 px-3.5 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl text-xs text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-[#1a73e8]"
+        >
+        <button onclick="sendQuickReply()" class="px-4 py-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+          <span>Enviar</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+        </button>
+      </div>
+
+    </main>
+
+    <!-- COLUNA 4: BARRA LATERAL DIREITA (EXATOS 2 BANNERS DOS PRODUTOS COON) -->
+    <!-- "apenas com baner laterais para divulgar nossos produtos uns dois banners para não cansar" -->
+    <aside class="w-64 bg-[#f8f9fa] dark:bg-[#0f172a] border-l border-[#dadce0] dark:border-gray-800 p-4 flex flex-col justify-between shrink-0 overflow-y-auto">
+      
+      <div class="space-y-4">
+        
+        <!-- Status da Ponte WhatsApp do Cliente -->
+        <div class="p-3 rounded-2xl bg-white dark:bg-[#111827] border border-[#dadce0] dark:border-gray-800 shadow-2xs">
+          <div class="flex items-center justify-between pb-2 mb-2 border-b border-gray-100 dark:border-gray-800 text-xs">
+            <span class="font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              Ponte WhatsApp
+            </span>
+            <span class="text-[10px] text-emerald-600 font-bold">Online</span>
+          </div>
+          <div class="text-[11px] text-gray-500 dark:text-gray-400 space-y-1">
+            <div>Número: <strong class="text-gray-700 dark:text-gray-200">(31) 99999-9999</strong></div>
+            <div>Remetentes VIP: <strong class="text-gray-700 dark:text-gray-200">2 cadastrados</strong></div>
+          </div>
+          <button onclick="openSettingsModal()" class="mt-2.5 w-full py-1 text-[11px] font-semibold text-[#1a73e8] dark:text-sky-400 hover:underline text-left">
+            Gerenciar Conexão →
+          </button>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- BANNER LATERAL 1: ONNEWS (O DIA EM DADOS) -->
+        <!-- ============================================== -->
+        <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50/60 dark:from-slate-900 dark:to-amber-950/30 border border-amber-200 dark:border-amber-900/60 shadow-2xs relative overflow-hidden group">
+          <div class="flex items-center justify-between mb-2">
+            <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+              📰
+            </div>
+            <span class="text-[9px] font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wider bg-amber-100 dark:bg-amber-900/60 px-2 py-0.5 rounded-full">
+              O Dia em Dados
+            </span>
+          </div>
+          <h4 class="text-xs font-bold text-gray-900 dark:text-white font-heading">
+            onnews<span class="text-emerald-500">.</span>
+          </h4>
+          <p class="text-[11px] text-gray-600 dark:text-gray-300 mt-1 leading-relaxed">
+            Notícias dos principais portais, cotações do Agro & Mercado e previsão do tempo direto no seu WhatsApp às 17:30.
+          </p>
+          <a href="/onnews" class="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-[11px] font-bold shadow-xs transition cursor-pointer">
+            <span>Acessar OnNews</span>
+            <span>→</span>
+          </a>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- BANNER LATERAL 2: STUDIO COON (SOFTWARES) -->
+        <!-- ============================================== -->
+        <div class="p-4 rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950 text-white border border-slate-800 shadow-2xs relative overflow-hidden group">
+          <div class="flex items-center justify-between mb-2">
+            <div class="w-8 h-8 rounded-xl bg-emerald-500 text-slate-900 flex items-center justify-center font-bold text-sm shadow-xs">
+              💻
+            </div>
+            <span class="text-[9px] font-bold text-emerald-300 uppercase tracking-wider bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-800">
+              Ecossistema Coon
+            </span>
+          </div>
+          <h4 class="text-xs font-bold text-white font-heading">
+            studio<span class="text-emerald-400">.</span>
+          </h4>
+          <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+            Softwares corporativos de alta precisão: inferência pericial ABNT NBR 14653, cobrança inteligente e gestão.
+          </p>
+          <a href="/studio" class="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-900 rounded-xl text-[11px] font-bold shadow-xs transition cursor-pointer">
+            <span>Explorar Studio</span>
+            <span>→</span>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Rodapé Institucional Discreto -->
+      <div class="pt-3 border-t border-gray-200 dark:border-gray-800 text-center">
+        <span class="text-[10px] text-gray-400">Coon Participações Ltda. • 2026</span>
+      </div>
+
+    </aside>
+
+  </div>
 
   <!-- ======================================================== -->
-  <!-- 5. RODAPÉ INSTITUCIONAL COON -->
+  <!-- MODAL 1: CONFIGURAÇÕES DO E-MAIL (ENCAMINHAMENTO, WHATSAPP) -->
   <!-- ======================================================== -->
-  <footer class="bg-[#f8f9fa] dark:bg-[#0B0F19] border-t border-[#dadce0] dark:border-gray-800 py-6 px-4 text-center text-xs text-gray-500">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-      <div>
-        <strong>OnMail</strong> é um produto da <strong>Coon Participações Ltda.</strong> • 2026
+  <div id="settingsModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#111827] rounded-3xl border border-gray-200 dark:border-gray-800 max-w-lg w-full p-6 shadow-2xl space-y-5 animate-in fade-in duration-150">
+      
+      <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-950 text-[#1a73e8] flex items-center justify-center font-bold">
+            ⚙️
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-gray-900 dark:text-white">Configurações do OnMail</h3>
+            <p class="text-[11px] text-gray-500">Conexão de contas, celular e regras anti-spam</p>
+          </div>
+        </div>
+        <button onclick="closeSettingsModal()" class="w-7 h-7 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-center text-gray-400 hover:text-gray-700">
+          ✕
+        </button>
       </div>
-      <div class="flex items-center space-x-4">
-        <a href="/portal" class="hover:text-gray-800 dark:hover:text-white">Portal Coon</a>
-        <a href="/studio" class="hover:text-gray-800 dark:hover:text-white">Studio Coon</a>
-        <a href="/imob" class="hover:text-gray-800 dark:hover:text-white">imob.coon</a>
-        <a href="/infer" class="hover:text-gray-800 dark:hover:text-white">infer.coon</a>
+
+      <!-- Abas de Configuração -->
+      <div class="space-y-4 text-xs">
+        
+        <!-- 1. Encaminhamento de E-mail Existente -->
+        <div class="p-3.5 bg-gray-50 dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-gray-700">
+          <label class="font-bold text-gray-900 dark:text-white block mb-1">
+            Conectar E-mail Atual (Gmail, Outlook, Yahoo, cPanel)
+          </label>
+          <p class="text-[11px] text-gray-500 mb-2 leading-relaxed">
+            Encaminhe suas mensagens para seu endereço OnMail pessoal:
+          </p>
+          <div class="flex items-center gap-2">
+            <input type="text" readonly value="diretoria@onmail.br" class="flex-1 px-3 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg text-xs font-mono text-gray-800 dark:text-gray-200">
+            <button onclick="navigator.clipboard.writeText('diretoria@onmail.br'); alert('Endereço copiado!');" class="px-3 py-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg font-semibold hover:bg-gray-300 text-xs">
+              Copiar
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Número de Celular / WhatsApp -->
+        <div class="p-3.5 bg-gray-50 dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-gray-700">
+          <label class="font-bold text-gray-900 dark:text-white block mb-1">
+            WhatsApp para Recebimento de Alertas
+          </label>
+          <p class="text-[11px] text-gray-500 mb-2">
+            Onde você quer receber notificações quando clientes e bancos enviarem e-mails:
+          </p>
+          <input type="tel" value="31999999999" class="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg text-xs text-gray-800 dark:text-gray-200">
+        </div>
+
+        <!-- 3. Remetentes VIP -->
+        <div class="p-3.5 bg-gray-50 dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-gray-700">
+          <label class="font-bold text-gray-900 dark:text-white block mb-1">
+            Remetentes VIP (Apita imediatamente no celular)
+          </label>
+          <p class="text-[11px] text-gray-500 mb-2">
+            Mensagens destes e-mails disparam imediatamente no seu WhatsApp:
+          </p>
+          <textarea rows="2" class="w-full px-3 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg text-xs font-mono text-gray-800 dark:text-gray-200">diretoria@banco.com.br&#10;marcos.paulo@engenharia.com.br</textarea>
+        </div>
+
       </div>
+
+      <div class="pt-2 border-t border-gray-100 dark:border-gray-800 flex justify-end space-x-2">
+        <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+          Cancelar
+        </button>
+        <button onclick="alert('Configurações salvas com sucesso!'); closeSettingsModal();" class="px-4 py-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white rounded-xl text-xs font-bold shadow-xs">
+          Salvar Configurações
+        </button>
+      </div>
+
     </div>
-  </footer>
+  </div>
 
-  <!-- SCRIPT DE INTERAÇÃO LIMPA -->
+  <!-- ======================================================== -->
+  <!-- MODAL 2: ESCREVER NOVO E-MAIL (COM OPÇÃO DE CÓPIA NO WHATSAPP) -->
+  <!-- ======================================================== -->
+  <div id="composeModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#111827] rounded-3xl border border-gray-200 dark:border-gray-800 max-w-xl w-full p-6 shadow-2xl space-y-4 animate-in fade-in duration-150">
+      
+      <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
+        <h3 class="text-sm font-bold text-gray-900 dark:text-white">Nova Mensagem</h3>
+        <button onclick="closeComposeModal()" class="w-7 h-7 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-center text-gray-400 hover:text-gray-700">
+          ✕
+        </button>
+      </div>
+
+      <div class="space-y-2 text-xs">
+        <div>
+          <input type="email" id="composeTo" placeholder="Para (ex: cliente@empresa.com.br)" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#1a73e8]">
+        </div>
+        <div>
+          <input type="text" id="composeSubject" placeholder="Assunto" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-xs font-semibold text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#1a73e8]">
+        </div>
+        <div>
+          <textarea id="composeBody" rows="7" placeholder="Escreva sua mensagem corporativa aqui..." class="w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#1a73e8]"></textarea>
+        </div>
+        <div class="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 flex items-center justify-between text-[11px]">
+          <label class="flex items-center space-x-2 text-gray-700 dark:text-gray-300 font-medium cursor-pointer">
+            <input type="checkbox" id="composeSendWaCopy" checked class="rounded text-[#1a73e8]">
+            <span>Enviar comprovante de envio para meu WhatsApp</span>
+          </label>
+          <span class="text-emerald-600 dark:text-emerald-400 font-bold">✓ Ativo</span>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+        <button onclick="alert('Selecione arquivos do seu computador ou celular.')" class="px-3 py-1.5 text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg flex items-center gap-1">
+          📎 <span>Anexar Arquivo</span>
+        </button>
+        <div class="flex items-center space-x-2">
+          <button onclick="closeComposeModal()" class="px-4 py-2 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+            Descartar
+          </button>
+          <button onclick="sendComposeEmail()" class="px-5 py-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white rounded-xl text-xs font-bold shadow-xs flex items-center gap-1.5">
+            <span>Enviar Mensagem</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL 3: PLANOS CORPORATIVOS SOB DEMANDA (SEM SUJAR O E-MAIL) -->
+  <!-- ======================================================== -->
+  <div id="plansModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#111827] rounded-3xl border border-gray-200 dark:border-gray-800 max-w-4xl w-full max-h-[92vh] overflow-y-auto p-6 sm:p-8 shadow-2xl space-y-6 animate-in fade-in duration-150">
+      
+      <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4">
+        <div>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white font-heading">Planos Corporativos OnMail</h3>
+          <p class="text-xs text-gray-500">Escolha o plano ideal para você e sua equipe</p>
+        </div>
+        <button onclick="closePlansModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-center text-gray-400 hover:text-gray-700">
+          ✕
+        </button>
+      </div>
+
+      <!-- Seletor Mensal / Anual (30% de Desconto) -->
+      <div class="text-center">
+        <div class="inline-flex items-center p-1 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700">
+          <button type="button" onclick="setModalBillingCycle('mensal')" id="modalBtnMensal" class="px-4 py-1.5 rounded-full text-xs font-bold bg-[#1a73e8] text-white shadow-xs transition cursor-pointer">
+            Cobrança Mensal
+          </button>
+          <button type="button" onclick="setModalBillingCycle('anual')" id="modalBtnAnual" class="px-4 py-1.5 rounded-full text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition cursor-pointer flex items-center gap-1.5">
+            <span>Cobrança Anual</span>
+            <span class="text-[10px] bg-emerald-500 text-white font-bold px-2 py-0.2 rounded-full uppercase">30% OFF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid dos 3 Planos: OnMail Start, OnMail Pro, OnMail Business -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        
+        <!-- OnMail Start -->
+        <div class="p-5 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 flex flex-col justify-between">
+          <div>
+            <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Entrada</span>
+            <h4 class="text-base font-bold text-gray-900 dark:text-white mt-1">OnMail Start</h4>
+            <div class="mt-2 text-2xl font-bold text-gray-900 dark:text-white">R$ 0</div>
+            <p class="text-xs text-gray-500 mt-1">Para profissionais individuais testarem a integração com o WhatsApp.</p>
+            <ul class="mt-4 space-y-2 text-xs text-gray-600 dark:text-gray-300">
+              <li>✓ 1 conta corporativa (2 GB)</li>
+              <li>✓ Até 2 Remetentes VIP no WhatsApp</li>
+              <li>✓ Resumo diário às 18h</li>
+              <li>✓ Filtro anti-spam ativo</li>
+            </ul>
+          </div>
+          <button onclick="alert('Plano Start ativo!'); closePlansModal();" class="mt-6 w-full py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 text-gray-900 dark:text-white text-xs font-bold rounded-xl transition">
+            Começar Grátis
+          </button>
+        </div>
+
+        <!-- OnMail Pro (Equipes & PMEs) -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#1e293b] border-2 border-[#1a73e8] shadow-md flex flex-col justify-between relative">
+          <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#1a73e8] text-white text-[10px] font-bold uppercase px-3 py-0.5 rounded-full">
+            Mais Escolhido
+          </div>
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-[#1a73e8] uppercase tracking-wider">Equipes & PMEs</span>
+              <span id="mProBadge" class="hidden text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.2 rounded-full">30% OFF</span>
+            </div>
+            <h4 class="text-base font-bold text-gray-900 dark:text-white mt-1">OnMail Pro</h4>
+            <div class="mt-2 flex items-baseline">
+              <span id="mProPrice" class="text-2xl font-bold text-gray-900 dark:text-white">R$ 49,90</span>
+              <span id="mProPeriod" class="text-xs text-gray-500 ml-1">/ mês</span>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Para quem já possui domínio próprio e quer a equipe conectada ao WhatsApp.</p>
+            <ul class="mt-4 space-y-2 text-xs text-gray-600 dark:text-gray-300">
+              <li>✓ <strong>Até 5 contas corporativas</strong> (10 GB cada)</li>
+              <li>✓ <strong>Alertas ilimitados no WhatsApp</strong></li>
+              <li>✓ Compactação automática em .ZIP</li>
+              <li>✓ Links seguros para arquivos pesados</li>
+            </ul>
+          </div>
+          <a href="https://wa.me/5531999999999?text=Ol%C3%A1!%20Gostaria%20de%20assinar%20o%20OnMail%20Pro." target="_blank" class="mt-6 w-full py-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white text-xs font-bold rounded-xl text-center shadow-xs transition">
+            Assinar OnMail Pro
+          </a>
+        </div>
+
+        <!-- OnMail Business -->
+        <div class="p-5 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">Grandes Operações</span>
+              <span id="mBizBadge" class="hidden text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.2 rounded-full">30% OFF</span>
+            </div>
+            <h4 class="text-base font-bold text-gray-900 dark:text-white mt-1">OnMail Business</h4>
+            <div class="mt-2 flex items-baseline">
+              <span id="mBizPrice" class="text-2xl font-bold text-gray-900 dark:text-white">R$ 99,90</span>
+              <span id="mBizPeriod" class="text-xs text-gray-500 ml-1">/ mês</span>
+            </div>
+            <div id="mBizDomain" class="hidden mt-1 text-[11px] text-emerald-600 font-bold">
+              + 1 Domínio .com.br Incluso Grátis
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Solução completa com contas ilimitadas e auditoria.</p>
+            <ul class="mt-4 space-y-2 text-xs text-gray-600 dark:text-gray-300">
+              <li>✓ <strong>Contas ilimitadas</strong> (50 GB por conta)</li>
+              <li>✓ Roteamento VIP por departamento</li>
+              <li>✓ Painel Administrador Master Coon</li>
+              <li>✓ Suporte Executivo 24/7</li>
+            </ul>
+          </div>
+          <a href="https://wa.me/5531999999999?text=Ol%C3%A1!%20Gostaria%20de%20assinar%20o%20OnMail%20Business." target="_blank" class="mt-6 w-full py-2 bg-slate-900 dark:bg-emerald-600 hover:bg-slate-800 text-white text-xs font-bold rounded-xl text-center shadow-xs transition">
+            Assinar OnMail Business
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 3. SCRIPTS DO WEBMAIL, DADOS & SINCRONIZAÇÃO DE TEMAS -->
+  <!-- ======================================================== -->
   <script>
-    // Alternar tema Dark/Light
-    function toggleTheme() {
-      const html = document.documentElement;
-      if (html.classList.contains('dark')) {
-        html.classList.remove('dark');
-        localStorage.setItem('coon_theme', 'light');
-      } else {
-        html.classList.add('dark');
-        localStorage.setItem('coon_theme', 'dark');
-      }
-    }
-
-    // Banco de e-mails para navegação realista
-    const emailData = {
+    // Banco de Mensagens Demonstrativas
+    const emails = {
       1: {
         from: 'diretoria@banco.com.br',
         subject: 'Contrato de Financiamento Aprovado',
-        time: '14:15',
+        time: '14:15 (Hoje)',
         body: 'Olá! Tudo bem? Segue formalizado o contrato de prestação de serviços e a minuta de financiamento aprovada para a sua empresa. Favor revisar as cláusulas 4 e 7 antes da assinatura digital.',
         attName: 'contrato_final_aprovado.pdf',
-        attMeta: '3.5 MB • Enviado diretamente ao WhatsApp',
+        attMeta: '3.5 MB • Enviado automaticamente ao seu WhatsApp',
         attIcon: 'PDF',
-        isVip: true,
-        waAtt: '📎 contrato_final_aprovado.pdf (3.5 MB)'
+        isVip: true
       },
       2: {
-        from: 'perito@engenharia.com.br',
-        subject: 'Vistoria Técnica & Fotos de Campo',
-        time: '13:42',
-        body: 'Prezados, finalizei a inspeção predial. Em anexo o laudo preliminar em formato ABNT NBR 14653, a planilha de dados de mercado e as 4 fotos da fachada e fissuras.',
-        attName: 'Anexos_Email_Vistoria.zip',
-        attMeta: '33.5 MB • 4 Arquivos compactados automaticamente',
+        from: 'marcos.paulo@engenharia.com.br',
+        subject: 'Laudo Técnico Preliminar e Plantas NBR',
+        time: '12:30 (Hoje)',
+        body: 'Prezado Daniel, finalizamos a auditoria pericial conforme as diretrizes da ABNT NBR 14653. Os dados de regressão linear e as plantas complementares estão compactados em anexo para validação pericial.',
+        attName: 'laudo_pericial_nbr14653.zip',
+        attMeta: '18 MB • Compactado e notificado no WhatsApp',
         attIcon: 'ZIP',
-        isVip: true,
-        waAtt: '📦 Anexos_Email_Vistoria.zip (33.5 MB)'
+        isVip: true
       },
       3: {
-        from: 'projeto@arquitetura.com.br',
+        from: 'fernanda.lima@arquitetura.com.br',
         subject: 'Modelagem Executiva BIM 3D',
-        time: '11:05',
-        body: 'Segue o modelo 3D completo e as pranchas em alta resolução. O arquivo é extenso para preservar os detalhes de iluminação e estrutura.',
-        attName: 'projeto_executivo_bim_3d.rvt',
-        attMeta: '84.0 MB • Link de Nuvem Seguro (Expira em 48h)',
-        attIcon: 'R2',
-        isVip: false,
-        waAtt: '☁️ Link de Download Seguro (84 MB)'
+        time: '11:05 (Hoje)',
+        body: 'Bom dia! Subi os arquivos IFC e RVT da modelagem no storage em nuvem do OnMail. Qualquer ajuste no projeto estamos à disposição.',
+        attName: 'projeto_executivo_bim.rvt',
+        attMeta: '84 MB • Armazenado com link seguro de nuvem',
+        attIcon: 'BIM',
+        isVip: false
       }
     };
 
-    function openEmail(id) {
-      const email = emailData[id];
+    function selectEmail(id) {
+      const email = emails[id];
       if (!email) return;
 
-      // Atualiza seleção na tabela
+      // Seleção visual da linha
       [1, 2, 3].forEach(i => {
         const row = document.getElementById('row' + i);
         if (row) {
@@ -704,29 +1096,22 @@
       document.getElementById('viewAttName').innerText = email.attName;
       document.getElementById('viewAttMeta').innerText = email.attMeta;
       document.getElementById('viewAttIcon').innerText = email.attIcon;
-      document.getElementById('viewVipTag').style.display = email.isVip ? 'block' : 'none';
-
-      // Atualiza cartão de WhatsApp lateral
-      document.getElementById('waCardSender').innerText = email.from;
-      document.getElementById('waCardSubject').innerText = email.subject;
-      document.getElementById('waCardBody').innerText = email.body.substring(0, 110) + '...';
-      document.getElementById('waCardAttTitle').innerText = email.waAtt;
+      document.getElementById('viewVipTag').style.display = email.isVip ? 'inline-flex' : 'none';
+      document.getElementById('quickReplyInput').placeholder = `Escreva uma resposta rápida para ${email.from}...`;
     }
 
     function switchFolder(folder) {
       const titles = {
         inbox: 'Caixa de entrada',
-        starred: 'Com estrela',
-        vip: 'Remetentes VIP (Disparo Imediato)',
+        vip: 'Remetentes VIP • WhatsApp',
         sent: 'Enviados',
         drafts: 'Rascunhos',
-        spam: 'Spam / Lixo Eletrônico (8 bloqueados)',
+        spam: 'Anti-Spam • Protegido',
         trash: 'Lixeira'
       };
       document.getElementById('folderTitle').innerText = titles[folder] || 'Mensagens';
 
-      // Altera navegação ativa
-      ['inbox', 'starred', 'vip', 'sent', 'drafts', 'spam', 'trash'].forEach(f => {
+      ['inbox', 'vip', 'sent', 'drafts', 'spam', 'trash'].forEach(f => {
         const el = document.getElementById('nav' + f.charAt(0).toUpperCase() + f.slice(1));
         if (el) {
           if (f === folder) el.classList.add('active');
@@ -735,17 +1120,347 @@
       });
 
       if (folder === 'spam') {
-        alert('🛡️ Pasta Spam / Lixo Eletrônico: 8 e-mails retidos pelo filtro de segurança. Nenhuma dessas mensagens incomodou seu WhatsApp.');
+        alert('🛡️ Pasta Anti-Spam: 8 e-mails de marketing e lixo eletrônico foram retidos pelo filtro perimetral. Nenhuma dessas mensagens incomodou seu WhatsApp.');
       }
     }
 
+    function filterEmails(term) {
+      const q = term.toLowerCase().trim();
+      [1, 2, 3].forEach(id => {
+        const row = document.getElementById('row' + id);
+        const data = emails[id];
+        if (!row || !data) return;
+        const matches = data.subject.toLowerCase().includes(q) || 
+                        data.from.toLowerCase().includes(q) || 
+                        data.body.toLowerCase().includes(q) || 
+                        data.attName.toLowerCase().includes(q);
+        row.style.display = matches ? 'flex' : 'none';
+      });
+    }
+
+    // ==========================================
+    // SELEÇÃO "TODOS" & ATUALIZAÇÃO ESTILO GMAIL
+    // ==========================================
+    function toggleSelectDropdown(event) {
+      if (event) event.stopPropagation();
+      const menu = document.getElementById('selectDropdownMenu');
+      if (menu) menu.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('selectDropdownMenu');
+      const btn = document.getElementById('selectMenuBtn');
+      if (menu && !menu.contains(e.target) && btn && !btn.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+
+    function handleSelectAllToggle(checked) {
+      const cbs = document.querySelectorAll('.email-row-cb');
+      cbs.forEach(cb => {
+        cb.checked = checked;
+        const rowId = cb.getAttribute('data-id');
+        const row = document.getElementById('row' + rowId);
+        if (row) {
+          if (checked) row.classList.add('bg-blue-50/70', 'dark:bg-blue-950/40');
+          else row.classList.remove('bg-blue-50/70', 'dark:bg-blue-950/40');
+        }
+      });
+      updateBatchUI();
+    }
+
+    function selectByFilter(type) {
+      const cbs = document.querySelectorAll('.email-row-cb');
+      cbs.forEach(cb => {
+        const id = parseInt(cb.getAttribute('data-id'));
+        let shouldCheck = false;
+        if (type === 'all') shouldCheck = true;
+        else if (type === 'none') shouldCheck = false;
+        else if (type === 'read') shouldCheck = (id === 1);
+        else if (type === 'unread') shouldCheck = (id === 2 || id === 3);
+        else if (type === 'starred') shouldCheck = (id === 1 || id === 2);
+
+        cb.checked = shouldCheck;
+        const row = document.getElementById('row' + id);
+        if (row) {
+          if (shouldCheck) row.classList.add('bg-blue-50/70', 'dark:bg-blue-950/40');
+          else row.classList.remove('bg-blue-50/70', 'dark:bg-blue-950/40');
+        }
+      });
+
+      const master = document.getElementById('selectAllCheckbox');
+      const allChecked = Array.from(cbs).every(cb => cb.checked);
+      const anyChecked = Array.from(cbs).some(cb => cb.checked);
+      if (master) {
+        master.checked = allChecked;
+        master.indeterminate = (!allChecked && anyChecked);
+      }
+
+      const menu = document.getElementById('selectDropdownMenu');
+      if (menu) menu.classList.add('hidden');
+
+      updateBatchUI();
+    }
+
+    function handleRowCheckboxChange(id, checked) {
+      const row = document.getElementById('row' + id);
+      if (row) {
+        if (checked) row.classList.add('bg-blue-50/70', 'dark:bg-blue-950/40');
+        else row.classList.remove('bg-blue-50/70', 'dark:bg-blue-950/40');
+      }
+
+      const cbs = document.querySelectorAll('.email-row-cb');
+      const master = document.getElementById('selectAllCheckbox');
+      const allChecked = Array.from(cbs).every(cb => cb.checked);
+      const anyChecked = Array.from(cbs).some(cb => cb.checked);
+      if (master) {
+        master.checked = allChecked;
+        master.indeterminate = (!allChecked && anyChecked);
+      }
+      updateBatchUI();
+    }
+
+    function updateBatchUI() {
+      const checkedCount = document.querySelectorAll('.email-row-cb:checked').length;
+      const batchSlot = document.getElementById('batchActionsSlot');
+      const label = document.getElementById('selectLabelText');
+      if (batchSlot) {
+        if (checkedCount > 0) {
+          batchSlot.classList.remove('hidden');
+          batchSlot.classList.add('flex');
+          if (label) label.innerText = `${checkedCount} sel.`;
+        } else {
+          batchSlot.classList.add('hidden');
+          batchSlot.classList.remove('flex');
+          if (label) label.innerText = 'Todos';
+        }
+      }
+    }
+
+    function markSelectedRead() {
+      showGmailToast('✓ Mensagens selecionadas marcadas como lidas.');
+      selectByFilter('none');
+    }
+
+    function deleteSelected() {
+      const checked = document.querySelectorAll('.email-row-cb:checked');
+      if (checked.length === 0) return;
+      checked.forEach(cb => {
+        const id = cb.getAttribute('data-id');
+        const row = document.getElementById('row' + id);
+        if (row) row.style.display = 'none';
+      });
+      showGmailToast(`🗑️ ${checked.length} mensagem(ns) movida(s) para a lixeira.`);
+      selectByFilter('none');
+      const countEl = document.getElementById('pageCountLabel');
+      if (countEl) countEl.innerText = '0 de 0';
+    }
+
+    let toastTimer = null;
+    function showGmailToast(text) {
+      const toast = document.getElementById('gmailToast');
+      const toastText = document.getElementById('gmailToastText');
+      if (!toast || !toastText) return;
+      toastText.innerText = text;
+      toast.classList.remove('hidden');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        hideGmailToast();
+      }, 4000);
+    }
+
+    function hideGmailToast() {
+      const toast = document.getElementById('gmailToast');
+      if (toast) toast.classList.add('hidden');
+    }
+
     function refreshInbox() {
-      alert('Caixa de entrada atualizada. Nenhuma nova mensagem no momento.');
+      const icon = document.getElementById('refreshIconSvg');
+      if (icon) icon.classList.add('animate-spin');
+      showGmailToast('🔄 Sincronizando com servidores OnMail...');
+
+      setTimeout(() => {
+        if (icon) icon.classList.remove('animate-spin');
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        showGmailToast(`✅ Todas as mensagens estão atualizadas (sincronizado às ${timeStr})`);
+        
+        // Restaura linhas se tinham sido ocultadas
+        [1, 2, 3].forEach(id => {
+          const row = document.getElementById('row' + id);
+          if (row) row.style.display = 'flex';
+        });
+        const countEl = document.getElementById('pageCountLabel');
+        if (countEl) countEl.innerText = '1–3 de 3';
+      }, 700);
+    }
+
+    function forwardToWhatsApp() {
+      const subject = document.getElementById('viewSubject').innerText;
+      const from = document.getElementById('viewFrom').innerText;
+      const msg = `📩 *[OnMail]* Novo e-mail de ${from}\n*Assunto:* ${subject}\n\nNotificação confirmada no seu WhatsApp oficial.`;
+      window.open(`https://wa.me/5531999999999?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function sendQuickReply() {
+      const input = document.getElementById('quickReplyInput');
+      if (!input.value.trim()) return;
+      alert(`Mensagem enviada com sucesso para ${document.getElementById('viewFrom').innerText}!`);
+      input.value = '';
+    }
+
+    // Modais
+    function openSettingsModal() {
+      document.getElementById('settingsModal').classList.remove('hidden');
+      document.getElementById('settingsModal').classList.add('flex');
+    }
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').classList.add('hidden');
+      document.getElementById('settingsModal').classList.remove('flex');
+    }
+
+    function openComposeModal() {
+      document.getElementById('composeModal').classList.remove('hidden');
+      document.getElementById('composeModal').classList.add('flex');
+    }
+    function closeComposeModal() {
+      document.getElementById('composeModal').classList.add('hidden');
+      document.getElementById('composeModal').classList.remove('flex');
+    }
+    function openReplyModal() {
+      document.getElementById('composeTo').value = document.getElementById('viewFrom').innerText;
+      document.getElementById('composeSubject').value = 'Re: ' + document.getElementById('viewSubject').innerText;
+      openComposeModal();
+    }
+    function sendComposeEmail() {
+      const to = document.getElementById('composeTo').value.trim();
+      if (!to) {
+        alert('Por favor, informe o destinatário.');
+        return;
+      }
+      alert('✅ Mensagem enviada com sucesso pelo servidor seguro OnMail!');
+      closeComposeModal();
+    }
+
+    function openPlansModal() {
+      document.getElementById('plansModal').classList.remove('hidden');
+      document.getElementById('plansModal').classList.add('flex');
+    }
+    function closePlansModal() {
+      document.getElementById('plansModal').classList.add('hidden');
+      document.getElementById('plansModal').classList.remove('flex');
+    }
+
+    function setModalBillingCycle(cycle) {
+      const btnM = document.getElementById('modalBtnMensal');
+      const btnA = document.getElementById('modalBtnAnual');
+      const proP = document.getElementById('mProPrice');
+      const proPer = document.getElementById('mProPeriod');
+      const proB = document.getElementById('mProBadge');
+      const bizP = document.getElementById('mBizPrice');
+      const bizPer = document.getElementById('mBizPeriod');
+      const bizB = document.getElementById('mBizBadge');
+      const bizD = document.getElementById('mBizDomain');
+
+      if (cycle === 'anual') {
+        btnA.className = "px-4 py-1.5 rounded-full text-xs font-bold bg-[#1a73e8] text-white shadow-xs transition cursor-pointer flex items-center gap-1.5";
+        btnM.className = "px-4 py-1.5 rounded-full text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 transition cursor-pointer";
+        proP.innerText = 'R$ 34,90';
+        proPer.innerText = '/ mês (anual: R$ 418,80)';
+        proB.classList.remove('hidden');
+        bizP.innerText = 'R$ 69,90';
+        bizPer.innerText = '/ mês (anual: R$ 838,80)';
+        bizB.classList.remove('hidden');
+        bizD.classList.remove('hidden');
+      } else {
+        btnM.className = "px-4 py-1.5 rounded-full text-xs font-bold bg-[#1a73e8] text-white shadow-xs transition cursor-pointer";
+        btnA.className = "px-4 py-1.5 rounded-full text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 transition cursor-pointer flex items-center gap-1.5";
+        proP.innerText = 'R$ 49,90';
+        proPer.innerText = '/ mês';
+        proB.classList.add('hidden');
+        bizP.innerText = 'R$ 99,90';
+        bizPer.innerText = '/ mês';
+        bizB.classList.add('hidden');
+        bizD.classList.add('hidden');
+      }
+    }
+
+    // Alternância e Reconhecimento de Tema (Dark / Light)
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const next = isDark ? 'light' : 'dark';
+      localStorage.setItem('coon_theme', next);
+      if (next === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      updateThemeUI();
+    }
+
+    function updateThemeUI() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const moon = document.getElementById('moonIcon');
+      const sun = document.getElementById('sunIcon');
+      if (moon && sun) {
+        if (isDark) {
+          moon.classList.add('hidden');
+          sun.classList.remove('hidden');
+        } else {
+          moon.classList.remove('hidden');
+          sun.classList.add('hidden');
+        }
+      }
+    }
+    updateThemeUI();
+
+    // Acesso Exclusivo do Presidente Daniel ao Link Admin
+    function checkDanielAdminAccess() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('daniel') === '1' || urlParams.get('admin') === '1') {
+        localStorage.setItem('coon_is_daniel', 'true');
+        localStorage.setItem('coon_is_admin', 'true');
+      }
+      const isAdmin = localStorage.getItem('coon_is_daniel') === 'true' || localStorage.getItem('coon_is_admin') === 'true';
+      if (isAdmin) {
+        const link = document.getElementById('adminOnmailLink');
+        if (link) {
+          link.classList.remove('hidden');
+          link.classList.add('inline-flex');
+        }
+      }
+    }
+    checkDanielAdminAccess();
+
+    // Controle do Menu do Usuário no OnMail (DS)
+    function toggleOnmailUserMenu() {
+      const menu = document.getElementById('onmailUserDropdown');
+      if (menu) menu.classList.toggle('hidden');
+    }
+    document.addEventListener('click', function(e) {
+      const btn = document.getElementById('onmailAvatarBtn');
+      const menu = document.getElementById('onmailUserDropdown');
+      if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+    function handleOnmailSwitchAccount() {
+      localStorage.removeItem('coon_auth_token');
+      localStorage.removeItem('coon_user');
+      window.location.href = '/portal?login=1';
+    }
+    function handleOnmailLogout() {
+      localStorage.removeItem('coon_auth_token');
+      localStorage.removeItem('coon_user');
+      localStorage.removeItem('coon_master_key');
+      localStorage.removeItem('coon_is_admin');
+      localStorage.removeItem('coon_is_daniel');
+      localStorage.removeItem('is_daniel');
+      window.location.href = '/portal';
     }
   </script>
 
-  <!-- ATENDIMENTO ONLINE COON -->
+  <!-- Atendimento Online WhatsApp Coon -->
   <script src="/coon-bot.js"></script>
-
 </body>
 </html>

@@ -186,6 +186,12 @@
 
       <!-- STATUS DA API & BARRA DE AÇÕES -->
       <div class="flex items-center space-x-2">
+        <!-- Botão Baixar para o Celular -->
+        <button onclick="openCoonInstallModal('Infer.coon', 'https://coon.com.br/index', '📊')" class="flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 dark:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-300 dark:border-emerald-800 transition cursor-pointer shadow-xs" title="Baixar Infer.coon para Celular (PWA & APK)">
+          <span>📱</span>
+          <span class="hidden md:inline">Baixar no Celular</span>
+        </button>
+
         <!-- Botão Voltar ao Portal Coon -->
         <a href="/" class="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 transition" title="Ir para o Portal de Aplicativos da Coon">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
@@ -3902,5 +3908,6 @@
   </script>
   <script src="/static/coon-auth.js"></script>
   <script src="/static/coon-bot.js"></script>
+  <script src="/coon-mobile-install.js"></script>
 </body>
 </html>

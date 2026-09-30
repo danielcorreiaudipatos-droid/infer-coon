@@ -16,14 +16,35 @@
     }
   </script>
 
-  <!-- Inicialização do Tema Dark / Light Instantâneo (Zero FOUC) -->
+  <!-- Inicialização do Tema Dark / Light Instantâneo (Zero FOUC • Chrome, Mozilla, Safari, Edge) -->
   <script>
     (function() {
-      const savedTheme = localStorage.getItem('coon_theme');
-      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      function getActiveTheme() {
+        const savedTheme = localStorage.getItem('coon_theme');
+        if (savedTheme === 'dark') return 'dark';
+        if (savedTheme === 'light') return 'light';
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      }
+
+      if (getActiveTheme() === 'dark') {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
+      }
+
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+          if (!localStorage.getItem('coon_theme')) {
+            if (e.matches) {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
+          }
+        });
       }
     })();
   </script>
@@ -157,13 +178,22 @@
   <header class="bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 sticky top-0 z-30">
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       
-      <!-- Marca Oficial Coon com transição suave contínua -->
-      <a href="/" class="flex items-center space-x-3 group">
-        <span class="text-2xl font-black tracking-tighter gemini-wordmark">coon<span class="coon-dot-animated text-emerald-500">.</span></span>
-        <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 pl-2 border-l border-slate-200 dark:border-slate-800">Studio de Aplicativos</span>
-      </a>
+      <!-- Lado Esquerdo: coon. / studio. (Identidade Oficial Coon) -->
+      <div class="flex items-center space-x-2.5">
+        <a href="/portal" class="flex items-baseline group" title="Ir para o Portal Coon">
+          <span class="text-2xl font-black tracking-tighter gemini-wordmark font-heading group-hover:opacity-90 transition">
+            coon<span class="coon-dot-animated text-emerald-500">.</span>
+          </span>
+        </a>
+        <span class="text-slate-300 dark:text-slate-700 text-lg font-light select-none">/</span>
+        <a href="/studio" class="flex items-baseline" title="Studio Coon">
+          <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white font-heading">
+            studio<span class="text-emerald-500">.</span>
+          </span>
+        </a>
+      </div>
 
-      <!-- Ações -->
+      <!-- Ações & Links Globais -->
       <div class="flex items-center space-x-3">
         <!-- Botão Modo Escuro / Claro (Lua / Sol) -->
         <button 
@@ -180,17 +210,30 @@
           </span>
         </button>
 
-        <span class="hidden md:inline-flex items-center space-x-1.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-slate-100/80 dark:bg-slate-800/80 px-2.5 py-1 rounded-full border border-slate-200/60 dark:border-slate-700/60">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          <span>Tecnologia Proprietária & Padrão Big Tech</span>
-        </span>
-        <a href="/" class="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition flex items-center space-x-1">
+        <a href="/portal" class="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition flex items-center space-x-1">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
           <span>Início</span>
         </a>
-        <a href="/infer" target="_blank" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-semibold rounded-full shadow-xs transition flex items-center space-x-1.5">
-          <span>Acessar infer.coon</span>
-          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-emerald-400 dark:text-white"></i>
+        <a href="/onnews" class="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition flex items-center space-x-1">
+          <span>📰</span>
+          <span>onnews.</span>
+        </a>
+        <a href="/onmail" class="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition flex items-center space-x-1">
+          <span>✉️</span>
+          <span>onmail.</span>
+        </a>
+
+        <!-- Atendimento Online no WhatsApp (Símbolo Executivo) -->
+        <a href="https://wa.me/5531999999999?text=Ol%C3%A1!%20Sou%20cliente%20Coon%20e%20gostaria%20de%20atendimento." target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition shadow-2xs" title="Atendimento Executivo Coon via WhatsApp">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+          </svg>
+          <span>Atendimento</span>
         </a>
 
         <!-- Widget Universal de Autenticação / Área do Assinante COON -->
@@ -207,14 +250,14 @@
     
     <!-- Cabeçalho do Diretório (Sóbrio, Sem Propaganda) -->
     <div class="mb-10 text-left">
-      <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 text-[11px] font-semibold mb-3">
+      <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-[11px] font-semibold mb-3 shadow-2xs">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
         <span>Aplicações Oficiais COON</span>
       </div>
-      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
         Diretório de Softwares & Soluções
       </h1>
-      <p class="text-sm text-slate-500 max-w-2xl mt-1.5 leading-relaxed">
+      <p class="text-sm sm:text-base text-slate-700 dark:text-slate-100 max-w-2xl mt-2 leading-relaxed font-medium">
         Plataformas verticais e ecossistemas digitais desenhados para alta precisão técnica, gestão e produtividade operacional.
       </p>
     </div>
@@ -223,28 +266,28 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       
       <!-- 1. infer.coon (Engenharia - Destaque Central) -->
-      <div class="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between">
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 flex items-center justify-center font-bold">
               <i data-lucide="line-chart" class="w-6 h-6"></i>
             </div>
-            <span class="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center space-x-1">
+            <span class="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800 flex items-center space-x-1">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1"></span>
               Operacional v1.0
             </span>
           </div>
-          <span class="text-[10px] font-mono font-bold text-emerald-700 uppercase tracking-wider block mb-1">
+          <span class="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block mb-1">
             Engenharia & Perícias
           </span>
-          <h2 class="text-lg font-bold text-slate-900 mb-2">infer.coon</h2>
-          <p class="text-xs text-slate-600 leading-relaxed">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">infer.coon</h2>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
             Inferência estatística, regressão linear múltipla MCO, paridade SisDEA e conformidade integral com a <strong>ABNT NBR 14653</strong>. Laudos auditáveis para juízos e bancos públicos e privados.
           </p>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <span class="text-[11px] text-slate-400 font-mono">infer.coon.com.br</span>
-          <a href="/infer" target="_blank" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
+          <a href="/infer" target="_blank" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
             <span>Acessar Plataforma</span>
             <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
           </a>
@@ -252,29 +295,29 @@
       </div>
 
       <!-- 2. growth.coon (Vendas & Aceleração Comercial) -->
-      <div class="bg-white rounded-3xl border border-indigo-200/90 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-indigo-200/90 dark:border-indigo-900/50 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
         <div class="absolute top-0 right-0 bg-indigo-600 text-white text-[9px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-bl-xl">
           Aceleração Comercial Contínua
         </div>
         <div>
           <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 flex items-center justify-center font-bold">
               <i data-lucide="zap" class="w-6 h-6"></i>
             </div>
-            <span class="text-[10px] font-mono font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 flex items-center space-x-1">
+            <span class="text-[10px] font-mono font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-1 rounded-full border border-indigo-200 dark:border-indigo-800 flex items-center space-x-1">
               <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse mr-1"></span>
               Operacional v1.0
             </span>
           </div>
-          <span class="text-[10px] font-mono font-bold text-indigo-700 uppercase tracking-wider block mb-1">
+          <span class="text-[10px] font-mono font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider block mb-1">
             Aceleração Comercial & Vendas Digitais
           </span>
-          <h2 class="text-lg font-bold text-slate-900 mb-2">growth.coon</h2>
-          <p class="text-xs text-slate-600 leading-relaxed">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">growth.coon</h2>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
             Atendimento comercial no WhatsApp 24/7 com tempo de resposta em 5 segundos, gestão ativa de reputação 5 estrelas no Google Maps e reativação sistemática de clientes com linguagem empática e humana.
           </p>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <span class="text-[11px] text-slate-400 font-mono">growth.coon.com.br</span>
           <a href="/growth" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
             <span>Acessar Plataforma</span>
@@ -284,29 +327,29 @@
       </div>
 
       <!-- 3. imob.coon (Vendas, Locações & Split Automático) -->
-      <div class="bg-white rounded-3xl border border-blue-200/90 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-blue-200/90 dark:border-blue-900/50 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
         <div class="absolute top-0 right-0 bg-blue-600 text-white text-[9px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-bl-xl">
           Split Pix Automático
         </div>
         <div>
           <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold">
               <i data-lucide="building-2" class="w-6 h-6"></i>
             </div>
-            <span class="text-[10px] font-mono font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200 flex items-center space-x-1">
+            <span class="text-[10px] font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800 flex items-center space-x-1">
               <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse mr-1"></span>
               Operacional v1.0
             </span>
           </div>
-          <span class="text-[10px] font-mono font-bold text-blue-700 uppercase tracking-wider block mb-1">
+          <span class="text-[10px] font-mono font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider block mb-1">
             Gestão Imobiliária, Vendas & Locações
           </span>
-          <h2 class="text-lg font-bold text-slate-900 mb-2">imob.coon</h2>
-          <p class="text-xs text-slate-600 leading-relaxed">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">imob.coon</h2>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
             Plataforma para imobiliárias e corretores com <strong>Split Bancário Automático via Pix</strong>. Ao receber aluguéis ou vendas, o dinheiro é dividido no mesmo instante: repasse líquido do proprietário, taxa da imobiliária e comissão do corretor, sem bitributação e com conciliação bancária instantânea.
           </p>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <span class="text-[11px] text-slate-400 font-mono">imob.coon.com.br</span>
           <a href="/imob" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
             <span>Acessar Plataforma</span>
@@ -316,29 +359,29 @@
       </div>
 
       <!-- 4. check.coon (Vistorias Imobiliárias no Celular) -->
-      <div class="bg-white rounded-3xl border border-teal-200/90 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-teal-200/90 dark:border-teal-900/50 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
         <div class="absolute top-0 right-0 bg-teal-600 text-white text-[9px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-bl-xl">
           App Mobile / PWA
         </div>
         <div>
           <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold">
+            <div class="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 flex items-center justify-center font-bold">
               <i data-lucide="clipboard-check" class="w-6 h-6"></i>
             </div>
-            <span class="text-[10px] font-mono font-bold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200 flex items-center space-x-1">
+            <span class="text-[10px] font-mono font-bold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 rounded-full border border-teal-200 dark:border-teal-800 flex items-center space-x-1">
               <span class="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse mr-1"></span>
               Operacional v1.0
             </span>
           </div>
-          <span class="text-[10px] font-mono font-bold text-teal-700 uppercase tracking-wider block mb-1">
+          <span class="text-[10px] font-mono font-bold text-teal-700 dark:text-teal-400 uppercase tracking-wider block mb-1">
             Laudo de Vistoria de Imóveis no Smartphone
           </span>
-          <h2 class="text-lg font-bold text-slate-900 mb-2">check.coon</h2>
-          <p class="text-xs text-slate-600 leading-relaxed">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">check.coon</h2>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
             Vistorias de entrada e saída 100% práticas no celular. Tire fotos ilimitadas por cômodo, dite anotações com transcrição técnica de voz em tempo real, aponte avarias e colha <strong>assinatura digital na tela</strong> do proprietário e inquilino com validade jurídica, geolocalização e carimbo de tempo à prova de contestações.
           </p>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <span class="text-[11px] text-slate-400 font-mono">check.coon.com.br</span>
           <a href="/check" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
             <span>Acessar Plataforma</span>
@@ -348,29 +391,29 @@
       </div>
 
       <!-- 5. cob.coon (Cobrança Humana & Recuperação Estruturada) -->
-      <div class="bg-white rounded-3xl border border-emerald-200/90 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-emerald-200/90 dark:border-emerald-900/50 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
         <div class="absolute top-0 right-0 bg-emerald-600 text-white text-[9px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-bl-xl">
           Recuperação Ativa • Pix
         </div>
         <div>
           <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 flex items-center justify-center font-bold">
               <i data-lucide="coins" class="w-6 h-6"></i>
             </div>
-            <span class="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center space-x-1">
+            <span class="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800 flex items-center space-x-1">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1"></span>
               Operacional v1.0
             </span>
           </div>
-          <span class="text-[10px] font-mono font-bold text-emerald-700 uppercase tracking-wider block mb-1">
+          <span class="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block mb-1">
             Cobrança Humanizada & Recuperação de Recebíveis
           </span>
-          <h2 class="text-lg font-bold text-slate-900 mb-2">cob.coon</h2>
-          <p class="text-xs text-slate-600 leading-relaxed">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">cob.coon</h2>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
             Recupere até 68% dos clientes em atraso nos primeiros 7 dias via WhatsApp. Abordagem empática e respeitosa, sem atrito ou desgaste de relacionamento, com <strong>Pix Copia e Cola em 1 clique</strong> e propostas personalizadas para liquidação imediata.
           </p>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <span class="text-[11px] text-slate-400 font-mono">cob.coon.com.br</span>
           <a href="/cob" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
             <span>Acessar Plataforma</span>
@@ -380,29 +423,29 @@
       </div>
 
       <!-- 6. ad.coon (Inteligência Criativa de Mídia & Tráfego Multicanal) -->
-      <div class="bg-white rounded-3xl border border-rose-200/90 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-rose-200/90 dark:border-rose-900/50 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
         <div class="absolute top-0 right-0 bg-rose-600 text-white text-[9px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-bl-xl">
           Estratégia Multicanal • 1 Clique
         </div>
         <div>
           <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-700 flex items-center justify-center font-bold">
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 flex items-center justify-center font-bold">
               <i data-lucide="target" class="w-6 h-6"></i>
             </div>
-            <span class="text-[10px] font-mono font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200 flex items-center space-x-1">
+            <span class="text-[10px] font-mono font-bold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 px-2.5 py-1 rounded-full border border-rose-200 dark:border-rose-800 flex items-center space-x-1">
               <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse mr-1"></span>
               Operacional v1.0
             </span>
           </div>
-          <span class="text-[10px] font-mono font-bold text-rose-700 uppercase tracking-wider block mb-1">
+          <span class="text-[10px] font-mono font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider block mb-1">
             Inteligência Criativa de Mídia & Tráfego Multicanal
           </span>
-          <h2 class="text-lg font-bold text-slate-900 mb-2">ad.coon</h2>
-          <p class="text-xs text-slate-600 leading-relaxed">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">ad.coon</h2>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
             Estratégia de mídia e planejamento de anúncios em <strong>1 clique para qualquer canal</strong>. O sistema gera os criativos visuais, estrutura copies persuasivas de alta conversão com linguagem humana, segmenta o público ideal e orquestra campanhas no <strong>Instagram, Facebook, Google Ads, TikTok e LinkedIn</strong>, direcionando clientes qualificados ao seu WhatsApp.
           </p>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <span class="text-[11px] text-slate-400 font-mono">ad.coon.com.br</span>
           <a href="/ad" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
             <span>Acessar Plataforma</span>
@@ -412,32 +455,64 @@
       </div>
 
       <!-- 7. onmail (E-mail Corporativo com Ponte para WhatsApp) -->
-      <div class="bg-white rounded-3xl border border-emerald-300 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-emerald-300 dark:border-emerald-800/60 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
         <div class="absolute top-0 right-0 bg-emerald-600 text-white text-[9px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-bl-xl">
           Novo • E-mail + WhatsApp
         </div>
         <div>
           <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 flex items-center justify-center font-bold">
               <i data-lucide="mail" class="w-6 h-6"></i>
             </div>
-            <span class="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center space-x-1">
+            <span class="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800 flex items-center space-x-1">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1"></span>
               Operacional v1.0
             </span>
           </div>
-          <span class="text-[10px] font-mono font-bold text-emerald-700 uppercase tracking-wider block mb-1">
+          <span class="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block mb-1">
             Comunicação Corporativa & Ponte para WhatsApp
           </span>
-          <h2 class="text-lg font-bold text-slate-900 mb-2">onmail</h2>
-          <p class="text-xs text-slate-600 leading-relaxed">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">onmail</h2>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
             E-mail corporativo inteligente que está <strong>sempre ON no seu WhatsApp</strong>. Triagem de anexos em tempo real (.ZIP automático ou link em nuvem), anti-spam global e zero custo de API da Meta.
           </p>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <span class="text-[11px] text-slate-400 font-mono">onmail.coon.com.br</span>
           <a href="/onmail" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
             <span>Acessar Plataforma</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- 8. onnews (Portal de Notícias, Clima, Agro e Newsletter) -->
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-amber-300 dark:border-amber-800/60 p-6 shadow-xs hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute top-0 right-0 bg-amber-600 text-white text-[9px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-bl-xl">
+          100% Grátis • Newsletter
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 flex items-center justify-center font-bold text-xl">
+              📰
+            </div>
+            <span class="text-[10px] font-mono font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2.5 py-1 rounded-full border border-amber-200 dark:border-amber-800 flex items-center space-x-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1"></span>
+              Ao Vivo
+            </span>
+          </div>
+          <span class="text-[10px] font-mono font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider block mb-1">
+            Informação, Clima & Mercado
+          </span>
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">onnews<span class="text-emerald-500">.</span></h2>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Agregador inteligente de notícias dos principais portais, cotações do Agro & Mercado ao vivo, clima e <strong>Newsletter diária gratuita</strong> direto no seu e-mail e às 17:30 no WhatsApp.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <span class="text-[11px] text-slate-400 font-mono">coon.com.br/onnews</span>
+          <a href="/onnews" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
+            <span>Acessar onnews.</span>
             <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
           </a>
         </div>
@@ -450,21 +525,25 @@
   <!-- ======================================================== -->
   <!-- MODAL DE ACESSO AO SISTEMA -->
   <!-- ======================================================== -->
-  <div id="accessModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden items-center justify-center p-4">
-    <div class="bg-white rounded-3xl border border-slate-200 max-w-sm w-full p-6 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="text-sm font-bold text-slate-900" id="accessTitle">Acesso à Plataforma</h3>
-        <button onclick="closeAccessModal()" class="text-slate-400 hover:text-slate-600">
+  <div id="accessModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 max-w-sm w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="text-sm font-bold text-slate-900 dark:text-white" id="accessTitle">Acesso à Plataforma</h3>
+        <button onclick="closeAccessModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
-      <p class="text-xs text-slate-600 leading-relaxed">
+      <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
         Para credenciamento, liberação de acesso imediato ou demonstração guiada do sistema, fale diretamente com nossa equipe de suporte e implantação.
       </p>
       <div class="pt-2 flex justify-end space-x-2">
-        <button onclick="closeAccessModal()" class="px-3 py-1.5 text-xs text-slate-500">Fechar</button>
-        <a id="accessBtn" href="https://wa.me/5531999999999" target="_blank" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition">
-          Falar com Atendimento
+        <button onclick="closeAccessModal()" class="px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">Fechar</button>
+        <a id="accessBtn" href="https://wa.me/5531999999999" target="_blank" class="px-4 py-2 bg-slate-900 dark:bg-emerald-600 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition inline-flex items-center gap-2">
+          <svg class="w-4 h-4 text-emerald-400 dark:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+          </svg>
+          <span>Falar com Atendimento (WhatsApp)</span>
         </a>
       </div>
     </div>
@@ -526,5 +605,6 @@
   </script>
   <script src="/static/coon-auth.js"></script>
   <script src="/static/coon-bot.js"></script>
+  <script src="/coon-mobile-install.js"></script>
 </body>
 </html>

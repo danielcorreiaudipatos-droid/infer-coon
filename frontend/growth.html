@@ -126,6 +126,12 @@
 
       <!-- Ações Direitas -->
       <div class="flex items-center space-x-3">
+        <!-- Botão Baixar para o Celular -->
+        <button onclick="openCoonInstallModal('growth.coon', 'https://coon.com.br/growth', '🚀')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer text-xs font-semibold text-slate-700 shadow-2xs" title="Baixar growth.coon para Celular (PWA & APK)">
+          <span class="text-sm">📱</span>
+          <span class="hidden sm:inline">Baixar no Celular</span>
+        </button>
+
         <a href="/studio" class="text-xs font-semibold text-slate-500 hover:text-slate-900 transition hidden sm:inline-block">
           Studio COON
         </a>
@@ -1183,5 +1189,6 @@
   </script>
   <script src="/static/coon-auth.js"></script>
   <script src="/static/coon-bot.js"></script>
+  <script src="/coon-mobile-install.js"></script>
 </body>
 </html>
