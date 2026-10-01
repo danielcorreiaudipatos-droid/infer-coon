@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrar — onmail</title>
+<script src="js/tema.js"></script>
+<link rel="stylesheet" href="css/onmail.css">
+<link rel="stylesheet" href="css/entrar.css">
+</head>
+<body class="pagina-entrar">
+<main class="cartao-entrar">
+  <a class="wordmark" href="/onmail/">onmail<i>.</i><small>COON</small></a>
+
+  <div class="alternar" role="tablist">
+    <button type="button" role="tab" id="abaEntrar" class="at" data-modo="entrar">Entrar</button>
+    <button type="button" role="tab" id="abaCadastro" data-modo="cadastro">Criar conta</button>
+  </div>
+
+  <form id="formEntrar" novalidate>
+    <h1>Bem-vindo de volta</h1>
+    <label class="campo"><span>Endereço</span>
+      <input name="endereco" autocomplete="username" placeholder="seunome@onmail.br" required spellcheck="false" autocapitalize="none">
+    </label>
+    <label class="campo"><span>Senha</span>
+      <input name="senha" type="password" autocomplete="current-password" required>
+    </label>
+    <p class="dica erro" id="erroEntrar" aria-live="polite"></p>
+    <button class="bt bt-marca bt-g largo" type="submit">Entrar</button>
+  </form>
+
+  <form id="formCadastro" novalidate hidden>
+    <h1>Crie a sua caixa</h1>
+    <label class="campo"><span>Seu nome</span>
+      <input name="nome" autocomplete="name" maxlength="80" required>
+    </label>
+    <label class="campo"><span>Endereço</span>
+      <span class="endereco"><input name="endereco" maxlength="30" placeholder="seunome" spellcheck="false" autocapitalize="none" required><em>@onmail.br</em></span>
+      <span class="dica" id="dicaEndereco">Letras, números e ponto. Sem números fica mais fácil de lembrar.</span>
+    </label>
+    <label class="campo"><span>WhatsApp (recebe os alertas)</span>
+      <input name="whatsapp" type="tel" autocomplete="tel" placeholder="(34) 99999-0000" required>
+    </label>
+    <label class="campo"><span>Senha</span>
+      <input name="senha" type="password" autocomplete="new-password" minlength="10" required>
+      <span class="dica" id="dicaSenha">Pelo menos 10 caracteres, com letras e números.</span>
+    </label>
+    <label class="campo"><span>Plano</span>
+      <select name="plano">
+        <option value="start">Start — grátis</option>
+        <option value="pro">Pro — R$ 49,90/mês</option>
+        <option value="business">Business — R$ 99,90/mês, domínio incluso</option>
+      </select>
+    </label>
+    <p class="dica erro" id="erroCadastro" aria-live="polite"></p>
+    <button class="bt bt-marca bt-g largo" type="submit">Criar conta</button>
+    <p class="dica miudo">No piloto, o plano escolhido fica registrado e a cobrança é combinada com a COON.</p>
+  </form>
+</main>
+<script src="js/comum.js"></script>
+<script src="js/entrar.js"></script>
+</body>
+</html>

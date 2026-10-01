@@ -1,0 +1,14 @@
+/* web/css/entrar.css — tela de entrada e cadastro */
+.pagina-entrar { min-height: 100vh; display: grid; place-items: center; padding: 32px 16px; }
+.cartao-entrar { width: min(420px, 100%); background: var(--superficie); border: 1px solid var(--linha); border-radius: 14px; box-shadow: var(--sombra); padding: 32px 28px; }
+.cartao-entrar h1 { font-size: 22px; margin: 22px 0 18px; }
+.alternar { display: grid; grid-template-columns: 1fr 1fr; margin-top: 24px; border-bottom: 1px solid var(--linha); }
+.alternar button { border: 0; background: none; padding: 10px 0; min-height: 40px; font-weight: 600; color: var(--fraco); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.alternar button.at { color: var(--tinta); border-color: var(--marca); }
+.endereco { display: flex; align-items: center; border: 1px solid var(--linha-forte); border-radius: var(--raio-p); background: var(--superficie); padding-right: 12px; }
+.endereco:focus-within { border-color: var(--marca); box-shadow: 0 0 0 3px var(--marca-clara); }
+.campo .endereco input { border: 0; box-shadow: none; }
+.endereco em { font-style: normal; color: var(--fraco); }
+.largo { width: 100%; margin-top: 4px; }
+.miudo { margin-top: 12px; text-align: center; }
+.dica.erro:empty { display: none; }

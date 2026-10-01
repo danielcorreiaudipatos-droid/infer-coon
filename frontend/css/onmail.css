@@ -1,0 +1,97 @@
+/* ============================================================================
+   web/css/onmail.css — base visual do onmail (todas as páginas)
+   Minimalista: papel claro, tinta quase preta, um azul COON e o ponto verde
+   da marca onmail. Tema escuro automático ou escolhido pelo usuário.
+   ============================================================================ */
+:root {
+  --fundo: #F7F7F5; --superficie: #FFFFFF; --superficie-2: #FBFBFA; --tinta: #121417; --suave: #5E6570; --fraco: #8A919A;
+  --linha: #E6E4E0; --linha-forte: #D6D3CD; --pairar: #F1F0ED; --selecao: #E6EEF5;
+  --marca: #1F5F8B; --marca-forte: #174868; --marca-clara: #EAF1F6; --ponto: #10B981;
+  --ok: #1E7B45; --ok-claro: #E7F4EC; --perigo: #B42318; --perigo-claro: #FDECEA; --alerta: #B45309; --alerta-claro: #FEF3E2;
+  --sombra: 0 1px 2px rgba(18,20,23,.05), 0 8px 24px -12px rgba(18,20,23,.18);
+  --sombra-alta: 0 24px 64px -24px rgba(18,20,23,.35);
+  --raio: 10px; --raio-p: 6px;
+  --fonte: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Roboto, sans-serif;
+  --fonte-titulo: "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Roboto, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) {
+    --fundo: #0C1014; --superficie: #12171C; --superficie-2: #161C22; --tinta: #E7EBEE; --suave: #9AA4AD; --fraco: #6F7984;
+    --linha: #232B32; --linha-forte: #2E3740; --pairar: #1A2128; --selecao: #17283A;
+    --marca: #6BAEDB; --marca-forte: #9CCBEA; --marca-clara: #132331; --ponto: #34D399;
+    --ok: #5FC58A; --ok-claro: #11261A; --perigo: #F47C6F; --perigo-claro: #2C1513; --alerta: #F0A64B; --alerta-claro: #2A1D0B;
+    --sombra: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    --sombra-alta: 0 24px 64px -24px rgba(0,0,0,.8);
+    color-scheme: dark;
+  }
+}
+:root[data-tema="escuro"] {
+  --fundo: #0C1014; --superficie: #12171C; --superficie-2: #161C22; --tinta: #E7EBEE; --suave: #9AA4AD; --fraco: #6F7984;
+  --linha: #232B32; --linha-forte: #2E3740; --pairar: #1A2128; --selecao: #17283A;
+  --marca: #6BAEDB; --marca-forte: #9CCBEA; --marca-clara: #132331; --ponto: #34D399;
+  --ok: #5FC58A; --ok-claro: #11261A; --perigo: #F47C6F; --perigo-claro: #2C1513; --alerta: #F0A64B; --alerta-claro: #2A1D0B;
+  --sombra: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  --sombra-alta: 0 24px 64px -24px rgba(0,0,0,.8);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--fundo); color: var(--tinta); font: 15px/1.5 var(--fonte); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { font-family: var(--fonte-titulo); letter-spacing: -.015em; margin: 0; }
+a { color: var(--marca); }
+button, input, select, textarea { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--marca); outline-offset: 2px; }
+.so-leitor { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---- marca -------------------------------------------------------------- */
+.wordmark { font-family: var(--fonte-titulo); font-weight: 700; font-size: 21px; letter-spacing: -.045em; color: var(--tinta); text-decoration: none; white-space: nowrap; }
+.wordmark i { font-style: normal; color: var(--ponto); }
+.wordmark small { font: 500 11px/1 var(--fonte); letter-spacing: .12em; text-transform: uppercase; color: var(--fraco); margin-left: 8px; vertical-align: 3px; }
+
+/* ---- botões ------------------------------------------------------------- */
+.bt { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: var(--raio-p);
+  border: 1px solid var(--linha-forte); background: var(--superficie); color: var(--tinta); font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; white-space: nowrap; transition: background .12s, border-color .12s; }
+.bt:hover { background: var(--pairar); }
+.bt:disabled { opacity: .5; cursor: not-allowed; }
+.bt-marca { background: var(--marca); border-color: var(--marca); color: #fff; }
+.bt-marca:hover { background: var(--marca-forte); border-color: var(--marca-forte); }
+:root[data-tema="escuro"] .bt-marca { color: #0C1014; }
+@media (prefers-color-scheme: dark) { :root:not([data-tema="claro"]) .bt-marca { color: #0C1014; } }
+.bt-leve { border-color: transparent; background: transparent; }
+.bt-leve:hover { background: var(--pairar); }
+.bt-perigo { color: var(--perigo); }
+.bt-g { min-height: 46px; padding: 0 22px; font-size: 15px; border-radius: 8px; }
+.icone { width: 18px; height: 18px; flex: 0 0 18px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.bt-icone { width: 36px; min-width: 36px; padding: 0; border-color: transparent; background: transparent; }
+.bt-icone:hover { background: var(--pairar); }
+
+/* ---- formulários -------------------------------------------------------- */
+.campo { display: grid; gap: 6px; margin-bottom: 14px; }
+.campo > span { font-size: 13px; font-weight: 600; color: var(--suave); }
+.entrada, .campo input, .campo select, .campo textarea { width: 100%; min-height: 40px; padding: 8px 12px; border: 1px solid var(--linha-forte); border-radius: var(--raio-p); background: var(--superficie); }
+.campo textarea { min-height: 90px; resize: vertical; }
+.entrada:focus, .campo input:focus, .campo select:focus, .campo textarea:focus { outline: none; border-color: var(--marca); box-shadow: 0 0 0 3px var(--marca-clara); }
+.dica { font-size: 12.5px; color: var(--fraco); }
+.dica.ok { color: var(--ok); } .dica.erro { color: var(--perigo); }
+.sinal { font-weight: 700; } .sinal.ok { color: var(--ok); } .sinal.erro { color: var(--perigo); }
+
+/* ---- aviso flutuante ---------------------------------------------------- */
+.aviso { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(12px); opacity: 0; pointer-events: none; z-index: 90;
+  background: var(--tinta); color: var(--fundo); padding: 10px 16px; border-radius: 8px; font-size: 14px; box-shadow: var(--sombra-alta); transition: .18s; max-width: calc(100vw - 32px); }
+.aviso.ver { opacity: 1; transform: translateX(-50%); pointer-events: auto; }
+.aviso.erro { background: var(--perigo); color: #fff; }
+
+/* ---- diálogo ------------------------------------------------------------ */
+dialog { border: 1px solid var(--linha); border-radius: 12px; padding: 0; background: var(--superficie); color: var(--tinta); box-shadow: var(--sombra-alta); width: min(520px, calc(100vw - 32px)); max-height: calc(100vh - 48px); }
+dialog::backdrop { background: rgba(12,16,20,.38); }
+.dlg-topo { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 8px; }
+.dlg-topo h2 { font-size: 18px; }
+.dlg-corpo { padding: 8px 20px 4px; overflow: auto; max-height: calc(100vh - 190px); }
+.dlg-rodape { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; padding: 12px 20px 18px; border-top: 1px solid var(--linha); margin-top: 8px; }
+.dlg-rodape .esq { margin-right: auto; }
+.linha2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.linha3 { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 12px; }
+@media (max-width: 520px) { .linha2, .linha3 { grid-template-columns: 1fr; gap: 0; } }

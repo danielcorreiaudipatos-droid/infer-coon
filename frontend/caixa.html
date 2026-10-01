@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caixa de entrada — onmail</title>
+<script src="js/tema.js"></script>
+<link rel="stylesheet" href="css/onmail.css">
+<link rel="stylesheet" href="css/caixa.css">
+</head>
+<body class="app-corpo">
+
+<header class="barra">
+  <button class="bt bt-icone so-celular" type="button" data-acao="menuPastas" title="Pastas" aria-label="Pastas"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#menu"></use></svg></button>
+  <a class="wordmark" href="/onmail/">onmail<i>.</i></a>
+  <form class="busca" id="formBusca" role="search">
+    <svg class="icone" aria-hidden="true"><use href="img/icones.svg#busca"></use></svg>
+    <input id="campoBusca" type="search" placeholder="Pesquisar e-mails" aria-label="Pesquisar e-mails" maxlength="120" autocomplete="off">
+  </form>
+  <div class="barra-dir">
+    <a class="bt bt-icone" href="/onzap/" target="_blank" rel="noopener" title="Buscar serviços ou empresas no onzap" aria-label="Buscar serviços ou empresas no onzap"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#busca"></use></svg></a>
+    <button class="bt bt-icone" type="button" data-acao="meuDia" title="Meu dia" aria-label="Meu dia"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#hoje"></use></svg></button>
+    <button class="bt bt-icone" type="button" data-tema-alternar title="Tema claro ou escuro" aria-label="Tema claro ou escuro"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#tema"></use></svg></button>
+    <button class="bt bt-icone" type="button" data-acao="config" title="Configurações" aria-label="Configurações"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#config"></use></svg></button>
+    <button class="avatar" type="button" data-acao="config" id="avatar" title="Sua conta" aria-label="Sua conta">··</button>
+  </div>
+</header>
+
+<div class="app">
+  <nav class="trilho" aria-label="Módulos">
+    <button type="button" class="at" data-modulo="email" title="E-mail" aria-label="E-mail"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#correio"></use></svg></button>
+    <button type="button" data-modulo="agenda" title="Agenda" aria-label="Agenda"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#agenda"></use></svg></button>
+    <a class="trilho-admin" id="linkAdmin" href="/onmail/admin" title="Painel do administrador" aria-label="Painel do administrador" hidden><svg class="icone" aria-hidden="true"><use href="img/icones.svg#admin"></use></svg></a>
+  </nav>
+
+  <!-- ===================== E-MAIL ===================== -->
+  <section class="modulo" id="modEmail" aria-label="E-mail">
+    <div class="comandos" role="toolbar" aria-label="Ações do e-mail">
+      <button class="bt bt-marca" type="button" data-acao="novo"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#novo"></use></svg><span>Novo e-mail</span></button>
+      <span class="sep"></span>
+      <button class="bt bt-leve" type="button" data-acao="excluir" data-precisa="msg" title="Excluir (Delete)"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#lixo"></use></svg><span>Excluir</span></button>
+      <button class="bt bt-leve" type="button" data-acao="arquivar" data-precisa="msg" title="Arquivar"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#arquivo"></use></svg><span>Arquivar</span></button>
+      <button class="bt bt-leve" type="button" data-acao="spam" data-precisa="msg" title="Mover para Spam"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#spam"></use></svg><span>Spam</span></button>
+      <span class="sep"></span>
+      <button class="bt bt-leve" type="button" data-acao="lida" data-precisa="msg" title="Marcar como lida ou não lida"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#lida"></use></svg><span>Lida / não lida</span></button>
+      <button class="bt bt-leve" type="button" data-acao="sinalizar" data-precisa="msg" title="Sinalizar"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#bandeira"></use></svg><span>Sinalizar</span></button>
+      <button class="bt bt-leve" type="button" data-acao="criarEvento" data-precisa="msg" title="Criar evento na agenda a partir deste e-mail"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#evento"></use></svg><span>Criar evento</span></button>
+    </div>
+
+    <div class="paineis">
+      <aside class="pastas" id="pastas" aria-label="Pastas">
+        <p class="pastas-titulo">Favoritos</p>
+        <button type="button" class="pasta at" data-pasta="entrada"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#entrada"></use></svg><span>Caixa de entrada</span><b data-contagem="entrada"></b></button>
+        <button type="button" class="pasta" data-pasta="enviados"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#enviados"></use></svg><span>Enviados</span><b data-contagem="enviados"></b></button>
+        <button type="button" class="pasta" data-pasta="rascunhos"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#rascunho"></use></svg><span>Rascunhos</span><b data-contagem="rascunhos"></b></button>
+        <button type="button" class="pasta" data-pasta="sinalizados"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#bandeira"></use></svg><span>Sinalizados</span><b data-contagem="sinalizados"></b></button>
+        <p class="pastas-titulo">Pastas</p>
+        <button type="button" class="pasta" data-pasta="arquivo"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#arquivo"></use></svg><span>Arquivo</span><b data-contagem="arquivo"></b></button>
+        <button type="button" class="pasta" data-pasta="spam"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#spam"></use></svg><span>Spam</span><b data-contagem="spam"></b></button>
+        <button type="button" class="pasta" data-pasta="lixeira"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#lixo"></use></svg><span>Lixeira</span><b data-contagem="lixeira"></b></button>
+        <div class="pastas-rodape" id="statusEntrega"></div>
+      </aside>
+
+      <section class="lista" id="lista" aria-label="Mensagens">
+        <div class="lista-topo">
+          <div class="abas-foco" id="abasFoco" role="tablist">
+            <button type="button" role="tab" class="at" data-aba="prioritaria">Prioritária <b data-contagem="prioritaria"></b></button>
+            <button type="button" role="tab" data-aba="outros">Outros <b data-contagem="outros"></b></button>
+          </div>
+          <h2 id="tituloLista" hidden>Enviados</h2>
+          <button class="bt bt-icone" type="button" data-acao="atualizar" title="Atualizar" aria-label="Atualizar"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#atualizar"></use></svg></button>
+        </div>
+        <ul class="itens" id="itens"></ul>
+      </section>
+
+      <article class="leitura" id="leitura" aria-live="polite"></article>
+    </div>
+  </section>
+
+  <!-- ===================== AGENDA ===================== -->
+  <section class="modulo" id="modAgenda" aria-label="Agenda" hidden>
+    <div class="comandos agenda-comandos" role="toolbar" aria-label="Ações da agenda">
+      <button class="bt bt-marca" type="button" data-acao="novoEvento"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#mais"></use></svg><span>Novo evento</span></button>
+      <span class="sep"></span>
+      <button class="bt" type="button" data-acao="agHoje">Hoje</button>
+      <button class="bt bt-icone" type="button" data-acao="agAnterior" title="Anterior" aria-label="Anterior"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#esquerda"></use></svg></button>
+      <button class="bt bt-icone" type="button" data-acao="agProximo" title="Próximo" aria-label="Próximo"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#direita"></use></svg></button>
+      <h2 class="ag-titulo" id="agTitulo"></h2>
+      <div class="vistas" role="group" aria-label="Visualização">
+        <button type="button" data-vista="dia">Dia</button>
+        <button type="button" data-vista="semana" class="at">Semana</button>
+        <button type="button" data-vista="mes">Mês</button>
+      </div>
+    </div>
+    <div class="agenda" id="agenda"></div>
+  </section>
+
+  <!-- ===================== MEU DIA ===================== -->
+  <aside class="meu-dia" id="meuDia" aria-label="Meu dia" hidden>
+    <div class="md-topo"><h2>Meu dia</h2><button class="bt bt-icone" type="button" data-acao="meuDia" title="Fechar" aria-label="Fechar"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#x"></use></svg></button></div>
+    <div class="mini-cal" id="miniCal"></div>
+    <div id="mdEventos"></div>
+    <button class="bt largo" type="button" data-acao="novoEvento"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#mais"></use></svg><span>Novo evento</span></button>
+  </aside>
+</div>
+
+<!-- ===================== DIÁLOGO: EVENTO ===================== -->
+<dialog id="dlgEvento" aria-labelledby="tituloEvento">
+  <form id="formEvento" method="dialog" novalidate>
+    <div class="dlg-topo"><h2 id="tituloEvento">Novo evento</h2><button class="bt bt-icone" type="button" data-acao="fecharDialogo" aria-label="Fechar"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#x"></use></svg></button></div>
+    <div class="dlg-corpo">
+      <label class="campo"><span>Título</span><input name="titulo" maxlength="160" required></label>
+      <label class="campo check"><input type="checkbox" name="diaInteiro"><span>Dia inteiro</span></label>
+      <div class="linha3">
+        <label class="campo"><span>Data</span><input type="date" name="data" required></label>
+        <label class="campo"><span>Início</span><input type="time" name="inicio" step="300"></label>
+        <label class="campo"><span>Fim</span><input type="time" name="fim" step="300"></label>
+      </div>
+      <label class="campo"><span>Local</span><input name="local" maxlength="200"></label>
+      <div class="linha2">
+        <label class="campo"><span>Lembrete no WhatsApp</span>
+          <select name="lembrete"><option value="0">Sem lembrete</option><option value="5">5 min antes</option><option value="10">10 min antes</option><option value="15">15 min antes</option><option value="30">30 min antes</option><option value="60">1 hora antes</option><option value="120">2 horas antes</option><option value="1440">1 dia antes</option></select>
+        </label>
+        <label class="campo"><span>Cor</span>
+          <select name="cor"><option value="azul">Azul</option><option value="verde">Verde</option><option value="laranja">Laranja</option><option value="roxo">Roxo</option><option value="cinza">Cinza</option></select>
+        </label>
+      </div>
+      <label class="campo"><span>Notas</span><textarea name="notas" maxlength="4000"></textarea></label>
+      <p class="dica erro" id="erroEvento" aria-live="polite"></p>
+    </div>
+    <div class="dlg-rodape">
+      <button class="bt bt-leve bt-perigo esq" type="button" data-acao="excluirEvento" hidden>Excluir</button>
+      <button class="bt bt-leve" type="button" data-acao="icsEvento" hidden><svg class="icone" aria-hidden="true"><use href="img/icones.svg#download"></use></svg><span>.ics</span></button>
+      <button class="bt" type="button" data-acao="fecharDialogo">Cancelar</button>
+      <button class="bt bt-marca" type="submit" value="salvar">Salvar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ===================== DIÁLOGO: CONFIGURAÇÕES ===================== -->
+<dialog id="dlgConfig" aria-labelledby="tituloConfig">
+  <form id="formConfig" method="dialog" novalidate>
+    <div class="dlg-topo"><h2 id="tituloConfig">Configurações</h2><button class="bt bt-icone" type="button" data-acao="fecharDialogo" aria-label="Fechar"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#x"></use></svg></button></div>
+    <div class="dlg-corpo">
+      <p class="conta-info" id="contaInfo"></p>
+      <label class="campo"><span>Seu nome</span><input name="nome" maxlength="80" required></label>
+      <label class="campo"><span>WhatsApp dos alertas</span><input name="whatsapp" type="tel" required></label>
+      <label class="campo"><span>Remetentes VIP (um por linha)</span><textarea name="vip" rows="3" spellcheck="false"></textarea><span class="dica" id="dicaVip"></span></label>
+      <label class="campo"><span>Assinatura</span><textarea name="assinatura" rows="3" maxlength="600"></textarea></label>
+      <details class="trocar-senha"><summary>Trocar a senha</summary>
+        <div class="linha2">
+          <label class="campo"><span>Senha atual</span><input name="senhaAtual" type="password" autocomplete="current-password"></label>
+          <label class="campo"><span>Nova senha</span><input name="senhaNova" type="password" autocomplete="new-password"></label>
+        </div>
+        <button class="bt" type="button" data-acao="trocarSenha">Trocar a senha</button>
+      </details>
+      <p class="dica erro" id="erroConfig" aria-live="polite"></p>
+    </div>
+    <div class="dlg-rodape">
+      <button class="bt bt-leve esq" type="button" data-acao="sair"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#sair"></use></svg><span>Sair</span></button>
+      <button class="bt" type="button" data-acao="fecharDialogo">Cancelar</button>
+      <button class="bt bt-marca" type="submit" value="salvar">Salvar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ===================== DIÁLOGO: BOAS-VINDAS (primeira entrada) ===================== -->
+<dialog id="dlgBoasVindas" class="boas-vindas" aria-labelledby="tituloBoasVindas">
+  <div class="bv-topo">
+    <span class="wordmark">onmail<i>.</i></span>
+    <h2 id="tituloBoasVindas">Bem-vindo</h2>
+    <p class="bv-endereco" id="bvEndereco"></p>
+  </div>
+  <ol class="bv-passos">
+    <li><svg class="icone" aria-hidden="true"><use href="img/icones.svg#whatsapp"></use></svg><div><b>Alertas no WhatsApp</b><span id="bvWhatsapp"></span></div></li>
+    <li><svg class="icone" aria-hidden="true"><use href="img/icones.svg#estrela"></use></svg><div><b>Quem avisa na hora</b><span id="bvVip"></span></div></li>
+    <li><svg class="icone" aria-hidden="true"><use href="img/icones.svg#agenda"></use></svg><div><b>Agenda no mesmo lugar</b><span>Convite recebido entra na agenda com um clique. Qualquer e-mail vira compromisso em "Criar evento".</span></div></li>
+    <li><svg class="icone" aria-hidden="true"><use href="img/icones.svg#enviados"></use></svg><div><b>Enviar por e-mail, WhatsApp ou os dois</b><span>Você escolhe o caminho na hora de escrever.</span></div></li>
+  </ol>
+  <p class="bv-nota">Mandamos também um e-mail de boas-vindas para a sua Caixa de entrada, com este roteiro.</p>
+  <div class="dlg-rodape">
+    <button class="bt esq" type="button" data-acao="boasVindasConfig"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#config"></use></svg><span>Configurar agora</span></button>
+    <button class="bt bt-marca" type="button" data-acao="boasVindasOk">Começar</button>
+  </div>
+</dialog>
+
+<script src="js/comum.js"></script>
+<script src="js/teste-app.js"></script>
+<script src="js/agenda.js"></script>
+<script src="js/caixa.js"></script>
+</body>
+</html>
