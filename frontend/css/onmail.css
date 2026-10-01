@@ -95,3 +95,4 @@ dialog::backdrop { background: rgba(12,16,20,.38); }
 .linha2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .linha3 { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 12px; }
 @media (max-width: 520px) { .linha2, .linha3 { grid-template-columns: 1fr; gap: 0; } }
+
