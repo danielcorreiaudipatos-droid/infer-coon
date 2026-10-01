@@ -3006,3 +3006,4 @@ if os.path.exists(frontend_path):
 
     # Monta todos os ativos estáticos (imagens, CSS, JS, áudios)
     app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend_static")
+
