@@ -39,6 +39,7 @@ from backend.auth import (
     UpgradeRequest,
     authenticate_user,
     register_user,
+    criar_usuario_staff,
     handle_google_login,
     create_jwt,
     decode_jwt
@@ -1564,6 +1565,7 @@ def api_auth_login(req: LoginRequest):
         "email": user["email"],
         "name": user["name"],
         "plan": user["plan"],
+        "role": user.get("role", "cliente"),
         "is_admin": False
     })
     return {
@@ -2022,6 +2024,8 @@ async def api_onimob_upload_documento(
         raise HTTPException(status_code=400, detail="Arquivo maior que 15 MB.")
     if len(conteudo) == 0:
         raise HTTPException(status_code=400, detail="Arquivo vazio.")
+    if not imob_engine.validar_assinatura_arquivo(ext, conteudo):
+        raise HTTPException(status_code=400, detail="O conteúdo do arquivo não corresponde a um PDF/JPG/PNG válido.")
 
     os.makedirs(imob_engine.UPLOAD_DIR, exist_ok=True)
     nome_arquivo = f"{_uuid.uuid4().hex}{ext}"
@@ -2037,20 +2041,47 @@ async def api_onimob_upload_documento(
         os.remove(caminho)  # desfaz o arquivo salvo se a validação dos dados falhar
         raise HTTPException(status_code=400, detail=str(e))
 
+PAPEIS_STAFF_ONIMOB = {"onimob_staff", "admin"}
+
 def _exigir_acesso_onimob(request: Request):
     """Documentos de RG/CPF/comprovante são dado sensível (LGPD): só a chave mestra do
-    admin/escritório pode listar, baixar ou revisar. O envio em si (upload) fica público,
-    porque é o proprietário/inquilino mandando o documento pela primeira vez, sem conta ainda.
-    Não aceita qualquer JWT de login: o cadastro de usuário (/api/auth/register) é público e
-    não tem nenhum vínculo com o imóvel/proprietário/inquilino dono do documento, então aceitar
-    "qualquer logado" ainda deixava qualquer pessoa que criasse conta ver RG/CPF de terceiros
-    só adivinhando o id sequencial."""
+    admin ou uma conta de equipe (role 'onimob_staff', criada só pelo admin via
+    /api/admin/onimob/staff) pode listar, baixar ou revisar. O envio em si (upload) fica
+    público, porque é o proprietário/inquilino mandando o documento pela primeira vez,
+    sem conta ainda.
+    Não aceita qualquer JWT de login: o cadastro de usuário (/api/auth/register) é público
+    e não tem nenhum vínculo com o imóvel/proprietário/inquilino dono do documento, então
+    aceitar "qualquer logado" deixava qualquer pessoa que criasse conta ver RG/CPF de
+    terceiros só adivinhando o id sequencial."""
     token = request.headers.get("Authorization", "").replace("Bearer ", "").strip()
     if not token:
         token = request.cookies.get("coon_auth_token", "")
-    if token and token == COON_MASTER_KEY:
+    if token == COON_MASTER_KEY:
         return
-    raise HTTPException(status_code=401, detail="Acesso restrito: use a chave de administrador do escritório.")
+    payload = decode_jwt(token) if token else None
+    if payload and (payload.get("is_admin") or payload.get("role") in PAPEIS_STAFF_ONIMOB):
+        return
+    raise HTTPException(status_code=401, detail="Acesso restrito: faça login com uma conta de equipe ou use a chave de administrador.")
+
+class CriarStaffRequest(BaseModel):
+    name: str
+    email: str
+    password: str
+
+@app.post("/api/admin/onimob/staff")
+def api_admin_criar_staff(dados: CriarStaffRequest, request: Request):
+    """Só o admin (chave mestra) cria conta de equipe com acesso aos documentos do onimob."""
+    token = request.headers.get("Authorization", "").replace("Bearer ", "").strip()
+    if not token:
+        token = request.cookies.get("coon_auth_token", "")
+    if token != COON_MASTER_KEY:
+        raise HTTPException(status_code=401, detail="Só o administrador do escritório pode criar contas de equipe.")
+    if len(dados.password) < 4:
+        raise HTTPException(status_code=400, detail="A senha deve conter no mínimo 4 caracteres.")
+    try:
+        return criar_usuario_staff(dados.name.strip(), dados.email, dados.password)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.get("/api/onimob/documentos")
 def api_onimob_listar_documentos(request: Request, entidade_tipo: Optional[str] = None, entidade_id: Optional[int] = None, status: Optional[str] = None):

@@ -142,6 +142,23 @@ STATUS_DOCUMENTO = {"pendente", "aprovado", "rejeitado"}
 EXTENSOES_PERMITIDAS = {".pdf", ".jpg", ".jpeg", ".png"}
 TAMANHO_MAX_BYTES = 15 * 1024 * 1024  # 15 MB
 
+# Assinatura real (magic bytes) de cada extensão aceita. A extensão do nome do arquivo
+# é só o que o navegador manda; sem checar os bytes, um .exe renomeado pra .pdf passava
+# pela validação e ficava disponível pra quem revisasse o documento baixar e abrir.
+_ASSINATURAS_PERMITIDAS = {
+    ".pdf": (b"%PDF-",),
+    ".png": (b"\x89PNG\r\n\x1a\n",),
+    ".jpg": (b"\xff\xd8\xff",),
+    ".jpeg": (b"\xff\xd8\xff",),
+}
+
+
+def validar_assinatura_arquivo(ext: str, conteudo: bytes) -> bool:
+    assinaturas = _ASSINATURAS_PERMITIDAS.get(ext)
+    if not assinaturas:
+        return False
+    return any(conteudo.startswith(a) for a in assinaturas)
+
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads", "onimob_documentos")
 
 
