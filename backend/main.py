@@ -78,6 +78,7 @@ from backend.telemetry import (
     resolve_diagnostic
 )
 from backend.integracao_endpoints import router as integracao_router
+from backend.site_endpoints import router as site_router
 
 from backend.financial import (
     init_financial_tables,
@@ -627,6 +628,7 @@ def apply_transformation(val_array: np.ndarray, transform_type: str, var_name: s
 
 # ========== ROUTERS REGISTRADOS ==========
 app.include_router(integracao_router)
+app.include_router(site_router)
 
 # ========== ENDPOINTS PRINCIPAIS ==========
 
