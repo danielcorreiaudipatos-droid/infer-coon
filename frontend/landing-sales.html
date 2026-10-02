@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>on.imob — Venda 30% Mais Rápido Com Avaliação Científica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .hero .subheader {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* PAIN SECTION */
+        .pain {
+            padding: 80px 40px;
+            background: #f8f9ff;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        .pain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pain-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #f44336;
+        }
+
+        .pain-card h3 {
+            color: #f44336;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .pain-card p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .pain-result {
+            background: #ffe0e0;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #c33;
+            margin-top: 15px;
+        }
+
+        /* SOLUTION SECTION */
+        .solution {
+            padding: 80px 40px;
+            background: white;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #4caf50;
+            transition: transform 0.3s;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .solution-card .icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .solution-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .solution-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* HOW IT WORKS */
+        .how-it-works {
+            padding: 80px 40px;
+            background: #f8f9ff;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 900px;
+            margin: 50px auto 0;
+        }
+
+        .step {
+            text-align: center;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .step h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .step p {
+            color: #666;
+            font-size: 13px;
+        }
+
+        /* CASE STUDY */
+        .case-study {
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .case-study h2 {
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        .case-study-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .case-before-after {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .before, .after {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .before h3, .after h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .before-stat, .after-stat {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .improvement {
+            background: #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* PRICING */
+        .pricing {
+            padding: 80px 40px;
+            background: white;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 50px auto 0;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured {
+            border-color: #667eea;
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .pricing-card h3 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 48px;
+            color: #667eea;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .price-period {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .pricing-features {
+            text-align: left;
+            margin: 30px 0;
+            list-style: none;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            color: #666;
+            border-bottom: 1px solid #eee;
+        }
+
+        .pricing-features li:before {
+            content: "✓ ";
+            color: #4caf50;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 80px 40px;
+            background: #f8f9ff;
+        }
+
+        .faq-grid {
+            max-width: 800px;
+            margin: 50px auto 0;
+        }
+
+        .faq-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            color: #666;
+            margin-top: 15px;
+            display: none;
+            line-height: 1.8;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        /* CTA FINAL */
+        .cta-final {
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cta-final h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+
+        .cta-final p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* FORM */
+        .form-section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* FOOTER */
+        footer {
+            background: #333;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .trust-marks {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .trust-mark {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero .subheader {
+                font-size: 18px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .case-before-after {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HERO -->
+    <section class="hero">
+        <h1>Venda 30% Mais Rápido</h1>
+        <p class="subheader">Seu cliente recebe DOCUMENTO que prova o valor real do imóvel.<br>Fecha negócio em 2-3 semanas (não 6-8).</p>
+        <div class="cta-buttons">
+            <button class="btn btn-primary" onclick="document.querySelector('.form-section').scrollIntoView()">Testar Grátis</button>
+            <button class="btn btn-secondary" onclick="alert('Demo em 15 min')">Ver Demo</button>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-number">30%</div>
+                <div class="stat-label">Mais rápido</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">+25%</div>
+                <div class="stat-label">Mais comissão</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">1.000+</div>
+                <div class="stat-label">Imobiliárias usando</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAIN -->
+    <section class="pain">
+        <h2 class="section-title">O Problema: Você Está Perdendo R$ 30.000/mês</h2>
+        <div class="pain-grid">
+            <div class="pain-card">
+                <h3>❌ Clientes duvidam do preço</h3>
+                <p>"Corretor diz R$ 2 milhões, mas será que é?"</p>
+                <div class="pain-result">Resultado: Negoceiam 20%+, ganham menos</div>
+            </div>
+            <div class="pain-card">
+                <h3>❌ Venda demorando 6-8 semanas</h3>
+                <p>"Preciso pensar mais um pouco..."</p>
+                <div class="pain-result">Resultado: Lead esfria, perde interesse</div>
+            </div>
+            <div class="pain-card">
+                <h3>❌ Financeiro desorganizado</h3>
+                <p>"Qual era o split desse imóvel mesmo?"</p>
+                <div class="pain-result">Resultado: Atrasos, cliente irritado</div>
+            </div>
+            <div class="pain-card">
+                <h3>❌ Sem diferencial</h3>
+                <p>Concorrente tem Jetimob, Imobisoft...</p>
+                <div class="pain-result">Resultado: Cliente escolhe pelo preço</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOLUTION -->
+    <section class="solution">
+        <h2 class="section-title">A Solução: on.imob Resolve Com CIÊNCIA</h2>
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="icon">📊</div>
+                <h3>Avaliação Científica</h3>
+                <p>Regressão estatística + NBR 14.653. Seu cliente recebe DOCUMENTO que prova valor.</p>
+            </div>
+            <div class="solution-card">
+                <div class="icon">💬</div>
+                <h3>CRM + IA</h3>
+                <p>WhatsApp 2-way + Gemini IA. Qualificação automática de leads 24/7.</p>
+            </div>
+            <div class="solution-card">
+                <div class="icon">💰</div>
+                <h3>Pagamentos Automáticos</h3>
+                <p>PIX, Boleto, Cartão. Split 95/5 automático. Sem burocracias.</p>
+            </div>
+            <div class="solution-card">
+                <div class="icon">🏦</div>
+                <h3>Open Banking</h3>
+                <p>Sincroniza com Itaú, Bradesco, Santander. Financeiro 24/7.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works">
+        <h2 class="section-title">Como Funciona Em 3 Passos</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Insira dados do imóvel</h3>
+                <p>2 minutos. Dados básicos do imóvel.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>IA calcula valor</h3>
+                <p>5 segundos. Regressão estatística.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Cliente recebe PDF</h3>
+                <p>1 click. Documento científico pronto.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CASE STUDY -->
+    <section class="case-study">
+        <h2>ABC Imobiliária Vendeu 15 Imóveis em 30 Dias</h2>
+        <div class="case-study-content">
+            <p><strong>Problema:</strong> Vendiam 5 imóveis/mês. Clientes negociavam muito. Sem diferencial.</p>
+            <p style="margin-top: 20px;"><strong>Solução:</strong> Começaram com on.imob em 15 de setembro.</p>
+
+            <div class="case-before-after">
+                <div class="before">
+                    <h3>ANTES</h3>
+                    <div class="before-stat">5 imóveis/mês</div>
+                    <p>R$ 15.000 comissão</p>
+                    <p>6-8 semanas venda</p>
+                </div>
+                <div class="after">
+                    <h3>DEPOIS</h3>
+                    <div class="after-stat">7 imóveis/mês</div>
+                    <p>R$ 21.000 comissão</p>
+                    <p>2-3 semanas venda</p>
+                </div>
+            </div>
+
+            <div class="improvement">
+                +40% vendas | +40% comissão | +12 clientes por referência
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing">
+        <h2 class="section-title">Escolha Seu Plano</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Startup</h3>
+                <div class="price">R$ 99</div>
+                <div class="price-period">/mês</div>
+                <ul class="pricing-features">
+                    <li>50 imóveis</li>
+                    <li>3 usuários</li>
+                    <li>VivaReal</li>
+                    <li>CRM básico</li>
+                </ul>
+                <button class="btn btn-primary">Começar</button>
+            </div>
+
+            <div class="pricing-card featured">
+                <h3>Professional ⭐</h3>
+                <div class="price">R$ 299</div>
+                <div class="price-period">/mês</div>
+                <ul class="pricing-features">
+                    <li>Imóveis ilimitados</li>
+                    <li>10 usuários</li>
+                    <li>VivaReal + ZapImóveis</li>
+                    <li>Financeiro completo</li>
+                    <li>Split automático</li>
+                </ul>
+                <button class="btn btn-primary">Começar</button>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Enterprise</h3>
+                <div class="price">Custom</div>
+                <div class="price-period">Entre em contato</div>
+                <ul class="pricing-features">
+                    <li>Tudo acima +</li>
+                    <li>Open Banking (3 bancos)</li>
+                    <li>Nota Fiscal integrada</li>
+                    <li>Suporte dedicado</li>
+                </ul>
+                <button class="btn btn-primary">Conversar</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <h2 class="section-title">Perguntas Frequentes</h2>
+        <div class="faq-grid">
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-question">
+                    <span>Quanto tempo leva para gerar uma avaliação?</span>
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    5 segundos. A IA processa os dados e gera o PDF automaticamente.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-question">
+                    <span>Meus clientes vão confiar no documento?</span>
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    Sim. É baseado em regressão estatística + NBR 14.653. Tem validade legal e comprovação científica.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-question">
+                    <span>Qual é o ROI?</span>
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    Vende 1 imóvel extra = +R$ 3.000 comissão. Custo plano = R$ 299. Payback = menos de 1 mês.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-question">
+                    <span>Precisa treinar a equipe?</span>
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    Não. É intuitivo. Sua equipe aprende em 5 minutos.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-question">
+                    <span>E se eu não gostar?</span>
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    Cancelar qualquer hora. Sem contrato de longo prazo. 30 dias de garantia de devolução.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="cta-final">
+        <h2>Pronto para vender mais rápido?</h2>
+        <p>Teste grátis. Sem cartão de crédito. Dois imóveis avaliados de graça.</p>
+
+        <div class="form-section">
+            <form onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label for="nome">Seu nome</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefone">Telefone (WhatsApp)</label>
+                    <input type="tel" id="telefone" name="telefone" required>
+                </div>
+                <div class="form-group">
+                    <label for="imoveis">Quantos imóveis você tem?</label>
+                    <select id="imoveis" name="imoveis" required>
+                        <option value="">Selecione...</option>
+                        <option value="1-10">1-10 imóveis</option>
+                        <option value="11-50">11-50 imóveis</option>
+                        <option value="51-100">51-100 imóveis</option>
+                        <option value="100+">100+ imóveis</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="empresa">Nome da imobiliária</label>
+                    <input type="text" id="empresa" name="empresa" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Começar Avaliação Grátis</button>
+            </form>
+
+            <div class="trust-marks">
+                <div class="trust-mark">✓ Sem cartão</div>
+                <div class="trust-mark">✓ 30 dias de volta</div>
+                <div class="trust-mark">✓ Suporte 24/7</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 on.imob. Todos os direitos reservados.</p>
+        <p>Made with ❤️ para imobiliárias que vendem rápido</p>
+    </footer>
+
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault();
+            const data = {
+                nome: document.getElementById('nome').value,
+                email: document.getElementById('email').value,
+                telefone: document.getElementById('telefone').value,
+                imoveis: document.getElementById('imoveis').value,
+                empresa: document.getElementById('empresa').value
+            };
+
+            console.log('Lead capturado:', data);
+            alert('✅ Conta criada! Você receberá email com acesso à avaliação grátis.');
+            document.querySelector('form').reset();
+        }
+    </script>
+</body>
+</html>
