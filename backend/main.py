@@ -1932,6 +1932,7 @@ import backend.garantias as garantias
 import backend.modelos_cartas as modelos_cartas
 import backend.word_generator as word_generator
 import backend.ia_chat as ia_chat
+import backend.ia_analytics as ia_analytics
 
 @app.post("/api/onimob/corretores")
 def api_onimob_criar_corretor(dados: imob_engine.CorretorIn):
@@ -2449,6 +2450,37 @@ def api_adicionar_modelo_carta(nome: str, template: str):
         return gemini_integration.adicionar_modelo_carta(nome, template)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+# ==============================================================================
+# ANALYTICS DA IA — Histórico, Frequência de Perguntas, Insights
+# ==============================================================================
+@app.post("/api/onimob/ia/registrar")
+def api_registrar_pergunta(usuario_email: str, pergunta: str, resposta: str, pagina: str, fonte: str):
+    """Registra pergunta no histórico analytics."""
+    try:
+        return ia_analytics.registrar_pergunta(usuario_email, pergunta, resposta, pagina, fonte)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/ia/historico")
+def api_obter_historico(usuario_email: str, limite: int = 20):
+    """Retorna histórico de perguntas do usuário."""
+    return {"historico": ia_analytics.obter_historico(usuario_email, limite)}
+
+@app.get("/api/onimob/ia/frequentes")
+def api_perguntas_frequentes(limite: int = 10):
+    """Retorna perguntas mais frequentes do sistema."""
+    return {"frequentes": ia_analytics.obter_perguntas_frequentes(limite)}
+
+@app.get("/api/onimob/ia/analytics/por-pagina")
+def api_analise_por_pagina():
+    """Analytics de perguntas por página."""
+    return {"por_pagina": ia_analytics.obter_analise_by_pagina()}
+
+@app.post("/api/onimob/ia/limpar-historico")
+def api_limpar_historico(usuario_email: str):
+    """Limpa histórico do usuário."""
+    return ia_analytics.limpar_historico(usuario_email)
 
 # ==============================================================================
 # BIBLIOTECA DE MODELOS — Cartas, Contratos, Comunicados (Lei 8.245/91)
