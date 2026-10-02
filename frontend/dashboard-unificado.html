@@ -467,5 +467,310 @@
             }
         });
     </script>
+
+    <!-- 🤖 IA Assistant Bar -->
+    <script>
+        // Estado do chat
+        const chatState = {
+            aberto: false,
+            pagina: 'dashboard_financeiro',
+            contexto: {},
+            historico: []
+        };
+
+        // Obter contexto da página
+        function obterContextoPagina() {
+            return {
+                imovel_nome: "Apt. Paulista",
+                inquilino_nome: "João Silva",
+                dias_atraso: 17,
+                valor_aluguel: "R$ 2.500"
+            };
+        }
+
+        // Atualizar contexto
+        function atualizarContextoUI() {
+            chatState.contexto = obterContextoPagina();
+            const ctx = document.getElementById('iaContext');
+            if (!ctx) return;
+
+            let html = `<div class="ia-context-item"><span class="ia-context-label">📍 Dashboard</span></div>`;
+            if (chatState.contexto.imovel_nome) {
+                html += `<div class="ia-context-item">🏠 ${chatState.contexto.imovel_nome}</div>`;
+            }
+            if (chatState.contexto.dias_atraso) {
+                html += `<div class="ia-context-item" style="color: #dc3545;">⏰ ${chatState.contexto.dias_atraso} dias atrasado</div>`;
+            }
+            ctx.innerHTML = html;
+        }
+
+        // Abrir/Fechar
+        function abrirAssistente() {
+            const panel = document.getElementById('iaPanel');
+            if (panel) {
+                panel.classList.add('open');
+                document.getElementById('iaOpenBtn').classList.add('hidden');
+                atualizarContextoUI();
+                document.getElementById('iaInput')?.focus();
+            }
+        }
+
+        function fecharAssistente() {
+            const panel = document.getElementById('iaPanel');
+            if (panel) {
+                panel.classList.remove('open');
+                document.getElementById('iaOpenBtn').classList.remove('hidden');
+            }
+        }
+
+        // Enviar pergunta
+        async function enviarPergunta() {
+            const input = document.getElementById('iaInput');
+            const pergunta = input.value.trim();
+            if (!pergunta) return;
+
+            adicionarMensagem(pergunta, 'user');
+            input.value = '';
+
+            const chatArea = document.getElementById('iaChatArea');
+            const typing = document.createElement('div');
+            typing.className = 'ia-typing';
+            typing.innerHTML = '<span></span><span></span><span></span>';
+            typing.id = 'iaTyping';
+            chatArea.appendChild(typing);
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            try {
+                const res = await fetch('/api/onimob/ia/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        pergunta: pergunta,
+                        pagina: chatState.pagina,
+                        contexto: chatState.contexto
+                    })
+                }).then(r => r.json());
+
+                document.getElementById('iaTyping')?.remove();
+                adicionarMensagem(res.resposta, 'assistant');
+
+                if (res.sugestoes) {
+                    mostrarSugestoes(res.sugestoes);
+                }
+                chatArea.scrollTop = chatArea.scrollHeight;
+            } catch (e) {
+                document.getElementById('iaTyping')?.remove();
+                adicionarMensagem('❌ Erro ao conectar', 'assistant');
+            }
+        }
+
+        function adicionarMensagem(texto, tipo) {
+            const chatArea = document.getElementById('iaChatArea');
+            if (!chatArea) return;
+            const msg = document.createElement('div');
+            msg.className = `ia-message ${tipo}`;
+            msg.textContent = texto;
+            chatArea.appendChild(msg);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function mostrarSugestoes(sugestoes) {
+            const sugDiv = document.getElementById('iaSuggestions');
+            if (!sugDiv) return;
+            sugDiv.innerHTML = sugestoes.slice(0, 3).map(s =>
+                `<button class="ia-suggestion-btn" onclick="document.getElementById('iaInput').value='${s}'; enviarPergunta();">${s}</button>`
+            ).join('');
+        }
+
+        window.addEventListener('load', atualizarContextoUI);
+    </script>
+
+    <style>
+        .ia-assistant-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .ia-button-open {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .ia-button-open:hover { transform: scale(1.1); }
+        .ia-button-open.hidden { display: none; }
+
+        .ia-panel {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            height: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .ia-panel.open { display: flex; }
+
+        .ia-header {
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            color: white;
+            padding: 16px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ia-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .ia-context {
+            background: #f0f4f9;
+            padding: 12px;
+            font-size: 12px;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .ia-context-item { margin: 4px 0; }
+        .ia-context-label { font-weight: 600; color: #666; }
+
+        .ia-chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .ia-message {
+            margin-bottom: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .ia-message.user {
+            background: #0066cc;
+            color: white;
+            margin-left: 20px;
+            text-align: right;
+        }
+
+        .ia-message.assistant {
+            background: #f0f0f0;
+            color: #333;
+            margin-right: 20px;
+        }
+
+        .ia-typing {
+            display: flex;
+            gap: 4px;
+            padding: 10px;
+        }
+
+        .ia-typing span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #999;
+            animation: pulse 1.4s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .ia-suggestions {
+            padding: 8px 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            border-top: 1px solid #eee;
+        }
+
+        .ia-suggestion-btn {
+            padding: 6px 12px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 16px;
+            font-size: 11px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .ia-suggestion-btn:hover { background: #e0e0e0; }
+
+        .ia-input-area {
+            padding: 12px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 8px;
+        }
+
+        .ia-input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 12px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .ia-input:focus { border-color: #0066cc; }
+
+        .ia-send-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #0066cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .ia-send-btn:hover { background: #0052a3; }
+    </style>
+
+    <!-- IA Assistant Panel -->
+    <div class="ia-assistant-container">
+        <button class="ia-button-open" id="iaOpenBtn" onclick="abrirAssistente()">🤖</button>
+        <div class="ia-panel" id="iaPanel">
+            <div class="ia-header">
+                <span>🤖 Assistente on.imob</span>
+                <button class="ia-close" onclick="fecharAssistente()">✕</button>
+            </div>
+            <div class="ia-context" id="iaContext"></div>
+            <div class="ia-chat-area" id="iaChatArea"></div>
+            <div class="ia-suggestions" id="iaSuggestions"></div>
+            <div class="ia-input-area">
+                <input type="text" class="ia-input" id="iaInput" placeholder="Sua dúvida..." onkeypress="if(event.key=='Enter') enviarPergunta()">
+                <button class="ia-send-btn" onclick="enviarPergunta()">➤</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

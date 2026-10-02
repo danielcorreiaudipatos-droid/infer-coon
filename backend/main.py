@@ -1931,6 +1931,7 @@ import backend.gemini_integration as gemini_integration
 import backend.garantias as garantias
 import backend.modelos_cartas as modelos_cartas
 import backend.word_generator as word_generator
+import backend.ia_chat as ia_chat
 
 @app.post("/api/onimob/corretores")
 def api_onimob_criar_corretor(dados: imob_engine.CorretorIn):
@@ -2418,6 +2419,21 @@ async def api_responder_duvida(pergunta: str):
         if not resposta:
             raise ValueError("Não foi possível gerar resposta")
         return {"resposta": resposta}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/onimob/ia/chat")
+async def api_chat_ia(pergunta: str, pagina: str, contexto: Optional[Dict[str, Any]] = None):
+    """Chat IA com contexto do sistema — Assistente Inteligente."""
+    try:
+        ctx = ia_chat.ContextoChat(pagina, contexto or {})
+        resultado = await ia_chat.chat_ia(pergunta, ctx)
+
+        # Adicionar ação recomendada
+        acao = ia_chat.determinar_acao_recomendada(ctx)
+        resultado["acao_recomendada"] = acao
+
+        return resultado
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
