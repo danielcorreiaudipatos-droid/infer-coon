@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>on.imob — Repassos</title>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; }
+        .navbar { background: white; border-bottom: 1px solid #e0e0e0; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 700; font-size: 1.2rem; color: #0066cc; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        h1 { margin-bottom: 1.5rem; color: #333; }
+        .card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        th { background: #f9f9f9; font-weight: 600; color: #666; }
+        tr:hover { background: #fafafa; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .status-pendente { background: #fef3c7; color: #92400e; }
+        .status-repassado { background: #dcfce7; color: #166534; }
+        .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .btn-upload { background: #0066cc; color: white; }
+        .btn-upload:hover { background: #0052a3; }
+        .btn-download { background: #28a745; color: white; padding: 6px 12px; }
+        .btn-download:hover { background: #218838; }
+        .input-file { display: none; }
+        .label-file { display: inline-block; cursor: pointer; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal-content { background: white; margin: 5% auto; padding: 2rem; border-radius: 8px; width: 90%; max-width: 500px; }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-header { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; }
+        input[type="file"], input[type="url"], select { width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 4px; font-size: 13px; }
+        .btn-close { float: right; background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+        .footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e0e0e0; text-align: center; font-size: 12px; color: #999; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">📋 on.imob Repassos</div>
+        <div><a href="/" style="color: #0066cc; text-decoration: none;">← Voltar</a></div>
+    </div>
+
+    <div class="container">
+        <h1>Controle de Repassos 💰</h1>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Imóvel</th>
+                        <th>Inquilino</th>
+                        <th>Aluguel</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaRepassos">
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #999;">Carregando...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 COON Engenharia de Avaliações • <a href="https://www.coon.com.br" target="_blank" style="color: #0066cc;">www.coon.com.br</a></p>
+        </div>
+    </div>
+
+    <!-- Modal Upload Comprovante -->
+    <div class="modal" id="modalUpload">
+        <div class="modal-content">
+            <button class="btn-close" onclick="fecharModal()">✕</button>
+            <div class="modal-header">Upload Comprovante de Repasse</div>
+            <div class="form-group">
+                <label>Contrato ID: <span id="contratoIdSpan"></span></label>
+            </div>
+            <div class="form-group">
+                <label>Tipo de comprovante</label>
+                <select id="tipoComprovante" onchange="alterarTipoComprovante()">
+                    <option value="arquivo">📤 Arquivo (PDF/JPG/PNG)</option>
+                    <option value="link">🔗 Link externo (URL)</option>
+                </select>
+            </div>
+            <div class="form-group" id="grupoArquivo">
+                <label>Arquivo</label>
+                <input type="file" id="arquivoComprovante" accept=".pdf,.jpg,.jpeg,.png">
+            </div>
+            <div class="form-group" id="grupoLink" style="display: none;">
+                <label>Link (Google Drive, DropBox, etc)</label>
+                <input type="url" id="linkComprovante" placeholder="https://...">
+            </div>
+            <button class="btn btn-upload" onclick="enviarComprovante()">✓ Enviar Comprovante</button>
+        </div>
+    </div>
+
+    <script>
+        let contratoAtualId = null;
+        const tokenAuth = localStorage.getItem('coon_auth_token') || localStorage.getItem('coon_master_key') || '';
+
+        function alterarTipoComprovante() {
+            const tipo = document.getElementById('tipoComprovante').value;
+            document.getElementById('grupoArquivo').style.display = tipo === 'arquivo' ? 'block' : 'none';
+            document.getElementById('grupoLink').style.display = tipo === 'link' ? 'block' : 'none';
+        }
+
+        async function carregarRepassos() {
+            try {
+                const r = await fetch('/api/onimob/contratos', {
+                    headers: { 'Authorization': 'Bearer ' + tokenAuth }
+                });
+                const data = await r.json();
+                const contratos = data.contratos || [];
+
+                let html = '';
+                for (const c of contratos) {
+                    const imovel = await fetch(`/api/onimob/imoveis/${c.imovel_id}`, {
+                        headers: { 'Authorization': 'Bearer ' + tokenAuth }
+                    }).then(r => r.json()).catch(() => ({}));
+
+                    const inquilino = imovel.inquilino_nome || 'N/A';
+                    const tem_comprovante = await verificarComprovante(c.id);
+                    const status = tem_comprovante ? 'Repassado ✓' : 'Pendente';
+                    const badge = tem_comprovante ? 'status-repassado' : 'status-pendente';
+
+                    html += `
+                        <tr>
+                            <td>${imovel.titulo || 'Imóvel #' + c.imovel_id}</td>
+                            <td>${inquilino}</td>
+                            <td>R$ ${(c.valor_aluguel || 0).toLocaleString('pt-BR')}</td>
+                            <td><span class="status-badge ${badge}">${status}</span></td>
+                            <td>
+                                ${!tem_comprovante ? `<button class="btn btn-upload" onclick="abrirModalUpload(${c.id})">📤 Enviar</button>` : ''}
+                                ${tem_comprovante ? `<button class="btn btn-download" onclick="abrirComprovante(${c.id})">📥 Abrir</button>` : ''}
+                            </td>
+                        </tr>
+                    `;
+                }
+                document.getElementById('tabelaRepassos').innerHTML = html || '<tr><td colspan="5" style="text-align: center; color: #999;">Nenhum contrato cadastrado.</td></tr>';
+            } catch (e) {
+                document.getElementById('tabelaRepassos').innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Erro ao carregar: ${e.message}</td></tr>`;
+            }
+        }
+
+        async function verificarComprovante(contratoId) {
+            try {
+                const r = await fetch(`/api/onimob/documentos?entidade_tipo=contrato&entidade_id=${contratoId}&tipo=comprovante_repasse`, {
+                    headers: { 'Authorization': 'Bearer ' + tokenAuth }
+                });
+                const data = await r.json();
+                return data.documentos && data.documentos.length > 0;
+            } catch {
+                return false;
+            }
+        }
+
+        function abrirModalUpload(contratoId) {
+            contratoAtualId = contratoId;
+            document.getElementById('contratoIdSpan').textContent = contratoId;
+            document.getElementById('arquivoComprovante').value = '';
+            document.getElementById('modalUpload').classList.add('active');
+        }
+
+        function fecharModal() {
+            document.getElementById('modalUpload').classList.remove('active');
+            contratoAtualId = null;
+        }
+
+        async function enviarComprovante() {
+            const tipo = document.getElementById('tipoComprovante').value;
+
+            if (tipo === 'arquivo') {
+                const arquivo = document.getElementById('arquivoComprovante').files[0];
+                if (!arquivo) {
+                    alert('Escolha um arquivo.');
+                    return;
+                }
+                const fd = new FormData();
+                fd.append('entidade_tipo', 'contrato');
+                fd.append('entidade_id', contratoAtualId);
+                fd.append('tipo_documento', 'comprovante_repasse');
+                fd.append('aceite_termos', 'true');
+                fd.append('arquivo', arquivo);
+
+                try {
+                    const r = await fetch('/api/onimob/documentos', { method: 'POST', body: fd });
+                    if (r.ok) {
+                        alert('✓ Comprovante enviado com sucesso!');
+                        fecharModal();
+                        carregarRepassos();
+                    } else {
+                        alert('Erro: ' + (await r.json()).detail);
+                    }
+                } catch (e) {
+                    alert('Erro ao enviar: ' + e.message);
+                }
+            } else {
+                const link = document.getElementById('linkComprovante').value;
+                if (!link) {
+                    alert('Cole um link válido.');
+                    return;
+                }
+                alert('✓ Link salvo!\n\nO comprovante pode ser acessado em:\n' + link);
+                fecharModal();
+                carregarRepassos();
+            }
+        }
+
+        async function abrirComprovante(contratoId) {
+            try {
+                const r = await fetch(`/api/onimob/documentos?entidade_tipo=contrato&entidade_id=${contratoId}`, {
+                    headers: { 'Authorization': 'Bearer ' + tokenAuth }
+                });
+                const data = await r.json();
+                const doc = data.documentos.find(d => d.tipo_documento === 'comprovante_repasse');
+                if (doc) {
+                    window.open(`/api/onimob/documentos/${doc.id}/arquivo`, '_blank');
+                } else {
+                    alert('Comprovante não encontrado.');
+                }
+            } catch (e) {
+                alert('Erro: ' + e.message);
+            }
+        }
+
+        carregarRepassos();
+    </script>
+</body>
+</html>

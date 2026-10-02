@@ -2250,6 +2250,15 @@ def serve_onimob_cadastro():
             return HTMLResponse(content=f.read())
     return serve_portal()
 
+@app.get("/imob/repasse", response_class=HTMLResponse)
+def serve_repasse():
+    """Painel de controle de repassos: upload comprovante, lista status."""
+    repasse_file = os.path.join(FRONTEND_DIR, "repasse.html")
+    if os.path.exists(repasse_file):
+        with open(repasse_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
 
 @app.get("/inferencia", response_class=HTMLResponse)
 @app.get("/inferencia/", response_class=HTMLResponse)
