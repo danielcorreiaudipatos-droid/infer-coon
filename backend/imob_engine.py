@@ -157,8 +157,8 @@ def init_db():
 
 # ── Módulo 2: Documentação ───────────────────────────────────────────────────
 
-ENTIDADES_DOC = {"imovel", "proprietario", "inquilino", "corretor", "fiador"}
-TIPOS_DOCUMENTO = {"rg_cpf", "comprovante_residencia", "contrato", "matricula_imovel", "iptu", "outro"}
+ENTIDADES_DOC = {"imovel", "proprietario", "inquilino", "corretor", "fiador", "contrato"}
+TIPOS_DOCUMENTO = {"rg_cpf", "comprovante_residencia", "contrato", "matricula_imovel", "iptu", "comprovante_repasse", "outro"}
 STATUS_DOCUMENTO = {"pendente", "aprovado", "rejeitado"}
 EXTENSOES_PERMITIDAS = {".pdf", ".jpg", ".jpeg", ".png"}
 TAMANHO_MAX_BYTES = 15 * 1024 * 1024  # 15 MB
@@ -217,7 +217,22 @@ def registrar_documento(entidade_tipo: str, entidade_id: int, tipo_documento: st
     did = cur.lastrowid
     row = cur.execute("SELECT * FROM imob_documentos WHERE id = ?", (did,)).fetchone()
     conn.close()
-    return _row_to_dict(row)
+    resultado = _row_to_dict(row)
+
+    # Se for comprovante de repasse, notifica o proprietário
+    if tipo_documento == "comprovante_repasse":
+        from backend.notificacoes_onimob import notificar_repasse
+        proprietario = None
+        if entidade_tipo == "contrato":
+            contrato = obter_contrato(entidade_id)
+            if contrato:
+                imovel = obter_imovel(contrato["imovel_id"])
+                if imovel and imovel.get("proprietario_id"):
+                    proprietario = _row_to_dict(get_db().execute("SELECT * FROM imob_proprietarios WHERE id = ?", (imovel["proprietario_id"],)).fetchone())
+        if proprietario:
+            notificar_repasse(proprietario.get("nome", ""), proprietario.get("email", ""))
+
+    return resultado
 
 
 def listar_documentos(entidade_tipo: Optional[str] = None, entidade_id: Optional[int] = None,

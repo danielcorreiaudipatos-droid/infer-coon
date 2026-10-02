@@ -239,9 +239,9 @@
   // ── Documentos (Módulo 2) ────────────────────────────────────────────────
   const ROTULOS_TIPO_DOC = {
     rg_cpf: 'RG / CPF', comprovante_residencia: 'Comprovante de residência', contrato: 'Contrato',
-    matricula_imovel: 'Matrícula do imóvel', iptu: 'IPTU', outro: 'Outro',
+    matricula_imovel: 'Matrícula do imóvel', iptu: 'IPTU', comprovante_repasse: 'Comprovante de repasse', outro: 'Outro',
   };
-  const ROTULOS_ENTIDADE = { imovel: 'Imóvel', proprietario: 'Proprietário', inquilino: 'Inquilino', corretor: 'Corretor', fiador: 'Fiador' };
+  const ROTULOS_ENTIDADE = { imovel: 'Imóvel', proprietario: 'Proprietário', inquilino: 'Inquilino', corretor: 'Corretor', fiador: 'Fiador', contrato: 'Contrato' };
   const BADGE_STATUS = {
     pendente: 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300',
     aprovado: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300',
