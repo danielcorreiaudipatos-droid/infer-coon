@@ -12,4 +12,4 @@ services:
       - key: OFFICIAL_SITE_URL
         value: https://www.coon.com.br
       - key: COON_MASTER_KEY
-        value: coon2026master
+        sync: false  # defina o valor real só no painel do Render (Settings > Environment), nunca aqui

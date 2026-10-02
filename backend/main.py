@@ -172,7 +172,16 @@ init_security_tables()
 init_integrations_tables()
 
 OFFICIAL_SITE_URL = os.getenv("OFFICIAL_SITE_URL", "https://www.coon.com.br")
-COON_MASTER_KEY = os.getenv("COON_MASTER_KEY", "coon2026master")
+
+# A chave mestra do admin NUNCA tem valor fixo no código. Em produção, defina
+# COON_MASTER_KEY nas variáveis de ambiente do Render/Railway (nunca em arquivo
+# versionado). Sem a variável, gera uma chave aleatória a cada start e avisa
+# no log — só serve pra testar localmente, não é previsível nem repetida.
+import secrets as _secrets
+COON_MASTER_KEY = os.getenv("COON_MASTER_KEY")
+if not COON_MASTER_KEY:
+    COON_MASTER_KEY = _secrets.token_urlsafe(18)
+    print(f"[AVISO] COON_MASTER_KEY não definida no ambiente. Chave temporária gerada para esta sessão: {COON_MASTER_KEY}")
 
 app = FastAPI(
     title="Infer.coon API",
