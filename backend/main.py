@@ -3823,6 +3823,22 @@ def serve_funcionarios():
             return HTMLResponse(content=f.read())
     return serve_portal()
 
+
+# ==============================================================================
+# HEALTH CHECK (para Docker, Heroku, etc.)
+# ==============================================================================
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint para monitoramento."""
+    return {
+        "status": "ok",
+        "service": "on.imob",
+        "version": "1.0.0",
+        "timestamp": datetime.now().isoformat()
+    }
+
+
     # Monta todos os ativos estáticos (imagens, CSS, JS, áudios)
     app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend_static")
 
