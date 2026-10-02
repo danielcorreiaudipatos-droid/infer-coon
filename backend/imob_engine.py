@@ -66,31 +66,182 @@ def init_db():
     """)
 
     cur.execute("""
+    CREATE TABLE IF NOT EXISTS imob_fiadores (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        cpf_cnpj TEXT,
+        telefone TEXT,
+        email TEXT,
+        cep TEXT,
+        rua TEXT,
+        numero TEXT,
+        complemento TEXT,
+        bairro TEXT,
+        cidade TEXT,
+        uf TEXT,
+        criado_em REAL
+    )
+    """)
+
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS imob_imoveis (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         titulo TEXT NOT NULL,
         tipo TEXT NOT NULL,
         finalidade TEXT NOT NULL,
-        endereco TEXT,
+        cep TEXT,
+        rua TEXT,
+        numero TEXT,
+        complemento TEXT,
+        bairro TEXT,
         cidade TEXT,
         uf TEXT,
-        cep TEXT,
-        area_m2 REAL,
+        area_terreno_m2 REAL,
+        area_construida_m2 REAL,
         quartos INTEGER,
         valor REAL,
         status TEXT DEFAULT 'disponivel',
         proprietario_id INTEGER,
         corretor_id INTEGER,
         inquilino_id INTEGER,
+        fiador_id INTEGER,
         criado_em REAL,
         FOREIGN KEY (proprietario_id) REFERENCES imob_proprietarios(id),
         FOREIGN KEY (corretor_id) REFERENCES imob_corretores(id),
-        FOREIGN KEY (inquilino_id) REFERENCES imob_inquilinos(id)
+        FOREIGN KEY (inquilino_id) REFERENCES imob_inquilinos(id),
+        FOREIGN KEY (fiador_id) REFERENCES imob_fiadores(id)
+    )
+    """)
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS imob_documentos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        entidade_tipo TEXT NOT NULL,
+        entidade_id INTEGER NOT NULL,
+        tipo_documento TEXT NOT NULL,
+        nome_original TEXT NOT NULL,
+        nome_arquivo TEXT NOT NULL,
+        tamanho_bytes INTEGER,
+        status TEXT DEFAULT 'pendente',
+        motivo_rejeicao TEXT,
+        aceite_termos_em REAL,
+        enviado_em REAL,
+        revisado_em REAL
     )
     """)
 
     conn.commit()
     conn.close()
+
+
+# ── Módulo 2: Documentação ───────────────────────────────────────────────────
+
+ENTIDADES_DOC = {"imovel", "proprietario", "inquilino", "corretor", "fiador"}
+TIPOS_DOCUMENTO = {"rg_cpf", "comprovante_residencia", "contrato", "matricula_imovel", "iptu", "outro"}
+STATUS_DOCUMENTO = {"pendente", "aprovado", "rejeitado"}
+EXTENSOES_PERMITIDAS = {".pdf", ".jpg", ".jpeg", ".png"}
+TAMANHO_MAX_BYTES = 15 * 1024 * 1024  # 15 MB
+
+UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads", "onimob_documentos")
+
+
+def _tabela_entidade(entidade_tipo: str) -> str:
+    return {
+        "imovel": "imob_imoveis",
+        "proprietario": "imob_proprietarios",
+        "inquilino": "imob_inquilinos",
+        "corretor": "imob_corretores",
+        "fiador": "imob_fiadores",
+    }[entidade_tipo]
+
+
+def registrar_documento(entidade_tipo: str, entidade_id: int, tipo_documento: str,
+                         nome_original: str, nome_arquivo: str, tamanho_bytes: int,
+                         aceite_termos: bool = False) -> Dict[str, Any]:
+    if entidade_tipo not in ENTIDADES_DOC:
+        raise ValueError(f"entidade_tipo precisa ser um de: {', '.join(sorted(ENTIDADES_DOC))}")
+    if tipo_documento not in TIPOS_DOCUMENTO:
+        raise ValueError(f"tipo_documento precisa ser um de: {', '.join(sorted(TIPOS_DOCUMENTO))}")
+    if not aceite_termos:
+        raise ValueError("É preciso aceitar os Termos de Uso e a Política de Privacidade para enviar o documento.")
+
+    conn = get_db()
+    _valida_fk(conn, _tabela_entidade(entidade_tipo), entidade_id, entidade_tipo.capitalize())
+    cur = conn.cursor()
+    agora = time.time()
+    cur.execute(
+        """INSERT INTO imob_documentos
+           (entidade_tipo, entidade_id, tipo_documento, nome_original, nome_arquivo, tamanho_bytes, status, aceite_termos_em, enviado_em)
+           VALUES (?, ?, ?, ?, ?, ?, 'pendente', ?, ?)""",
+        (entidade_tipo, entidade_id, tipo_documento, nome_original, nome_arquivo, tamanho_bytes, agora, agora),
+    )
+    conn.commit()
+    did = cur.lastrowid
+    row = cur.execute("SELECT * FROM imob_documentos WHERE id = ?", (did,)).fetchone()
+    conn.close()
+    return _row_to_dict(row)
+
+
+def listar_documentos(entidade_tipo: Optional[str] = None, entidade_id: Optional[int] = None,
+                       status: Optional[str] = None) -> List[Dict[str, Any]]:
+    conn = get_db()
+    sql = "SELECT * FROM imob_documentos WHERE 1=1"
+    params = []
+    if entidade_tipo:
+        sql += " AND entidade_tipo = ?"
+        params.append(entidade_tipo)
+    if entidade_id is not None:
+        sql += " AND entidade_id = ?"
+        params.append(entidade_id)
+    if status:
+        sql += " AND status = ?"
+        params.append(status)
+    sql += " ORDER BY enviado_em DESC"
+    rows = conn.execute(sql, params).fetchall()
+    conn.close()
+    return [_row_to_dict(r) for r in rows]
+
+
+def obter_documento(documento_id: int) -> Optional[Dict[str, Any]]:
+    conn = get_db()
+    row = conn.execute("SELECT * FROM imob_documentos WHERE id = ?", (documento_id,)).fetchone()
+    conn.close()
+    return _row_to_dict(row)
+
+
+def revisar_documento(documento_id: int, status: str, motivo_rejeicao: Optional[str] = None) -> Dict[str, Any]:
+    if status not in ("aprovado", "rejeitado"):
+        raise ValueError("Status de revisão precisa ser 'aprovado' ou 'rejeitado'.")
+    if status == "rejeitado" and not motivo_rejeicao:
+        raise ValueError("Informe o motivo da rejeição.")
+    conn = get_db()
+    row = conn.execute("SELECT id FROM imob_documentos WHERE id = ?", (documento_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise ValueError("Documento não encontrado.")
+    conn.execute(
+        "UPDATE imob_documentos SET status = ?, motivo_rejeicao = ?, revisado_em = ? WHERE id = ?",
+        (status, motivo_rejeicao, time.time(), documento_id),
+    )
+    conn.commit()
+    updated = conn.execute("SELECT * FROM imob_documentos WHERE id = ?", (documento_id,)).fetchone()
+    conn.close()
+    return _row_to_dict(updated)
+
+
+def pendencias_documentacao(entidade_tipo: str, entidade_id: int) -> List[str]:
+    """Lista os tipos de documento exigidos que ainda faltam ou foram rejeitados — mesma lógica
+    de 'ENTREGA BLOQUEADA' usada no resto da COON: a pendência trava a entrega, nunca o cadastro."""
+    exigidos = {
+        "imovel": {"matricula_imovel", "iptu"},
+        "proprietario": {"rg_cpf", "comprovante_residencia"},
+        "inquilino": {"rg_cpf", "comprovante_residencia"},
+        "corretor": {"rg_cpf"},
+        "fiador": {"rg_cpf", "comprovante_residencia"},
+    }.get(entidade_tipo, set())
+    docs = listar_documentos(entidade_tipo=entidade_tipo, entidade_id=entidade_id)
+    aprovados = {d["tipo_documento"] for d in docs if d["status"] == "aprovado"}
+    return sorted(exigidos - aprovados)
 
 
 # ── Validação ────────────────────────────────────────────────────────────────
@@ -148,21 +299,45 @@ class InquilinoIn(BaseModel):
         return validar_cpf_cnpj(v)
 
 
+class FiadorIn(BaseModel):
+    nome: str = Field(..., min_length=2)
+    cpf_cnpj: Optional[str] = None
+    telefone: Optional[str] = None
+    email: Optional[str] = None
+    cep: Optional[str] = None
+    rua: Optional[str] = None
+    numero: Optional[str] = None
+    complemento: Optional[str] = None
+    bairro: Optional[str] = None
+    cidade: Optional[str] = None
+    uf: Optional[str] = None
+
+    @field_validator("cpf_cnpj")
+    @classmethod
+    def _valida_doc(cls, v):
+        return validar_cpf_cnpj(v)
+
+
 class ImovelIn(BaseModel):
     titulo: str = Field(..., min_length=3)
     tipo: str
     finalidade: str
-    endereco: Optional[str] = None
+    cep: Optional[str] = None
+    rua: Optional[str] = None
+    numero: Optional[str] = None
+    complemento: Optional[str] = None
+    bairro: Optional[str] = None
     cidade: Optional[str] = None
     uf: Optional[str] = None
-    cep: Optional[str] = None
-    area_m2: Optional[float] = None
+    area_terreno_m2: Optional[float] = None
+    area_construida_m2: Optional[float] = None
     quartos: Optional[int] = None
     valor: Optional[float] = None
     status: str = "disponivel"
     proprietario_id: Optional[int] = None
     corretor_id: Optional[int] = None
     inquilino_id: Optional[int] = None
+    fiador_id: Optional[int] = None
 
     @field_validator("tipo")
     @classmethod
@@ -255,6 +430,29 @@ def listar_inquilinos() -> List[Dict[str, Any]]:
     return [_row_to_dict(r) for r in rows]
 
 
+def criar_fiador(dados: FiadorIn) -> Dict[str, Any]:
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute(
+        """INSERT INTO imob_fiadores (nome, cpf_cnpj, telefone, email, cep, rua, numero, complemento, bairro, cidade, uf, criado_em)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        (dados.nome.strip(), dados.cpf_cnpj, dados.telefone, dados.email, dados.cep, dados.rua,
+         dados.numero, dados.complemento, dados.bairro, dados.cidade, (dados.uf or "").upper() or None, time.time()),
+    )
+    conn.commit()
+    fid = cur.lastrowid
+    row = cur.execute("SELECT * FROM imob_fiadores WHERE id = ?", (fid,)).fetchone()
+    conn.close()
+    return _row_to_dict(row)
+
+
+def listar_fiadores() -> List[Dict[str, Any]]:
+    conn = get_db()
+    rows = conn.execute("SELECT * FROM imob_fiadores ORDER BY nome").fetchall()
+    conn.close()
+    return [_row_to_dict(r) for r in rows]
+
+
 def _valida_fk(conn, tabela: str, id_: Optional[int], rotulo: str):
     if id_ is None:
         return
@@ -269,17 +467,20 @@ def criar_imovel(dados: ImovelIn) -> Dict[str, Any]:
     _valida_fk(conn, "imob_proprietarios", dados.proprietario_id, "Proprietário")
     _valida_fk(conn, "imob_corretores", dados.corretor_id, "Corretor")
     _valida_fk(conn, "imob_inquilinos", dados.inquilino_id, "Inquilino")
+    _valida_fk(conn, "imob_fiadores", dados.fiador_id, "Fiador")
 
     cur = conn.cursor()
     cur.execute(
         """INSERT INTO imob_imoveis
-           (titulo, tipo, finalidade, endereco, cidade, uf, cep, area_m2, quartos, valor,
-            status, proprietario_id, corretor_id, inquilino_id, criado_em)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           (titulo, tipo, finalidade, cep, rua, numero, complemento, bairro, cidade, uf,
+            area_terreno_m2, area_construida_m2, quartos, valor,
+            status, proprietario_id, corretor_id, inquilino_id, fiador_id, criado_em)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
-            dados.titulo.strip(), dados.tipo, dados.finalidade, dados.endereco, dados.cidade,
-            (dados.uf or "").upper() or None, dados.cep, dados.area_m2, dados.quartos, dados.valor,
-            dados.status, dados.proprietario_id, dados.corretor_id, dados.inquilino_id, time.time(),
+            dados.titulo.strip(), dados.tipo, dados.finalidade, dados.cep, dados.rua, dados.numero,
+            dados.complemento, dados.bairro, dados.cidade, (dados.uf or "").upper() or None,
+            dados.area_terreno_m2, dados.area_construida_m2, dados.quartos, dados.valor,
+            dados.status, dados.proprietario_id, dados.corretor_id, dados.inquilino_id, dados.fiador_id, time.time(),
         ),
     )
     conn.commit()
@@ -292,11 +493,12 @@ def criar_imovel(dados: ImovelIn) -> Dict[str, Any]:
 def listar_imoveis(cidade: Optional[str] = None, status: Optional[str] = None, finalidade: Optional[str] = None) -> List[Dict[str, Any]]:
     conn = get_db()
     sql = """
-        SELECT i.*, p.nome AS proprietario_nome, c.nome AS corretor_nome, t.nome AS inquilino_nome
+        SELECT i.*, p.nome AS proprietario_nome, c.nome AS corretor_nome, t.nome AS inquilino_nome, f.nome AS fiador_nome
         FROM imob_imoveis i
         LEFT JOIN imob_proprietarios p ON p.id = i.proprietario_id
         LEFT JOIN imob_corretores c ON c.id = i.corretor_id
         LEFT JOIN imob_inquilinos t ON t.id = i.inquilino_id
+        LEFT JOIN imob_fiadores f ON f.id = i.fiador_id
         WHERE 1=1
     """
     params = []
@@ -318,11 +520,12 @@ def listar_imoveis(cidade: Optional[str] = None, status: Optional[str] = None, f
 def obter_imovel(imovel_id: int) -> Optional[Dict[str, Any]]:
     conn = get_db()
     row = conn.execute(
-        """SELECT i.*, p.nome AS proprietario_nome, c.nome AS corretor_nome, t.nome AS inquilino_nome
+        """SELECT i.*, p.nome AS proprietario_nome, c.nome AS corretor_nome, t.nome AS inquilino_nome, f.nome AS fiador_nome
            FROM imob_imoveis i
            LEFT JOIN imob_proprietarios p ON p.id = i.proprietario_id
            LEFT JOIN imob_corretores c ON c.id = i.corretor_id
            LEFT JOIN imob_inquilinos t ON t.id = i.inquilino_id
+           LEFT JOIN imob_fiadores f ON f.id = i.fiador_id
            WHERE i.id = ?""",
         (imovel_id,),
     ).fetchone()

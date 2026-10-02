@@ -52,3 +52,6 @@ Thumbs.db
 scratch/
 *.csv
 onzap_import_patos.sql
+
+# Documentos enviados por usuários (RG, comprovante, contrato) — nunca versionar
+uploads/

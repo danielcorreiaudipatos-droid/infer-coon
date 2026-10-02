@@ -12,7 +12,7 @@ import sqlite3
 import numpy as np
 import pandas as pd
 from typing import List, Dict, Any, Optional
-from fastapi import FastAPI, HTTPException, Depends, Header, Response, Query, Request
+from fastapi import FastAPI, HTTPException, Depends, Header, Response, Query, Request, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, FileResponse
@@ -1949,6 +1949,17 @@ def api_onimob_criar_inquilino(dados: imob_engine.InquilinoIn):
 def api_onimob_listar_inquilinos():
     return {"inquilinos": imob_engine.listar_inquilinos()}
 
+@app.post("/api/onimob/fiadores")
+def api_onimob_criar_fiador(dados: imob_engine.FiadorIn):
+    try:
+        return imob_engine.criar_fiador(dados)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/fiadores")
+def api_onimob_listar_fiadores():
+    return {"fiadores": imob_engine.listar_fiadores()}
+
 @app.post("/api/onimob/imoveis")
 def api_onimob_criar_imovel(dados: imob_engine.ImovelIn):
     try:
@@ -1981,6 +1992,85 @@ def api_onimob_atualizar_status(imovel_id: int, dados: AtualizarStatusImovelRequ
 @app.get("/api/onimob/resumo")
 def api_onimob_resumo():
     return imob_engine.painel_resumo()
+
+# ── Módulo 2: Documentação online ────────────────────────────────────────────
+import uuid as _uuid
+
+@app.post("/api/onimob/documentos")
+async def api_onimob_upload_documento(
+    entidade_tipo: str = Form(...),
+    entidade_id: int = Form(...),
+    tipo_documento: str = Form(...),
+    aceite_termos: bool = Form(False),
+    arquivo: UploadFile = File(...),
+):
+    nome_original = arquivo.filename or "documento"
+    ext = os.path.splitext(nome_original)[1].lower()
+    if ext not in imob_engine.EXTENSOES_PERMITIDAS:
+        raise HTTPException(status_code=400, detail=f"Formato não aceito. Envie um de: {', '.join(sorted(imob_engine.EXTENSOES_PERMITIDAS))}")
+
+    conteudo = await arquivo.read()
+    if len(conteudo) > imob_engine.TAMANHO_MAX_BYTES:
+        raise HTTPException(status_code=400, detail="Arquivo maior que 15 MB.")
+    if len(conteudo) == 0:
+        raise HTTPException(status_code=400, detail="Arquivo vazio.")
+
+    os.makedirs(imob_engine.UPLOAD_DIR, exist_ok=True)
+    nome_arquivo = f"{_uuid.uuid4().hex}{ext}"
+    caminho = os.path.join(imob_engine.UPLOAD_DIR, nome_arquivo)
+    with open(caminho, "wb") as f:
+        f.write(conteudo)
+
+    try:
+        return imob_engine.registrar_documento(
+            entidade_tipo, entidade_id, tipo_documento, nome_original, nome_arquivo, len(conteudo), aceite_termos
+        )
+    except ValueError as e:
+        os.remove(caminho)  # desfaz o arquivo salvo se a validação dos dados falhar
+        raise HTTPException(status_code=400, detail=str(e))
+
+def _exigir_acesso_onimob(request: Request):
+    """Documentos de RG/CPF/comprovante são dado sensível (LGPD): só admin (chave mestra)
+    ou sessão logada pode listar, baixar ou revisar. O envio em si (upload) fica público,
+    porque é o proprietário/inquilino mandando o documento pela primeira vez, sem conta ainda."""
+    token = request.headers.get("Authorization", "").replace("Bearer ", "").strip()
+    if not token:
+        token = request.cookies.get("coon_auth_token", "")
+    if token and (token == COON_MASTER_KEY or decode_jwt(token)):
+        return
+    raise HTTPException(status_code=401, detail="Acesso restrito: faça login ou use a chave de administrador.")
+
+@app.get("/api/onimob/documentos")
+def api_onimob_listar_documentos(request: Request, entidade_tipo: Optional[str] = None, entidade_id: Optional[int] = None, status: Optional[str] = None):
+    _exigir_acesso_onimob(request)
+    return {"documentos": imob_engine.listar_documentos(entidade_tipo, entidade_id, status)}
+
+@app.get("/api/onimob/documentos/{documento_id}/arquivo")
+def api_onimob_baixar_documento(documento_id: int, request: Request):
+    _exigir_acesso_onimob(request)
+    doc = imob_engine.obter_documento(documento_id)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Documento não encontrado.")
+    caminho = os.path.join(imob_engine.UPLOAD_DIR, doc["nome_arquivo"])
+    if not os.path.exists(caminho):
+        raise HTTPException(status_code=404, detail="Arquivo não encontrado no servidor.")
+    return FileResponse(caminho, filename=doc["nome_original"])
+
+class RevisarDocumentoRequest(BaseModel):
+    status: str
+    motivo_rejeicao: Optional[str] = None
+
+@app.patch("/api/onimob/documentos/{documento_id}/revisar")
+def api_onimob_revisar_documento(documento_id: int, dados: RevisarDocumentoRequest, request: Request):
+    _exigir_acesso_onimob(request)
+    try:
+        return imob_engine.revisar_documento(documento_id, dados.status, dados.motivo_rejeicao)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/pendencias")
+def api_onimob_pendencias(entidade_tipo: str, entidade_id: int):
+    return {"pendencias": imob_engine.pendencias_documentacao(entidade_tipo, entidade_id)}
 
 @app.get("/imob/cadastro", response_class=HTMLResponse)
 def serve_onimob_cadastro():

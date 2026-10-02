@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro | Onimob</title>
-  <meta name="description" content="Cadastro de imóveis, proprietários, inquilinos e corretores do Onimob.">
+  <title>Cadastro | on.imob</title>
+  <meta name="description" content="Cadastro de imóveis, proprietários, inquilinos e corretores do on.imob.">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
@@ -38,7 +38,7 @@
           <span class="text-2xl font-black tracking-tighter gemini-wordmark group-hover:opacity-90 transition">coon<span class="coon-dot-animated text-emerald-500">.</span></span>
         </a>
         <span class="text-slate-300 dark:text-slate-700 text-lg font-light select-none">/</span>
-        <a href="/imob" class="text-xl font-bold tracking-tight text-slate-900 dark:text-white hover:opacity-80 transition">Onimob</a>
+        <a href="/imob" class="text-xl font-bold tracking-tight text-slate-900 dark:text-white hover:opacity-80 transition">on.imob</a>
         <span class="text-slate-300 dark:text-slate-700 text-lg font-light select-none">/</span>
         <span class="text-sm font-semibold text-slate-500 dark:text-slate-400">Cadastro</span>
       </div>
@@ -60,6 +60,8 @@
       <button data-aba="proprietarios" class="aba-cadastro px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">Proprietários</button>
       <button data-aba="inquilinos" class="aba-cadastro px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">Inquilinos</button>
       <button data-aba="corretores" class="aba-cadastro px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">Corretores</button>
+      <button data-aba="fiadores" class="aba-cadastro px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">Fiadores</button>
+      <button data-aba="documentos" class="aba-cadastro px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">Documentos</button>
     </div>
 
     <!-- PAINEL: IMÓVEIS -->
@@ -67,6 +69,13 @@
       <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
         <h2 class="text-sm font-bold mb-4">Cadastrar imóvel</h2>
         <form id="formImovel" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input required name="cep" placeholder="CEP (preenche o endereço sozinho)" maxlength="9" class="campo-input busca-cep">
+          <input required name="numero" placeholder="Número" class="campo-input">
+          <input name="rua" placeholder="Rua" class="campo-input sm:col-span-2 campo-auto-cep" data-cep-campo="rua">
+          <input name="complemento" placeholder="Complemento (apto, bloco...)" class="campo-input">
+          <input name="bairro" placeholder="Bairro" class="campo-input campo-auto-cep" data-cep-campo="bairro">
+          <input name="cidade" placeholder="Cidade" class="campo-input campo-auto-cep" data-cep-campo="cidade">
+          <input name="uf" placeholder="UF" maxlength="2" class="campo-input campo-auto-cep" data-cep-campo="uf">
           <input required name="titulo" placeholder="Título (ex: Apê 2 quartos, Centro)" class="campo-input sm:col-span-2">
           <select required name="tipo" class="campo-input">
             <option value="">Tipo</option>
@@ -82,15 +91,14 @@
             <option value="venda">Venda</option>
             <option value="aluguel">Aluguel</option>
           </select>
-          <input name="endereco" placeholder="Endereço" class="campo-input sm:col-span-2">
-          <input name="cidade" placeholder="Cidade" class="campo-input">
-          <input name="uf" placeholder="UF" maxlength="2" class="campo-input">
-          <input name="cep" placeholder="CEP" class="campo-input">
-          <input name="area_m2" type="number" step="0.01" placeholder="Área (m²)" class="campo-input">
+          <input name="area_terreno_m2" type="number" step="0.01" placeholder="Área do terreno (m²)" class="campo-input">
+          <input name="area_construida_m2" type="number" step="0.01" placeholder="Área construída (m²)" class="campo-input">
           <input name="quartos" type="number" placeholder="Quartos" class="campo-input">
           <input name="valor" type="number" step="0.01" placeholder="Valor (R$)" class="campo-input">
           <select name="proprietario_id" class="campo-input" id="selProprietario"><option value="">Proprietário (opcional)</option></select>
           <select name="corretor_id" class="campo-input" id="selCorretor"><option value="">Corretor (opcional)</option></select>
+          <select name="inquilino_id" class="campo-input" id="selInquilinoImovel"><option value="">Inquilino (opcional)</option></select>
+          <select name="fiador_id" class="campo-input" id="selFiadorImovel"><option value="">Fiador (opcional)</option></select>
           <button type="submit" class="sm:col-span-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 rounded-xl transition">Cadastrar imóvel</button>
           <p class="sm:col-span-2 text-xs text-rose-600 hidden" id="erroImovel"></p>
         </form>
@@ -111,7 +119,7 @@
         <h2 class="text-sm font-bold mb-4">Cadastrar proprietário</h2>
         <form id="formProprietario" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <input required name="nome" placeholder="Nome completo" class="campo-input sm:col-span-2">
-          <input name="cpf_cnpj" placeholder="CPF ou CNPJ" class="campo-input">
+          <input name="cpf_cnpj" placeholder="CPF ou CNPJ (CNPJ preenche o nome sozinho)" class="campo-input busca-cnpj">
           <input name="telefone" placeholder="Telefone / WhatsApp" class="campo-input">
           <input name="email" type="email" placeholder="E-mail" class="campo-input">
           <input name="chave_pix" placeholder="Chave Pix (p/ repasse futuro)" class="campo-input">
@@ -133,7 +141,7 @@
         <h2 class="text-sm font-bold mb-4">Cadastrar inquilino</h2>
         <form id="formInquilino" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <input required name="nome" placeholder="Nome completo" class="campo-input sm:col-span-2">
-          <input name="cpf_cnpj" placeholder="CPF ou CNPJ" class="campo-input">
+          <input name="cpf_cnpj" placeholder="CPF ou CNPJ (CNPJ preenche o nome sozinho)" class="campo-input busca-cnpj">
           <input name="telefone" placeholder="Telefone / WhatsApp" class="campo-input">
           <input name="email" type="email" placeholder="E-mail" class="campo-input">
           <button type="submit" class="sm:col-span-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 rounded-xl transition">Cadastrar inquilino</button>
@@ -170,9 +178,80 @@
       </div>
     </section>
 
+    <!-- PAINEL: FIADORES -->
+    <section data-painel="fiadores" class="space-y-5 hidden">
+      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
+        <h2 class="text-sm font-bold mb-4">Cadastrar fiador</h2>
+        <form id="formFiador" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input required name="nome" placeholder="Nome completo" class="campo-input sm:col-span-2">
+          <input name="cpf_cnpj" placeholder="CPF ou CNPJ (CNPJ preenche o nome sozinho)" class="campo-input busca-cnpj">
+          <input name="telefone" placeholder="Telefone / WhatsApp" class="campo-input">
+          <input name="email" type="email" placeholder="E-mail" class="campo-input sm:col-span-2">
+          <input name="cep" placeholder="CEP (preenche o endereço sozinho)" maxlength="9" class="campo-input busca-cep">
+          <input name="numero" placeholder="Número" class="campo-input">
+          <input name="rua" placeholder="Rua" class="campo-input sm:col-span-2 campo-auto-cep" data-cep-campo="rua">
+          <input name="complemento" placeholder="Complemento" class="campo-input">
+          <input name="bairro" placeholder="Bairro" class="campo-input campo-auto-cep" data-cep-campo="bairro">
+          <input name="cidade" placeholder="Cidade" class="campo-input campo-auto-cep" data-cep-campo="cidade">
+          <input name="uf" placeholder="UF" maxlength="2" class="campo-input campo-auto-cep" data-cep-campo="uf">
+          <button type="submit" class="sm:col-span-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 rounded-xl transition">Cadastrar fiador</button>
+          <p class="sm:col-span-2 text-xs text-rose-600 hidden" id="erroFiador"></p>
+        </form>
+      </div>
+      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead class="bg-slate-50 dark:bg-slate-900 text-slate-500"><tr><th class="text-left p-3">Nome</th><th class="text-left p-3">CPF/CNPJ</th><th class="text-left p-3">Cidade</th><th class="text-left p-3">Telefone</th></tr></thead>
+          <tbody id="corpoFiadores"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PAINEL: DOCUMENTOS -->
+    <section data-painel="documentos" class="space-y-5 hidden">
+      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
+        <h2 class="text-sm font-bold mb-1">Enviar documento</h2>
+        <p class="text-xs text-slate-500 mb-4">RG/CPF, comprovante de residência, contrato, matrícula do imóvel ou IPTU. Formatos aceitos: PDF, JPG ou PNG, até 15 MB.</p>
+        <form id="formDocumento" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <select required name="entidade_tipo" id="selTipoEntidade" class="campo-input">
+            <option value="">Vincular a...</option>
+            <option value="imovel">Imóvel</option>
+            <option value="proprietario">Proprietário</option>
+            <option value="inquilino">Inquilino</option>
+            <option value="corretor">Corretor</option>
+            <option value="fiador">Fiador</option>
+          </select>
+          <select required name="entidade_id" id="selEntidadeAlvo" class="campo-input"><option value="">Escolha o tipo primeiro</option></select>
+          <select required name="tipo_documento" class="campo-input">
+            <option value="">Tipo de documento</option>
+            <option value="rg_cpf">RG / CPF</option>
+            <option value="comprovante_residencia">Comprovante de residência</option>
+            <option value="contrato">Contrato</option>
+            <option value="matricula_imovel">Matrícula do imóvel</option>
+            <option value="iptu">IPTU</option>
+            <option value="outro">Outro</option>
+          </select>
+          <input required type="file" name="arquivo" accept=".pdf,.jpg,.jpeg,.png" class="campo-input">
+          <label class="sm:col-span-2 flex items-start gap-2 text-xs text-slate-600 dark:text-slate-300 cursor-pointer">
+            <input required type="checkbox" id="aceiteDocumento" name="aceite_termos" value="true" class="mt-0.5 accent-blue-600">
+            <span>Declaro que este documento é meu ou que tenho autorização para enviá-lo, e aceito os <a href="/termos" target="_blank" class="text-blue-600 hover:underline">Termos de Uso e a Política de Privacidade</a> da COON para tratamento deste dado.</span>
+          </label>
+          <button type="submit" class="sm:col-span-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 rounded-xl transition">Enviar documento</button>
+          <p class="sm:col-span-2 text-xs text-rose-600 hidden" id="erroDocumento"></p>
+        </form>
+      </div>
+      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead class="bg-slate-50 dark:bg-slate-900 text-slate-500">
+            <tr><th class="text-left p-3">Arquivo</th><th class="text-left p-3">Tipo</th><th class="text-left p-3">Vinculado a</th><th class="text-left p-3">Status</th><th class="text-left p-3">Ações</th></tr>
+          </thead>
+          <tbody id="corpoDocumentos"></tbody>
+        </table>
+      </div>
+    </section>
+
   </main>
 
   <script src="/static/coon-auth.js"></script>
-  <script src="js/onimob-cadastro.js"></script>
+  <script src="/js/onimob-cadastro.js"></script>
 </body>
 </html>
