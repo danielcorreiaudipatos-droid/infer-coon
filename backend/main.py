@@ -77,6 +77,7 @@ from backend.telemetry import (
     get_all_users_with_access,
     resolve_diagnostic
 )
+from backend.integracao_endpoints import router as integracao_router
 
 from backend.financial import (
     init_financial_tables,
@@ -624,9 +625,12 @@ def apply_transformation(val_array: np.ndarray, transform_type: str, var_name: s
         return np.square(val_array)
     return val_array.copy()
 
-# -------------------------------------------------------------
+# ========== ROUTERS REGISTRADOS ==========
+app.include_router(integracao_router)
+
+# ========== ENDPOINTS PRINCIPAIS ==========
+
 # Endpoint Principal de Regressão e Inferência Estilo SisDEA
-# -------------------------------------------------------------
 
 @app.post("/api/regression/calculate")
 def run_regression(req: RegressionRequest):
