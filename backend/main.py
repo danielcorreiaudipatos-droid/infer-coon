@@ -145,6 +145,13 @@ from backend.security_guard import (
     ban_ip_immediate,
     is_ip_banned
 )
+from backend.avaliacao_imovel import (
+    gerar_avaliacao_simples,
+    registrar_avaliacao,
+    obter_avaliacao,
+    extrair_dados_imovel,
+    gerar_pdf_avaliacao
+)
 from backend.integrations_hub import (
     init_integrations_tables,
     get_integrations_dashboard_status,
@@ -2010,6 +2017,92 @@ def api_onimob_atualizar_status(imovel_id: int, dados: AtualizarStatusImovelRequ
 @app.get("/api/onimob/resumo")
 def api_onimob_resumo():
     return imob_engine.painel_resumo()
+
+# ── AVALIAÇÃO DE IMÓVEIS (COON Infer) ────────────────────────────────────────
+
+@app.post("/api/onimob/imoveis/{imovel_id}/avaliar")
+def api_avaliar_imovel(imovel_id: int, escritorio_id: int = Query(...)):
+    """
+    Gera avaliação automática de um imóvel usando modelo COON.
+
+    Entrada: imovel_id e escritorio_id
+    Saída: valor central, intervalo de confiança, grau de precisão
+    """
+    try:
+        # Obter dados do imóvel
+        imovel = imob_engine.obter_imovel(imovel_id)
+        if not imovel:
+            raise HTTPException(status_code=404, detail="Imóvel não encontrado")
+
+        # Extrair características
+        dados_imovel = extrair_dados_imovel(imovel)
+
+        # Gerar avaliação
+        avaliacao = gerar_avaliacao_simples(dados_imovel, escritorio_id)
+
+        if avaliacao.get('sucesso'):
+            # Registrar no banco
+            registrar_avaliacao(imovel_id, escritorio_id, avaliacao)
+
+            return {
+                "sucesso": True,
+                "avaliacao": {
+                    "valor_central": avaliacao.get('valor_central'),
+                    "valor_minimo": avaliacao.get('valor_minimo'),
+                    "valor_maximo": avaliacao.get('valor_maximo'),
+                    "valor_m2": avaliacao.get('valor_m2'),
+                    "grau_precisao": avaliacao.get('grau_precisao'),
+                    "amplitude": avaliacao.get('amplitude'),
+                    "intervalo_confianca": avaliacao.get('intervalo_confianca')
+                },
+                "msg": "Avaliação gerada com sucesso"
+            }
+        else:
+            raise HTTPException(status_code=400, detail="Erro ao gerar avaliação")
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/imoveis/{imovel_id}/avaliacao")
+def api_obter_avaliacao(imovel_id: int):
+    """
+    Retorna a avaliação mais recente de um imóvel.
+    """
+    avaliacao = obter_avaliacao(imovel_id)
+
+    if avaliacao:
+        return {
+            "sucesso": True,
+            "avaliacao": avaliacao
+        }
+    else:
+        raise HTTPException(status_code=404, detail="Nenhuma avaliação encontrada para este imóvel")
+
+@app.get("/api/onimob/imoveis/{imovel_id}/avaliacao/pdf")
+def api_pdf_avaliacao(imovel_id: int):
+    """
+    Gera PDF com o relatório de avaliação.
+    """
+    try:
+        avaliacao = obter_avaliacao(imovel_id)
+        if not avaliacao:
+            raise HTTPException(status_code=404, detail="Avaliação não encontrada")
+
+        imovel = imob_engine.obter_imovel(imovel_id)
+        if not imovel:
+            raise HTTPException(status_code=404, detail="Imóvel não encontrado")
+
+        # Gerar PDF
+        pdf_content = gerar_pdf_avaliacao(avaliacao, imovel)
+
+        return Response(
+            content=pdf_content.encode('utf-8'),
+            media_type="application/pdf",
+            headers={"Content-Disposition": f"attachment; filename=avaliacao_{imovel_id}.pdf"}
+        )
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 # ── Módulo 2: Documentação online ────────────────────────────────────────────
 import uuid as _uuid
