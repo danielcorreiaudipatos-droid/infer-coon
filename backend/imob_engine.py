@@ -126,7 +126,28 @@ def init_db():
         motivo_rejeicao TEXT,
         aceite_termos_em REAL,
         enviado_em REAL,
-        revisado_em REAL
+        revisado_em REAL,
+        revisado_por TEXT
+    )
+    """)
+    try:
+        cur.execute("ALTER TABLE imob_documentos ADD COLUMN revisado_por TEXT")
+        conn.commit()
+    except sqlite3.OperationalError:
+        pass  # coluna já existe
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS imob_contratos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        imovel_id INTEGER NOT NULL,
+        valor_aluguel REAL NOT NULL,
+        dia_vencimento INTEGER NOT NULL,
+        prazo_meses INTEGER NOT NULL,
+        data_inicio REAL NOT NULL,
+        indice_reajuste TEXT DEFAULT 'IGP-M',
+        foro_comarca TEXT NOT NULL,
+        criado_em REAL,
+        FOREIGN KEY (imovel_id) REFERENCES imob_imoveis(id)
     )
     """)
 
@@ -226,7 +247,7 @@ def obter_documento(documento_id: int) -> Optional[Dict[str, Any]]:
     return _row_to_dict(row)
 
 
-def revisar_documento(documento_id: int, status: str, motivo_rejeicao: Optional[str] = None) -> Dict[str, Any]:
+def revisar_documento(documento_id: int, status: str, motivo_rejeicao: Optional[str] = None, revisado_por: Optional[str] = None) -> Dict[str, Any]:
     if status not in ("aprovado", "rejeitado"):
         raise ValueError("Status de revisão precisa ser 'aprovado' ou 'rejeitado'.")
     if status == "rejeitado" and not motivo_rejeicao:
@@ -237,8 +258,8 @@ def revisar_documento(documento_id: int, status: str, motivo_rejeicao: Optional[
         conn.close()
         raise ValueError("Documento não encontrado.")
     conn.execute(
-        "UPDATE imob_documentos SET status = ?, motivo_rejeicao = ?, revisado_em = ? WHERE id = ?",
-        (status, motivo_rejeicao, time.time(), documento_id),
+        "UPDATE imob_documentos SET status = ?, motivo_rejeicao = ?, revisado_em = ?, revisado_por = ? WHERE id = ?",
+        (status, motivo_rejeicao, time.time(), revisado_por, documento_id),
     )
     conn.commit()
     updated = conn.execute("SELECT * FROM imob_documentos WHERE id = ?", (documento_id,)).fetchone()
@@ -585,6 +606,197 @@ def painel_resumo() -> Dict[str, Any]:
         "total_inquilinos": total_inquilinos,
         "total_corretores": total_corretores,
     }
+
+
+# ── Contrato de locação (PDF) ────────────────────────────────────────────────
+import datetime as _dt
+
+TIPOS_CONTRATO = {"residencial", "comercial", "temporada"}
+
+ROTULO_TIPO_CONTRATO = {
+    "residencial": "CONTRATO DE LOCAÇÃO RESIDENCIAL",
+    "comercial": "CONTRATO DE LOCAÇÃO COMERCIAL (NÃO RESIDENCIAL)",
+    "temporada": "CONTRATO DE LOCAÇÃO POR TEMPORADA",
+}
+
+
+class ContratoIn(BaseModel):
+    imovel_id: int
+    tipo_contrato: str = "residencial"
+    valor_aluguel: float = Field(..., gt=0)
+    dia_vencimento: int = Field(..., ge=1, le=28)
+    prazo_meses: int = Field(..., gt=0)
+    data_inicio: str  # "AAAA-MM-DD"
+    indice_reajuste: str = "IGP-M"
+    foro_comarca: str = Field(..., min_length=2)
+
+    @field_validator("tipo_contrato")
+    @classmethod
+    def _valida_tipo(cls, v):
+        if v not in TIPOS_CONTRATO:
+            raise ValueError(f"tipo_contrato precisa ser um de: {', '.join(sorted(TIPOS_CONTRATO))}")
+        return v
+
+    @field_validator("data_inicio")
+    @classmethod
+    def _valida_data(cls, v):
+        try:
+            _dt.date.fromisoformat(v)
+        except ValueError:
+            raise ValueError("data_inicio precisa estar no formato AAAA-MM-DD.")
+        return v
+
+
+def criar_contrato(dados: ContratoIn) -> Dict[str, Any]:
+    imovel = obter_imovel(dados.imovel_id)
+    if not imovel:
+        raise ValueError("Imóvel não encontrado.")
+    if not imovel.get("proprietario_id") or not imovel.get("inquilino_id"):
+        raise ValueError("O imóvel precisa ter proprietário e inquilino vinculados antes de gerar o contrato.")
+
+    data_inicio_epoch = _dt.datetime.fromisoformat(dados.data_inicio).timestamp()
+    conn = get_db()
+    cur = conn.execute(
+        """INSERT INTO imob_contratos
+           (imovel_id, valor_aluguel, dia_vencimento, prazo_meses, data_inicio, indice_reajuste, foro_comarca, criado_em)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+        (dados.imovel_id, dados.valor_aluguel, dados.dia_vencimento, dados.prazo_meses,
+         data_inicio_epoch, dados.indice_reajuste, dados.foro_comarca, time.time()),
+    )
+    conn.commit()
+    contrato_id = cur.lastrowid
+    conn.close()
+    contrato = obter_contrato(contrato_id)
+    contrato["tipo_contrato"] = dados.tipo_contrato
+    return contrato
+
+
+def obter_contrato(contrato_id: int) -> Optional[Dict[str, Any]]:
+    conn = get_db()
+    row = conn.execute("SELECT * FROM imob_contratos WHERE id = ?", (contrato_id,)).fetchone()
+    conn.close()
+    return _row_to_dict(row)
+
+
+def listar_contratos(imovel_id: Optional[int] = None) -> List[Dict[str, Any]]:
+    conn = get_db()
+    if imovel_id:
+        rows = conn.execute("SELECT * FROM imob_contratos WHERE imovel_id = ? ORDER BY id DESC", (imovel_id,)).fetchall()
+    else:
+        rows = conn.execute("SELECT * FROM imob_contratos ORDER BY id DESC").fetchall()
+    conn.close()
+    return [_row_to_dict(r) for r in rows]
+
+
+def _por_extenso_moeda(valor: float) -> str:
+    return f"R$ {valor:,.2f}".replace(",", "_").replace(".", ",").replace("_", ".")
+
+
+def gerar_contrato_pdf(contrato_id: int, tipo_contrato: str = "residencial", logo_path: Optional[str] = None) -> bytes:
+    """Monta o contrato de locação em PDF a partir dos dados já cadastrados do imóvel,
+    proprietário, inquilino e fiador — a pessoa não digita os dados de novo, só os
+    termos específicos do contrato (valor, prazo, vencimento, foro).
+
+    Cláusula de multa por rescisão antecipada segue Lei nº 8.245/91 (Lei do Inquilinato):
+    multa proporcional ao período restante da locação."""
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.units import cm
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, PageTemplate, Frame
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
+    import io
+
+    contrato = obter_contrato(contrato_id)
+    if not contrato:
+        raise ValueError("Contrato não encontrado.")
+    imovel = obter_imovel(contrato["imovel_id"])
+    if not imovel:
+        raise ValueError("Imóvel do contrato não encontrado.")
+
+    conn = get_db()
+    proprietario = _row_to_dict(conn.execute("SELECT * FROM imob_proprietarios WHERE id = ?", (imovel["proprietario_id"],)).fetchone())
+    inquilino = _row_to_dict(conn.execute("SELECT * FROM imob_inquilinos WHERE id = ?", (imovel["inquilino_id"],)).fetchone())
+    fiador = _row_to_dict(conn.execute("SELECT * FROM imob_fiadores WHERE id = ?", (imovel["fiador_id"],)).fetchone()) if imovel.get("fiador_id") else None
+    conn.close()
+
+    endereco_imovel = ", ".join(x for x in [
+        imovel.get("rua"), imovel.get("numero"), imovel.get("complemento"),
+        imovel.get("bairro"), imovel.get("cidade"), imovel.get("uf"),
+    ] if x)
+
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4, topMargin=1.5 * cm, bottomMargin=1.5 * cm, leftMargin=2 * cm, rightMargin=2 * cm)
+    estilos = getSampleStyleSheet()
+    titulo = ParagraphStyle("titulo", parent=estilos["Title"], fontSize=13, alignment=TA_CENTER)
+    corpo = ParagraphStyle("corpo", parent=estilos["Normal"], fontSize=10, alignment=TA_JUSTIFY, spaceAfter=8, leading=14)
+    clausula_titulo = ParagraphStyle("clausula_titulo", parent=estilos["Normal"], fontSize=10, spaceBefore=10, spaceAfter=4, fontName="Helvetica-Bold")
+
+    elementos = []
+    if logo_path and os.path.exists(logo_path):
+        try:
+            elementos.append(Image(logo_path, width=4 * cm, height=4 * cm, kind="proportional"))
+            elementos.append(Spacer(1, 0.3 * cm))
+        except Exception:
+            pass
+
+    elementos.append(Paragraph(ROTULO_TIPO_CONTRATO.get(tipo_contrato, ROTULO_TIPO_CONTRATO["residencial"]), titulo))
+    elementos.append(Spacer(1, 0.5 * cm))
+
+    data_inicio_fmt = _dt.datetime.fromtimestamp(contrato["data_inicio"]).strftime("%d/%m/%Y")
+
+    elementos.append(Paragraph(
+        f"<b>LOCADOR(A):</b> {proprietario.get('nome')}, CPF/CNPJ {proprietario.get('cpf_cnpj') or 'não informado'}.",
+        corpo))
+    elementos.append(Paragraph(
+        f"<b>LOCATÁRIO(A):</b> {inquilino.get('nome')}, CPF/CNPJ {inquilino.get('cpf_cnpj') or 'não informado'}.",
+        corpo))
+    if fiador:
+        endereco_fiador = ", ".join(x for x in [
+            fiador.get("rua"), fiador.get("numero"), fiador.get("complemento"),
+            fiador.get("bairro"), fiador.get("cidade"), fiador.get("uf"),
+        ] if x)
+        elementos.append(Paragraph(
+            f"<b>FIADOR(A):</b> {fiador.get('nome')}, CPF/CNPJ {fiador.get('cpf_cnpj') or 'não informado'}, "
+            f"residente em {endereco_fiador or 'endereço não informado'}.",
+            corpo))
+
+    elementos.append(Paragraph("<b>CLÁUSULA 1ª — DO OBJETO</b>", clausula_titulo))
+    elementos.append(Paragraph(
+        f"O(a) LOCADOR(A) dá em locação ao(à) LOCATÁRIO(A) o imóvel situado em {endereco_imovel or 'endereço não informado'}, "
+        f"com área construída de {imovel.get('area_construida_m2') or 'não informada'} m², destinado a fins "
+        f"{'residenciais' if tipo_contrato == 'residencial' else ('comerciais' if tipo_contrato == 'comercial' else 'de temporada')}.",
+        corpo))
+
+    elementos.append(Paragraph("<b>CLÁUSULA 2ª — DO PRAZO E DO ALUGUEL</b>", clausula_titulo))
+    elementos.append(Paragraph(
+        f"O prazo da locação é de {contrato['prazo_meses']} meses, com início em {data_inicio_fmt}. "
+        f"O aluguel mensal é de {_por_extenso_moeda(contrato['valor_aluguel'])}, a ser pago até o dia "
+        f"{contrato['dia_vencimento']} de cada mês, reajustado anualmente pelo índice {contrato['indice_reajuste']}.",
+        corpo))
+
+    elementos.append(Paragraph("<b>CLÁUSULA 3ª — DA MULTA POR RESCISÃO ANTECIPADA</b>", clausula_titulo))
+    elementos.append(Paragraph(
+        "Na hipótese de devolução do imóvel antes do prazo contratado, o(a) LOCATÁRIO(A) pagará multa "
+        "compensatória conforme Lei nº 8.245/91, proporcional ao período restante de contrato, "
+        "equivalente a 3 (três) aluguéis vigentes reduzidos proporcionalmente ao tempo já cumprido.",
+        corpo))
+
+    elementos.append(Paragraph("<b>CLÁUSULA 4ª — DO FORO</b>", clausula_titulo))
+    elementos.append(Paragraph(
+        f"Fica eleito o foro da Comarca de {contrato['foro_comarca']} para dirimir questões "
+        f"decorrentes deste contrato.",
+        corpo))
+
+    elementos.append(Spacer(1, 1.2 * cm))
+    elementos.append(Paragraph("_" * 40 + "<br/>LOCADOR(A)", corpo))
+    elementos.append(Spacer(1, 0.6 * cm))
+    elementos.append(Paragraph("_" * 40 + "<br/>LOCATÁRIO(A)", corpo))
+    if fiador:
+        elementos.append(Spacer(1, 0.6 * cm))
+        elementos.append(Paragraph("_" * 40 + "<br/>FIADOR(A)", corpo))
+
+    doc.build(elementos)
+    return buffer.getvalue()
 
 
 init_db()

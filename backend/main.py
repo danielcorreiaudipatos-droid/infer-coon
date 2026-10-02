@@ -2043,7 +2043,7 @@ async def api_onimob_upload_documento(
 
 PAPEIS_STAFF_ONIMOB = {"onimob_staff", "admin"}
 
-def _exigir_acesso_onimob(request: Request):
+def _exigir_acesso_onimob(request: Request) -> str:
     """Documentos de RG/CPF/comprovante são dado sensível (LGPD): só a chave mestra do
     admin ou uma conta de equipe (role 'onimob_staff', criada só pelo admin via
     /api/admin/onimob/staff) pode listar, baixar ou revisar. O envio em si (upload) fica
@@ -2052,15 +2052,16 @@ def _exigir_acesso_onimob(request: Request):
     Não aceita qualquer JWT de login: o cadastro de usuário (/api/auth/register) é público
     e não tem nenhum vínculo com o imóvel/proprietário/inquilino dono do documento, então
     aceitar "qualquer logado" deixava qualquer pessoa que criasse conta ver RG/CPF de
-    terceiros só adivinhando o id sequencial."""
+    terceiros só adivinhando o id sequencial.
+    Retorna um identificador de quem acessou, pra registrar autoria em revisões (auditoria)."""
     token = request.headers.get("Authorization", "").replace("Bearer ", "").strip()
     if not token:
         token = request.cookies.get("coon_auth_token", "")
     if token == COON_MASTER_KEY:
-        return
+        return "admin_master"
     payload = decode_jwt(token) if token else None
     if payload and (payload.get("is_admin") or payload.get("role") in PAPEIS_STAFF_ONIMOB):
-        return
+        return payload.get("email") or f"uid:{payload.get('uid')}"
     raise HTTPException(status_code=401, detail="Acesso restrito: faça login com uma conta de equipe ou use a chave de administrador.")
 
 class CriarStaffRequest(BaseModel):
@@ -2105,15 +2106,110 @@ class RevisarDocumentoRequest(BaseModel):
 
 @app.patch("/api/onimob/documentos/{documento_id}/revisar")
 def api_onimob_revisar_documento(documento_id: int, dados: RevisarDocumentoRequest, request: Request):
-    _exigir_acesso_onimob(request)
+    quem = _exigir_acesso_onimob(request)
     try:
-        return imob_engine.revisar_documento(documento_id, dados.status, dados.motivo_rejeicao)
+        return imob_engine.revisar_documento(documento_id, dados.status, dados.motivo_rejeicao, revisado_por=quem)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 @app.get("/api/onimob/pendencias")
 def api_onimob_pendencias(entidade_tipo: str, entidade_id: int):
     return {"pendencias": imob_engine.pendencias_documentacao(entidade_tipo, entidade_id)}
+
+@app.post("/api/onimob/contratos")
+def api_onimob_criar_contrato(dados: imob_engine.ContratoIn):
+    return imob_engine.criar_contrato(dados)
+
+@app.get("/api/onimob/contratos/{contrato_id}")
+def api_onimob_obter_contrato(contrato_id: int):
+    c = imob_engine.obter_contrato(contrato_id)
+    if not c:
+        raise HTTPException(status_code=404, detail="Contrato não encontrado.")
+    return c
+
+@app.get("/api/onimob/contratos/{contrato_id}/pdf")
+def api_onimob_gerar_contrato_pdf(contrato_id: int, request: Request, tipo_contrato: str = "residencial"):
+    _exigir_acesso_onimob(request)
+    try:
+        pdf_bytes = imob_engine.gerar_contrato_pdf(contrato_id, tipo_contrato)
+        return Response(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename=contrato_{contrato_id}.pdf"})
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.put("/api/onimob/proprietarios/{proprietario_id}")
+def api_onimob_atualizar_proprietario(proprietario_id: int, dados: imob_engine.ProprietarioIn):
+    conn = imob_engine.get_db()
+    row = conn.execute("SELECT id FROM imob_proprietarios WHERE id = ?", (proprietario_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Proprietário não encontrado.")
+    conn.execute(
+        "UPDATE imob_proprietarios SET nome = ?, cpf_cnpj = ?, telefone = ?, email = ?, chave_pix = ? WHERE id = ?",
+        (dados.nome, dados.cpf_cnpj, dados.telefone, dados.email, dados.chave_pix, proprietario_id),
+    )
+    conn.commit()
+    updated = imob_engine._row_to_dict(conn.execute("SELECT * FROM imob_proprietarios WHERE id = ?", (proprietario_id,)).fetchone())
+    conn.close()
+    return updated
+
+@app.put("/api/onimob/inquilinos/{inquilino_id}")
+def api_onimob_atualizar_inquilino(inquilino_id: int, dados: imob_engine.InquilinoIn):
+    conn = imob_engine.get_db()
+    row = conn.execute("SELECT id FROM imob_inquilinos WHERE id = ?", (inquilino_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Inquilino não encontrado.")
+    conn.execute(
+        "UPDATE imob_inquilinos SET nome = ?, cpf_cnpj = ?, telefone = ?, email = ? WHERE id = ?",
+        (dados.nome, dados.cpf_cnpj, dados.telefone, dados.email, inquilino_id),
+    )
+    conn.commit()
+    updated = imob_engine._row_to_dict(conn.execute("SELECT * FROM imob_inquilinos WHERE id = ?", (inquilino_id,)).fetchone())
+    conn.close()
+    return updated
+
+@app.put("/api/onimob/imoveis/{imovel_id}")
+def api_onimob_atualizar_imovel(imovel_id: int, dados: imob_engine.ImovelIn):
+    imovel = imob_engine.obter_imovel(imovel_id)
+    if not imovel:
+        raise HTTPException(status_code=404, detail="Imóvel não encontrado.")
+    conn = imob_engine.get_db()
+    conn.execute(
+        """UPDATE imob_imoveis SET titulo=?, tipo=?, finalidade=?, cep=?, rua=?, numero=?, complemento=?,
+           bairro=?, cidade=?, uf=?, area_terreno_m2=?, area_construida_m2=?, quartos=?, valor=?,
+           status=?, proprietario_id=?, corretor_id=?, inquilino_id=?, fiador_id=? WHERE id=?""",
+        (dados.titulo, dados.tipo, dados.finalidade, dados.cep, dados.rua, dados.numero, dados.complemento,
+         dados.bairro, dados.cidade, dados.uf, dados.area_terreno_m2, dados.area_construida_m2, dados.quartos,
+         dados.valor, dados.status, dados.proprietario_id, dados.corretor_id, dados.inquilino_id, dados.fiador_id, imovel_id),
+    )
+    conn.commit()
+    updated = imob_engine.obter_imovel(imovel_id)
+    conn.close()
+    return updated
+
+@app.delete("/api/onimob/proprietarios/{proprietario_id}")
+def api_onimob_deletar_proprietario(proprietario_id: int):
+    conn = imob_engine.get_db()
+    row = conn.execute("SELECT id FROM imob_proprietarios WHERE id = ?", (proprietario_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Proprietário não encontrado.")
+    conn.execute("DELETE FROM imob_proprietarios WHERE id = ?", (proprietario_id,))
+    conn.commit()
+    conn.close()
+    return {"msg": "Proprietário deletado."}
+
+@app.delete("/api/onimob/inquilinos/{inquilino_id}")
+def api_onimob_deletar_inquilino(inquilino_id: int):
+    conn = imob_engine.get_db()
+    row = conn.execute("SELECT id FROM imob_inquilinos WHERE id = ?", (inquilino_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Inquilino não encontrado.")
+    conn.execute("DELETE FROM imob_inquilinos WHERE id = ?", (inquilino_id,))
+    conn.commit()
+    conn.close()
+    return {"msg": "Inquilino deletado."}
 
 @app.get("/imob/cadastro", response_class=HTMLResponse)
 def serve_onimob_cadastro():
