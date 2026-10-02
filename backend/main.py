@@ -1925,6 +1925,7 @@ def serve_onlove_app():
 # ONIMOB — MÓDULO 1: CADASTRO (imóveis, proprietários, inquilinos, corretores)
 # ==============================================================================
 import backend.imob_engine as imob_engine
+import backend.multi_tenant as multi_tenant
 
 @app.post("/api/onimob/corretores")
 def api_onimob_criar_corretor(dados: imob_engine.CorretorIn):
