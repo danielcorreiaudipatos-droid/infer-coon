@@ -694,9 +694,9 @@ def _por_extenso_moeda(valor: float) -> str:
     return f"R$ {valor:,.2f}".replace(",", "_").replace(".", ",").replace("_", ".")
 
 
-def obter_modelo_customizado(tipo_contrato: str) -> Optional[bytes]:
-    """Retorna o PDF do modelo customizado da imobiliária se existir, senão None."""
-    caminho = os.path.join(MODELOS_CONTRATO_DIR, f"modelo_{tipo_contrato}.pdf")
+def obter_modelo_customizado(tipo_contrato: str, numero: int = 1) -> Optional[bytes]:
+    """Retorna o PDF do modelo customizado (1, 2 ou 3) se existir, senão None."""
+    caminho = os.path.join(MODELOS_CONTRATO_DIR, f"modelo_{tipo_contrato}_{numero}.pdf")
     if os.path.exists(caminho):
         with open(caminho, "rb") as f:
             return f.read()
@@ -731,9 +731,9 @@ def preencher_placeholders_pdf(pdf_bytes: bytes, dados: Dict[str, str]) -> bytes
         return pdf_bytes
 
 
-def gerar_contrato_pdf(contrato_id: int, tipo_contrato: str = "residencial", usar_modelo_customizado: bool = True, logo_path: Optional[str] = None) -> bytes:
-    """Gera contrato em PDF: tenta usar modelo customizado da imobiliária (com placeholders),
-    senão usa o auto-gerado com Lei 8.245/91. Em ambos, preenche dados do cadastro."""
+def gerar_contrato_pdf(contrato_id: int, tipo_contrato: str = "residencial", usar_modelo_customizado: bool = True, numero_modelo: int = 1, logo_path: Optional[str] = None) -> bytes:
+    """Gera contrato em PDF: tenta usar modelo customizado (1, 2 ou 3) da imobiliária,
+    senão usa auto-gerado com Lei 8.245/91. Em ambos, preenche dados do cadastro."""
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.units import cm
     from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, PageTemplate, Frame
@@ -750,7 +750,7 @@ def gerar_contrato_pdf(contrato_id: int, tipo_contrato: str = "residencial", usa
 
     # Tenta usar modelo customizado se solicitado
     if usar_modelo_customizado:
-        modelo_pdf = obter_modelo_customizado(tipo_contrato)
+        modelo_pdf = obter_modelo_customizado(tipo_contrato, numero_modelo)
         if modelo_pdf:
             conn = get_db()
             proprietario = _row_to_dict(conn.execute("SELECT * FROM imob_proprietarios WHERE id = ?", (imovel["proprietario_id"],)).fetchone())

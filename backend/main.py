@@ -2121,8 +2121,8 @@ def api_onimob_criar_contrato(dados: imob_engine.ContratoIn):
     return imob_engine.criar_contrato(dados)
 
 @app.post("/api/admin/onimob/modelo-contrato")
-async def api_admin_upload_modelo_contrato(request: Request, tipo_contrato: str = Form(...), arquivo: UploadFile = File(...)):
-    """Admin (chave mestra) sobe seu próprio template de contrato (PDF) pra usar como modelo padrão."""
+async def api_admin_upload_modelo_contrato(request: Request, tipo_contrato: str = Form(...), numero: int = Form(1), arquivo: UploadFile = File(...)):
+    """Admin (chave mestra) sobe modelo de contrato (1, 2 ou 3) pra usar como template."""
     token = request.headers.get("Authorization", "").replace("Bearer ", "").strip()
     if not token:
         token = request.cookies.get("coon_auth_token", "")
@@ -2130,6 +2130,8 @@ async def api_admin_upload_modelo_contrato(request: Request, tipo_contrato: str 
         raise HTTPException(status_code=401, detail="Só o administrador pode fazer upload de modelo de contrato.")
     if tipo_contrato not in imob_engine.TIPOS_CONTRATO:
         raise HTTPException(status_code=400, detail=f"Tipo de contrato inválido. Aceitos: {', '.join(sorted(imob_engine.TIPOS_CONTRATO))}")
+    if numero not in (1, 2, 3):
+        raise HTTPException(status_code=400, detail="Número do modelo deve ser 1, 2 ou 3.")
     if not arquivo.filename.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Apenas arquivos PDF são aceitos como modelo de contrato.")
 
@@ -2138,11 +2140,11 @@ async def api_admin_upload_modelo_contrato(request: Request, tipo_contrato: str 
     if len(conteudo) > 5 * 1024 * 1024:
         raise HTTPException(status_code=400, detail="Modelo de contrato não pode exceder 5 MB.")
 
-    caminho = os.path.join(imob_engine.MODELOS_CONTRATO_DIR, f"modelo_{tipo_contrato}.pdf")
+    caminho = os.path.join(imob_engine.MODELOS_CONTRATO_DIR, f"modelo_{tipo_contrato}_{numero}.pdf")
     with open(caminho, "wb") as f:
         f.write(conteudo)
 
-    return {"msg": f"Modelo de contrato '{tipo_contrato}' atualizado com sucesso.", "tipo": tipo_contrato, "tamanho": len(conteudo)}
+    return {"msg": f"Modelo {numero} de contrato '{tipo_contrato}' atualizado com sucesso.", "tipo": tipo_contrato, "numero": numero, "tamanho": len(conteudo)}
 
 @app.get("/api/onimob/contratos/{contrato_id}")
 def api_onimob_obter_contrato(contrato_id: int):
@@ -2152,14 +2154,14 @@ def api_onimob_obter_contrato(contrato_id: int):
     return c
 
 @app.get("/api/onimob/contratos/{contrato_id}/pdf")
-def api_onimob_gerar_contrato_pdf(contrato_id: int, request: Request, tipo_modelo: str = "residencial"):
-    """tipo_modelo pode ser: 'customizado' (usa modelo da imobiliária se tiver),
+def api_onimob_gerar_contrato_pdf(contrato_id: int, request: Request, tipo_modelo: str = "residencial", numero_modelo: int = 1):
+    """tipo_modelo pode ser: 'customizado' (usa modelo 1, 2 ou 3 da imobiliária se tiver),
     ou um dos auto-gerados: 'residencial', 'comercial', 'temporada', 'venda'."""
     _exigir_acesso_onimob(request)
     try:
         usar_customizado = tipo_modelo == "customizado"
         tipo_contrato = tipo_modelo if tipo_modelo != "customizado" else "residencial"
-        pdf_bytes = imob_engine.gerar_contrato_pdf(contrato_id, tipo_contrato, usar_modelo_customizado=usar_customizado)
+        pdf_bytes = imob_engine.gerar_contrato_pdf(contrato_id, tipo_contrato, usar_modelo_customizado=usar_customizado, numero_modelo=numero_modelo)
         return Response(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename=contrato_{contrato_id}.pdf"})
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
