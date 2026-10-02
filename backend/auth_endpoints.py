@@ -318,3 +318,29 @@ async def pagina_recuperar_senha():
     </html>
     """
     return html
+
+
+@router_frontend.get("/", response_class=HTMLResponse)
+async def pagina_landing():
+    """Landing page com apresentação de features."""
+    frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+    landing_file = os.path.join(frontend_path, 'landing.html')
+
+    if os.path.exists(landing_file):
+        with open(landing_file, 'r', encoding='utf-8') as f:
+            return f.read()
+
+    return "<h1>Landing page não encontrada</h1>"
+
+
+@router_frontend.get("/settings", response_class=HTMLResponse)
+async def pagina_settings():
+    """Painel de configurações do sistema."""
+    frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+    settings_file = os.path.join(frontend_path, 'settings.html')
+
+    if os.path.exists(settings_file):
+        with open(settings_file, 'r', encoding='utf-8') as f:
+            return f.read()
+
+    return "<h1>Painel de configurações não encontrado</h1>"

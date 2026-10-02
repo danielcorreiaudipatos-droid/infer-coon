@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>on.imob — CRM + IA + Avaliação Científica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header/Navbar */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            transition: opacity 0.3s;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 40px;
+            text-align: center;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            animation: slideDown 0.6s ease;
+        }
+
+        .hero p {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            max-width: 700px;
+            animation: slideUp 0.6s ease 0.2s both;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            animation: slideUp 0.6s ease 0.4s both;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 40px;
+            background: #f8f9ff;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* Differentiator Section */
+        .differentiator {
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .differentiator h2 {
+            font-size: 42px;
+            margin-bottom: 30px;
+        }
+
+        .differentiator p {
+            font-size: 18px;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            opacity: 0.95;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 80px 40px;
+            background: #f8f9ff;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .pricing-card h3 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 48px;
+            color: #667eea;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .price-period {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .pricing-features {
+            text-align: left;
+            margin: 30px 0;
+            list-style: none;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+
+        .pricing-features li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .pricing-card .btn-primary {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .footer-links {
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: #999;
+            text-decoration: none;
+            margin: 0 20px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .cta-buttons .btn {
+                width: 100%;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav a {
+                margin-left: 0;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">on.imob</div>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#diferencial">Diferencial</a>
+            <a href="#pricing">Preços</a>
+            <a href="/login">Login</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Gestão Imobiliária Inteligente</h1>
+        <p>CRM + IA + Avaliação Científica de Imóveis. Tudo que sua imobiliária precisa para crescer.</p>
+        <div class="cta-buttons">
+            <a href="/cadastro" class="btn btn-primary">Começar Gratuitamente</a>
+            <a href="#features" class="btn btn-secondary">Saiba Mais</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Features Completas</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>WhatsApp 2-Way Bot</h3>
+                <p>Chatbot inteligente com integração direta do Meta. Responda clientes automaticamente e qualifique leads em tempo real.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔗</div>
+                <h3>Integração VivaReal + ZapImóveis</h3>
+                <p>Publique imóveis automaticamente e receba leads de volta. Sincronização bidirecional 24/7.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Site Auto-Gerado</h3>
+                <p>Cada imóvel tem seu próprio site otimizado para SEO. Schema.org + Google Rankings automáticos.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💳</div>
+                <h3>Portal de Pagamento</h3>
+                <p>PIX (0%), Boleto (2.49%), Cartão (2.99%). Tudo integrado e seguro com Stripe + Assas.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Financeiro Avançado</h3>
+                <p>Cash flow com previsão 12 meses. ROI por imóvel. Alertas automáticos de inadimplência.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Split Payment (Assas)</h3>
+                <p>Repasse automático para proprietários (95%). Sem burocracias. Saldo em tempo real.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>IA Gemini Integrada</h3>
+                <p>Barra de IA para dúvidas. Context-aware com histórico de conversations. Ações integradas.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3>Login + Branding Customizável</h3>
+                <p>Painel de login sem propagandas. Logo e cores da sua imobiliária. White-label ready.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🏦</div>
+                <h3>Open Banking (Itaú/Bradesco/Santander)</h3>
+                <p>Reconciliação automática de extratos. Integração com 3 maiores bancos. Pronto para ativar.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Differentiator Section -->
+    <section class="differentiator" id="diferencial">
+        <h2>O Verdadeiro Diferencial</h2>
+        <p>
+            Não é CRM, não é IA, não é integração. É a <strong>Avaliação Científica de Imóveis</strong>
+            com Base em Regressão Estatística + NBR 14.653. Único no mercado. Monopolio instalado.
+        </p>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">80%</div>
+                <div class="stat-label">Intervalo de Confiança</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Diferencial Absoluto</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">1º</div>
+                <div class="stat-label">Posição no Mercado</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <h2 class="section-title">Planos</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Startup</h3>
+                <div class="price">R$ 99</div>
+                <div class="price-period">/mês</div>
+                <ul class="pricing-features">
+                    <li>Até 50 imóveis</li>
+                    <li>WhatsApp Bot</li>
+                    <li>Site auto-gerado</li>
+                    <li>Relatórios básicos</li>
+                    <li>Email suporte</li>
+                </ul>
+                <a href="/cadastro" class="btn btn-primary">Começar</a>
+            </div>
+
+            <div class="pricing-card featured">
+                <h3>Professional</h3>
+                <div class="price">R$ 299</div>
+                <div class="price-period">/mês</div>
+                <ul class="pricing-features">
+                    <li>Imóveis ilimitados</li>
+                    <li>VivaReal + ZapImóveis</li>
+                    <li>Portal de pagamento</li>
+                    <li>Financeiro avançado</li>
+                    <li>Split Payment</li>
+                    <li>Avaliação científica</li>
+                    <li>Suporte prioritário</li>
+                </ul>
+                <a href="/cadastro" class="btn btn-primary">Começar</a>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Enterprise</h3>
+                <div class="price">Customizado</div>
+                <div class="price-period">Fale conosco</div>
+                <ul class="pricing-features">
+                    <li>Tudo do Professional</li>
+                    <li>Open Banking (3 bancos)</li>
+                    <li>Integração Nota Fiscal</li>
+                    <li>DMOB integrado</li>
+                    <li>API custom</li>
+                    <li>SSO para empresa</li>
+                    <li>Onboarding dedicado</li>
+                </ul>
+                <a href="/contato" class="btn btn-primary">Contato</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#privacy">Privacidade</a>
+            <a href="#terms">Termos</a>
+            <a href="#contact">Contato</a>
+            <a href="#status">Status</a>
+        </div>
+        <p>&copy; 2026 on.imob. Todos os direitos reservados. | CNPJ: 00.000.000/0001-00</p>
+    </footer>
+</body>
+</html>
