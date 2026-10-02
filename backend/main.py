@@ -2241,6 +2241,43 @@ def api_onimob_deletar_inquilino(inquilino_id: int):
     conn.close()
     return {"msg": "Inquilino deletado."}
 
+# ── Integração Site ─────────────────────────────────────────────────────────
+from backend.integracao_site import salvar_config_site, obter_config_site, publicar_imovel, obter_publicacao
+
+@app.post("/api/admin/integracao-site/config")
+def api_config_site(url_site: str = Form(...), api_key: str = Form(...), request: Request = None):
+    """Admin configura URL e API key do site externo pra publicar imóveis."""
+    token = request.headers.get("Authorization", "").replace("Bearer ", "").strip() if request else ""
+    if not token:
+        token = request.cookies.get("coon_auth_token", "") if request else ""
+    if token != COON_MASTER_KEY:
+        raise HTTPException(status_code=401, detail="Só o admin pode configurar o site.")
+    return salvar_config_site(url_site, api_key)
+
+@app.get("/api/admin/integracao-site/config")
+def api_obter_config_site(request: Request):
+    """Retorna config do site (sem a chave, só URL)."""
+    config = obter_config_site()
+    if config:
+        config.pop("api_key", None)
+    return config or {"msg": "Nenhuma configuração salva ainda."}
+
+@app.post("/api/onimob/imoveis/{imovel_id}/publicar-site")
+async def api_publicar_imovel_site(imovel_id: int, request: Request, fotos_urls: list = Form(default=[])):
+    """Publica imóvel no site externo."""
+    _exigir_acesso_onimob(request)
+    imovel = imob_engine.obter_imovel(imovel_id)
+    if not imovel:
+        raise HTTPException(status_code=404, detail="Imóvel não encontrado.")
+    resultado = await publicar_imovel(imovel, fotos_urls, [])
+    return resultado
+
+@app.get("/api/onimob/imoveis/{imovel_id}/publicacao-status")
+def api_status_publicacao(imovel_id: int):
+    """Retorna status de publicação de um imóvel no site externo."""
+    pub = obter_publicacao(imovel_id)
+    return pub or {"status": "não publicado"}
+
 @app.get("/imob/cadastro", response_class=HTMLResponse)
 def serve_onimob_cadastro():
     """Painel de cadastro do Onimob (Módulo 1): imóveis, proprietários, inquilinos e corretores."""
@@ -2256,6 +2293,15 @@ def serve_repasse():
     repasse_file = os.path.join(FRONTEND_DIR, "repasse.html")
     if os.path.exists(repasse_file):
         with open(repasse_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+@app.get("/integracao-site", response_class=HTMLResponse)
+def serve_integracao_site():
+    """Painel de integração com site externo: config + publicar imóveis."""
+    integracao_file = os.path.join(FRONTEND_DIR, "integracao-site.html")
+    if os.path.exists(integracao_file):
+        with open(integracao_file, "r", encoding="utf-8") as f:
             return HTMLResponse(content=f.read())
     return serve_portal()
 
