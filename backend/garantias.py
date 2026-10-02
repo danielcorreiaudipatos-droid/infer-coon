@@ -89,7 +89,7 @@ def registrar_deducao_caacao(garantia_id: int, motivo: str, valor: float) -> Dic
     conn = get_db()
     cur = conn.cursor()
     cur.execute(
-        "INSERT INTO deducoes_caacao (garantia_id, motivo, valor, criado_em) VALUES (?, ?, ?, ?)",
+        "INSERT INTO deducoes_caucao (garantia_id, motivo, valor, criado_em) VALUES (?, ?, ?, ?)",
         (garantia_id, motivo, valor, time.time())
     )
     conn.commit()
@@ -101,7 +101,7 @@ def calcular_saldo_caacao(garantia_id: int) -> float:
     """Calcula saldo restante da caução."""
     conn = get_db()
     garantia = conn.execute("SELECT valor FROM garantias WHERE id = ?", (garantia_id,)).fetchone()
-    total_deducoes = conn.execute("SELECT SUM(valor) FROM deducoes_caacao WHERE garantia_id = ?", (garantia_id,)).fetchone()
+    total_deducoes = conn.execute("SELECT SUM(valor) FROM deducoes_caucao WHERE garantia_id = ?", (garantia_id,)).fetchone()
     conn.close()
 
     if not garantia:

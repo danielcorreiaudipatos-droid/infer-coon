@@ -59,10 +59,7 @@ Atenciosamente,
 
 async def gerar_texto_ia(prompt: str, context: Optional[Dict[str, Any]] = None, modelo: str = "cobranca_gentil") -> Optional[str]:
     """Gera texto via Gemini — cartas, comunicados, respostas."""
-    if not GEMINI_API_KEY:
-        return None
-
-    # Se context foi fornecido, usar template
+    # Se context foi fornecido, usar template (não precisa de API)
     if context and modelo in MODELOS_CARTA:
         template = MODELOS_CARTA[modelo]
         try:
@@ -70,6 +67,10 @@ async def gerar_texto_ia(prompt: str, context: Optional[Dict[str, Any]] = None, 
         except KeyError as e:
             print(f"Chave faltando no template: {e}")
             return None
+
+    # Se não tem API, não pode gerar via Gemini
+    if not GEMINI_API_KEY:
+        return None
 
     # Senão, usar Gemini para gerar
     try:
