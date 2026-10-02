@@ -3442,6 +3442,15 @@ if os.path.exists(frontend_path):
             "output": out
         }
 
+@app.get("/funcionarios", response_class=HTMLResponse)
+def serve_funcionarios():
+    """Painel de login/liberação de funcionários pra site."""
+    funcionarios_file = os.path.join(FRONTEND_DIR, "funcionarios.html")
+    if os.path.exists(funcionarios_file):
+        with open(funcionarios_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
     # Monta todos os ativos estáticos (imagens, CSS, JS, áudios)
     app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend_static")
 
