@@ -2120,6 +2120,30 @@ def api_onimob_pendencias(entidade_tipo: str, entidade_id: int):
 def api_onimob_criar_contrato(dados: imob_engine.ContratoIn):
     return imob_engine.criar_contrato(dados)
 
+@app.post("/api/admin/onimob/modelo-contrato")
+async def api_admin_upload_modelo_contrato(request: Request, tipo_contrato: str = Form(...), arquivo: UploadFile = File(...)):
+    """Admin (chave mestra) sobe seu próprio template de contrato (PDF) pra usar como modelo padrão."""
+    token = request.headers.get("Authorization", "").replace("Bearer ", "").strip()
+    if not token:
+        token = request.cookies.get("coon_auth_token", "")
+    if token != COON_MASTER_KEY:
+        raise HTTPException(status_code=401, detail="Só o administrador pode fazer upload de modelo de contrato.")
+    if tipo_contrato not in imob_engine.TIPOS_CONTRATO:
+        raise HTTPException(status_code=400, detail=f"Tipo de contrato inválido. Aceitos: {', '.join(sorted(imob_engine.TIPOS_CONTRATO))}")
+    if not arquivo.filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Apenas arquivos PDF são aceitos como modelo de contrato.")
+
+    os.makedirs(imob_engine.MODELOS_CONTRATO_DIR, exist_ok=True)
+    conteudo = await arquivo.read()
+    if len(conteudo) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Modelo de contrato não pode exceder 5 MB.")
+
+    caminho = os.path.join(imob_engine.MODELOS_CONTRATO_DIR, f"modelo_{tipo_contrato}.pdf")
+    with open(caminho, "wb") as f:
+        f.write(conteudo)
+
+    return {"msg": f"Modelo de contrato '{tipo_contrato}' atualizado com sucesso.", "tipo": tipo_contrato, "tamanho": len(conteudo)}
+
 @app.get("/api/onimob/contratos/{contrato_id}")
 def api_onimob_obter_contrato(contrato_id: int):
     c = imob_engine.obter_contrato(contrato_id)

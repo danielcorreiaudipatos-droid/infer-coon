@@ -612,6 +612,7 @@ def painel_resumo() -> Dict[str, Any]:
 import datetime as _dt
 
 TIPOS_CONTRATO = {"residencial", "comercial", "temporada"}
+MODELOS_CONTRATO_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads_contratos")
 
 ROTULO_TIPO_CONTRATO = {
     "residencial": "CONTRATO DE LOCAÇÃO RESIDENCIAL",
