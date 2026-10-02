@@ -2305,6 +2305,32 @@ def serve_integracao_site():
             return HTMLResponse(content=f.read())
     return serve_portal()
 
+@app.get("/dashboard-financeiro", response_class=HTMLResponse)
+def serve_dashboard_financeiro():
+    """Dashboard financeiro: KPIs, aluguéis, repassos e taxa retida."""
+    dashboard_file = os.path.join(FRONTEND_DIR, "dashboard-financeiro.html")
+    if os.path.exists(dashboard_file):
+        with open(dashboard_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+@app.get("/portal-inquilino", response_class=HTMLResponse)
+def serve_portal_inquilino():
+    """Portal do inquilino: contrato, pagamentos, documentos."""
+    portal_file = os.path.join(FRONTEND_DIR, "portal-inquilino.html")
+    if os.path.exists(portal_file):
+        with open(portal_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+@app.get("/portal-proprietario", response_class=HTMLResponse)
+def serve_portal_proprietario():
+    """Portal do proprietário: imóveis, repassos, documentos, comunicados."""
+    portal_file = os.path.join(FRONTEND_DIR, "portal-proprietario.html")
+    if os.path.exists(portal_file):
+        with open(portal_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
 
 @app.get("/inferencia", response_class=HTMLResponse)
 @app.get("/inferencia/", response_class=HTMLResponse)

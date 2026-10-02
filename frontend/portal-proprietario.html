@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Proprietário — on.imob</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; padding: 2rem; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { margin-bottom: 1rem; color: #333; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .kpi { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        .numero { font-size: 2rem; font-weight: 700; color: #0066cc; }
+        .label { font-size: 12px; color: #666; margin-top: 0.5rem; }
+        .card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        .imovel-item { border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin-bottom: 1rem; }
+        .endereco { font-weight: 600; color: #333; }
+        .info { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 0.5rem 0; font-size: 14px; }
+        .info-label { color: #666; }
+        .info-valor { color: #333; font-weight: 500; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        th { background: #f9f9f9; font-weight: 600; }
+        .status-ok { color: #28a745; }
+        .status-pendente { color: #ffc107; }
+        .status-vencido { color: #dc3545; }
+        button { padding: 8px 16px; background: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        button:hover { background: #0052a3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏘️ Portal Proprietário</h1>
+
+        <!-- KPIs -->
+        <div class="grid">
+            <div class="kpi">
+                <div class="numero">2</div>
+                <div class="label">Imóveis Alugados</div>
+            </div>
+            <div class="kpi">
+                <div class="numero">R$ 4.300</div>
+                <div class="label">Recebido (mês)</div>
+            </div>
+            <div class="kpi">
+                <div class="numero">R$ 0</div>
+                <div class="label">Atrasados</div>
+            </div>
+            <div class="kpi">
+                <div class="numero">12</div>
+                <div class="label">Meses restantes</div>
+            </div>
+        </div>
+
+        <!-- Meus Imóveis -->
+        <div class="card">
+            <h2>🏠 Meus Imóveis</h2>
+
+            <div class="imovel-item">
+                <div class="endereco">Apartamento Paulista, 100 — São Paulo/SP</div>
+                <div class="info">
+                    <div><span class="info-label">Inquilino:</span> <span class="info-valor">João Silva</span></div>
+                    <div><span class="info-label">Aluguel:</span> <span class="info-valor">R$ 2.500,00</span></div>
+                    <div><span class="info-label">Data Vencimento:</span> <span class="info-valor">01/mês</span></div>
+                    <div><span class="info-label">Status:</span> <span class="info-valor status-ok">✓ Quitado</span></div>
+                </div>
+                <button onclick="verDetalhes(1)">Ver Detalhes</button>
+            </div>
+
+            <div class="imovel-item">
+                <div class="endereco">Casa Vila Mariana, 250 — São Paulo/SP</div>
+                <div class="info">
+                    <div><span class="info-label">Inquilino:</span> <span class="info-valor">Maria Santos</span></div>
+                    <div><span class="info-label">Aluguel:</span> <span class="info-valor">R$ 1.800,00</span></div>
+                    <div><span class="info-label">Data Vencimento:</span> <span class="info-valor">05/mês</span></div>
+                    <div><span class="info-label">Status:</span> <span class="info-valor status-pendente">⏳ Pendente</span></div>
+                </div>
+                <button onclick="verDetalhes(2)">Ver Detalhes</button>
+            </div>
+        </div>
+
+        <!-- Repassos Recebidos -->
+        <div class="card">
+            <h2>💰 Repassos Recebidos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Imóvel</th>
+                        <th>Período</th>
+                        <th>Aluguel</th>
+                        <th>Data Repasse</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Apt. Paulista</td>
+                        <td>Outubro/2026</td>
+                        <td>R$ 2.300,00</td>
+                        <td>02/10/2026</td>
+                        <td class="status-ok">✓ Repassado</td>
+                    </tr>
+                    <tr>
+                        <td>Apt. Paulista</td>
+                        <td>Setembro/2026</td>
+                        <td>R$ 2.300,00</td>
+                        <td>02/09/2026</td>
+                        <td class="status-ok">✓ Repassado</td>
+                    </tr>
+                    <tr>
+                        <td>Casa Vila</td>
+                        <td>Outubro/2026</td>
+                        <td>R$ 1.650,00</td>
+                        <td>Previsto: 05/10/2026</td>
+                        <td class="status-pendente">⏳ Pendente</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Documentos dos Inquilinos -->
+        <div class="card">
+            <h2>📄 Documentos do Inquilino</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Inquilino</th>
+                        <th>Tipo</th>
+                        <th>Data</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>João Silva</td>
+                        <td>Contrato Assinado</td>
+                        <td>01/01/2024</td>
+                        <td><button onclick="abrirDoc('contrato1')">📥 Abrir</button></td>
+                    </tr>
+                    <tr>
+                        <td>João Silva</td>
+                        <td>Certidão Negativa</td>
+                        <td>15/09/2024</td>
+                        <td><button onclick="abrirDoc('cert1')">📥 Abrir</button></td>
+                    </tr>
+                    <tr>
+                        <td>Maria Santos</td>
+                        <td>Contrato Assinado</td>
+                        <td>01/05/2024</td>
+                        <td><button onclick="abrirDoc('contrato2')">📥 Abrir</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Avisos para Inquilinos -->
+        <div class="card">
+            <h2>📢 Enviar Comunicado</h2>
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-weight: 600; margin-bottom: 8px;">Selecione o Inquilino</label>
+                <select style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 1rem;">
+                    <option>João Silva (Apt. Paulista)</option>
+                    <option>Maria Santos (Casa Vila)</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-weight: 600; margin-bottom: 8px;">Mensagem</label>
+                <textarea style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; height: 100px;"></textarea>
+            </div>
+            <button onclick="enviarComunicado()">📤 Enviar Comunicado</button>
+        </div>
+    </div>
+
+    <script>
+        function verDetalhes(id) {
+            alert(`Detalhes do imóvel ${id}`);
+        }
+        function abrirDoc(tipo) {
+            alert(`Abrindo documento: ${tipo}`);
+        }
+        function enviarComunicado() {
+            alert('Comunicado enviado com sucesso!');
+        }
+    </script>
+</body>
+</html>
