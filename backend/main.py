@@ -1926,6 +1926,8 @@ def serve_onlove_app():
 # ==============================================================================
 import backend.imob_engine as imob_engine
 import backend.multi_tenant as multi_tenant
+import backend.gemini_integration as gemini_integration
+import backend.garantias as garantias
 
 @app.post("/api/onimob/corretores")
 def api_onimob_criar_corretor(dados: imob_engine.CorretorIn):
@@ -2332,6 +2334,93 @@ def serve_portal_proprietario():
         with open(portal_file, "r", encoding="utf-8") as f:
             return HTMLResponse(content=f.read())
     return serve_portal()
+
+@app.get("/dashboard-financeiro-v2", response_class=HTMLResponse)
+def serve_dashboard_financeiro_v2():
+    """Dashboard Financeiro v2: 3 tabelas, WhatsApp, PIX, alertas atraso."""
+    dashboard_file = os.path.join(FRONTEND_DIR, "dashboard-financeiro-v2.html")
+    if os.path.exists(dashboard_file):
+        with open(dashboard_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+# ==============================================================================
+# GARANTIAS — Caução, Avalista, Seguro Fiança
+# ==============================================================================
+@app.post("/api/onimob/garantias/caacao")
+def api_registrar_caacao(contrato_id: int, valor: float):
+    """Registra caução no contrato."""
+    try:
+        return garantias.registrar_caacao(contrato_id, valor)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/onimob/garantias/fiador")
+def api_registrar_fiador(contrato_id: int, nome: str, cpf: str, telefone: str, email: str, endereco: str):
+    """Registra fiador/avalista."""
+    try:
+        return garantias.registrar_fiador(contrato_id, nome, cpf, telefone, email, endereco)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/garantias/{contrato_id}")
+def api_listar_garantias(contrato_id: int):
+    """Lista garantias de um contrato."""
+    return {"garantias": garantias.listar_garantias(contrato_id)}
+
+@app.post("/api/onimob/garantias/{garantia_id}/deducao")
+def api_registrar_deducao(garantia_id: int, motivo: str, valor: float):
+    """Registra dedução na caução."""
+    try:
+        return garantias.registrar_deducao_caacao(garantia_id, motivo, valor)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/onimob/garantias/{garantia_id}/liberar")
+def api_liberar_caacao(garantia_id: int):
+    """Libera caução ao final do contrato."""
+    try:
+        return garantias.liberar_caacao(garantia_id)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# ==============================================================================
+# GEMINI IA — Cartas, Comunicados, Dúvidas de Funcionários
+# ==============================================================================
+@app.post("/api/onimob/ia/carta")
+async def api_gerar_carta(tipo: str, context: Dict[str, Any]):
+    """Gera carta/comunicado usando IA ou template."""
+    try:
+        texto = await gemini_integration.gerar_comunicado_proprietario(tipo, context)
+        if not texto:
+            raise ValueError("Não foi possível gerar o comunicado")
+        return {"carta": texto}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/onimob/ia/duvida")
+async def api_responder_duvida(pergunta: str):
+    """Responde dúvida de funcionário usando Gemini."""
+    try:
+        resposta = await gemini_integration.responder_duvida_funcionario(pergunta)
+        if not resposta:
+            raise ValueError("Não foi possível gerar resposta")
+        return {"resposta": resposta}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/ia/modelos-carta")
+def api_listar_modelos_carta():
+    """Lista modelos de cartas disponíveis."""
+    return {"modelos": gemini_integration.listar_modelos_carta()}
+
+@app.post("/api/onimob/ia/adicionar-modelo")
+def api_adicionar_modelo_carta(nome: str, template: str):
+    """Adiciona novo modelo de carta."""
+    try:
+        return gemini_integration.adicionar_modelo_carta(nome, template)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.get("/inferencia", response_class=HTMLResponse)
 @app.get("/inferencia/", response_class=HTMLResponse)
