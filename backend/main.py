@@ -4,6 +4,7 @@ Motor de Inferência Estatística e API Principal FastAPI.
 """
 
 import os
+import io
 import time
 import math
 import json
@@ -1928,6 +1929,8 @@ import backend.imob_engine as imob_engine
 import backend.multi_tenant as multi_tenant
 import backend.gemini_integration as gemini_integration
 import backend.garantias as garantias
+import backend.modelos_cartas as modelos_cartas
+import backend.word_generator as word_generator
 
 @app.post("/api/onimob/corretores")
 def api_onimob_criar_corretor(dados: imob_engine.CorretorIn):
@@ -2344,6 +2347,15 @@ def serve_dashboard_financeiro_v2():
             return HTMLResponse(content=f.read())
     return serve_portal()
 
+@app.get("/dashboard", response_class=HTMLResponse)
+def serve_dashboard_unificado():
+    """Dashboard Unificado: Financeiro, Repassos, Imóveis, Garantias, Comunicados."""
+    dashboard_file = os.path.join(FRONTEND_DIR, "dashboard-unificado.html")
+    if os.path.exists(dashboard_file):
+        with open(dashboard_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
 # ==============================================================================
 # GARANTIAS — Caução, Avalista, Seguro Fiança
 # ==============================================================================
@@ -2421,6 +2433,91 @@ def api_adicionar_modelo_carta(nome: str, template: str):
         return gemini_integration.adicionar_modelo_carta(nome, template)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+# ==============================================================================
+# BIBLIOTECA DE MODELOS — Cartas, Contratos, Comunicados (Lei 8.245/91)
+# ==============================================================================
+@app.get("/api/onimob/modelos/listar")
+def api_listar_modelos(categoria: Optional[str] = None):
+    """Lista todos os modelos disponíveis (cartas, contratos, comunicados)."""
+    return {"modelos": modelos_cartas.listar_modelos(categoria)}
+
+@app.get("/api/onimob/modelos/{modelo_id}")
+def api_obter_modelo(modelo_id: int):
+    """Obtém conteúdo completo de um modelo."""
+    modelo = modelos_cartas.obter_modelo(modelo_id)
+    if not modelo:
+        raise HTTPException(status_code=404, detail="Modelo não encontrado")
+    return modelo
+
+@app.post("/api/onimob/modelos/adicionar")
+def api_adicionar_modelo(nome: str, categoria: str, conteudo: str):
+    """Adiciona novo modelo customizado."""
+    try:
+        return modelos_cartas.adicionar_modelo(nome, categoria, conteudo)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.delete("/api/onimob/modelos/{modelo_id}")
+def api_deletar_modelo(modelo_id: int):
+    """Deleta modelo customizado (não pode deletar padrões)."""
+    return modelos_cartas.deletar_modelo(modelo_id)
+
+@app.post("/api/onimob/modelos/buscar-internet")
+async def api_buscar_modelos_internet(tipo: str):
+    """Busca modelos reais na internet via Gemini (Lei 8.245/91)."""
+    modelos = await modelos_cartas.buscar_modelos_internet(tipo)
+    return {"modelos": modelos}
+
+# ==============================================================================
+# GERAÇÃO DE DOCUMENTOS WORD — Cartas, Contratos com Edição Automática
+# ==============================================================================
+@app.post("/api/onimob/documentos/gerar-word")
+def api_gerar_documento_word(titulo: str, conteudo: str, dados: Dict[str, Any]):
+    """
+    Gera documento Word (.docx) a partir de modelo com auto-preenchimento.
+    Substituir {{CHAVE}} por dados reais automaticamente.
+    """
+    try:
+        # Gerar em memória
+        docx_bytes = word_generator.gerar_em_memoria(titulo, conteudo, dados)
+        if not docx_bytes:
+            raise ValueError("python-docx não está instalado. pip install python-docx")
+
+        # Retornar como download
+        return FileResponse(
+            io.BytesIO(docx_bytes),
+            media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            filename=f"{titulo.replace(' ', '_').lower()}.docx"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/onimob/documentos/preview-word")
+def api_preview_documento(titulo: str, conteudo: str, dados: Dict[str, Any]):
+    """Preview do documento antes de gerar Word (retorna HTML)."""
+    # Substituir placeholders
+    conteudo_preenchido = conteudo
+    for chave, valor in dados.items():
+        placeholder = "{" + "{" + chave + "}" + "}"
+        conteudo_preenchido = conteudo_preenchido.replace(placeholder, str(valor))
+
+    html = f"""
+    <html>
+    <head>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 2rem; line-height: 1.5; }}
+            h1 {{ color: #0066cc; text-align: center; }}
+            pre {{ white-space: pre-wrap; }}
+        </style>
+    </head>
+    <body>
+        <h1>{titulo}</h1>
+        <pre>{conteudo_preenchido}</pre>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html)
 
 @app.get("/inferencia", response_class=HTMLResponse)
 @app.get("/inferencia/", response_class=HTMLResponse)
