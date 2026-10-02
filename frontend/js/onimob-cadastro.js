@@ -270,7 +270,14 @@
   });
 
   async function carregarDocumentos() {
-    const r = await api('GET', '/api/onimob/documentos');
+    const corpo = document.getElementById('corpoDocumentos');
+    let r;
+    try {
+      r = await api('GET', '/api/onimob/documentos');
+    } catch (err) {
+      corpo.innerHTML = '<tr><td class="p-3 text-slate-400" colspan="5">Acesso restrito: entre com a chave de administrador para ver os documentos.</td></tr>';
+      return;
+    }
     const linhas = await Promise.all(r.documentos.map(async (d) => {
       const badge = BADGE_STATUS[d.status] || BADGE_STATUS.pendente;
       const acoes = d.status === 'pendente'

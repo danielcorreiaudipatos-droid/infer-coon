@@ -179,9 +179,17 @@ OFFICIAL_SITE_URL = os.getenv("OFFICIAL_SITE_URL", "https://www.coon.com.br")
 # no log — só serve pra testar localmente, não é previsível nem repetida.
 import secrets as _secrets
 COON_MASTER_KEY = os.getenv("COON_MASTER_KEY")
+_EM_PRODUCAO = bool(os.getenv("RENDER") or os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("DYNO"))
 if not COON_MASTER_KEY:
+    if _EM_PRODUCAO:
+        # Em produção, nunca gera e expõe uma chave de admin sozinha: força a
+        # configuração correta da variável de ambiente antes de subir o servico.
+        raise RuntimeError(
+            "COON_MASTER_KEY não está definida no ambiente de produção. "
+            "Configure-a em Settings > Environment (Render/Railway) antes de iniciar o servidor."
+        )
     COON_MASTER_KEY = _secrets.token_urlsafe(18)
-    print(f"[AVISO] COON_MASTER_KEY não definida no ambiente. Chave temporária gerada para esta sessão: {COON_MASTER_KEY}")
+    print("[AVISO] COON_MASTER_KEY não definida. Chave temporária gerada só para uso local; não fica em log de produção.")
 
 app = FastAPI(
     title="Infer.coon API",
@@ -2030,15 +2038,19 @@ async def api_onimob_upload_documento(
         raise HTTPException(status_code=400, detail=str(e))
 
 def _exigir_acesso_onimob(request: Request):
-    """Documentos de RG/CPF/comprovante são dado sensível (LGPD): só admin (chave mestra)
-    ou sessão logada pode listar, baixar ou revisar. O envio em si (upload) fica público,
-    porque é o proprietário/inquilino mandando o documento pela primeira vez, sem conta ainda."""
+    """Documentos de RG/CPF/comprovante são dado sensível (LGPD): só a chave mestra do
+    admin/escritório pode listar, baixar ou revisar. O envio em si (upload) fica público,
+    porque é o proprietário/inquilino mandando o documento pela primeira vez, sem conta ainda.
+    Não aceita qualquer JWT de login: o cadastro de usuário (/api/auth/register) é público e
+    não tem nenhum vínculo com o imóvel/proprietário/inquilino dono do documento, então aceitar
+    "qualquer logado" ainda deixava qualquer pessoa que criasse conta ver RG/CPF de terceiros
+    só adivinhando o id sequencial."""
     token = request.headers.get("Authorization", "").replace("Bearer ", "").strip()
     if not token:
         token = request.cookies.get("coon_auth_token", "")
-    if token and (token == COON_MASTER_KEY or decode_jwt(token)):
+    if token and token == COON_MASTER_KEY:
         return
-    raise HTTPException(status_code=401, detail="Acesso restrito: faça login ou use a chave de administrador.")
+    raise HTTPException(status_code=401, detail="Acesso restrito: use a chave de administrador do escritório.")
 
 @app.get("/api/onimob/documentos")
 def api_onimob_listar_documentos(request: Request, entidade_tipo: Optional[str] = None, entidade_id: Optional[int] = None, status: Optional[str] = None):
