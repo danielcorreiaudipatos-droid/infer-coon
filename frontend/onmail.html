@@ -15,8 +15,8 @@
         extend: {
           colors: {
             google: {
-              blue: '#1a73e8',
-              hover: '#1557b0',
+              blue: '#059669',
+              hover: '#047857',
               gray: '#5f6368',
               bgLight: '#f8f9fa',
               borderLight: '#dadce0',
@@ -220,7 +220,7 @@
     }
     .mail-row.selected {
       background-color: #e8f0fe !important;
-      border-left: 3px solid #1a73e8;
+      border-left: 3px solid #059669;
     }
     .dark .mail-row.selected {
       background-color: #1e3a5f !important;
@@ -263,7 +263,7 @@
           id="emailSearchInput"
           oninput="filterEmails(this.value)"
           placeholder="Pesquisar em todas as mensagens e anexos..." 
-          class="w-full pl-10 pr-10 py-2 bg-[#eaf1fb] dark:bg-[#1e293b] hover:bg-[#e1e9f6] focus:bg-white dark:focus:bg-[#0f172a] border border-transparent focus:border-[#1a73e8] rounded-full text-xs text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none transition shadow-2xs"
+          class="w-full pl-10 pr-10 py-2 bg-[#eaf1fb] dark:bg-[#1e293b] hover:bg-[#e1e9f6] focus:bg-white dark:focus:bg-[#0f172a] border border-transparent focus:border-[#059669] rounded-full text-xs text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none transition shadow-2xs"
         >
         <button onclick="document.getElementById('emailSearchInput').value=''; filterEmails('');" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xs">
           ✕
@@ -386,7 +386,7 @@
         <!-- Botão Novo E-mail (Escrever) -->
         <button 
           onclick="openComposeModal()" 
-          class="w-full mb-4 px-4 py-3 bg-[#c2e7ff] hover:bg-[#b3d7ef] dark:bg-[#1a73e8] dark:hover:bg-[#1557b0] text-[#001d35] dark:text-white rounded-2xl text-xs font-bold flex items-center space-x-3 shadow-xs hover:shadow-md transition cursor-pointer"
+          class="w-full mb-4 px-4 py-3 bg-[#a7f3d0] hover:bg-[#86efac] dark:bg-[#059669] dark:hover:bg-[#047857] text-[#001d35] dark:text-white rounded-2xl text-xs font-bold flex items-center space-x-3 shadow-xs hover:shadow-md transition cursor-pointer"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           <span class="tracking-wide">Escrever</span>
@@ -467,7 +467,7 @@
                 type="checkbox" 
                 id="selectAllCheckbox" 
                 onchange="handleSelectAllToggle(this.checked)"
-                class="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#1a73e8] focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                class="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#059669] focus:ring-0 focus:ring-offset-0 cursor-pointer"
               >
             </label>
             <button 
@@ -544,7 +544,7 @@
           <div class="pt-0.5 shrink-0" onclick="event.stopPropagation()">
             <input 
               type="checkbox" 
-              class="email-row-cb w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#1a73e8] focus:ring-0 cursor-pointer"
+              class="email-row-cb w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#059669] focus:ring-0 cursor-pointer"
               data-id="1"
               onchange="handleRowCheckboxChange(1, this.checked)"
             >
@@ -577,7 +577,7 @@
           <div class="pt-0.5 shrink-0" onclick="event.stopPropagation()">
             <input 
               type="checkbox" 
-              class="email-row-cb w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#1a73e8] focus:ring-0 cursor-pointer"
+              class="email-row-cb w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#059669] focus:ring-0 cursor-pointer"
               data-id="2"
               onchange="handleRowCheckboxChange(2, this.checked)"
             >
@@ -610,7 +610,7 @@
           <div class="pt-0.5 shrink-0" onclick="event.stopPropagation()">
             <input 
               type="checkbox" 
-              class="email-row-cb w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#1a73e8] focus:ring-0 cursor-pointer"
+              class="email-row-cb w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#059669] focus:ring-0 cursor-pointer"
               data-id="3"
               onchange="handleRowCheckboxChange(3, this.checked)"
             >
@@ -630,7 +630,7 @@
               Arquivos estruturais e plantas complementares em alta resolução para download...
             </div>
             <div class="mt-1 flex items-center justify-between text-[10px]">
-              <span class="bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded font-medium border border-blue-200 dark:border-blue-800">
+              <span class="bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded font-medium border border-emerald-200 dark:border-emerald-800">
                 Nuvem OnMail
               </span>
               <span class="text-gray-400 font-medium">84 MB</span>
@@ -706,9 +706,9 @@
           type="text" 
           id="quickReplyInput"
           placeholder="Escreva uma resposta rápida para diretoria@banco.com.br..." 
-          class="flex-1 px-3.5 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl text-xs text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-[#1a73e8]"
+          class="flex-1 px-3.5 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl text-xs text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-[#059669]"
         >
-        <button onclick="sendQuickReply()" class="px-4 py-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+        <button onclick="sendQuickReply()" class="px-4 py-2 bg-[#059669] hover:bg-[#047857] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
           <span>Enviar</span>
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
         </button>
@@ -735,7 +735,7 @@
             <div>Número: <strong class="text-gray-700 dark:text-gray-200">(31) 99999-9999</strong></div>
             <div>Remetentes VIP: <strong class="text-gray-700 dark:text-gray-200">2 cadastrados</strong></div>
           </div>
-          <button onclick="openSettingsModal()" class="mt-2.5 w-full py-1 text-[11px] font-semibold text-[#1a73e8] dark:text-sky-400 hover:underline text-left">
+          <button onclick="openSettingsModal()" class="mt-2.5 w-full py-1 text-[11px] font-semibold text-[#059669] dark:text-sky-400 hover:underline text-left">
             Gerenciar Conexão →
           </button>
         </div>
@@ -807,7 +807,7 @@
       
       <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
         <div class="flex items-center space-x-2">
-          <div class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-950 text-[#1a73e8] flex items-center justify-center font-bold">
+          <div class="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-950 text-[#059669] flex items-center justify-center font-bold">
             ⚙️
           </div>
           <div>
@@ -867,7 +867,7 @@
         <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
           Cancelar
         </button>
-        <button onclick="alert('Configurações salvas com sucesso!'); closeSettingsModal();" class="px-4 py-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white rounded-xl text-xs font-bold shadow-xs">
+        <button onclick="alert('Configurações salvas com sucesso!'); closeSettingsModal();" class="px-4 py-2 bg-[#059669] hover:bg-[#047857] text-white rounded-xl text-xs font-bold shadow-xs">
           Salvar Configurações
         </button>
       </div>
@@ -890,17 +890,17 @@
 
       <div class="space-y-2 text-xs">
         <div>
-          <input type="email" id="composeTo" placeholder="Para (ex: cliente@empresa.com.br)" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#1a73e8]">
+          <input type="email" id="composeTo" placeholder="Para (ex: cliente@empresa.com.br)" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#059669]">
         </div>
         <div>
-          <input type="text" id="composeSubject" placeholder="Assunto" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-xs font-semibold text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#1a73e8]">
+          <input type="text" id="composeSubject" placeholder="Assunto" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-xs font-semibold text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#059669]">
         </div>
         <div>
-          <textarea id="composeBody" rows="7" placeholder="Escreva sua mensagem corporativa aqui..." class="w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#1a73e8]"></textarea>
+          <textarea id="composeBody" rows="7" placeholder="Escreva sua mensagem corporativa aqui..." class="w-full p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#059669]"></textarea>
         </div>
-        <div class="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 flex items-center justify-between text-[11px]">
+        <div class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 flex items-center justify-between text-[11px]">
           <label class="flex items-center space-x-2 text-gray-700 dark:text-gray-300 font-medium cursor-pointer">
-            <input type="checkbox" id="composeSendWaCopy" checked class="rounded text-[#1a73e8]">
+            <input type="checkbox" id="composeSendWaCopy" checked class="rounded accent-[#059669]">
             <span>Enviar comprovante de envio para meu WhatsApp</span>
           </label>
           <span class="text-emerald-600 dark:text-emerald-400 font-bold">✓ Ativo</span>
@@ -915,7 +915,7 @@
           <button onclick="closeComposeModal()" class="px-4 py-2 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
             Descartar
           </button>
-          <button onclick="sendComposeEmail()" class="px-5 py-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white rounded-xl text-xs font-bold shadow-xs flex items-center gap-1.5">
+          <button onclick="sendComposeEmail()" class="px-5 py-2 bg-[#059669] hover:bg-[#047857] text-white rounded-xl text-xs font-bold shadow-xs flex items-center gap-1.5">
             <span>Enviar Mensagem</span>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
           </button>
@@ -944,7 +944,7 @@
       <!-- Seletor Mensal / Anual (30% de Desconto) -->
       <div class="text-center">
         <div class="inline-flex items-center p-1 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700">
-          <button type="button" onclick="setModalBillingCycle('mensal')" id="modalBtnMensal" class="px-4 py-1.5 rounded-full text-xs font-bold bg-[#1a73e8] text-white shadow-xs transition cursor-pointer">
+          <button type="button" onclick="setModalBillingCycle('mensal')" id="modalBtnMensal" class="px-4 py-1.5 rounded-full text-xs font-bold bg-[#059669] text-white shadow-xs transition cursor-pointer">
             Cobrança Mensal
           </button>
           <button type="button" onclick="setModalBillingCycle('anual')" id="modalBtnAnual" class="px-4 py-1.5 rounded-full text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition cursor-pointer flex items-center gap-1.5">
@@ -977,13 +977,13 @@
         </div>
 
         <!-- OnMail Pro (Equipes & PMEs) -->
-        <div class="p-5 rounded-2xl bg-white dark:bg-[#1e293b] border-2 border-[#1a73e8] shadow-md flex flex-col justify-between relative">
-          <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#1a73e8] text-white text-[10px] font-bold uppercase px-3 py-0.5 rounded-full">
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#1e293b] border-2 border-[#059669] shadow-md flex flex-col justify-between relative">
+          <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#059669] text-white text-[10px] font-bold uppercase px-3 py-0.5 rounded-full">
             Mais Escolhido
           </div>
           <div>
             <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold text-[#1a73e8] uppercase tracking-wider">Equipes & PMEs</span>
+              <span class="text-[11px] font-bold text-[#059669] uppercase tracking-wider">Equipes & PMEs</span>
               <span id="mProBadge" class="hidden text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.2 rounded-full">30% OFF</span>
             </div>
             <h4 class="text-base font-bold text-gray-900 dark:text-white mt-1">OnMail Pro</h4>
@@ -999,7 +999,7 @@
               <li>✓ Links seguros para arquivos pesados</li>
             </ul>
           </div>
-          <a href="https://wa.me/5531999999999?text=Ol%C3%A1!%20Gostaria%20de%20assinar%20o%20OnMail%20Pro." target="_blank" class="mt-6 w-full py-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white text-xs font-bold rounded-xl text-center shadow-xs transition">
+          <a href="https://wa.me/5531999999999?text=Ol%C3%A1!%20Gostaria%20de%20assinar%20o%20OnMail%20Pro." target="_blank" class="mt-6 w-full py-2 bg-[#059669] hover:bg-[#047857] text-white text-xs font-bold rounded-xl text-center shadow-xs transition">
             Assinar OnMail Pro
           </a>
         </div>
@@ -1162,8 +1162,8 @@
         const rowId = cb.getAttribute('data-id');
         const row = document.getElementById('row' + rowId);
         if (row) {
-          if (checked) row.classList.add('bg-blue-50/70', 'dark:bg-blue-950/40');
-          else row.classList.remove('bg-blue-50/70', 'dark:bg-blue-950/40');
+          if (checked) row.classList.add('bg-emerald-50/70', 'dark:bg-emerald-950/40');
+          else row.classList.remove('bg-emerald-50/70', 'dark:bg-emerald-950/40');
         }
       });
       updateBatchUI();
@@ -1183,8 +1183,8 @@
         cb.checked = shouldCheck;
         const row = document.getElementById('row' + id);
         if (row) {
-          if (shouldCheck) row.classList.add('bg-blue-50/70', 'dark:bg-blue-950/40');
-          else row.classList.remove('bg-blue-50/70', 'dark:bg-blue-950/40');
+          if (shouldCheck) row.classList.add('bg-emerald-50/70', 'dark:bg-emerald-950/40');
+          else row.classList.remove('bg-emerald-50/70', 'dark:bg-emerald-950/40');
         }
       });
 
@@ -1205,8 +1205,8 @@
     function handleRowCheckboxChange(id, checked) {
       const row = document.getElementById('row' + id);
       if (row) {
-        if (checked) row.classList.add('bg-blue-50/70', 'dark:bg-blue-950/40');
-        else row.classList.remove('bg-blue-50/70', 'dark:bg-blue-950/40');
+        if (checked) row.classList.add('bg-emerald-50/70', 'dark:bg-emerald-950/40');
+        else row.classList.remove('bg-emerald-50/70', 'dark:bg-emerald-950/40');
       }
 
       const cbs = document.querySelectorAll('.email-row-cb');
@@ -1363,7 +1363,7 @@
       const bizD = document.getElementById('mBizDomain');
 
       if (cycle === 'anual') {
-        btnA.className = "px-4 py-1.5 rounded-full text-xs font-bold bg-[#1a73e8] text-white shadow-xs transition cursor-pointer flex items-center gap-1.5";
+        btnA.className = "px-4 py-1.5 rounded-full text-xs font-bold bg-[#059669] text-white shadow-xs transition cursor-pointer flex items-center gap-1.5";
         btnM.className = "px-4 py-1.5 rounded-full text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 transition cursor-pointer";
         proP.innerText = 'R$ 34,90';
         proPer.innerText = '/ mês (anual: R$ 418,80)';
@@ -1373,7 +1373,7 @@
         bizB.classList.remove('hidden');
         bizD.classList.remove('hidden');
       } else {
-        btnM.className = "px-4 py-1.5 rounded-full text-xs font-bold bg-[#1a73e8] text-white shadow-xs transition cursor-pointer";
+        btnM.className = "px-4 py-1.5 rounded-full text-xs font-bold bg-[#059669] text-white shadow-xs transition cursor-pointer";
         btnA.className = "px-4 py-1.5 rounded-full text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 transition cursor-pointer flex items-center gap-1.5";
         proP.innerText = 'R$ 49,90';
         proPer.innerText = '/ mês';

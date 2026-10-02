@@ -8,23 +8,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>COON Infer</title>
+  <title>Base14</title>
   <meta name="description" content="Avaliação de imóveis por inferência estatística conforme a ABNT NBR 14.653-2.">
-  <link rel="stylesheet" href="css/estilo.css">
+  <link rel="stylesheet" href="css/estilo.css?v=coonbrand2">
+  <link rel="stylesheet" href="/css/coon-wordmark.css">
 </head>
 <body>
   <header class="topo">
-    <div class="marca"><span class="logo">COON</span> Infer</div>
+    <a href="/studio" class="marca" title="Studio Coon"><span class="gemini-wordmark">coon<span class="coon-dot-animated">.</span></span> <span class="marca-produto">Base14</span></a>
     <div class="projeto-atual" id="tituloProjeto">Projeto sem nome</div>
     <nav class="arquivo" aria-label="Arquivo">
+      <div class="arquivo-grupo">
+        <button data-acao="novo" class="leve">Novo</button>
+        <button data-acao="meusProjetos" class="leve">Meus projetos</button>
+      </div>
+      <div class="arquivo-grupo arquivo-menu-wrap">
+        <button class="leve" id="btnMaisArquivo" aria-haspopup="true" aria-expanded="false" title="Exportar e abrir arquivo">Arquivo ⌄</button>
+        <div class="arquivo-menu" id="menuMaisArquivo" hidden>
+          <button class="leve" data-acao="exportarExcel" title="Todas as planilhas do trabalho em .xlsx">Exportar Excel</button>
+          <button class="leve" data-acao="exportarPDF" title="Relatório completo com gráficos; na impressão escolha Salvar como PDF">Exportar PDF</button>
+          <button class="leve" data-acao="baixarProjeto" title="Baixar o projeto em arquivo .json">Baixar</button>
+          <label class="botao leve" title="Abrir um projeto .json do computador">Abrir arquivo<input type="file" id="arqProjeto" accept=".json" hidden></label>
+        </div>
+      </div>
       <button class="botao-laudo" data-aba="laudo" title="Gerar o laudo de avaliação completo em Word ou PDF">Laudo completo</button>
-      <button data-acao="novo">Novo</button>
-      <button data-acao="meusProjetos">Meus projetos</button>
       <button class="principal" data-acao="salvarNuvem">Salvar</button>
-      <button class="leve" data-acao="exportarExcel" title="Todas as planilhas do trabalho em .xlsx">Exportar Excel</button>
-      <button class="leve" data-acao="exportarPDF" title="Relatório completo com gráficos; na impressão escolha Salvar como PDF">Exportar PDF</button>
-      <button class="leve" data-acao="baixarProjeto" title="Baixar o projeto em arquivo .json">Baixar</button>
-      <label class="botao leve" title="Abrir um projeto .json do computador">Abrir arquivo<input type="file" id="arqProjeto" accept=".json" hidden></label>
     </nav>
     <span id="statusNuvem" class="status off">conectando…</span>
   </header>
@@ -61,6 +69,7 @@
   <script src="js/nuvem.js"></script>
   <script src="js/interface.js"></script>
   <script src="js/teste-app.js"></script>
+  <script src="js/menu-arquivo.js"></script>
 <div id="avisoEngenheiro" style="position:fixed;bottom:0;left:0;right:0;background:#fef3c7;border-top:1px solid #fde68a;padding:8px 16px;font-size:12px;color:#92400e;display:flex;align-items:center;gap:8px;z-index:1000;cursor:pointer" onclick="this.style.display='none'" title="Clique para fechar">
   <svg style="width:14px;height:14px;flex:none;stroke:#d97706" fill="none" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0 3.75h.008M12 3l9.5 16.5H2.5z"/></svg>
   <span><strong>Aviso técnico:</strong> Este sistema automatiza cálculos e gera documentos como ferramenta de apoio. O engenheiro ou perito responsável deve revisar todos os resultados antes de assinar e protocolar. O julgamento técnico e a responsabilidade são exclusivos do profissional habilitado.</span>

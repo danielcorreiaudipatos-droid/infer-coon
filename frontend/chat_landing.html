@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="antialiased">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Coon Chat | Atendimento Imobiliário Inteligente</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+    if (localStorage.getItem('coon_theme') === 'dark' || (!('coon_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .dark .glass-nav {
+      background: rgba(15, 23, 42, 0.75);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .hero-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(255,255,255,0) 70%);
+      top: -100px;
+      left: -100px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .dark .hero-glow {
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, rgba(15,23,42,0) 70%);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 selection:bg-blue-500/30 font-sans min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-2 cursor-pointer" onclick="window.location.href='/'">
+          <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
+            <i data-lucide="message-circle" class="w-5 h-5 text-white"></i>
+          </div>
+          <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">coon<span class="text-blue-500">.</span></span>
+        </div>
+        <div class="hidden md:flex space-x-8 items-center">
+          <a href="/infer" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-500 transition">Inferência</a>
+          <a href="/growth" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-500 transition">Growth</a>
+          <a href="/chat" class="text-sm font-medium text-blue-600 dark:text-blue-400 border-b-2 border-blue-500 pb-1 transition">Chat</a>
+          <a href="/studio" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-500 transition">Studio</a>
+          
+          <div class="h-4 w-px bg-slate-200 dark:bg-slate-700"></div>
+          
+          <button onclick="toggleCoonTheme()" id="themeIconSlot" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300"></button>
+          <a href="/login" class="text-sm font-semibold bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-2 rounded-full shadow-lg shadow-slate-900/20 hover:scale-105 transition-transform">Entrar</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <main class="flex-grow pt-28 pb-16 relative overflow-hidden flex flex-col justify-center">
+    <div class="hero-glow"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
+      
+      <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-100/50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-400 text-xs font-semibold mx-auto mb-6">
+        <span class="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
+        <span>Atendimento 24/7 Ativado</span>
+      </div>
+      
+      <h1 class="text-5xl lg:text-7xl font-extrabold tracking-tight leading-tight text-slate-900 dark:text-white max-w-4xl mx-auto">
+        Nunca mais perca um lead no <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-600">WhatsApp</span>.
+      </h1>
+      
+      <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mt-6 leading-relaxed">
+        O Coon Chat integra CRM Imobiliário e Chatbots de IA para qualificar seus clientes automaticamente, agendar visitas e escalar sua equipe de vendas.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row justify-center gap-4 pt-8">
+        <a href="#" class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-full transition-all shadow-xl shadow-blue-500/20 hover:-translate-y-0.5">
+          Testar Grátis
+        </a>
+        <a href="#" class="flex items-center justify-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-semibold px-8 py-3.5 rounded-full border border-slate-200 dark:border-slate-700 transition-all">
+          <i data-lucide="play-circle" class="w-4 h-4"></i> Como funciona
+        </a>
+      </div>
+
+      <!-- IMAGE PREVIEW -->
+      <div class="mt-16 mx-auto max-w-4xl relative">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-50 dark:from-slate-900 to-transparent z-10 bottom-0 h-32 mt-auto"></div>
+        <div class="bg-white dark:bg-slate-800 rounded-t-3xl border border-slate-200 dark:border-slate-700 shadow-2xl p-2 relative z-0 overflow-hidden">
+           <div class="bg-slate-100 dark:bg-slate-900 rounded-2xl h-80 flex flex-col justify-end p-6 relative">
+              <!-- Chat bubbles mockup -->
+              <div class="w-full max-w-md mx-auto space-y-4 relative z-0 pb-10">
+                <div class="flex justify-end">
+                  <div class="bg-blue-600 text-white px-4 py-2 rounded-2xl rounded-tr-sm text-sm">Gostaria de ver imóveis de 3 quartos no Centro.</div>
+                </div>
+                <div class="flex justify-start">
+                  <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 px-4 py-3 rounded-2xl rounded-tl-sm text-sm shadow-sm flex items-start gap-2">
+                    <i data-lucide="bot" class="w-5 h-5 text-blue-500 mt-0.5"></i>
+                    <div>
+                      Olá! Excelente escolha. Encontrei 4 opções incríveis de 3 quartos no Centro. Podemos agendar uma visita para amanhã às 14h?
+                    </div>
+                  </div>
+                </div>
+              </div>
+           </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-12 mt-auto relative z-20">
+    <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 dark:text-slate-400 text-sm">
+      © 2026 Coon Participações. Coon Chat Integrado ao WhatsApp Oficial.
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+    function updateThemeIcons() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const slot = document.getElementById('themeIconSlot');
+      if (!slot) return;
+      slot.innerHTML = isDark ? `<i data-lucide="sun" class="w-5 h-5 text-amber-300"></i>` : `<i data-lucide="moon" class="w-5 h-5 text-slate-600"></i>`;
+      lucide.createIcons();
+    }
+    window.toggleCoonTheme = function() {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('coon_theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      updateThemeIcons();
+    };
+    updateThemeIcons();
+  </script>
+</body>
+</html>

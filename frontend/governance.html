@@ -464,7 +464,7 @@
             <textarea 
               id="boardRoundtableInput" 
               rows="3" 
-              placeholder="Digite aqui sua ordem ou pauta de reunião para TODOS os diretores e a secretária (ex: 'Ordem a todos: avaliar o plano de lançamento do cob.coon e apresentar status')..."
+              placeholder="Digite aqui sua ordem ou pauta de reunião para TODOS os diretores e a secretária (ex: 'Ordem a todos: avaliar o plano de lançamento do Oncob e apresentar status')..."
               class="w-full bg-slate-950 border border-slate-700/80 rounded-2xl p-4 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 shadow-inner"
               onkeydown="if(event.key === 'Enter' && (event.ctrlKey || event.metaKey)) handleBoardRoundtableSubmit(event)"
             ></textarea>
@@ -1923,7 +1923,7 @@ ${cfo.executive_statement}
           <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
             <span class="text-[10px] text-slate-400 block font-mono">Queima Média Diária</span>
             <div class="text-lg font-black text-amber-400 font-mono">${summary.total_daily_burn_formatted || 'R$ 0,00/dia'}</div>
-            <span class="text-[10px] text-slate-400 font-mono">Consumo infer.coon + ad.coon</span>
+            <span class="text-[10px] text-slate-400 font-mono">Consumo Base14 + Onads</span>
           </div>
           <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
             <span class="text-[10px] text-slate-400 block font-mono">Autonomia da Operação</span>
@@ -2400,7 +2400,6 @@ ${cfo.executive_statement}
       setInterval(loadOnda1Metrics, 15000);
     });
   </script>
-  <script src="/static/coon-bot.js"></script>
   <script src="/coon-mobile-install.js"></script>
 </body>
 </html>

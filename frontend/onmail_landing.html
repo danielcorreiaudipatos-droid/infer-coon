@@ -8,12 +8,17 @@
 <script src="js/tema.js"></script>
 <link rel="stylesheet" href="css/onmail.css">
 <link rel="stylesheet" href="css/landing.css">
+<link rel="stylesheet" href="/css/coon-wordmark.css">
 </head>
 <body>
 
 <header class="topo">
   <div class="faixa topo-in">
-    <a class="wordmark" href="/onmail/">onmail<i>.</i><small>COON</small></a>
+    <span style="display:inline-flex;align-items:baseline;gap:8px">
+      <a class="wordmark gemini-wordmark" href="/" title="Ir para a inicial COON">coon<i class="coon-dot-animated">.</i></a>
+      <span style="color:var(--linha-forte);font-weight:300">/</span>
+      <a class="wordmark" href="/onmail/">onmail<i>.</i></a>
+    </span>
     <nav class="topo-nav" aria-label="Seções">
       <a href="#vantagens">Vantagens</a>
       <a href="#agenda">Agenda</a>
@@ -23,6 +28,7 @@
     </nav>
     <div class="topo-acoes">
       <button class="bt bt-icone" type="button" data-tema-alternar title="Tema claro ou escuro" aria-label="Tema claro ou escuro"><svg class="icone" aria-hidden="true"><use href="img/icones.svg#tema"></use></svg></button>
+      <a class="bt bt-leve" href="/studio" title="Studio Coon">Studio</a>
       <a class="bt bt-leve" href="/onmail/entrar">Entrar</a>
       <a class="bt bt-marca" href="/onmail/entrar#cadastro">Criar conta</a>
     </div>

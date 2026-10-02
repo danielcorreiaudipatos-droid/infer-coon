@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>growth.coon | Piloto Automático de Vendas & Marketing Local com IA</title>
+  <title>Ongrowth | Piloto Automático de Vendas & Marketing Local com IA</title>
   
-  <meta name="description" content="growth.coon: Atenda leads em 5 segundos no WhatsApp 24/7, multiplique avaliações 5 estrelas no Google Maps e dobre suas vendas locais com Inteligência Artificial. COON Soluções Tecnológicas.">
+  <meta name="description" content="Ongrowth: Atenda leads em 5 segundos no WhatsApp 24/7, multiplique avaliações 5 estrelas no Google Maps e dobre suas vendas locais com Inteligência Artificial. COON Soluções Tecnológicas.">
   <meta name="theme-color" content="#ffffff">
 
   <!-- Favicon -->
@@ -93,6 +93,7 @@
       border: 1px solid rgba(226, 232, 240, 0.8);
     }
   </style>
+  <link rel="stylesheet" href="/css/coon-wordmark.css">
 </head>
 <body class="min-h-screen flex flex-col justify-between text-slate-800 selection:bg-indigo-600 selection:text-white">
 
@@ -102,18 +103,16 @@
   <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200/80">
     <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
       
-      <!-- Marca Oficial com animação suave de transição de cores Big Tech -->
-      <a href="/" class="flex items-center space-x-2.5 group">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition">
-          <i data-lucide="zap" class="w-5 h-5"></i>
-        </div>
-        <div class="flex items-baseline space-x-1">
-          <span class="text-xl font-black tracking-tight text-slate-900">growth<span class="gemini-wordmark">.coon</span></span>
-          <span class="text-[9px] font-mono font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full border border-indigo-200 hidden sm:inline-block">
-            Growth Engine
+      <!-- Marca Oficial (lockup padrão COON) -->
+      <div class="flex items-center space-x-2.5">
+        <a href="/" class="flex items-baseline group" title="Ir para a inicial COON">
+          <span class="text-2xl font-black tracking-tighter gemini-wordmark group-hover:opacity-90 transition">
+            coon<span class="coon-dot-animated text-emerald-500">.</span>
           </span>
-        </div>
-      </a>
+        </a>
+        <span class="text-slate-300 text-lg font-light select-none">/</span>
+        <span class="text-xl font-bold tracking-tight text-slate-900">Ongrowth</span>
+      </div>
 
       <!-- Menu de Navegação -->
       <nav class="hidden md:flex items-center space-x-6 text-xs font-semibold text-slate-600">
@@ -127,13 +126,14 @@
       <!-- Ações Direitas -->
       <div class="flex items-center space-x-3">
         <!-- Botão Baixar para o Celular -->
-        <button onclick="openCoonInstallModal('growth.coon', 'https://coon.com.br/growth', '🚀')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer text-xs font-semibold text-slate-700 shadow-2xs" title="Baixar growth.coon para Celular (PWA & APK)">
+        <button onclick="openCoonInstallModal('Ongrowth', 'https://coon.com.br/growth', '🚀')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer text-xs font-semibold text-slate-700 shadow-2xs" title="Baixar Ongrowth para Celular (PWA & APK)">
           <span class="text-sm">📱</span>
           <span class="hidden sm:inline">Baixar no Celular</span>
         </button>
 
-        <a href="/studio" class="text-xs font-semibold text-slate-500 hover:text-slate-900 transition hidden sm:inline-block">
-          Studio COON
+        <a href="/studio" class="text-xs font-semibold text-slate-500 hover:text-slate-900 transition hidden sm:inline-flex items-center space-x-1">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Studio</span>
         </a>
         <a 
           href="#precos" 
@@ -194,6 +194,22 @@
         </a>
       </div>
 
+      <!-- DIFERENCIAIS EXPLÍCITOS -->
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-2xs text-xs font-semibold text-slate-700">
+          <i data-lucide="timer" class="w-4 h-4 text-indigo-600"></i>
+          <span>Responde em 5 segundos, até de madrugada</span>
+        </div>
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-2xs text-xs font-semibold text-slate-700">
+          <i data-lucide="star" class="w-4 h-4 text-indigo-600"></i>
+          <span>Mais avaliações 5 estrelas no Google</span>
+        </div>
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-2xs text-xs font-semibold text-slate-700">
+          <i data-lucide="refresh-cw" class="w-4 h-4 text-indigo-600"></i>
+          <span>Chama de volta quem sumiu</span>
+        </div>
+      </div>
+
       <!-- Selos de Credibilidade -->
       <div class="mt-10 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 font-medium">
         <div class="flex items-center space-x-1.5">
@@ -220,7 +236,7 @@
         
         <div class="text-center mb-8">
           <h2 class="text-2xl font-bold text-slate-900">Por que donos de empresas estão demitindo agências tradicionais?</h2>
-          <p class="text-xs sm:text-sm text-slate-500 mt-1">A conta simples que prova o retorno instantâneo do growth.coon</p>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">A conta simples que prova o retorno instantâneo do Ongrowth</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -256,7 +272,7 @@
             </div>
           </div>
 
-          <!-- Lado B: O Jeito growth.coon (IA 24/7 de Alta Performance) -->
+          <!-- Lado B: O Jeito Ongrowth (IA 24/7 de Alta Performance) -->
           <div class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-200 flex flex-col justify-between relative overflow-hidden">
             <div class="absolute top-3 right-3 bg-emerald-600 text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
               Alta Lucratividade
@@ -264,7 +280,7 @@
             <div>
               <div class="flex items-center space-x-2 text-emerald-800 font-bold text-sm mb-3">
                 <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"></i>
-                <span>Com growth.coon (Piloto Automático)</span>
+                <span>Com Ongrowth (Piloto Automático)</span>
               </div>
               <ul class="space-y-3 text-xs text-slate-700">
                 <li class="flex items-start space-x-2">
@@ -304,7 +320,7 @@
       <div class="text-center mb-10">
         <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Demonstração Interativa</span>
         <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
-          Veja como o growth.coon atende seus clientes
+          Veja como o Ongrowth atende seus clientes
         </h2>
         <p class="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto mt-2">
           Clique nas mensagens abaixo para simular o comportamento do seu atendente IA no WhatsApp em tempo real.
@@ -322,7 +338,7 @@
                 AI
               </div>
               <div>
-                <h4 class="text-xs font-bold leading-tight">Atendente IA • growth.coon</h4>
+                <h4 class="text-xs font-bold leading-tight">Atendente IA • Ongrowth</h4>
                 <p class="text-[10px] text-emerald-200 flex items-center space-x-1">
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-300"></span>
                   <span>Online agora (tempo de resposta: 3s)</span>
@@ -617,7 +633,7 @@
             </p>
           </div>
           <div class="sm:text-right shrink-0">
-            <span class="text-[11px] text-slate-500 block">Investimento no growth.coon:</span>
+            <span class="text-[11px] text-slate-500 block">Investimento no Ongrowth:</span>
             <span class="text-sm font-bold text-slate-900 block">Apenas R$ 197 / mês</span>
             <span class="inline-block mt-1 text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
               Retorno de 17x
@@ -789,7 +805,7 @@
             <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
           </summary>
           <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-            Não! O growth.coon opera 100% na nuvem de alta segurança da COON. Mesmo com seu computador desligado ou sem bateria no celular, o atendente inteligente responde instantaneamente.
+            Não! O Ongrowth opera 100% na nuvem de alta segurança da COON. Mesmo com seu computador desligado ou sem bateria no celular, o atendente inteligente responde instantaneamente.
           </p>
         </details>
 
@@ -836,7 +852,7 @@
     <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 max-w-md w-full shadow-2xl animate-in fade-in zoom-in-95 space-y-4">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div>
-          <h3 class="text-sm font-bold text-slate-900">Ativação do growth.coon</h3>
+          <h3 class="text-sm font-bold text-slate-900">Ativação do Ongrowth</h3>
           <p id="checkoutPlanSubtitle" class="text-xs text-indigo-600 font-semibold">Plano Pro • R$ 89,90/mês</p>
         </div>
         <button onclick="closeCheckout()" class="text-slate-400 hover:text-slate-700 cursor-pointer">
@@ -1078,7 +1094,7 @@
           alert("Não foi possível gerar no momento. Verifique a conexão com o servidor.");
         }
       } catch (err) {
-        alert("Erro ao conectar à API do growth.coon.");
+        alert("Erro ao conectar à API do Ongrowth.");
       } finally {
         btn.disabled = false;
         btn.innerHTML = origHtml;

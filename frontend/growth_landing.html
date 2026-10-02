@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="antialiased">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Coon Growth | Reputação Imobiliária Premium</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+    if (localStorage.getItem('coon_theme') === 'dark' || (!('coon_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .dark .glass-nav {
+      background: rgba(15, 23, 42, 0.75);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .hero-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(5, 150, 105, 0.15) 0%, rgba(255,255,255,0) 70%);
+      top: -100px;
+      right: -100px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .dark .hero-glow {
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, rgba(15,23,42,0) 70%);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 selection:bg-emerald-500/30 font-sans min-h-screen flex flex-col">
+
+  <!-- NAVBAR UNIFICADA -->
+  <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-2 cursor-pointer" onclick="window.location.href='/'">
+          <div class="w-8 h-8 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-500/20">
+            <i data-lucide="trending-up" class="w-5 h-5 text-white"></i>
+          </div>
+          <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">coon<span class="text-emerald-500">.</span></span>
+        </div>
+        <div class="hidden md:flex space-x-8 items-center">
+          <a href="/infer" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-emerald-500 dark:hover:text-emerald-400 transition">Inferência</a>
+          <a href="/growth" class="text-sm font-medium text-emerald-600 dark:text-emerald-400 border-b-2 border-emerald-500 pb-1 transition">Growth</a>
+          <a href="/chat" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-emerald-500 transition">Chat</a>
+          <a href="/studio" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-emerald-500 transition">Studio</a>
+          
+          <div class="h-4 w-px bg-slate-200 dark:bg-slate-700"></div>
+          
+          <button onclick="toggleCoonTheme()" id="themeIconSlot" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300">
+          </button>
+          <a href="/login" class="text-sm font-semibold bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-2 rounded-full shadow-lg shadow-slate-900/20 hover:scale-105 transition-transform">
+            Entrar
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <main class="flex-grow pt-28 pb-16 relative overflow-hidden flex flex-col justify-center">
+    <div class="hero-glow"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        
+        <div class="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-100/50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
+            <span class="flex h-2 w-2 rounded-full bg-emerald-500"></span>
+            <span>Reputação Imobiliária com IA</span>
+          </div>
+          
+          <h1 class="text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-slate-900 dark:text-white">
+            Escale sua <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-blue-600">reputação</span> e venda mais.
+          </h1>
+          
+          <p class="text-lg text-slate-600 dark:text-slate-400 max-w-xl leading-relaxed">
+            Gestão inteligente de avaliações no Google, portais imobiliários e redes sociais. Respostas automáticas com IA, geração de conteúdo e dashboard unificado.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 pt-4">
+            <a href="#planos" class="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-8 py-3.5 rounded-full transition-all shadow-xl shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:-translate-y-0.5">
+              Começar Agora
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+            <a href="#como-funciona" class="flex items-center justify-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-semibold px-8 py-3.5 rounded-full border border-slate-200 dark:border-slate-700 transition-all">
+              Ver Demonstração
+            </a>
+          </div>
+          
+          <div class="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400 pt-4">
+            <div class="flex -space-x-2">
+              <img src="https://i.pravatar.cc/100?img=1" class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900">
+              <img src="https://i.pravatar.cc/100?img=2" class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900">
+              <img src="https://i.pravatar.cc/100?img=3" class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900">
+            </div>
+            <p>Usado por <strong>+500</strong> corretores e imobiliárias.</p>
+          </div>
+        </div>
+
+        <!-- DASHBOARD PREVIEW / GLASSMORPHISM CARD -->
+        <div class="relative animate-in fade-in slide-in-from-right-8 duration-700 delay-150">
+          <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 to-blue-500/10 rounded-3xl blur-2xl transform rotate-3"></div>
+          <div class="relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-6 border-b border-slate-100 dark:border-slate-700 pb-4">
+              <h3 class="font-bold text-slate-800 dark:text-slate-100">Painel de Reputação</h3>
+              <span class="text-xs bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 px-2 py-1 rounded-md font-medium">Tempo Real</span>
+            </div>
+            
+            <div class="space-y-4">
+              <!-- Review 1 -->
+              <div class="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-700">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <div class="flex text-amber-400 mb-1">
+                      <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                      <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                      <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                      <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                      <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200">"Excelente atendimento na locação."</p>
+                  </div>
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="w-5 h-5" alt="Google">
+                </div>
+                <div class="mt-3 flex gap-2">
+                  <span class="text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded border border-emerald-100 dark:border-emerald-800/50">✅ Respondido por IA</span>
+                </div>
+              </div>
+              
+              <!-- Stats -->
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-700">
+                  <p class="text-xs text-slate-500 dark:text-slate-400">Score Global</p>
+                  <p class="text-2xl font-bold text-slate-800 dark:text-slate-100">4.8</p>
+                </div>
+                <div class="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-700">
+                  <p class="text-xs text-slate-500 dark:text-slate-400">Novos Leads</p>
+                  <p class="text-2xl font-bold text-slate-800 dark:text-slate-100">+34%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- FEATURES -->
+  <section id="como-funciona" class="py-20 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Tudo que você precisa para crescer</h2>
+        <p class="mt-4 text-slate-600 dark:text-slate-400">Automatize sua presença digital e foque no que importa: fechar negócios.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
+          <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4">
+            <i data-lucide="message-square" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Respostas com IA</h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm">Responda reviews do Google Meu Negócio em segundos usando nossa IA treinada para o mercado imobiliário.</p>
+        </div>
+        
+        <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-4">
+            <i data-lucide="bar-chart-2" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Dashboard Unificado</h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm">Acompanhe sua reputação no Google, Viva Real e Zap Imóveis em uma única tela de forma fácil.</p>
+        </div>
+        
+        <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
+          <div class="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-4">
+            <i data-lucide="instagram" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Geração de Conteúdo</h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm">Crie legendas, roteiros de vídeos para imóveis e posts para redes sociais com 1 clique.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-12 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-lg text-slate-900 dark:text-white">coon<span class="text-emerald-500">.</span></span>
+      </div>
+      <p class="text-slate-500 dark:text-slate-400 text-sm">© 2026 Coon Participações. Todos os direitos reservados.</p>
+      <div class="flex space-x-4">
+        <a href="#" class="text-slate-400 hover:text-emerald-500 transition"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+        <a href="#" class="text-slate-400 hover:text-emerald-500 transition"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+    function updateThemeIcons() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const slot = document.getElementById('themeIconSlot');
+      if (!slot) return;
+      if (isDark) {
+        slot.innerHTML = `<i data-lucide="sun" class="w-5 h-5 text-amber-300 hover:rotate-90 transition duration-300"></i>`;
+      } else {
+        slot.innerHTML = `<i data-lucide="moon" class="w-5 h-5 text-slate-600 hover:-rotate-12 transition duration-300"></i>`;
+      }
+      lucide.createIcons();
+    }
+    window.toggleCoonTheme = function() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('coon_theme', isDark ? 'dark' : 'light');
+      updateThemeIcons();
+    };
+    updateThemeIcons();
+  </script>
+</body>
+</html>

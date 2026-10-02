@@ -5,7 +5,7 @@
 
 :root {
   --fundo: #f8fafc; --cartao: #ffffff; --texto: #0f172a; --suave: #64748b; --linha: #e2e8f0;
-  --marca: #1d4ed8; --marca-forte: #1e40af; --marca-fundo: #eff6ff;
+  --marca: #059669; --marca-forte: #047857; --marca-fundo: #ecfdf5;
   --ok: #059669; --ok-fundo: #ecfdf5; --atencao: #d97706; --atencao-fundo: #fffbeb;
   --fraco: #ea580c; --ruim: #dc2626; --ruim-fundo: #fef2f2; --info-fundo: #f1f5f9;
   --banco: #eff6ff;
@@ -21,7 +21,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --fundo: #0b0f19; --cartao: #131929; --texto: #f1f5f9; --suave: #94a3b8; --linha: #1e293b;
-    --marca: #60a5fa; --marca-forte: #93c5fd; --marca-fundo: #172554;
+    --marca: #34d399; --marca-forte: #6ee7b7; --marca-fundo: #064e3b;
     --ok: #34d399; --ok-fundo: #064e3b; --atencao: #fbbf24; --atencao-fundo: #451a03;
     --fraco: #fb923c; --ruim: #f87171; --ruim-fundo: #450a0a; --info-fundo: #1e293b;
     --banco: #172554;
@@ -63,8 +63,27 @@ code { background: var(--info-fundo); padding: 1px 5px; border-radius: 4px; font
   position: sticky; top: 0; z-index: 10;
 }
 
-.marca { font-weight: 700; font-size: 15px; letter-spacing: -.01em; }
+.marca {
+  font-weight: 700; font-size: 15px; letter-spacing: -.01em;
+  color: var(--texto); text-decoration: none; display: inline-flex; align-items: baseline; gap: 4px;
+}
+.marca:hover { opacity: .85; }
 .logo { color: var(--marca); font-weight: 800; }
+.marca-produto { font-weight: 800; color: var(--texto); }
+
+.arquivo-grupo { display: flex; align-items: center; gap: 5px; position: relative; }
+.arquivo-grupo + .arquivo-grupo::before {
+  content: ''; width: 1px; height: 18px; background: var(--linha); margin: 0 2px;
+}
+.arquivo-menu-wrap { position: relative; }
+.arquivo-menu {
+  position: absolute; top: calc(100% + 6px); left: 0; z-index: 20;
+  flex-direction: column; gap: 4px;
+  background: var(--cartao); border: 1px solid var(--linha); border-radius: 10px;
+  box-shadow: var(--sombra-md); padding: 6px; min-width: 190px;
+}
+.arquivo-menu:not([hidden]) { display: flex; }
+.arquivo-menu button, .arquivo-menu label { width: 100%; justify-content: flex-start; }
 
 .projeto-atual {
   flex: 1; color: var(--suave); white-space: nowrap;

@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>check.coon | Laudo de Vistoria de Imóveis no Celular</title>
+  <title>Oncheck | Laudo de Vistoria de Imóveis no Celular</title>
   
-  <meta name="description" content="check.coon: Vistorias imobiliárias 100% no celular. Registro de fotos ilimitadas, notas por áudio com IA e assinatura digital na tela com validade jurídica. COON.">
+  <meta name="description" content="Oncheck: Vistorias imobiliárias 100% no celular. Registro de fotos ilimitadas, notas por áudio com IA e assinatura digital na tela com validade jurídica. COON.">
   <meta name="theme-color" content="#0d9488">
 
   <!-- Favicon -->
@@ -72,6 +72,7 @@
       touch-action: none;
     }
   </style>
+  <link rel="stylesheet" href="/css/coon-wordmark.css">
 </head>
 <body class="min-h-screen flex flex-col justify-between text-slate-800 selection:bg-teal-600 selection:text-white pb-20 sm:pb-0">
 
@@ -81,21 +82,21 @@
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3">
     <div class="max-w-4xl mx-auto flex items-center justify-between">
       
-      <!-- Marca check.coon -->
-      <a href="/" class="flex items-center space-x-2 group">
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-600 flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition">
-          <i data-lucide="clipboard-check" class="w-4 h-4"></i>
-        </div>
-        <div>
-          <span class="text-base font-extrabold tracking-tight text-slate-900">check<span class="gemini-wordmark">.coon</span></span>
-          <span class="text-[9px] bg-teal-50 text-teal-700 px-1.5 py-0.2 rounded font-mono font-bold ml-1 border border-teal-200">Mobile PWA</span>
-        </div>
-      </a>
+      <!-- Marca (lockup padrão COON) -->
+      <div class="flex items-center space-x-2">
+        <a href="/" class="flex items-baseline group" title="Ir para a inicial COON">
+          <span class="text-xl font-black tracking-tighter gemini-wordmark group-hover:opacity-90 transition">
+            coon<span class="coon-dot-animated text-emerald-500">.</span>
+          </span>
+        </a>
+        <span class="text-slate-300 text-base font-light select-none">/</span>
+        <span class="text-base font-bold tracking-tight text-slate-900">Oncheck</span>
+      </div>
 
       <!-- Ações Rápidas -->
       <div class="flex items-center space-x-2">
         <!-- Botão Baixar para o Celular -->
-        <button onclick="openCoonInstallModal('check.coon', 'https://coon.com.br/check', '📋')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full border border-teal-200 bg-white hover:bg-teal-50 transition cursor-pointer text-xs font-semibold text-slate-700 shadow-2xs" title="Baixar check.coon para Celular (PWA & APK)">
+        <button onclick="openCoonInstallModal('Oncheck', 'https://coon.com.br/check', '📋')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full border border-teal-200 bg-white hover:bg-teal-50 transition cursor-pointer text-xs font-semibold text-slate-700 shadow-2xs" title="Baixar Oncheck para Celular (PWA & APK)">
           <span class="text-sm">📱</span>
           <span class="hidden sm:inline">Baixar no Celular</span>
         </button>
@@ -124,7 +125,7 @@
   <!-- ======================================================== -->
   <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-1 space-y-6">
 
-    <!-- Banner Pro check.coon -->
+    <!-- Banner Pro Oncheck -->
     <div class="bg-gradient-to-r from-slate-900 to-teal-950 text-white rounded-2xl p-4 sm:p-5 border border-teal-800/40 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div class="space-y-1">
         <div class="flex items-center space-x-2">
@@ -137,6 +138,22 @@
         <i data-lucide="zap" class="w-4 h-4"></i>
         <span>Ativar Acesso Pro • R$ 99/mês</span>
       </button>
+    </div>
+
+    <!-- DIFERENCIAIS EXPLÍCITOS -->
+    <div class="flex flex-wrap items-center gap-2.5">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs text-[11px] font-semibold text-slate-700">
+        <i data-lucide="mic" class="w-3.5 h-3.5 text-teal-600"></i>
+        <span>Anotação por voz com transcrição técnica</span>
+      </div>
+      <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs text-[11px] font-semibold text-slate-700">
+        <i data-lucide="pen-tool" class="w-3.5 h-3.5 text-teal-600"></i>
+        <span>Assinatura digital com validade jurídica</span>
+      </div>
+      <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs text-[11px] font-semibold text-slate-700">
+        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-teal-600"></i>
+        <span>Geolocalização e carimbo de tempo à prova de contestação</span>
+      </div>
     </div>
 
     <!-- Card de Identificação da Vistoria -->
@@ -240,7 +257,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <span class="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
             <i data-lucide="camera" class="w-4 h-4 text-teal-600"></i>
-            <span>Fotos do Cômodo (com Carimbo Data/Hora)</span>
+            <span>Fotos do Cômodo (com Oncheck Data/Hora)</span>
           </span>
           <div class="flex items-center space-x-2">
             <!-- Botão Tirar Foto -->
@@ -739,7 +756,7 @@
     }
 
     async function submitCheckCheckout() {
-      const name = document.getElementById("chkCheckName").value.trim() || "Cliente check.coon";
+      const name = document.getElementById("chkCheckName").value.trim() || "Cliente Oncheck";
       const email = document.getElementById("chkCheckEmail").value.trim();
       const phone = document.getElementById("chkCheckPhone").value.trim();
 

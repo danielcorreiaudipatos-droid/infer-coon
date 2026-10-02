@@ -1797,14 +1797,14 @@ def serve_portal(host: Optional[str] = Header(None)):
                 with open(fpath, "r", encoding="utf-8") as f:
                     return HTMLResponse(content=f.read())
 
-    portal_file = os.path.join(FRONTEND_DIR, "portal.html")
-    if os.path.exists(portal_file):
-        with open(portal_file, "r", encoding="utf-8") as f:
-            return HTMLResponse(content=f.read())
-    # Fallback para index.html se portal.html não existir
+    # index.html é a fonte única da página inicial (portal.html é mantido só como alias/cópia)
     index_file = os.path.join(FRONTEND_DIR, "index.html")
     if os.path.exists(index_file):
         with open(index_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    portal_file = os.path.join(FRONTEND_DIR, "portal.html")
+    if os.path.exists(portal_file):
+        with open(portal_file, "r", encoding="utf-8") as f:
             return HTMLResponse(content=f.read())
     return HTMLResponse("<h1>COON Soluções Tecnológicas - Servidor Ativo.</h1>")
 
@@ -1881,6 +1881,104 @@ def serve_cob_app():
     cob_file = os.path.join(FRONTEND_DIR, "cob.html")
     if os.path.exists(cob_file):
         with open(cob_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+@app.get("/onzap", response_class=HTMLResponse)
+def serve_onzap_app():
+    """Página Oficial do onzap - Catálogo Regional & Conversa Direta no WhatsApp."""
+    onzap_file = os.path.join(FRONTEND_DIR, "onzap_landing.html")
+    if os.path.exists(onzap_file):
+        with open(onzap_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+@app.get("/onlove", response_class=HTMLResponse)
+def serve_onlove_app():
+    """Página Oficial do onlove - Paquera & Vitrine Local."""
+    onlove_file = os.path.join(FRONTEND_DIR, "onlove_landing.html")
+    if os.path.exists(onlove_file):
+        with open(onlove_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+# ==============================================================================
+# ONIMOB — MÓDULO 1: CADASTRO (imóveis, proprietários, inquilinos, corretores)
+# ==============================================================================
+import backend.imob_engine as imob_engine
+
+@app.post("/api/onimob/corretores")
+def api_onimob_criar_corretor(dados: imob_engine.CorretorIn):
+    try:
+        return imob_engine.criar_corretor(dados)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/corretores")
+def api_onimob_listar_corretores():
+    return {"corretores": imob_engine.listar_corretores()}
+
+@app.post("/api/onimob/proprietarios")
+def api_onimob_criar_proprietario(dados: imob_engine.ProprietarioIn):
+    try:
+        return imob_engine.criar_proprietario(dados)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/proprietarios")
+def api_onimob_listar_proprietarios():
+    return {"proprietarios": imob_engine.listar_proprietarios()}
+
+@app.post("/api/onimob/inquilinos")
+def api_onimob_criar_inquilino(dados: imob_engine.InquilinoIn):
+    try:
+        return imob_engine.criar_inquilino(dados)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/inquilinos")
+def api_onimob_listar_inquilinos():
+    return {"inquilinos": imob_engine.listar_inquilinos()}
+
+@app.post("/api/onimob/imoveis")
+def api_onimob_criar_imovel(dados: imob_engine.ImovelIn):
+    try:
+        return imob_engine.criar_imovel(dados)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/imoveis")
+def api_onimob_listar_imoveis(cidade: Optional[str] = None, status: Optional[str] = None, finalidade: Optional[str] = None):
+    return {"imoveis": imob_engine.listar_imoveis(cidade=cidade, status=status, finalidade=finalidade)}
+
+@app.get("/api/onimob/imoveis/{imovel_id}")
+def api_onimob_obter_imovel(imovel_id: int):
+    imovel = imob_engine.obter_imovel(imovel_id)
+    if not imovel:
+        raise HTTPException(status_code=404, detail="Imóvel não encontrado.")
+    return imovel
+
+class AtualizarStatusImovelRequest(BaseModel):
+    status: str
+    inquilino_id: Optional[int] = None
+
+@app.patch("/api/onimob/imoveis/{imovel_id}/status")
+def api_onimob_atualizar_status(imovel_id: int, dados: AtualizarStatusImovelRequest):
+    try:
+        return imob_engine.atualizar_status_imovel(imovel_id, dados.status, dados.inquilino_id)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/resumo")
+def api_onimob_resumo():
+    return imob_engine.painel_resumo()
+
+@app.get("/imob/cadastro", response_class=HTMLResponse)
+def serve_onimob_cadastro():
+    """Painel de cadastro do Onimob (Módulo 1): imóveis, proprietários, inquilinos e corretores."""
+    cadastro_file = os.path.join(FRONTEND_DIR, "onimob_cadastro.html")
+    if os.path.exists(cadastro_file):
+        with open(cadastro_file, "r", encoding="utf-8") as f:
             return HTMLResponse(content=f.read())
     return serve_portal()
 
@@ -2845,6 +2943,23 @@ if os.path.exists(frontend_path):
         """Retorna os planos oficiais do OnMail da Coon Participações."""
         from backend.onmail_engine import ONMAIL_PLANS
         return {"success": True, "plans": ONMAIL_PLANS}
+
+    @app.get("/api/onmail/planos")
+    def api_onmail_planos():
+        """Mesmos planos de /api/onmail/plans, no formato que a landing page onmail_landing.html espera."""
+        from backend.onmail_engine import ONMAIL_PLANS
+        planos = {}
+        for pid, p in ONMAIL_PLANS.items():
+            item = {
+                "selo": p.get("badge", ""),
+                "nome": p.get("name", ""),
+                "preco": {"mensal": p.get("price_monthly", 0), "anual": p.get("price_yearly", 0)},
+                "itens": p.get("features", []),
+            }
+            if p.get("discount_promo"):
+                item["promocao"] = {"texto": p["discount_promo"], "validoAte": "2026-10-30"}
+            planos[pid] = item
+        return {"planos": planos}
 
     @app.post("/api/onmail/simulate")
     def api_onmail_simulate(req: dict):

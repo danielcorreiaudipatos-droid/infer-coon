@@ -41,3 +41,14 @@ deploy/*.zip
 .idea/
 .DS_Store
 Thumbs.db
+
+# Bancos SQLite locais (dado de usuário/senha; nunca versionar)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Dados de leads/scraping e scripts experimentais (nunca versionar)
+scratch/
+*.csv
+onzap_import_patos.sql

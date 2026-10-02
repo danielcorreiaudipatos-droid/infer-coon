@@ -1,0 +1,93 @@
+/* Efeito oficial do "coon." — mesma animação da página inicial, reaproveitada em todos os cabeçalhos. */
+@keyframes coonLetterPassage {
+  0% { background-position: 200% 0; }
+  100% { background-position: -50% 0; }
+}
+
+@keyframes coonDotPulse {
+  0%, 100% {
+    color: #10b981;
+    filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.45));
+    transform: scale(1);
+  }
+  50% {
+    color: #06b6d4;
+    filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.7));
+    transform: scale(1.15);
+  }
+}
+
+.gemini-wordmark, .coon-gradient, .coon-bigtech-logo {
+  display: inline-block;
+  background: linear-gradient(
+    115deg,
+    #0f172a 0%,
+    #1e293b 22%,
+    #1d4ed8 35%,
+    #0284c7 43%,
+    #38bdf8 47%,
+    rgba(255, 255, 255, 0.90) 50%,
+    #34d399 53%,
+    #10b981 57%,
+    #059669 65%,
+    #1e293b 78%,
+    #0f172a 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.055em;
+  animation: coonLetterPassage 8s linear infinite;
+  will-change: background-position;
+  transition: transform 0.3s ease;
+}
+
+.gemini-wordmark:hover, .coon-bigtech-logo:hover {
+  transform: scale(1.02);
+}
+
+html.dark .gemini-wordmark, html.dark .coon-gradient, html.dark .coon-bigtech-logo,
+html[data-tema="escuro"] .gemini-wordmark, html[data-tema="escuro"] .coon-gradient, html[data-tema="escuro"] .coon-bigtech-logo {
+  background: linear-gradient(
+    115deg,
+    #f8fafc 0%,
+    #cbd5e1 22%,
+    #93c5fd 35%,
+    #38bdf8 43%,
+    #67e8f9 47%,
+    rgba(255, 255, 255, 0.98) 50%,
+    #6ee7b7 53%,
+    #34d399 57%,
+    #10b981 65%,
+    #94a3b8 78%,
+    #f8fafc 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: coonLetterPassage 8s linear infinite;
+}
+
+/* onmail_landing.html: escuro é o padrão, a menos que data-tema="claro" force o claro */
+@media (prefers-color-scheme: dark) {
+  html:not([data-tema="claro"]) .gemini-wordmark,
+  html:not([data-tema="claro"]) .coon-gradient,
+  html:not([data-tema="claro"]) .coon-bigtech-logo {
+    background: linear-gradient(115deg, #f8fafc 0%, #cbd5e1 22%, #93c5fd 35%, #38bdf8 43%, #67e8f9 47%, rgba(255, 255, 255, 0.98) 50%, #6ee7b7 53%, #34d399 57%, #10b981 65%, #94a3b8 78%, #f8fafc 100%);
+    background-size: 250% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: coonLetterPassage 8s linear infinite;
+  }
+}
+
+.coon-dot-animated {
+  display: inline-block;
+  -webkit-text-fill-color: #10b981;
+  color: #10b981;
+  animation: coonDotPulse 4s ease-in-out infinite alternate;
+  will-change: color, filter, transform;
+}

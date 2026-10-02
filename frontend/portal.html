@@ -195,19 +195,6 @@
         <span>Sobre a Empresa</span>
       </button>
       <button onclick="openContactModal()" class="hover:text-slate-900 dark:hover:text-white transition">Contato</button>
-      
-      <!-- Atendimento Online no WhatsApp (Símbolo Executivo) -->
-      <a href="https://wa.me/5531999999999?text=Ol%C3%A1!%20Sou%20cliente%20Coon%20e%20gostaria%20de%20atendimento." target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition shadow-2xs" title="Atendimento Executivo Coon via WhatsApp">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-        </span>
-        <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-          <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
-        </svg>
-        <span>Atendimento Online</span>
-      </a>
     </div>
 
     <!-- Lado Direito: Modo Escuro (Lua) + onnews. + onmail. + Painel Admin (Só para o Daniel) + 9 Pontinhos -->
@@ -229,19 +216,19 @@
       </button>
 
       <!-- 1º: Acesso Direto ao OnNews (Sem o Grátis, Cinza Sóbrio) -->
-      <a 
-        href="/onnews" 
-        class="text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white px-2.5 py-1.5 rounded-full hover:bg-slate-200/60 dark:hover:bg-slate-800/80 transition flex items-center gap-1.5 tracking-tight"
+      <a
+        href="/onnews"
+        class="text-[10px] font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white px-2 py-1.5 rounded-xl hover:bg-slate-200/60 dark:hover:bg-slate-800/80 transition flex flex-col items-center gap-0.5 tracking-tight"
         title="OnNews — O Dia em Dados (Agro, Mercado & Cripto)"
       >
-        <span class="text-slate-500 dark:text-slate-400">📰</span>
+        <span class="text-base leading-none text-slate-500 dark:text-slate-400">📰</span>
         <span>onnews.</span>
       </a>
 
       <!-- 2º: Acesso Direto ao OnMail (Cinza Sóbrio) -->
-      <a 
-        href="/onmail" 
-        class="text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white px-2.5 py-1.5 rounded-full hover:bg-slate-200/60 dark:hover:bg-slate-800/80 transition flex items-center gap-1.5 tracking-tight"
+      <a
+        href="/onmail"
+        class="text-[10px] font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white px-2 py-1.5 rounded-xl hover:bg-slate-200/60 dark:hover:bg-slate-800/80 transition flex flex-col items-center gap-0.5 tracking-tight"
         title="Acessar OnMail - E-mail Corporativo Integrado ao WhatsApp"
       >
         <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
@@ -249,20 +236,23 @@
       </a>
 
       <!-- 3º: Acesso Direto ao OnZap -->
-      <a 
-        href="/onzap" 
-        class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 px-2.5 py-1.5 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition flex items-center gap-1.5 tracking-tight"
+      <a
+        href="/onzap"
+        class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 px-2 py-1.5 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition flex flex-col items-center gap-0.5 tracking-tight"
       >
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.487-1.761-1.66-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span class="relative inline-flex">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          <i data-lucide="shopping-bag" class="w-2.5 h-2.5 absolute -right-1 -bottom-1 bg-white dark:bg-slate-900 rounded-full p-0.5"></i>
+        </span>
         <span>onzap.</span>
       </a>
 
       <!-- 4º: Acesso Direto ao OnLove -->
-      <a 
-        href="/onlove" 
-        class="text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-800 dark:hover:text-rose-300 px-2.5 py-1.5 rounded-full hover:bg-rose-50 dark:hover:bg-rose-950/30 transition flex items-center gap-1.5 tracking-tight"
+      <a
+        href="/onlove"
+        class="text-[10px] font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-800 dark:hover:text-rose-300 px-2 py-1.5 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/30 transition flex flex-col items-center gap-0.5 tracking-tight"
       >
-        <span>🔥</span>
+        <span class="text-base leading-none">🔥</span>
         <span>onlove.</span>
       </a>
 
@@ -315,117 +305,60 @@
             </span>
           </div>
 
-          <!-- Grid de Aplicativos -->
-          <div class="grid grid-cols-2 gap-2 text-left">
-            
-            <!-- infer.coon (Engenharia - Destaque Absoluto) -->
-            <a href="/infer" target="_blank" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-emerald-300 transition flex flex-col justify-between group">
-              <div class="flex items-center space-x-2 mb-2">
-                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
-                  <i data-lucide="line-chart" class="w-4 h-4"></i>
-                </div>
-                <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-700">infer.coon</span>
-              </div>
-              <p class="text-[10px] text-slate-500 leading-tight">Engenharia de Avaliações NBR 14653 & Laudos</p>
+          <!-- Grid de Aplicativos (estilo Google Apps Launcher: só logo + nome, sem quadrado) -->
+          <div class="grid grid-cols-3 gap-1 text-center">
+
+            <a href="/infer" target="_blank" title="Engenharia de Avaliações NBR 14653 & Laudos" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition group">
+              <i data-lucide="line-chart" class="w-6 h-6 text-emerald-600 group-hover:scale-110 transition-transform"></i>
+              <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 group-hover:text-emerald-700">Base14</span>
             </a>
 
-            <!-- growth.coon (Vendas & Aceleração) -->
-            <a href="/growth" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-indigo-300 transition flex flex-col justify-between group">
-              <div class="flex items-center space-x-2 mb-2">
-                <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold">
-                  <i data-lucide="zap" class="w-4 h-4"></i>
-                </div>
-                <span class="text-xs font-bold text-slate-900 group-hover:text-indigo-700">growth.coon</span>
-              </div>
-              <p class="text-[10px] text-slate-500 leading-tight">Aceleração Comercial 24/7 & Google 5 Estrelas</p>
+            <a href="/growth" title="Aceleração Comercial 24/7 & Google 5 Estrelas" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition group">
+              <i data-lucide="zap" class="w-6 h-6 text-indigo-600 group-hover:scale-110 transition-transform"></i>
+              <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 group-hover:text-indigo-700">Ongrowth</span>
             </a>
 
-            <!-- imob.coon -->
-            <a href="/imob" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-blue-300 transition flex flex-col justify-between group">
-              <div class="flex items-center space-x-2 mb-2">
-                <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
-                  <i data-lucide="building-2" class="w-4 h-4"></i>
-                </div>
-                <span class="text-xs font-bold text-slate-900 group-hover:text-blue-700">imob.coon</span>
-              </div>
-              <p class="text-[10px] text-slate-500 leading-tight">Vendas, Locações & Split Pix Automático</p>
+            <a href="/imob" title="Vendas, Locações & Split Pix Automático" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition group">
+              <i data-lucide="building-2" class="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform"></i>
+              <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 group-hover:text-blue-700">Onimob</span>
             </a>
 
-            <!-- check.coon -->
-            <a href="/check" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-teal-300 transition flex flex-col justify-between group">
-              <div class="flex items-center space-x-2 mb-2">
-                <div class="w-8 h-8 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold">
-                  <i data-lucide="clipboard-check" class="w-4 h-4"></i>
-                </div>
-                <span class="text-xs font-bold text-slate-900 group-hover:text-teal-700">check.coon</span>
-              </div>
-              <p class="text-[10px] text-slate-500 leading-tight">Laudos de Vistoria de Imóveis no Smartphone</p>
+            <a href="/check" title="Laudos de Vistoria de Imóveis no Smartphone" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition group">
+              <i data-lucide="clipboard-check" class="w-6 h-6 text-teal-600 group-hover:scale-110 transition-transform"></i>
+              <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 group-hover:text-teal-700">Oncheck</span>
             </a>
 
-            <!-- cob.coon -->
-            <a href="/cob" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-emerald-300 transition flex flex-col justify-between group">
-              <div class="flex items-center space-x-2 mb-2">
-                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
-                  <i data-lucide="coins" class="w-4 h-4"></i>
-                </div>
-                <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-700">cob.coon</span>
-              </div>
-              <p class="text-[10px] text-slate-500 leading-tight">Cobrança Humanizada & Pix Dinâmico</p>
+            <a href="/cob" title="Cobrança Humanizada & Pix Dinâmico" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition group">
+              <i data-lucide="coins" class="w-6 h-6 text-emerald-600 group-hover:scale-110 transition-transform"></i>
+              <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 group-hover:text-emerald-700">Oncob</span>
             </a>
 
-            <!-- ad.coon -->
-            <a href="/ad" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-rose-300 transition flex flex-col justify-between group">
-              <div class="flex items-center space-x-2 mb-2">
-                <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center font-bold">
-                  <i data-lucide="target" class="w-4 h-4"></i>
-                </div>
-                <span class="text-xs font-bold text-slate-900 group-hover:text-rose-700">ad.coon</span>
-              </div>
-              <p class="text-[10px] text-slate-500 leading-tight">Inteligência de Mídia & Tráfego Multicanal</p>
+            <a href="/ad" title="Inteligência de Mídia & Tráfego Multicanal" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition group">
+              <i data-lucide="target" class="w-6 h-6 text-rose-600 group-hover:scale-110 transition-transform"></i>
+              <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 group-hover:text-rose-700">Onads</span>
             </a>
 
-            <!-- OnNews by Coon (Terminal de Dados, Clima, Agro, Mercado & Newsletter) -->
-            <a href="/onnews" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-slate-300 transition flex flex-col justify-between group">
-              <div class="flex items-center space-x-2 mb-2">
-                <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm">
-                  📰
-                </div>
-                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-slate-900 tracking-tight">onnews.</span>
-              </div>
-              <p class="text-[10px] text-slate-500 leading-tight">O Dia em Dados • Agro, Câmbio & Cripto em 30s</p>
+            <a href="/onnews" title="O Dia em Dados • Agro, Câmbio & Cripto em 30s" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition group">
+              <span class="text-xl leading-none group-hover:scale-110 transition-transform">📰</span>
+              <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 group-hover:text-slate-900">onnews.</span>
             </a>
 
-            <!-- onmail.coon (E-mail Corporativo & WhatsApp - Cor Cinza Padronizada) -->
-            <a href="/onmail" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-slate-300 transition flex flex-col justify-between group">
-              <div class="flex items-center space-x-2 mb-2">
-                <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
-                  <i data-lucide="mail" class="w-4 h-4"></i>
-                </div>
-                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-slate-900 tracking-tight">onmail.</span>
-              </div>
-              <p class="text-[10px] text-slate-500 leading-tight">E-mail Corporativo & Despacho no WhatsApp</p>
+            <a href="/onmail" title="E-mail Corporativo & Despacho no WhatsApp" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition group">
+              <i data-lucide="mail" class="w-6 h-6 text-slate-600 group-hover:scale-110 transition-transform"></i>
+              <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 group-hover:text-slate-900">onmail.</span>
             </a>
 
-            <!-- OnZap -->
-            <a href="/onzap" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-emerald-300 transition flex flex-col justify-between group">
-              <div class="flex items-center space-x-2 mb-2">
-                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.487-1.761-1.66-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                </div>
-                <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-700">onzap.</span>
-              </div>
-              <p class="text-[10px] text-slate-500 leading-tight">Catálogos & Atendimento Automático</p>
+            <a href="/onzap" title="Catálogos Regionais & WhatsApp" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition group">
+              <span class="relative inline-flex group-hover:scale-110 transition-transform">
+                <i data-lucide="message-circle" class="w-6 h-6 text-emerald-600"></i>
+                <i data-lucide="shopping-bag" class="w-3 h-3 text-emerald-600 absolute -right-1 -bottom-1 bg-white dark:bg-slate-900 rounded-full p-0.5"></i>
+              </span>
+              <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 group-hover:text-emerald-700">onzap.</span>
             </a>
 
-            <!-- OnLove -->
-            <a href="/onlove" class="p-3 rounded-2xl hover:bg-slate-50 border border-slate-100 hover:border-rose-300 transition flex flex-col justify-between group">
-              <div class="flex items-center space-x-2 mb-2">
-                <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center font-bold">
-                  🔥
-                </div>
-                <span class="text-xs font-bold text-slate-900 group-hover:text-rose-700">onlove.</span>
-              </div>
-              <p class="text-[10px] text-slate-500 leading-tight">Paquera às cegas & Vitrine Local</p>
+            <a href="/onlove" title="Paquera às cegas & Vitrine Local" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition group">
+              <span class="text-xl leading-none group-hover:scale-110 transition-transform">🔥</span>
+              <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 group-hover:text-rose-700">onlove.</span>
             </a>
 
             <!-- Painel do Administrador Master (Visível apenas para o Presidente Daniel) -->
@@ -499,33 +432,6 @@
           <i data-lucide="arrow-right" class="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition"></i>
         </a>
 
-        <!-- CHAMADA OFICIAL ONMAIL.BR COM PRESTÍGIO E URGÊNCIA -->
-        <a 
-          href="/onmail" 
-          class="relative group px-5 py-3.5 bg-white/90 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-850 border border-slate-200/90 dark:border-slate-700/80 hover:border-emerald-400 dark:hover:border-emerald-500 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-xs sm:text-sm font-medium rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex items-center space-x-2.5 cursor-pointer"
-          title="Lançamento OnMail: Garanta os melhores nomes de e-mail antes que reservem o seu!"
-        >
-          <span class="relative flex h-2.5 w-2.5">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-          </span>
-          <i data-lucide="mail" class="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300"></i>
-          <span>Garanta seu email <strong class="font-bold text-slate-900 dark:text-white">onmail.br</strong></span>
-          <span class="text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-xs animate-pulse">Lançamento</span>
-          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
-        </a>
-      </div>
-
-      <!-- BOTÃO SÓBRIO & EXECUTIVO: RECEBA A NOSSA NEWSLETTER (ABRE JANELA CENTRALIZADA) -->
-      <div class="mt-4 flex items-center justify-center">
-        <button 
-          onclick="openNewsletterModal()" 
-          class="group inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 hover:bg-white dark:bg-slate-900/80 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-emerald-500 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white shadow-2xs hover:shadow-xs transition-all duration-200 cursor-pointer"
-          title="Receba a nossa Newsletter diária (E-mail ou WhatsApp 17:30)"
-        >
-          <span>📬</span>
-          <span>receba a nossa newsletter inscrever gratis</span>
-        </button>
       </div>
 
     </div>
@@ -839,7 +745,7 @@
       } else if (term.includes("obra") || term.includes("rdo") || term.includes("canteiro")) {
         openProductModal("obra.coon", "Diário de Obras (RDO) e apontamento de canteiro via áudio e fotos no WhatsApp com conformidade CREA e Caixa Econômica.");
       } else if (term.includes("ad") || term.includes("anuncio") || term.includes("trafego") || term.includes("meta") || term.includes("social")) {
-        openProductModal("ad.coon", "Piloto automático de anúncios e tráfego pago com IA em 1 clique para qualquer rede social (Instagram, Facebook, Google Ads, TikTok, YouTube e LinkedIn).");
+        openProductModal("Onads", "Piloto automático de anúncios e tráfego pago com IA em 1 clique para qualquer rede social (Instagram, Facebook, Google Ads, TikTok, YouTube e LinkedIn).");
       } else {
         window.location.href = "/studio";
       }
@@ -1058,7 +964,6 @@
     checkDanielAdminAccess();
   </script>
   <script src="/static/coon-auth.js"></script>
-  <script src="/static/coon-bot.js"></script>
 
   <!-- MODAL: NEWSLETTER -->
   <div id="newsletterPortalModal" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">

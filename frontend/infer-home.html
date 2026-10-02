@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Infer.coon — A Plataforma de Engenharia de Avaliações que Revolucionou a ABNT NBR 14.653 | Coon</title>
+  <title>Base14 — A Plataforma de Engenharia de Avaliações que Revolucionou a ABNT NBR 14.653 | Coon</title>
   <meta name="description" content="Software oficial de Engenharia de Avaliações da Coon Participações. Regressão linear múltipla ABNT NBR 14.653, Trava Anti-Alucinação Inviolável, Otimizador Grau III em 1 clique, Vistoria Satelital com GPS e Laudos em Word e PDF.">
   
   <!-- Tailwind CSS -->
@@ -230,6 +230,7 @@
       border: 1px solid rgba(51, 65, 85, 0.8);
     }
   </style>
+  <link rel="stylesheet" href="/css/coon-wordmark.css">
 </head>
 <body class="bg-white dark:bg-[#0B0F19] text-[#202124] dark:text-[#e8eaed] min-h-screen flex flex-col transition-colors duration-200">
 
@@ -257,7 +258,7 @@
         <span class="text-gray-300 dark:text-gray-700">•</span>
         <a href="/studio" class="hover:text-gray-900 dark:hover:text-white transition">Studio Coon</a>
         <span class="text-gray-300 dark:text-gray-700">•</span>
-        <a href="/inferencia/" class="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">Bancada NBR</a>
+        <a href="/inferencia/" class="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">Login</a>
       </div>
     </div>
   </div>
@@ -268,11 +269,18 @@
   <header id="msStickySubNav" class="sticky top-0 z-40 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-md border-b border-[#dadce0] dark:border-gray-800 px-4 lg:px-8 py-3 transition-all duration-200">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
       
-      <!-- Marca Infer. (Coon) -->
-      <a href="/infer" class="flex items-baseline space-x-1.5 group cursor-pointer shrink-0" title="Infer.coon - Engenharia de Avaliações">
-        <span class="text-2xl infer-logo text-gray-900 dark:text-white tracking-tight">infer<span class="infer-dot">.</span></span>
-        <span class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide uppercase">by Coon</span>
-      </a>
+      <!-- Marca (lockup padrão COON) -->
+      <div class="flex items-baseline space-x-2.5 shrink-0">
+        <a href="/" class="flex items-baseline group" title="Ir para a inicial COON">
+          <span class="text-2xl font-black tracking-tighter gemini-wordmark group-hover:opacity-90 transition">
+            coon<span class="coon-dot-animated text-emerald-500">.</span>
+          </span>
+        </a>
+        <span class="text-gray-300 dark:text-gray-700 text-lg font-light select-none">/</span>
+        <a href="/infer" class="flex items-baseline group" title="Base14 - Engenharia de Avaliações">
+          <span class="text-xl font-black tracking-tight text-gray-900 dark:text-white">Base14</span>
+        </a>
+      </div>
 
       <!-- Abas de Navegação -->
       <nav class="hidden lg:flex items-center space-x-1 overflow-x-auto no-scrollbar">
@@ -301,12 +309,17 @@
 
       <!-- Ações Rápidas, Tema e CTA Master -->
       <div class="flex items-center space-x-2 sm:space-x-3">
-        
+
+        <a href="/studio" class="hidden sm:inline-flex items-center space-x-1 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition" title="Studio Coon">
+          <span aria-hidden="true">←</span>
+          <span>Studio</span>
+        </a>
+
         <!-- Botão Baixar para o Celular / QR Code -->
         <button 
           onclick="openInferMobileModal()" 
           class="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-750 transition cursor-pointer shadow-xs" 
-          title="Baixar Infer.coon para Celular (Vistoria Campo GPS)"
+          title="Baixar Base14 para Celular (Vistoria Campo GPS)"
         >
           <span class="text-emerald-500">📱</span>
           <span class="text-[11px] font-semibold hidden md:inline">Vistoria Mobile</span>
@@ -333,7 +346,7 @@
           class="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white text-xs font-bold px-3.5 sm:px-4 py-2 rounded-lg transition shadow-md flex items-center gap-1.5 cursor-pointer hover:shadow-emerald-500/20"
         >
           <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-          <span>Acessar Bancada NBR</span>
+          <span>Login</span>
         </a>
 
       </div>
@@ -355,6 +368,11 @@
           </div>
         </div>
       </div>
+
+      <!-- Autoridade: o mais moderno do país -->
+      <p class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mb-2">
+        O sistema de inferência estatística mais moderno do Brasil
+      </p>
 
       <!-- Headline Master -->
       <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-[1.15] font-heading">
@@ -388,8 +406,8 @@
           href="/inferencia/" 
           class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center justify-center gap-2"
         >
-          <span class="text-base">⚖️</span>
-          <span>Abrir Bancada Completa (9 Abas)</span>
+          <span class="text-base">🖥️</span>
+          <span>Cadastre-se ou faça Login</span>
         </a>
         <button 
           onclick="scrollToTarget('simulador-nbr')" 
@@ -422,7 +440,7 @@
               O Artigo 158 do Código de Processo Civil e as diretrizes do IBAPE e ABNT determinam que o perito responde civil e penalmente pela veracidade dos dados do laudo. Em avaliações periciais, <strong>inventar dados ou usar IA para deduzir preços sem prova é estritamente proibido</strong>.
             </p>
             <p class="mt-2 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-              No <strong>Infer.coon</strong>, toda amostra precisa obrigatoriamente referenciar seu documento comprobatório (Matrícula, Cartório, Folha e Trecho). Caso contrário, a trava de conformidade pericial bloqueia a emissão final até a validação presencial do perito.
+              No <strong>Base14</strong>, toda amostra precisa obrigatoriamente referenciar seu documento comprobatório (Matrícula, Cartório, Folha e Trecho). Caso contrário, a trava de conformidade pericial bloqueia a emissão final até a validação presencial do perito.
             </p>
           </div>
           <div class="w-full lg:w-auto shrink-0 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 rounded-xl p-5 text-center min-w-[280px]">
@@ -659,7 +677,7 @@
       <div class="max-w-3xl mx-auto text-center mb-10">
         <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Excelência Técnica &amp; Legal</span>
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-1 font-heading">
-          Os 6 Pilares que Tornam o Infer.coon Único no Mercado
+          Os 6 Pilares que Tornam o Base14 Único no Mercado
         </h2>
         <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
           Projetado por peritos judiciais e mestres em estatística para atender com rigor absoluto à ABNT NBR 14.653-1, 2 e 3.
@@ -976,7 +994,7 @@
       
       <details class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 cursor-pointer">
         <summary class="font-bold text-sm text-gray-900 dark:text-white flex items-center justify-between">
-          <span>Os laudos gerados pelo Infer.coon são aceitos pela Caixa e Banco do Brasil?</span>
+          <span>Os laudos gerados pelo Base14 são aceitos pela Caixa e Banco do Brasil?</span>
           <span class="text-emerald-600 font-bold transition group-open:rotate-180">▼</span>
         </summary>
         <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
@@ -1000,7 +1018,7 @@
           <span class="text-emerald-600 font-bold transition group-open:rotate-180">▼</span>
         </summary>
         <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-          O aplicativo do Infer.coon é uma PWA com capacidade offline. Você abre a avaliação no celular através do QR Code de handoff, tira fotos e coleta as coordenadas GPS via sensor do aparelho mesmo sem sinal de celular. Ao reconectar, a sincronização é automática.
+          O aplicativo do Base14 é uma PWA com capacidade offline. Você abre a avaliação no celular através do QR Code de handoff, tira fotos e coleta as coordenadas GPS via sensor do aparelho mesmo sem sinal de celular. Ao reconectar, a sincronização é automática.
         </p>
       </details>
 
@@ -1010,7 +1028,7 @@
           <span class="text-emerald-600 font-bold transition group-open:rotate-180">▼</span>
         </summary>
         <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-          Sim! O Infer.coon exporta diretamente no formato Microsoft Word (.docx) estruturado e em PDF pericial. Você pode adicionar considerações fáticas do processo ou personalizar seu cabeçalho profissional.
+          Sim! O Base14 exporta diretamente no formato Microsoft Word (.docx) estruturado e em PDF pericial. Você pode adicionar considerações fáticas do processo ou personalizar seu cabeçalho profissional.
         </p>
       </details>
 
@@ -1027,7 +1045,7 @@
       <div class="w-12 h-12 mx-auto rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl mb-3">
         📱
       </div>
-      <h3 class="text-lg font-bold text-gray-900 dark:text-white">Leve o Infer.coon no Celular</h3>
+      <h3 class="text-lg font-bold text-gray-900 dark:text-white">Leve o Base14 no Celular</h3>
       <p class="text-xs text-gray-500 mt-1">Aponte a câmera do seu celular para abrir a bancada de vistoria e coletar fotos e coordenadas GPS no campo.</p>
 
       <div class="my-5 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl inline-block border border-gray-200 dark:border-gray-700">

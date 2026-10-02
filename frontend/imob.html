@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>imob.coon | Gestão Imobiliária & Split Pix Automático</title>
+  <title>Onimob | Gestão Imobiliária & Split Pix Automático</title>
   
-  <meta name="description" content="imob.coon: Gestão imobiliária completa para vendas e locações com Split Pix Automático. Repasse no mesmo instante para proprietário, imobiliária e corretor sem bitributação. COON.">
+  <meta name="description" content="Onimob: Gestão imobiliária completa para vendas e locações com Split Pix Automático. Onimob no mesmo instante para proprietário, imobiliária e corretor sem bitributação. COON.">
   <meta name="theme-color" content="#2563eb">
 
   <!-- Favicon -->
@@ -102,6 +102,7 @@
       border: 1px solid rgba(226, 232, 240, 0.85);
     }
   </style>
+  <link rel="stylesheet" href="/css/coon-wordmark.css">
 </head>
 <body class="min-h-screen flex flex-col justify-between text-slate-800 selection:bg-blue-600 selection:text-white">
 
@@ -111,25 +112,23 @@
   <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-6 py-3.5">
     <div class="max-w-6xl mx-auto flex items-center justify-between">
       
-      <!-- Marca Oficial -->
-      <a href="/" class="flex items-center space-x-2.5 group">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition">
-          <i data-lucide="building-2" class="w-5 h-5"></i>
-        </div>
-        <div class="flex items-baseline space-x-1">
-          <span class="text-xl font-extrabold tracking-tight text-slate-900">imob<span class="gemini-wordmark">.coon</span></span>
-          <span class="text-[9px] font-mono font-bold uppercase tracking-wider bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-200 hidden sm:inline-block">
-            Split Pix
+      <!-- Marca Oficial (lockup padrão COON) -->
+      <div class="flex items-center space-x-2.5">
+        <a href="/" class="flex items-baseline group" title="Ir para a inicial COON">
+          <span class="text-2xl font-black tracking-tighter gemini-wordmark group-hover:opacity-90 transition">
+            coon<span class="coon-dot-animated text-emerald-500">.</span>
           </span>
-        </div>
-      </a>
+        </a>
+        <span class="text-slate-300 text-lg font-light select-none">/</span>
+        <span class="text-xl font-bold tracking-tight text-slate-900">Onimob</span>
+      </div>
 
       <!-- Menu Superior -->
       <nav class="hidden md:flex items-center space-x-6 text-xs font-semibold text-slate-600">
         <a href="#simulador" class="hover:text-blue-600 transition">Simulador de Split</a>
         <a href="#infer-engine" class="hover:text-emerald-600 transition flex items-center space-x-1.5 font-bold text-slate-800">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>Motor INFER NBR</span>
+          <span>Motor Base14 NBR</span>
         </a>
         <a href="#beneficios" class="hover:text-blue-600 transition">Vantagens DIMOB</a>
         <a href="#planos" class="hover:text-blue-600 transition">Planos</a>
@@ -138,15 +137,20 @@
       <!-- Ações -->
       <div class="flex items-center space-x-3">
         <!-- Botão Baixar para o Celular -->
-        <button onclick="openCoonInstallModal('imob.coon', 'https://coon.com.br/imob', '🏢')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer text-xs font-semibold text-slate-700 shadow-2xs" title="Baixar imob.coon para Celular (PWA & APK)">
+        <button onclick="openCoonInstallModal('Onimob', 'https://coon.com.br/imob', '🏢')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer text-xs font-semibold text-slate-700 shadow-2xs" title="Baixar Onimob para Celular (PWA & APK)">
           <span class="text-sm">📱</span>
           <span class="hidden sm:inline">Baixar no Celular</span>
         </button>
 
-        <a href="/studio" class="text-xs font-semibold text-slate-500 hover:text-slate-900 transition hidden sm:inline-block">
-          Studio COON
+        <a href="/studio" class="text-xs font-semibold text-slate-500 hover:text-slate-900 transition hidden sm:inline-flex items-center space-x-1">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Studio</span>
         </a>
-        <a href="#simulador" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-full shadow-xs transition flex items-center space-x-1">
+        <a href="/imob/cadastro" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-full shadow-xs transition flex items-center space-x-1">
+          <i data-lucide="layout-list" class="w-3.5 h-3.5"></i>
+          <span>Abrir Cadastro</span>
+        </a>
+        <a href="#simulador" class="hidden md:inline-flex px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-full shadow-xs transition items-center space-x-1">
           <span>Testar Split Pix</span>
           <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-emerald-400"></i>
         </a>
@@ -188,10 +192,26 @@
         </a>
       </div>
 
+      <!-- DIFERENCIAIS EXPLÍCITOS -->
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-2xs text-xs font-semibold text-slate-700">
+          <i data-lucide="zap" class="w-4 h-4 text-blue-600"></i>
+          <span>Dinheiro dividido na hora do pagamento</span>
+        </div>
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-2xs text-xs font-semibold text-slate-700">
+          <i data-lucide="shield-check" class="w-4 h-4 text-blue-600"></i>
+          <span>Sem bitributação, sem passar pelo caixa</span>
+        </div>
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-2xs text-xs font-semibold text-slate-700">
+          <i data-lucide="line-chart" class="w-4 h-4 text-blue-600"></i>
+          <span>Laudo NBR 14653 integrado pelo Infer</span>
+        </div>
+      </div>
+
       <!-- Métricas de Impacto -->
       <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-left">
         <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Tempo de Repasse</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Tempo de Onimob</span>
           <div class="text-2xl font-black text-slate-900 mt-1">200 ms</div>
           <span class="text-[11px] text-emerald-600 font-semibold">Pix Instantâneo 24/7</span>
         </div>
@@ -261,7 +281,7 @@
           >
         </div>
 
-        <!-- Fluxograma Visual de Repasse -->
+        <!-- Fluxograma Visual de Onimob -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
           
           <!-- Origem: Inquilino -->
@@ -287,7 +307,7 @@
               <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white mx-auto flex items-center justify-center font-bold mb-2 shadow-xs">
                 <i data-lucide="wallet" class="w-5 h-5"></i>
               </div>
-              <h4 class="text-xs font-bold text-emerald-950">Repasse Líquido</h4>
+              <h4 class="text-xs font-bold text-emerald-950">Onimob Líquido</h4>
               <p class="text-[10px] text-emerald-700">Pix Direto na Conta</p>
             </div>
             <div class="text-sm font-black text-emerald-700 font-mono" id="ownerSplit">R$ 2.975,00</div>
@@ -332,7 +352,7 @@
             <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
             <span>Homologado com as regras do Banco Central do Brasil para Split de Pagamentos</span>
           </span>
-          <span class="font-mono text-slate-400">imob.coon Engine v1.0</span>
+          <span class="font-mono text-slate-400">Onimob Engine v1.0</span>
         </div>
 
       </div>
@@ -344,7 +364,7 @@
     <section id="beneficios" class="max-w-6xl mx-auto px-6 py-12">
       <div class="text-center mb-10">
         <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Por que as maiores imobiliárias estão migrando para o imob.coon?
+          Por que as maiores imobiliárias estão migrando para o Onimob?
         </h2>
       </div>
 
@@ -374,7 +394,7 @@
           <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold mb-4">
             <i data-lucide="smartphone" class="w-5 h-5"></i>
           </div>
-          <h3 class="text-base font-bold text-slate-900 mb-2">Integrado com check.coon</h3>
+          <h3 class="text-base font-bold text-slate-900 mb-2">Integrado com Oncheck</h3>
           <p class="text-xs text-slate-600 leading-relaxed">
             Vistorias de entrada e saída com fotos e assinatura na tela do celular são anexadas automaticamente aos contratos sem papel.
           </p>
@@ -385,7 +405,7 @@
           <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold mb-4 shadow-xs">
             <i data-lucide="scale" class="w-5 h-5"></i>
           </div>
-          <h3 class="text-base font-bold text-slate-900 mb-2">Motor infer.coon NBR</h3>
+          <h3 class="text-base font-bold text-slate-900 mb-2">Motor Base14 NBR</h3>
           <p class="text-xs text-slate-700 leading-relaxed">
             Avaliação científica de valor de mercado com base na <strong>ABNT NBR 14653</strong>. Prove o preço justo do imóvel para o proprietário com ciência.
           </p>
@@ -395,7 +415,7 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- SEÇÃO EXCLUSIVA: MOTOR CIENTÍFICO INFER.COON INTEGRADO -->
+    <!-- SEÇÃO EXCLUSIVA: MOTOR CIENTÍFICO BASE14 INTEGRADO -->
     <!-- ======================================================== -->
     <section id="infer-engine" class="max-w-6xl mx-auto px-6 py-12">
       <div class="glass-card rounded-3xl p-8 sm:p-10 border-2 border-emerald-300/80 shadow-sm relative overflow-hidden bg-gradient-to-b from-white via-emerald-50/30 to-white">
@@ -404,13 +424,13 @@
           <div>
             <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-100/70 text-emerald-800 text-[11px] font-bold mb-2">
               <i data-lucide="award" class="w-3.5 h-3.5"></i>
-              <span>DIFERENCIAL IMBATÍVEL • MOTOR INFER.COON NBR 14653 EMBUTIDO</span>
+              <span>DIFERENCIAL IMBATÍVEL • MOTOR BASE14 NBR 14653 EMBUTIDO</span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
               Precificação Científica de Imóveis: Adeus ao "Achismo"
             </h2>
             <p class="text-xs sm:text-sm text-slate-600 max-w-2xl mt-1 leading-relaxed">
-              O maior desafio do corretor é convencer o proprietário a precificar o imóvel no valor real de mercado. Com o motor do <strong>infer.coon</strong> dentro do <strong>imob.coon</strong>, você gera um laudo estatístico com intervalo de confiança da ABNT em 5 segundos.
+              O maior desafio do corretor é convencer o proprietário a precificar o imóvel no valor real de mercado. Com o motor do <strong>Base14</strong> dentro do <strong>Onimob</strong>, você gera um laudo estatístico com intervalo de confiança da ABNT em 5 segundos.
             </p>
           </div>
           <a href="/infer" target="_blank" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition flex items-center space-x-1.5 self-start shrink-0">
@@ -500,7 +520,7 @@
                 </div>
                 <div>
                   <h4 class="text-xs font-black text-slate-900">Certificado de Avaliação Paramétrica</h4>
-                  <span class="text-[10px] text-slate-400 font-mono">Motor infer.coon v1.0 • NBR 14653</span>
+                  <span class="text-[10px] text-slate-400 font-mono">Motor Base14 v1.0 • NBR 14653</span>
                 </div>
               </div>
               <span class="text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
@@ -585,7 +605,7 @@
             <div class="text-2xl font-black text-blue-600 font-mono mb-6">R$ 397 <span class="text-xs font-normal text-slate-500">/mês</span></div>
             <ul class="text-xs text-slate-600 space-y-2 mb-6">
               <li>✓ Split Pix Ilimitado</li>
-              <li>✓ Integração com check.coon</li>
+              <li>✓ Integração com Oncheck</li>
               <li>✓ Exportador DIMOB para Receita</li>
               <li>✓ Portal do Proprietário e Inquilino</li>
             </ul>
@@ -625,8 +645,8 @@
       <!-- Topo -->
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center space-x-2">
-          <span class="text-xl font-black tracking-tight coon-gradient">imob<span class="text-emerald-500">.coon</span></span>
-          <span id="checkoutPlanBadge" class="text-xs font-bold text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">
+          <span class="text-xl font-black tracking-tight coon-gradient">Onimob</span>
+          <span id="checkoutPlanBadge" class="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
             Plano Imobiliária Prime
           </span>
         </div>
@@ -844,7 +864,7 @@
     }
 
     async function submitImobCheckout() {
-      const name = document.getElementById("chkImobName").value.trim() || "Cliente imob.coon";
+      const name = document.getElementById("chkImobName").value.trim() || "Cliente Onimob";
       const email = document.getElementById("chkImobEmail").value.trim();
       const phone = document.getElementById("chkImobPhone").value.trim();
 

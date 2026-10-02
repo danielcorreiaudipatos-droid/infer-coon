@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="antialiased">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro | Onimob</title>
+  <meta name="description" content="Cadastro de imóveis, proprietários, inquilinos e corretores do Onimob.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' };
+    if (localStorage.getItem('coon_theme') === 'dark' || (!('coon_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+  <link rel="stylesheet" href="/css/coon-wordmark.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .campo-input {
+      width: 100%; padding: 0.55rem 0.8rem; font-size: 0.8rem; border-radius: 0.75rem;
+      border: 1px solid rgb(226 232 240); background: #fff; color: rgb(15 23 42);
+      outline: none; transition: border-color .15s;
+    }
+    .campo-input:focus { border-color: rgb(37 99 235); box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
+    html.dark .campo-input { background: rgb(15 23 42); border-color: rgb(51 65 85); color: rgb(241 245 249); }
+    .resumo-card { background: #fff; border: 1px solid rgb(226 232 240); border-radius: 1rem; padding: 1rem; }
+    html.dark .resumo-card { background: rgb(30 41 59); border-color: rgb(51 65 85); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 min-h-screen">
+
+  <!-- CABEÇALHO PADRÃO COON -->
+  <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-2.5">
+        <a href="/" class="flex items-baseline group" title="Ir para a inicial COON">
+          <span class="text-2xl font-black tracking-tighter gemini-wordmark group-hover:opacity-90 transition">coon<span class="coon-dot-animated text-emerald-500">.</span></span>
+        </a>
+        <span class="text-slate-300 dark:text-slate-700 text-lg font-light select-none">/</span>
+        <a href="/imob" class="text-xl font-bold tracking-tight text-slate-900 dark:text-white hover:opacity-80 transition">Onimob</a>
+        <span class="text-slate-300 dark:text-slate-700 text-lg font-light select-none">/</span>
+        <span class="text-sm font-semibold text-slate-500 dark:text-slate-400">Cadastro</span>
+      </div>
+      <a href="/studio" class="text-xs font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white transition flex items-center space-x-1">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+        <span>Studio</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-8 space-y-8">
+
+    <!-- RESUMO -->
+    <div id="resumoGrade" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+
+    <!-- ABAS -->
+    <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800">
+      <button data-aba="imoveis" class="aba-cadastro px-4 py-2.5 text-sm font-semibold border-b-2 border-blue-600 text-slate-900 dark:text-white">Imóveis</button>
+      <button data-aba="proprietarios" class="aba-cadastro px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">Proprietários</button>
+      <button data-aba="inquilinos" class="aba-cadastro px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">Inquilinos</button>
+      <button data-aba="corretores" class="aba-cadastro px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">Corretores</button>
+    </div>
+
+    <!-- PAINEL: IMÓVEIS -->
+    <section data-painel="imoveis" class="space-y-5">
+      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
+        <h2 class="text-sm font-bold mb-4">Cadastrar imóvel</h2>
+        <form id="formImovel" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input required name="titulo" placeholder="Título (ex: Apê 2 quartos, Centro)" class="campo-input sm:col-span-2">
+          <select required name="tipo" class="campo-input">
+            <option value="">Tipo</option>
+            <option value="casa">Casa</option>
+            <option value="apartamento">Apartamento</option>
+            <option value="comercial">Comercial</option>
+            <option value="terreno">Terreno</option>
+            <option value="rural">Rural</option>
+            <option value="outro">Outro</option>
+          </select>
+          <select required name="finalidade" class="campo-input">
+            <option value="">Finalidade</option>
+            <option value="venda">Venda</option>
+            <option value="aluguel">Aluguel</option>
+          </select>
+          <input name="endereco" placeholder="Endereço" class="campo-input sm:col-span-2">
+          <input name="cidade" placeholder="Cidade" class="campo-input">
+          <input name="uf" placeholder="UF" maxlength="2" class="campo-input">
+          <input name="cep" placeholder="CEP" class="campo-input">
+          <input name="area_m2" type="number" step="0.01" placeholder="Área (m²)" class="campo-input">
+          <input name="quartos" type="number" placeholder="Quartos" class="campo-input">
+          <input name="valor" type="number" step="0.01" placeholder="Valor (R$)" class="campo-input">
+          <select name="proprietario_id" class="campo-input" id="selProprietario"><option value="">Proprietário (opcional)</option></select>
+          <select name="corretor_id" class="campo-input" id="selCorretor"><option value="">Corretor (opcional)</option></select>
+          <button type="submit" class="sm:col-span-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 rounded-xl transition">Cadastrar imóvel</button>
+          <p class="sm:col-span-2 text-xs text-rose-600 hidden" id="erroImovel"></p>
+        </form>
+      </div>
+      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead class="bg-slate-50 dark:bg-slate-900 text-slate-500">
+            <tr><th class="text-left p-3">Título</th><th class="text-left p-3">Tipo</th><th class="text-left p-3">Finalidade</th><th class="text-left p-3">Cidade</th><th class="text-left p-3">Valor</th><th class="text-left p-3">Status</th></tr>
+          </thead>
+          <tbody id="corpoImoveis"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PAINEL: PROPRIETÁRIOS -->
+    <section data-painel="proprietarios" class="space-y-5 hidden">
+      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
+        <h2 class="text-sm font-bold mb-4">Cadastrar proprietário</h2>
+        <form id="formProprietario" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input required name="nome" placeholder="Nome completo" class="campo-input sm:col-span-2">
+          <input name="cpf_cnpj" placeholder="CPF ou CNPJ" class="campo-input">
+          <input name="telefone" placeholder="Telefone / WhatsApp" class="campo-input">
+          <input name="email" type="email" placeholder="E-mail" class="campo-input">
+          <input name="chave_pix" placeholder="Chave Pix (p/ repasse futuro)" class="campo-input">
+          <button type="submit" class="sm:col-span-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 rounded-xl transition">Cadastrar proprietário</button>
+          <p class="sm:col-span-2 text-xs text-rose-600 hidden" id="erroProprietario"></p>
+        </form>
+      </div>
+      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead class="bg-slate-50 dark:bg-slate-900 text-slate-500"><tr><th class="text-left p-3">Nome</th><th class="text-left p-3">CPF/CNPJ</th><th class="text-left p-3">Telefone</th><th class="text-left p-3">E-mail</th></tr></thead>
+          <tbody id="corpoProprietarios"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PAINEL: INQUILINOS -->
+    <section data-painel="inquilinos" class="space-y-5 hidden">
+      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
+        <h2 class="text-sm font-bold mb-4">Cadastrar inquilino</h2>
+        <form id="formInquilino" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input required name="nome" placeholder="Nome completo" class="campo-input sm:col-span-2">
+          <input name="cpf_cnpj" placeholder="CPF ou CNPJ" class="campo-input">
+          <input name="telefone" placeholder="Telefone / WhatsApp" class="campo-input">
+          <input name="email" type="email" placeholder="E-mail" class="campo-input">
+          <button type="submit" class="sm:col-span-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 rounded-xl transition">Cadastrar inquilino</button>
+          <p class="sm:col-span-2 text-xs text-rose-600 hidden" id="erroInquilino"></p>
+        </form>
+      </div>
+      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead class="bg-slate-50 dark:bg-slate-900 text-slate-500"><tr><th class="text-left p-3">Nome</th><th class="text-left p-3">CPF/CNPJ</th><th class="text-left p-3">Telefone</th><th class="text-left p-3">E-mail</th></tr></thead>
+          <tbody id="corpoInquilinos"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PAINEL: CORRETORES -->
+    <section data-painel="corretores" class="space-y-5 hidden">
+      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
+        <h2 class="text-sm font-bold mb-4">Cadastrar corretor</h2>
+        <form id="formCorretor" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input required name="nome" placeholder="Nome completo" class="campo-input sm:col-span-2">
+          <input name="creci" placeholder="CRECI" class="campo-input">
+          <input name="telefone" placeholder="Telefone / WhatsApp" class="campo-input">
+          <input name="email" type="email" placeholder="E-mail" class="campo-input">
+          <input name="imobiliaria" placeholder="Imobiliária" class="campo-input">
+          <button type="submit" class="sm:col-span-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 rounded-xl transition">Cadastrar corretor</button>
+          <p class="sm:col-span-2 text-xs text-rose-600 hidden" id="erroCorretor"></p>
+        </form>
+      </div>
+      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead class="bg-slate-50 dark:bg-slate-900 text-slate-500"><tr><th class="text-left p-3">Nome</th><th class="text-left p-3">CRECI</th><th class="text-left p-3">Imobiliária</th><th class="text-left p-3">Telefone</th></tr></thead>
+          <tbody id="corpoCorretores"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/static/coon-auth.js"></script>
+  <script src="js/onimob-cadastro.js"></script>
+</body>
+</html>
