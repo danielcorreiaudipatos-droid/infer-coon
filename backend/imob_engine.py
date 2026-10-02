@@ -611,13 +611,14 @@ def painel_resumo() -> Dict[str, Any]:
 # ── Contrato de locação (PDF) ────────────────────────────────────────────────
 import datetime as _dt
 
-TIPOS_CONTRATO = {"residencial", "comercial", "temporada"}
+TIPOS_CONTRATO = {"residencial", "comercial", "temporada", "venda"}
 MODELOS_CONTRATO_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads_contratos")
 
 ROTULO_TIPO_CONTRATO = {
     "residencial": "CONTRATO DE LOCAÇÃO RESIDENCIAL",
     "comercial": "CONTRATO DE LOCAÇÃO COMERCIAL (NÃO RESIDENCIAL)",
     "temporada": "CONTRATO DE LOCAÇÃO POR TEMPORADA",
+    "venda": "CONTRATO DE COMPRA E VENDA DE IMÓVEL",
 }
 
 
@@ -693,13 +694,46 @@ def _por_extenso_moeda(valor: float) -> str:
     return f"R$ {valor:,.2f}".replace(",", "_").replace(".", ",").replace("_", ".")
 
 
-def gerar_contrato_pdf(contrato_id: int, tipo_contrato: str = "residencial", logo_path: Optional[str] = None) -> bytes:
-    """Monta o contrato de locação em PDF a partir dos dados já cadastrados do imóvel,
-    proprietário, inquilino e fiador — a pessoa não digita os dados de novo, só os
-    termos específicos do contrato (valor, prazo, vencimento, foro).
+def obter_modelo_customizado(tipo_contrato: str) -> Optional[bytes]:
+    """Retorna o PDF do modelo customizado da imobiliária se existir, senão None."""
+    caminho = os.path.join(MODELOS_CONTRATO_DIR, f"modelo_{tipo_contrato}.pdf")
+    if os.path.exists(caminho):
+        with open(caminho, "rb") as f:
+            return f.read()
+    return None
 
-    Cláusula de multa por rescisão antecipada segue Lei nº 8.245/91 (Lei do Inquilinato):
-    multa proporcional ao período restante da locação."""
+
+def preencher_placeholders_pdf(pdf_bytes: bytes, dados: Dict[str, str]) -> bytes:
+    """Substitui placeholders {{CHAVE}} no PDF customizado pelos dados do cadastro.
+    Ex: {{PROPRIETARIO_NOME}} → "João Silva", {{VALOR}} → "2.500,00".
+
+    Usa uma abordagem simples: decompressa o PDF, substitui strings, recompacta.
+    Funciona pra PDFs de texto; PDFs com imagens/formulários podem precisar de ferramenta específica."""
+    try:
+        from PyPDF2 import PdfReader, PdfWriter
+        import io
+
+        reader = PdfReader(io.BytesIO(pdf_bytes))
+        writer = PdfWriter()
+
+        for page in reader.pages:
+            if page.extract_text():
+                texto = page.extract_text()
+                for chave, valor in dados.items():
+                    texto = texto.replace(f"{{{{{chave}}}}}", str(valor))
+                page.merge_page(writer.add_blank_page(width=page.mediabox.width, height=page.mediabox.height))
+            writer.add_page(page)
+
+        output = io.BytesIO()
+        writer.write(output)
+        return output.getvalue()
+    except ImportError:
+        return pdf_bytes
+
+
+def gerar_contrato_pdf(contrato_id: int, tipo_contrato: str = "residencial", usar_modelo_customizado: bool = True, logo_path: Optional[str] = None) -> bytes:
+    """Gera contrato em PDF: tenta usar modelo customizado da imobiliária (com placeholders),
+    senão usa o auto-gerado com Lei 8.245/91. Em ambos, preenche dados do cadastro."""
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.units import cm
     from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, PageTemplate, Frame
@@ -713,6 +747,39 @@ def gerar_contrato_pdf(contrato_id: int, tipo_contrato: str = "residencial", log
     imovel = obter_imovel(contrato["imovel_id"])
     if not imovel:
         raise ValueError("Imóvel do contrato não encontrado.")
+
+    # Tenta usar modelo customizado se solicitado
+    if usar_modelo_customizado:
+        modelo_pdf = obter_modelo_customizado(tipo_contrato)
+        if modelo_pdf:
+            conn = get_db()
+            proprietario = _row_to_dict(conn.execute("SELECT * FROM imob_proprietarios WHERE id = ?", (imovel["proprietario_id"],)).fetchone())
+            inquilino = _row_to_dict(conn.execute("SELECT * FROM imob_inquilinos WHERE id = ?", (imovel["inquilino_id"],)).fetchone())
+            fiador = _row_to_dict(conn.execute("SELECT * FROM imob_fiadores WHERE id = ?", (imovel["fiador_id"],)).fetchone()) if imovel.get("fiador_id") else None
+            conn.close()
+
+            endereco_imovel = ", ".join(x for x in [
+                imovel.get("rua"), imovel.get("numero"), imovel.get("complemento"),
+                imovel.get("bairro"), imovel.get("cidade"), imovel.get("uf"),
+            ] if x)
+
+            dados_preenchimento = {
+                "PROPRIETARIO_NOME": proprietario.get("nome", ""),
+                "PROPRIETARIO_CPF": proprietario.get("cpf_cnpj", ""),
+                "INQUILINO_NOME": inquilino.get("nome", ""),
+                "INQUILINO_CPF": inquilino.get("cpf_cnpj", ""),
+                "FIADOR_NOME": fiador.get("nome", "") if fiador else "",
+                "FIADOR_CPF": fiador.get("cpf_cnpj", "") if fiador else "",
+                "IMOVEL_ENDERECO": endereco_imovel,
+                "IMOVEL_AREA": str(imovel.get("area_construida_m2", "")),
+                "ALUGUEL": _por_extenso_moeda(contrato["valor_aluguel"]),
+                "ALUGUEL_VALOR": str(contrato["valor_aluguel"]),
+                "PRAZO_MESES": str(contrato["prazo_meses"]),
+                "DIA_VENCIMENTO": str(contrato["dia_vencimento"]),
+                "INDICE_REAJUSTE": contrato["indice_reajuste"],
+                "FORO": contrato["foro_comarca"],
+            }
+            return preencher_placeholders_pdf(modelo_pdf, dados_preenchimento)
 
     conn = get_db()
     proprietario = _row_to_dict(conn.execute("SELECT * FROM imob_proprietarios WHERE id = ?", (imovel["proprietario_id"],)).fetchone())

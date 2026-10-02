@@ -2152,10 +2152,14 @@ def api_onimob_obter_contrato(contrato_id: int):
     return c
 
 @app.get("/api/onimob/contratos/{contrato_id}/pdf")
-def api_onimob_gerar_contrato_pdf(contrato_id: int, request: Request, tipo_contrato: str = "residencial"):
+def api_onimob_gerar_contrato_pdf(contrato_id: int, request: Request, tipo_modelo: str = "residencial"):
+    """tipo_modelo pode ser: 'customizado' (usa modelo da imobiliária se tiver),
+    ou um dos auto-gerados: 'residencial', 'comercial', 'temporada', 'venda'."""
     _exigir_acesso_onimob(request)
     try:
-        pdf_bytes = imob_engine.gerar_contrato_pdf(contrato_id, tipo_contrato)
+        usar_customizado = tipo_modelo == "customizado"
+        tipo_contrato = tipo_modelo if tipo_modelo != "customizado" else "residencial"
+        pdf_bytes = imob_engine.gerar_contrato_pdf(contrato_id, tipo_contrato, usar_modelo_customizado=usar_customizado)
         return Response(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename=contrato_{contrato_id}.pdf"})
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
