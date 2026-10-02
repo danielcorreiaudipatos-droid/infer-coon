@@ -82,6 +82,7 @@ from backend.site_endpoints import router as site_router
 from backend.payment_endpoints import router as payment_router
 from backend.financial_endpoints import router as financial_router
 from backend.split_endpoints import router as split_router
+from backend.auth_endpoints import router as auth_router, router_branding as branding_router, router_frontend as frontend_router
 
 from backend.financial import (
     init_financial_tables,
@@ -635,6 +636,9 @@ app.include_router(site_router)
 app.include_router(payment_router)
 app.include_router(financial_router)
 app.include_router(split_router)
+app.include_router(auth_router)
+app.include_router(branding_router)
+app.include_router(frontend_router)
 
 # ========== ENDPOINTS PRINCIPAIS ==========
 

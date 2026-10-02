@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro — on.imob</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            padding: 20px;
+        }
+
+        .signup-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #eee;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 33%;
+            transition: width 0.3s;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .password-strength {
+            font-size: 12px;
+            margin-top: 6px;
+            height: 4px;
+            background: #eee;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            background: #ff4444;
+            width: 0%;
+            transition: all 0.3s;
+        }
+
+        .password-strength.medium .password-strength-bar {
+            background: #ffaa00;
+            width: 66%;
+        }
+
+        .password-strength.strong .password-strength-bar {
+            background: #00aa00;
+            width: 100%;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            font-size: 13px;
+            color: #666;
+            margin: 20px 0;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 8px;
+            margin-top: 4px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .checkbox-wrapper a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 13px;
+            border-left: 4px solid #c33;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 13px;
+            border-left: 4px solid #3c3;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .btn-cancel:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-signup {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            grid-column: 1 / -1;
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-link {
+            text-align: center;
+            font-size: 13px;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 500px) {
+            .signup-container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Criar Conta</h1>
+            <p class="subtitle">Comece sua jornada com on.imob</p>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- Mensagens -->
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <!-- Formulário -->
+        <form id="signupForm">
+            <!-- Passo 1: Informações Básicas -->
+            <div class="form-step" id="step1">
+                <div class="form-group">
+                    <label for="nome">Nome Completo *</label>
+                    <input
+                        type="text"
+                        id="nome"
+                        placeholder="Seu nome"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="seu@email.com"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="telefone">Telefone</label>
+                    <input
+                        type="tel"
+                        id="telefone"
+                        placeholder="(11) 9XXXX-XXXX"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="tipo">Você é? *</label>
+                    <select id="tipo" required>
+                        <option value="">Selecione...</option>
+                        <option value="imobiliario">Imobiliário(a)</option>
+                        <option value="proprietario">Proprietário(a)</option>
+                        <option value="inquilino">Inquilino(a)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Passo 2: Empresa (se imobiliário) -->
+            <div class="form-step" id="step2" style="display: none;">
+                <div class="form-group">
+                    <label for="nome-empresa">Nome da Imobiliária</label>
+                    <input
+                        type="text"
+                        id="nome-empresa"
+                        placeholder="Imobiliária XYZ"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="cnpj">CNPJ</label>
+                    <input
+                        type="text"
+                        id="cnpj"
+                        placeholder="XX.XXX.XXX/0001-XX"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="website">Website (opcional)</label>
+                    <input
+                        type="text"
+                        id="website"
+                        placeholder="https://..."
+                    >
+                </div>
+            </div>
+
+            <!-- Passo 3: Senha e Termos -->
+            <div class="form-step" id="step3" style="display: none;">
+                <div class="form-group">
+                    <label for="senha">Senha *</label>
+                    <input
+                        type="password"
+                        id="senha"
+                        placeholder="Mínimo 8 caracteres"
+                        required
+                    >
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="password-strength-bar"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmar-senha">Confirmar Senha *</label>
+                    <input
+                        type="password"
+                        id="confirmar-senha"
+                        placeholder="Repita a senha"
+                        required
+                    >
+                </div>
+
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="termos" required>
+                    <span>
+                        Concordo com os
+                        <a href="/termos" target="_blank">Termos de Serviço</a>
+                        e a
+                        <a href="/privacidade" target="_blank">Política de Privacidade</a>
+                    </span>
+                </label>
+
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="marketing">
+                    <span>Quero receber novidades e promoções por email</span>
+                </label>
+            </div>
+
+            <!-- Botões -->
+            <div class="button-group">
+                <button type="button" class="btn btn-cancel" id="btnVoltar" style="display: none;">
+                    ← Voltar
+                </button>
+                <button type="button" class="btn btn-signup" id="btnProximo">
+                    Próximo →
+                </button>
+                <button type="submit" class="btn btn-signup" id="btnCriarConta" style="display: none;">
+                    Criar Conta
+                </button>
+            </div>
+
+            <!-- Link de login -->
+            <div class="login-link">
+                Já tem conta?
+                <a href="/login">
+                    Faça login
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let currentStep = 1;
+
+        // Atualizar força da senha
+        document.getElementById('senha').addEventListener('input', (e) => {
+            const strength = document.getElementById('passwordStrength');
+            const value = e.target.value;
+
+            strength.classList.remove('medium', 'strong');
+
+            if (value.length >= 8) {
+                strength.classList.add('medium');
+            }
+            if (value.length >= 12 && /[A-Z]/.test(value) && /[0-9]/.test(value)) {
+                strength.classList.add('strong');
+            }
+        });
+
+        // Tipo de usuário
+        document.getElementById('tipo').addEventListener('change', (e) => {
+            const step2 = document.getElementById('step2');
+            step2.style.display = e.target.value === 'imobiliario' ? 'block' : 'none';
+        });
+
+        // Navegar entre passos
+        document.getElementById('btnProximo').addEventListener('click', (e) => {
+            e.preventDefault();
+
+            if (validarPasso(currentStep)) {
+                if (currentStep < 3) {
+                    mostrarPasso(currentStep + 1);
+                }
+            }
+        });
+
+        document.getElementById('btnVoltar').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentStep > 1) {
+                mostrarPasso(currentStep - 1);
+            }
+        });
+
+        function mostrarPasso(passo) {
+            // Ocultar todos
+            document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none');
+
+            // Mostrar passo atual
+            document.getElementById(`step${passo}`).style.display = 'block';
+
+            // Atualizar botões
+            document.getElementById('btnVoltar').style.display = passo > 1 ? 'block' : 'none';
+            document.getElementById('btnProximo').style.display = passo < 3 ? 'block' : 'none';
+            document.getElementById('btnCriarConta').style.display = passo === 3 ? 'block' : 'none';
+
+            // Atualizar progress bar
+            document.getElementById('progressFill').style.width = (passo * 33) + '%';
+
+            currentStep = passo;
+        }
+
+        function validarPasso(passo) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.style.display = 'none';
+
+            if (passo === 1) {
+                const nome = document.getElementById('nome').value;
+                const email = document.getElementById('email').value;
+                const tipo = document.getElementById('tipo').value;
+
+                if (!nome || !email || !tipo) {
+                    errorMessage.textContent = 'Preenchá todos os campos obrigatórios';
+                    errorMessage.style.display = 'block';
+                    return false;
+                }
+
+                if (!email.includes('@')) {
+                    errorMessage.textContent = 'Email inválido';
+                    errorMessage.style.display = 'block';
+                    return false;
+                }
+            }
+
+            if (passo === 3) {
+                const senha = document.getElementById('senha').value;
+                const confirmaSenha = document.getElementById('confirmar-senha').value;
+
+                if (senha !== confirmaSenha) {
+                    errorMessage.textContent = 'As senhas não conferem';
+                    errorMessage.style.display = 'block';
+                    return false;
+                }
+
+                if (senha.length < 8) {
+                    errorMessage.textContent = 'Senha deve ter mínimo 8 caracteres';
+                    errorMessage.style.display = 'block';
+                    return false;
+                }
+
+                if (!document.getElementById('termos').checked) {
+                    errorMessage.textContent = 'Você deve concordar com os termos';
+                    errorMessage.style.display = 'block';
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // Submissão do formulário
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!validarPasso(3)) {
+                return;
+            }
+
+            const dados = {
+                nome_completo: document.getElementById('nome').value,
+                email: document.getElementById('email').value,
+                telefone: document.getElementById('telefone').value,
+                tipo_usuario: document.getElementById('tipo').value,
+                senha: document.getElementById('senha').value,
+                nome_empresa: document.getElementById('nome-empresa').value,
+                cnpj: document.getElementById('cnpj').value,
+                website: document.getElementById('website').value
+            };
+
+            try {
+                const response = await fetch('/api/auth/registrar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                });
+
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    const successMessage = document.getElementById('successMessage');
+                    successMessage.textContent = 'Conta criada com sucesso! Redirecionando...';
+                    successMessage.style.display = 'block';
+
+                    setTimeout(() => {
+                        window.location.href = '/login?email=' + dados.email;
+                    }, 2000);
+                } else {
+                    const errorMessage = document.getElementById('errorMessage');
+                    errorMessage.textContent = data.erro || 'Erro ao criar conta';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                const errorMessage = document.getElementById('errorMessage');
+                errorMessage.textContent = 'Erro ao criar conta. Tente novamente.';
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
