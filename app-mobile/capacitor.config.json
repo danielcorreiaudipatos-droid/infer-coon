@@ -1,0 +1,25 @@
+{
+  "appId": "com.onimob.app",
+  "appName": "on.imob",
+  "webDir": "public",
+  "server": {
+    "androidScheme": "https",
+    "hostname": "localhost"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    },
+    "Camera": {
+      "permissions": [
+        "camera",
+        "photos"
+      ]
+    },
+    "Geolocation": {
+      "permissions": [
+        "location"
+      ]
+    }
+  }
+}
