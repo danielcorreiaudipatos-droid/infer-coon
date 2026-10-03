@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "ONNEWS",
+    "slug": "onnews",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "backgroundColor": "#0f172a"
+    },
+    "ios": {
+      "bundleIdentifier": "com.onnews.app"
+    },
+    "android": {
+      "package": "com.onnews.app",
+      "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"]
+    },
+    "extra": {
+      "apiUrl": "https://api.ongame.com",
+      "newsApiKey": "YOUR_NEWSAPI_KEY"
+    }
+  }
+}
