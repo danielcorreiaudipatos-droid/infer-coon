@@ -343,3 +343,69 @@ model Subscriber {
   @@index([email])
   @@index([status])
 }
+
+// ============================================
+// Games System (ONZAP, ONLOVE, ONMAIL)
+// ============================================
+
+model GameSession {
+  id                String   @id @default(cuid())
+  userId            String
+  gameType          String   // "onzap", "onlove", "onmail"
+  startTime         DateTime @default(now())
+  endTime           DateTime?
+  score             Int      @default(0)
+  status            String   @default("playing") // "playing", "finished", "abandoned"
+
+  // Anti-cheat
+  checksumData      String?
+  clientVersion     String?
+  deviceId          String?
+  suspiciousFlag    Boolean  @default(false)
+
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rewards           GameReward[]
+
+  createdAt         DateTime @default(now())
+
+  @@index([userId])
+  @@index([gameType])
+  @@index([status])
+}
+
+model GameReward {
+  id                    String   @id @default(cuid())
+  gameSessionId         String
+  userId                String
+  rewardType            String   // "points", "cosmetic", "cash"
+  rewardValue           Decimal
+  walletTransactionId   String?
+  claimed               Boolean  @default(false)
+
+  gameSession           GameSession @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
+  user                  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt             DateTime @default(now())
+
+  @@index([userId])
+  @@index([gameSessionId])
+  @@index([claimed])
+}
+
+model GameLeaderboard {
+  id                String   @id @default(cuid())
+  gameType          String   // "onzap", "onlove", "onmail"
+  userId            String
+  rank              Int      @default(0)
+  score             Int      @default(0)
+  gamesPlayed       Int      @default(1)
+  totalRewards      Decimal  @default(0)
+
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  updatedAt         DateTime @updatedAt
+
+  @@unique([gameType, userId])
+  @@index([gameType, rank])
+  @@index([gameType, score])
+}
