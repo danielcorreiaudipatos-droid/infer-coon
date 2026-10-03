@@ -77,6 +77,68 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Quick Access Shortcuts */}
+      <section className="py-20 px-6 bg-gradient-to-b from-slate-900 to-slate-800/50">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-white text-center mb-4">⚡ Acesso Rápido</h2>
+          <p className="text-gray-400 text-center mb-12">Comece a jogar ou criar agora mesmo</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* ONZAP Shortcut */}
+            <Link href="/game/onzap">
+              <div className="group relative cursor-pointer">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl blur-lg opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                <div className="relative bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-8 text-white text-center hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <div className="text-5xl mb-3">💬</div>
+                  <h3 className="text-2xl font-bold mb-2">ONZAP</h3>
+                  <p className="text-sm opacity-90 mb-4">WhatsApp Battle</p>
+                  <div className="text-xs font-semibold opacity-75">▶ JOGAR</div>
+                </div>
+              </div>
+            </Link>
+
+            {/* ONLOVE Shortcut */}
+            <Link href="/game/onlove">
+              <div className="group relative cursor-pointer">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-600 to-rose-600 rounded-2xl blur-lg opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                <div className="relative bg-gradient-to-br from-pink-600 to-rose-600 rounded-2xl p-8 text-white text-center hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <div className="text-5xl mb-3">💘</div>
+                  <h3 className="text-2xl font-bold mb-2">ONLOVE</h3>
+                  <p className="text-sm opacity-90 mb-4">Tinder Simulator</p>
+                  <div className="text-xs font-semibold opacity-75">▶ JOGAR</div>
+                </div>
+              </div>
+            </Link>
+
+            {/* ONMAIL Shortcut */}
+            <Link href="/game/onmail">
+              <div className="group relative cursor-pointer">
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-600 to-amber-600 rounded-2xl blur-lg opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                <div className="relative bg-gradient-to-br from-orange-600 to-amber-600 rounded-2xl p-8 text-white text-center hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <div className="text-5xl mb-3">🛡️</div>
+                  <h3 className="text-2xl font-bold mb-2">ONMAIL</h3>
+                  <p className="text-sm opacity-90 mb-4">Tower Defense</p>
+                  <div className="text-xs font-semibold opacity-75">▶ JOGAR</div>
+                </div>
+              </div>
+            </Link>
+
+            {/* Studio Shortcut */}
+            <Link href="/studio">
+              <div className="group relative cursor-pointer">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl blur-lg opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                <div className="relative bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl p-8 text-white text-center hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <div className="text-5xl mb-3">✨</div>
+                  <h3 className="text-2xl font-bold mb-2">STUDIO</h3>
+                  <p className="text-sm opacity-90 mb-4">Crie Jogos</p>
+                  <div className="text-xs font-semibold opacity-75">→ CRIAR</div>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Games */}
       <section id="games" className="py-20 px-6 bg-slate-800/50">
         <div className="max-w-7xl mx-auto">
