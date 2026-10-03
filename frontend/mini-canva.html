@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Canva — Poster de Imóvel</title>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; bg: #f0f0f0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { margin-bottom: 20px; color: #333; }
+        .editor { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .controls { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .preview { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+        button { background: #0066cc; color: white; padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        button:hover { background: #0052a3; }
+        .templates { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .template-btn { padding: 12px; border: 2px solid #ddd; background: white; cursor: pointer; border-radius: 4px; text-align: center; font-weight: 600; }
+        .template-btn.active { border-color: #0066cc; background: #f0f7ff; }
+        .poster { width: 100%; max-width: 400px; aspect-ratio: 9/16; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; flex-direction: column; justify-content: space-between; padding: 30px; border-radius: 8px; margin: 0 auto; text-align: center; font-size: 20px; font-weight: 600; }
+        .poster.template2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .poster.template3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .poster-title { font-size: 32px; margin-bottom: 20px; }
+        .poster-valor { font-size: 48px; font-weight: 700; margin: 20px 0; }
+        .poster-footer { font-size: 14px; margin-top: 20px; }
+        @media (max-width: 768px) { .editor { grid-template-columns: 1fr; } .templates { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📸 Mini Canva — Poster de Imóvel pra Redes Sociais</h1>
+
+        <div class="editor">
+            <div class="controls">
+                <h3>Escolha um template</h3>
+                <div class="templates">
+                    <button class="template-btn active" onclick="selectTemplate(1)">Purple</button>
+                    <button class="template-btn" onclick="selectTemplate(2)">Pink</button>
+                    <button class="template-btn" onclick="selectTemplate(3)">Blue</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de imóvel</label>
+                    <select id="tipoImovel" onchange="updatePreview()">
+                        <option value="Apartamento">Apartamento</option>
+                        <option value="Casa">Casa</option>
+                        <option value="Comercial">Comercial</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Quartos</label>
+                    <input type="number" id="quartos" value="3" onchange="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Área (m²)</label>
+                    <input type="number" id="area" value="120" onchange="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Aluguel (R$)</label>
+                    <input type="number" id="valor" value="2500" onchange="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Localização</label>
+                    <input type="text" id="local" value="São Paulo, SP" onchange="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Hashtags</label>
+                    <input type="text" id="hashtags" value="#imovel #aluga #saopaulo" onchange="updatePreview()">
+                </div>
+
+                <button onclick="downloadPoster()">📥 Baixar Imagem</button>
+                <button onclick="copyToClipboard()" style="margin-left: 10px; background: #28a745;">📋 Copiar Texto</button>
+            </div>
+
+            <div class="preview">
+                <div id="poster" class="poster">
+                    <div class="poster-title" id="posterTitle">Apartamento</div>
+                    <div>
+                        <div id="posterSpecs">3 quartos • 120 m²</div>
+                        <div class="poster-valor" id="posterValor">R$ 2.500</div>
+                        <div id="posterLocal">São Paulo, SP</div>
+                    </div>
+                    <div class="poster-footer">
+                        <strong>on.imob</strong><br/>
+                        Seu imóvel em boas mãos
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTemplate = 1;
+
+        function selectTemplate(n) {
+            currentTemplate = n;
+            document.querySelectorAll('.template-btn').forEach((b, i) => {
+                b.classList.toggle('active', i + 1 === n);
+            });
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const tipo = document.getElementById('tipoImovel').value;
+            const quartos = document.getElementById('quartos').value;
+            const area = document.getElementById('area').value;
+            const valor = document.getElementById('valor').value;
+            const local = document.getElementById('local').value;
+
+            document.getElementById('posterTitle').textContent = tipo;
+            document.getElementById('posterSpecs').textContent = `${quartos} quartos • ${area} m²`;
+            document.getElementById('posterValor').textContent = `R$ ${parseFloat(valor).toLocaleString('pt-BR')}`;
+            document.getElementById('posterLocal').textContent = local;
+
+            const poster = document.getElementById('poster');
+            poster.className = `poster template${currentTemplate}`;
+        }
+
+        function downloadPoster() {
+            alert('Funcionalidade de download ainda em desenvolvimento. Por enquanto, use a ferramenta de screenshot do seu navegador (Ctrl+Shift+S no Windows, Cmd+Shift+4 no Mac).');
+        }
+
+        function copyToClipboard() {
+            const tipo = document.getElementById('tipoImovel').value;
+            const quartos = document.getElementById('quartos').value;
+            const area = document.getElementById('area').value;
+            const valor = document.getElementById('valor').value;
+            const local = document.getElementById('local').value;
+            const hashtags = document.getElementById('hashtags').value;
+
+            const texto = `${tipo} • ${quartos}Q • ${area}m² • R$ ${valor}\n${local}\n${hashtags}`;
+            navigator.clipboard.writeText(texto).then(() => {
+                alert('Texto copiado! Pronto pra postar no Instagram, Facebook, etc.');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financeiro — on.imob</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; padding: 2rem; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { margin-bottom: 2rem; color: #333; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .card { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        .valor { font-size: 2rem; font-weight: 700; color: #0066cc; margin: 0.5rem 0; }
+        .label { color: #666; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; margin-top: 1rem; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        th { background: #f9f9f9; font-weight: 600; }
+        .status-ok { color: #28a745; }
+        .status-pendente { color: #ffc107; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💰 Dashboard Financeiro</h1>
+
+        <!-- KPIs -->
+        <div class="grid">
+            <div class="card">
+                <div class="label">Aluguéis Recebidos</div>
+                <div class="valor">R$ 12.500</div>
+                <div style="font-size: 12px; color: #666;">Mês atual</div>
+            </div>
+            <div class="card">
+                <div class="label">Repassos Realizados</div>
+                <div class="valor">R$ 10.200</div>
+                <div style="font-size: 12px; color: #666;">Aos proprietários</div>
+            </div>
+            <div class="card">
+                <div class="label">Taxa Retida</div>
+                <div class="valor">R$ 2.300</div>
+                <div style="font-size: 12px; color: #666;">Comissão (18.4%)</div>
+            </div>
+            <div class="card">
+                <div class="label">Pendências</div>
+                <div class="valor" style="color: #dc3545;">3</div>
+                <div style="font-size: 12px; color: #666;">Aluguéis em atraso</div>
+            </div>
+        </div>
+
+        <!-- Tabela Aluguéis -->
+        <div class="card">
+            <h2 style="margin-bottom: 1rem;">Aluguéis do Mês</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Imóvel</th>
+                        <th>Inquilino</th>
+                        <th>Aluguel</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Apt. Paulista</td>
+                        <td>João Silva</td>
+                        <td>R$ 2.500</td>
+                        <td>01/10/2026</td>
+                        <td class="status-ok">✓ Recebido</td>
+                    </tr>
+                    <tr>
+                        <td>Casa Vila</td>
+                        <td>Maria Santos</td>
+                        <td>R$ 1.800</td>
+                        <td>05/10/2026</td>
+                        <td class="status-pendente">⏳ Pendente</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tabela Repassos -->
+        <div class="card">
+            <h2 style="margin-bottom: 1rem;">Repassos aos Proprietários</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Proprietário</th>
+                        <th>Imóvel</th>
+                        <th>Valor</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Carlos Oliveira</td>
+                        <td>Apt. Paulista</td>
+                        <td>R$ 2.300</td>
+                        <td>02/10/2026</td>
+                        <td class="status-ok">✓ Repassado</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

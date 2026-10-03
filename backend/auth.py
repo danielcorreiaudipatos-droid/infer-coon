@@ -38,10 +38,18 @@ def init_db():
         crea_cau TEXT,
         plan TEXT DEFAULT 'perito_pro',
         plan_expires_at REAL,
-        created_at REAL
+        created_at REAL,
+        role TEXT DEFAULT 'cliente'
     )
     """)
     conn.commit()
+
+    # Migração: bases criadas antes do campo "role" existir não têm a coluna.
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'cliente'")
+        conn.commit()
+    except sqlite3.OperationalError:
+        pass  # coluna já existe
 
     # Criação do usuário padrão caso não exista
     cursor.execute("SELECT id FROM users WHERE email = 'perito@infercoon.com.br'")
@@ -163,7 +171,8 @@ def authenticate_user(email: str, password: str) -> Optional[Dict[str, Any]]:
         "email": user["email"],
         "crea_cau": user["crea_cau"],
         "plan": user["plan"],
-        "plan_expires_at": user["plan_expires_at"]
+        "plan_expires_at": user["plan_expires_at"],
+        "role": user["role"] or "cliente"
     }
 
 def register_user(req: RegisterRequest) -> Dict[str, Any]:
@@ -194,6 +203,30 @@ def register_user(req: RegisterRequest) -> Dict[str, Any]:
     except sqlite3.IntegrityError:
         conn.close()
         raise ValueError("Este e-mail já está cadastrado no Infer.coon.")
+
+def criar_usuario_staff(name: str, email: str, password: str, role: str = "onimob_staff") -> Dict[str, Any]:
+    """Cria conta de equipe (corretor/staff do escritório) com papel definido pelo admin.
+    Diferente de register_user: só é chamada por quem já tem a chave mestra, nunca pelo
+    cadastro público — é assim que o papel 'onimob_staff' nunca cai na mão de quem só
+    se auto-cadastrou pelo /api/auth/register."""
+    conn = get_db()
+    cursor = conn.cursor()
+    salt = os.urandom(16)
+    pwd_hash = hash_password(password, salt)
+    stored = f"{salt.hex()}:{pwd_hash}"
+    now = time.time()
+    try:
+        cursor.execute("""
+            INSERT INTO users (name, email, password_hash, auth_provider, plan, created_at, role)
+            VALUES (?, ?, ?, 'local', 'onimob_staff', ?, ?)
+        """, (name.strip(), email.lower().strip(), stored, now, role))
+        conn.commit()
+        uid = cursor.lastrowid
+        conn.close()
+        return {"id": uid, "name": name, "email": email, "role": role}
+    except sqlite3.IntegrityError:
+        conn.close()
+        raise ValueError("Este e-mail já está cadastrado.")
 
 def handle_google_login(req: GoogleAuthRequest) -> Dict[str, Any]:
     # Suporta tanto o token OAuth do Google quanto payload simplificado de integração

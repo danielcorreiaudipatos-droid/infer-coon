@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funcionários — on.imob</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        h1, h2 { color: #333; margin-bottom: 1.5rem; }
+        .card { background: white; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 12px 24px; background: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        button:hover { background: #0052a3; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        th { background: #f9f9f9; font-weight: 600; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge-ativo { background: #dcfce7; color: #166534; }
+        .badge-bloqueado { background: #fee2e2; color: #991b1b; }
+        .toggle { cursor: pointer; }
+        .msg { padding: 1rem; border-radius: 4px; margin-bottom: 1rem; display: none; }
+        .msg.ok { background: #dcfce7; color: #166534; display: block; }
+        .msg.erro { background: #fee2e2; color: #991b1b; display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👥 Funcionários — Liberação Site</h1>
+
+        <!-- Login -->
+        <div class="card" id="telaLogin">
+            <h2>Login</h2>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="emailLogin" placeholder="funcionario@coon.com.br">
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="senhaLogin">
+            </div>
+            <button onclick="fazerLogin()">Entrar</button>
+        </div>
+
+        <!-- Dashboard Funcionário -->
+        <div id="telaDashboard" style="display: none;">
+            <div class="card">
+                <h2>Bem-vindo, <span id="nomeFuncionario"></span></h2>
+                <button onclick="fazerLogout()">Sair</button>
+            </div>
+
+            <div class="card">
+                <h2>Imóveis Pendentes de Liberação</h2>
+                <table id="tabelaPendentes">
+                    <thead>
+                        <tr><th>Imóvel</th><th>Valor</th><th>Status</th><th>Ação</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="4" style="text-align: center; color: #999;">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h2>Meus Imóveis Publicados</h2>
+                <table id="tabelaPublicados">
+                    <thead>
+                        <tr><th>Imóvel</th><th>Data</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="3" style="text-align: center; color: #999;">Nenhum publicado ainda.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Panel Admin (master key) -->
+        <div id="telaAdmin" style="display: none;">
+            <div class="card">
+                <h2>👨‍💼 Gerenciar Funcionários</h2>
+                <table id="tabelaFuncionarios">
+                    <thead>
+                        <tr><th>Nome</th><th>Email</th><th>Permissão Site</th><th>Status</th><th>Ação</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h2>➕ Novo Funcionário</h2>
+                <div class="form-group">
+                    <label>Nome</label>
+                    <input type="text" id="novoNome">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="novoEmail">
+                </div>
+                <div class="form-group">
+                    <label>Pode Publicar no Site?</label>
+                    <input type="checkbox" id="novoCanPublish"> Sim
+                </div>
+                <button onclick="criarFuncionario()">Criar Funcionário</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const master_key = localStorage.getItem('coon_master_key') || '';
+        let usuarioLogado = JSON.parse(localStorage.getItem('funcionario_logado') || 'null');
+
+        function fazerLogin() {
+            const email = document.getElementById('emailLogin').value;
+            const senha = document.getElementById('senhaLogin').value;
+            if (!email || !senha) {
+                alert('Preencha email e senha.');
+                return;
+            }
+            usuarioLogado = { email, nome: email.split('@')[0], can_publish: true };
+            localStorage.setItem('funcionario_logado', JSON.stringify(usuarioLogado));
+            mostrarDashboard();
+        }
+
+        function fazerLogout() {
+            usuarioLogado = null;
+            localStorage.removeItem('funcionario_logado');
+            mostrarLogin();
+        }
+
+        function mostrarLogin() {
+            document.getElementById('telaLogin').style.display = 'block';
+            document.getElementById('telaDashboard').style.display = 'none';
+            document.getElementById('telaAdmin').style.display = 'none';
+        }
+
+        function mostrarDashboard() {
+            if (!usuarioLogado) return;
+            document.getElementById('telaLogin').style.display = 'none';
+            document.getElementById('telaDashboard').style.display = 'block';
+            document.getElementById('nomeFuncionario').textContent = usuarioLogado.nome;
+
+            if (master_key) {
+                document.getElementById('telaAdmin').style.display = 'block';
+                carregarFuncionarios();
+            }
+            carregarPendentes();
+        }
+
+        function carregarPendentes() {
+            const html = `
+                <tr>
+                    <td>Apt. Paulista</td>
+                    <td>R$ 2.500</td>
+                    <td><span class="badge badge-ativo">Pronto</span></td>
+                    <td><button onclick="liberarImovel(1)">✓ Liberar</button></td>
+                </tr>
+            `;
+            document.querySelector('#tabelaPendentes tbody').innerHTML = html;
+        }
+
+        function liberarImovel(id) {
+            alert('✓ Imóvel liberado pro site!');
+            carregarPendentes();
+        }
+
+        function criarFuncionario() {
+            const nome = document.getElementById('novoNome').value;
+            const email = document.getElementById('novoEmail').value;
+            const can_publish = document.getElementById('novoCanPublish').checked;
+            if (!nome || !email) {
+                alert('Preencha nome e email.');
+                return;
+            }
+            alert(`✓ Funcionário ${nome} criado!`);
+            document.getElementById('novoNome').value = '';
+            document.getElementById('novoEmail').value = '';
+            document.getElementById('novoCanPublish').checked = false;
+            carregarFuncionarios();
+        }
+
+        function carregarFuncionarios() {
+            const html = `
+                <tr>
+                    <td>João Silva</td>
+                    <td>joao@coon.com.br</td>
+                    <td><span class="badge badge-ativo">✓ Pode publicar</span></td>
+                    <td>Ativo</td>
+                    <td><button onclick="alterarPermissao(1)">Bloquear</button></td>
+                </tr>
+                <tr>
+                    <td>Maria Santos</td>
+                    <td>maria@coon.com.br</td>
+                    <td><span class="badge badge-bloqueado">✗ Bloqueado</span></td>
+                    <td>Ativo</td>
+                    <td><button onclick="alterarPermissao(2)">Liberar</button></td>
+                </tr>
+            `;
+            document.querySelector('#tabelaFuncionarios tbody').innerHTML = html;
+        }
+
+        function alterarPermissao(id) {
+            alert('Permissão alterada.');
+            carregarFuncionarios();
+        }
+
+        if (usuarioLogado) {
+            mostrarDashboard();
+        } else {
+            mostrarLogin();
+        }
+    </script>
+</body>
+</html>

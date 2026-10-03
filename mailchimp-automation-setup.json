@@ -1,0 +1,120 @@
+{
+  "automation_sequences": [
+    {
+      "name": "Welcome Series - New Subscriber",
+      "trigger": "new_subscriber",
+      "emails": [
+        {
+          "delay_hours": 0,
+          "subject": "Bem-vindo [FNAME]! Seus 14 dias grátis estão esperando 🎉",
+          "body": "Oi [FNAME],\n\nBem-vindo à comunidade de Founding Members da ADS Inteligente!\n\nYou're in! Aqui estão seus próximos passos:\n\n✅ 14 dias GRÁTIS para testar o Professional\n✅ Tudo que você precisa: Google, Meta, TikTok, LinkedIn em 1 dashboard\n✅ Auto-Ad-Creator: Cria anúncio em 60 segundos\n✅ Mini Canva integrado (sem pagar Canva Pro!)\n✅ Gemini IA para otimização automática\n\n🚀 COMECE AGORA:\n[LINK: https://ads-inteligente.com.br/login]\n\nNão precisa de cartão de crédito!\n\nQualquer dúvida, responda este email.\n\nAbraços,\n[Seu Nome]\nFounder, ADS Inteligente",
+          "cta_button": {
+            "text": "Começar Teste Grátis",
+            "url": "https://ads-inteligente.com.br/login"
+          }
+        },
+        {
+          "delay_hours": 72,
+          "subject": "Você começou seu teste? [FNAME]",
+          "body": "Oi [FNAME],\n\nVi que você ainda não ativou seu teste grátis.\n\nTem alguma dúvida?\n\n❓ É muito caro? NÃO! Founding Members pagam R$399 (50% OFF)\n❓ Precisa de demo? Posso agendar 5 minutos com você!\n❓ Quer esperar o sorteio? Tá certo, MAS aproveita os 14 dias também!\n\n👉 Responda este email e vamos conversar.\n\nAbraços!"
+        },
+        {
+          "delay_hours": 168,
+          "subject": "Último dia de sorteio [FNAME] - 30 dias GRÁTIS!",
+          "body": "Oi [FNAME],\n\n🎰 SORTEIO SEMANAL - SEXTA-FEIRA (23:59h)\n\nPrêmio: 30 DIAS GRÁTIS do Starter (R$199 de valor)\n\nVocê já se inscreveu?\n\n[LINK: https://ads-inteligente.com.br]\n\nE sabe o que é legal?\nVocê TAMBÉM pode começar seu teste grátis agora.\nMais chances = melhor! 😉\n\nBoa sorte!",
+          "cta_button": {
+            "text": "Concorrer & Testar",
+            "url": "https://ads-inteligente.com.br"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Weekly Giveaway - Friday Announcement",
+      "trigger": "scheduled",
+      "schedule": "every_friday_20:00",
+      "subject": "🎰 RESULTADO DO SORTEIO SEMANAL",
+      "body": "Oi!\n\nTemos um novo GANHADOR!\n\n🏆 [WINNER_NAME] ganhou 30 DIAS GRÁTIS!\n\nParabéns [WINNER_NAME]! 🎉\n\n---\n\nVocê NÃO foi sorteado desta vez...\n\nMAS você ainda pode:\n✅ Testar 14 dias GRÁTIS\n✅ Usar cupom 30% OFF (R$399 → R$280)\n✅ Concorrer NOVAMENTE próxima sexta!\n\n[LINK: https://ads-inteligente.com.br]\n\nAbra a oportunidade! 🚀",
+      "cta_button": {
+        "text": "Começar Teste Agora",
+        "url": "https://ads-inteligente.com.br"
+      }
+    },
+    {
+      "name": "Trial User - Engagement Series",
+      "trigger": "trial_started",
+      "emails": [
+        {
+          "delay_hours": 24,
+          "subject": "Primeiros passos no ADS [FNAME]",
+          "body": "Oi [FNAME],\n\n✅ Seu teste foi ativado!\n\nAqui estão seus PRIMEIROS PASSOS:\n\n1️⃣ Conecte Meta ou Google Ads\n2️⃣ Crie sua primeira campanha\n3️⃣ Use Auto-Ad-Creator (60 segundos!)\n4️⃣ Acompanhe em tempo real\n\n📚 Tutoriais:\n- [Link vídeo 1 - Setup]\n- [Link vídeo 2 - Primeira campanha]\n- [Link FAQ completa]\n\nQualquer dúvida: responda este email!\n\nAbraços!"
+        },
+        {
+          "delay_hours": 72,
+          "subject": "Você já economizou 5 horas [FNAME]!",
+          "body": "Oi [FNAME],\n\nViu seu dashboard?\n\nEm apenas 3 DIAS você:\n✅ Criou 3 campanhas\n✅ Gerenciou 2 plataformas\n✅ Economizou 5 HORAS em tempo\n\nSem contar a economia em ad spend otimizado!\n\n🎯 Próximo passo:\nComece A/B testing automático.\n\n[Link tutorial]\n\nVocê está indo bem! 💪"
+        },
+        {
+          "delay_hours": 168,
+          "subject": "Sua primeira semana no ADS [FNAME]",
+          "body": "Oi [FNAME],\n\nJá são 7 DIAS seu teste!\n\nComo está a experiência?\n\n📊 Stats:\n- [X] campanhas criadas\n- [Y] horas economizadas\n- [Z] otimizações automáticas\n\n💡 Dica: Use Gemini IA para gerar novos copy.\n\n[Link feature]\n\nEspero que esteja adorando!\n\nAbraços!"
+        },
+        {
+          "delay_hours": 240,
+          "subject": "Virar cliente? Conversão especial [FNAME]",
+          "body": "Oi [FNAME],\n\nSeu teste de 14 DIAS está terminando!\n\n🎁 Oferta especial para você:\n\nVire cliente TODAY e ganhe:\n✅ 30% OFF no primeiro mês\n✅ Acesso à comunidade privada no Discord\n✅ Suporte prioritário\n\nOpções:\n- Starter: R$199/mês (era R$299)\n- Professional: R$399/mês (era R$599) ← RECOMENDADO\n- Plus: R$599/mês (era R$999)\n\nPreço CONGELADO por 24 MESES!\n\n[Botão: Virar Founding Member]\n\nQualquer dúvida: chama no WhatsApp!\n\nAbraços!"
+        }
+      ]
+    }
+  ],
+  "setup_instructions": {
+    "steps": [
+      {
+        "step": 1,
+        "title": "Criar conta Mailchimp",
+        "action": "Ir para https://mailchimp.com e criar conta"
+      },
+      {
+        "step": 2,
+        "title": "Criar Audience",
+        "action": "Audiences > Create > Nome: 'ADS Inteligente Founding Members'"
+      },
+      {
+        "step": 3,
+        "title": "Integrar Landing Page",
+        "action": "Adicionar código Mailchimp subscribe form no giveaway-form.html"
+      },
+      {
+        "step": 4,
+        "title": "Criar Automations",
+        "action": "Automations > Welcome Series (usar template acima)"
+      },
+      {
+        "step": 5,
+        "title": "Testar",
+        "action": "Usar seu email para testar cada sequência"
+      },
+      {
+        "step": 6,
+        "title": "Ativar",
+        "action": "Ativar automations quando tudo OK"
+      }
+    ]
+  },
+  "mailchimp_api_example": {
+    "note": "Para integração via API em vez de manual",
+    "endpoint": "POST https://[seu-datacenter].api.mailchimp.com/3.0/lists/[AUDIENCE_ID]/members",
+    "headers": {
+      "Authorization": "Basic [BASE64 ENCODED: any:[YOUR_API_KEY]]",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "email_address": "[SUBSCRIBER_EMAIL]",
+      "status": "subscribed",
+      "merge_fields": {
+        "FNAME": "[SUBSCRIBER_NAME]",
+        "PHONE": "[WHATSAPP_NUMBER]"
+      }
+    }
+  }
+}

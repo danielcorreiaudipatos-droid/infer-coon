@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADS Inteligente - Publicidade Inteligente para Varejo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* Header */
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 0; }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        nav h1 { font-size: 24px; font-weight: bold; }
+        nav ul { list-style: none; display: flex; gap: 30px; }
+        nav a { color: white; text-decoration: none; transition: opacity 0.3s; }
+        nav a:hover { opacity: 0.8; }
+
+        /* Hero Section */
+        .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 80px 0; text-align: center; }
+        .hero h2 { font-size: 48px; margin-bottom: 20px; }
+        .hero p { font-size: 20px; margin-bottom: 30px; opacity: 0.9; }
+        .hero .cta { display: inline-block; background: #ff6b6b; color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; transition: background 0.3s; }
+        .hero .cta:hover { background: #ff5252; }
+
+        /* Features Grid */
+        .features { padding: 60px 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .feature { padding: 30px; border-radius: 10px; background: #f8f9fa; text-align: center; transition: transform 0.3s, box-shadow 0.3s; }
+        .feature:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .feature-icon { font-size: 40px; margin-bottom: 15px; }
+        .feature h3 { margin-bottom: 10px; color: #667eea; }
+
+        /* Pricing */
+        .pricing { padding: 60px 0; text-align: center; }
+        .pricing h2 { font-size: 36px; margin-bottom: 40px; }
+        .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        .price-card { background: white; border: 2px solid #ddd; border-radius: 10px; padding: 40px; transition: all 0.3s; }
+        .price-card:hover { border-color: #667eea; box-shadow: 0 10px 40px rgba(102, 126, 234, 0.1); }
+        .price-card.popular { border-color: #667eea; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; transform: scale(1.05); }
+        .price-card h3 { font-size: 24px; margin-bottom: 20px; }
+        .price { font-size: 36px; font-weight: bold; margin: 20px 0; }
+        .price-card ul { text-align: left; margin: 20px 0; list-style: none; }
+        .price-card li { padding: 10px 0; border-bottom: 1px solid #eee; }
+        .price-card.popular li { border-color: rgba(255,255,255,0.3); }
+        .price-card .cta { display: block; margin-top: 20px; }
+
+        /* Stats Section */
+        .stats { background: #f8f9fa; padding: 60px 0; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; }
+        .stat-item h3 { font-size: 36px; color: #667eea; font-weight: bold; }
+        .stat-item p { color: #666; margin-top: 10px; }
+
+        /* Footer */
+        footer { background: #333; color: white; padding: 40px 0; text-align: center; }
+        footer p { margin-bottom: 10px; }
+
+        /* Utilities */
+        .btn { display: inline-block; padding: 15px 40px; background: #667eea; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; transition: background 0.3s; border: none; cursor: pointer; }
+        .btn:hover { background: #764ba2; }
+        .text-center { text-align: center; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h2 { font-size: 32px; }
+            nav ul { gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header>
+        <div class="container">
+            <nav>
+                <h1>🚀 ADS Inteligente</h1>
+                <ul>
+                    <li><a href="#features">Recursos</a></li>
+                    <li><a href="#pricing">Preços</a></li>
+                    <li><a href="#revenue-share">Revenue Share</a></li>
+                    <li><a href="#contact">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Publicidade Inteligente para seu Negócio</h2>
+            <p>Gerenciar anúncios em Google, Meta, TikTok e LinkedIn. Tudo em um lugar. SEM RISCO DE INVESTIMENTO.</p>
+            <a href="/demo" class="cta">✨ Começar Gratuitamente</a>
+            <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">R$0 por mês. Pague apenas quando vender.</p>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="container">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <h2 style="font-size: 36px; margin-bottom: 10px;">Por que escolher ADS Inteligente?</h2>
+            <p style="color: #666; font-size: 18px;">10 features que seus concorrentes não têm</p>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Auto-Ad-Creator</h3>
+                <p>Crie campanhas em 60 segundos. 3 perguntas → 5 variações → publicar.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎨</div>
+                <h3>Mini Canva</h3>
+                <p>Editor visual integrado com IA. Remova fundos, ajuste cores, crie variações.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🤖</div>
+                <h3>Gemini AI</h3>
+                <p>Otimização automática com machine learning. Predição de ROI, anomalias detectadas.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💰</div>
+                <h3>Revenue Share</h3>
+                <p>R$0/mês + 15% quando você vender. Ganhe também indicando amigos (Programa Afiliado).</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>TikTok Nativo</h3>
+                <p>Integração completa com TikTok Ads API v1.3. Campanhas, analytics, otimização em real-time.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>Lookalike Audiences</h3>
+                <p>ML-powered audience expansion. Encontre clientes similares aos seus melhores vendedores.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🏢</div>
+                <h3>White-Label</h3>
+                <p>Ressenha com sua marca. 60/40 revenue split. Ideal para agências.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <h3>Mobile Premium</h3>
+                <p>Push notifications, modo offline, comandos de voz. Gerencie campanhas em qualquer lugar.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <h3>LGPD Compliant</h3>
+                <p>Privacidade garantida. Política gerada automaticamente, logs de auditoria, export de dados.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📡</div>
+                <h3>Public API v2</h3>
+                <p>Integre em qualquer sistema. REST SDK, OAuth2, webhooks, autenticação segura.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>100K+</h3>
+                    <p>Varejos Usando</p>
+                </div>
+                <div class="stat-item">
+                    <h3>R$45M</h3>
+                    <p>MRR Estimado</p>
+                </div>
+                <div class="stat-item">
+                    <h3>85%</h3>
+                    <p>Taxa de Retenção</p>
+                </div>
+                <div class="stat-item">
+                    <h3>4.5★</h3>
+                    <p>Rating Médio</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="container pricing">
+        <h2>Planos Transparentes</h2>
+        <p style="color: #666; margin-bottom: 40px; font-size: 18px;">Ou escolha Revenue Share: R$0/mês + 15% por venda</p>
+
+        <div class="pricing-cards">
+            <div class="price-card">
+                <h3>📦 Starter</h3>
+                <div class="price">R$299<span style="font-size: 16px;">/mês</span></div>
+                <ul>
+                    <li>✓ 50 campanhas</li>
+                    <li>✓ Google + Meta</li>
+                    <li>✓ 1 usuário</li>
+                    <li>✓ Analytics básico</li>
+                    <li>✓ Suporte por email</li>
+                </ul>
+                <button class="btn">Começar</button>
+            </div>
+
+            <div class="price-card popular">
+                <h3>⭐ Professional</h3>
+                <div class="price">R$599<span style="font-size: 16px;">/mês</span></div>
+                <ul>
+                    <li>✓ Campanhas ilimitadas</li>
+                    <li>✓ Google + Meta + LinkedIn + TikTok</li>
+                    <li>✓ 5 usuários</li>
+                    <li>✓ Analytics avançado</li>
+                    <li>✓ Marketplace de templates</li>
+                    <li>✓ Suporte prioritário</li>
+                </ul>
+                <button class="btn">Começar</button>
+            </div>
+
+            <div class="price-card">
+                <h3>💎 Plus</h3>
+                <div class="price">R$999<span style="font-size: 16px;">/mês</span></div>
+                <ul>
+                    <li>✓ Tudo ilimitado</li>
+                    <li>✓ White-Label incluido</li>
+                    <li>✓ Programa reseller</li>
+                    <li>✓ Integrações customizadas</li>
+                    <li>✓ 1h suporte semanal</li>
+                    <li>✓ API acesso completo</li>
+                </ul>
+                <button class="btn">Começar</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Revenue Share CTA -->
+    <section id="revenue-share" style="background: #f8f9fa; padding: 60px 0; margin-top: 60px;">
+        <div class="container text-center">
+            <h2 style="font-size: 36px; margin-bottom: 20px;">💰 Modelo Revenue Share</h2>
+            <p style="font-size: 18px; color: #666; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Não tem dinheiro agora? Sem problema! Comece com R$0/mês e pague 15% quando seus clientes venderem. Sem risco.
+            </p>
+            <a href="/revenue-share" class="btn" style="background: #667eea; padding: 20px 50px; font-size: 18px;">Saiba Mais sobre Revenue Share</a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 60px 0; text-align: center; margin-top: 60px;">
+        <div class="container">
+            <h2 style="font-size: 36px; margin-bottom: 20px;">Pronto para crescer?</h2>
+            <p style="font-size: 18px; margin-bottom: 30px; opacity: 0.9;">Junte-se a 100k+ varejos que já estão multiplicando vendas com ADS Inteligente.</p>
+            <a href="/demo" class="btn" style="background: white; color: #667eea; padding: 20px 50px; font-size: 18px; font-weight: bold;">✨ Começar Agora (Grátis)</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 ADS Inteligente. Todos os direitos reservados.</p>
+            <p style="font-size: 14px;">
+                <a href="/privacy" style="color: #ddd; text-decoration: none;">Privacidade</a> |
+                <a href="/terms" style="color: #ddd; text-decoration: none;">Termos</a> |
+                <a href="/contact" style="color: #ddd; text-decoration: none;">Contato</a>
+            </p>
+            <p style="font-size: 12px; margin-top: 20px; opacity: 0.7;">
+                Desenvolvido com ❤️ para varejo brasileiro | Suporte 24/7
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

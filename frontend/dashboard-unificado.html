@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard on.imob — Centralizado</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f9f9f9; color: #333; }
+        .header { background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%); color: white; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .header h1 { font-size: 28px; margin-bottom: 0.5rem; }
+        .header p { opacity: 0.9; font-size: 14px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .kpi { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-left: 4px solid #0066cc; }
+        .kpi.warning { border-left-color: #dc3545; }
+        .kpi.success { border-left-color: #28a745; }
+        .kpi-label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+        .kpi-value { font-size: 28px; font-weight: 700; color: #0066cc; margin: 0.5rem 0; }
+        .kpi.warning .kpi-value { color: #dc3545; }
+        .kpi.success .kpi-value { color: #28a745; }
+        .secao { background: white; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden; }
+        .secao-header { padding: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; background: #f9f9f9; border-bottom: 1px solid #eee; }
+        .secao-header:hover { background: #f0f0f0; }
+        .secao-header h2 { font-size: 16px; font-weight: 600; }
+        .secao-header .icon { font-size: 20px; transition: transform 0.2s; }
+        .secao-header.collapsed .icon { transform: rotate(-90deg); }
+        .secao-body { padding: 1.5rem; display: none; }
+        .secao-body.show { display: block; }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .row.full { grid-template-columns: 1fr; }
+        .chart-container { position: relative; height: 300px; }
+        .table-compact { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .table-compact th { background: #f0f0f0; padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #ddd; }
+        .table-compact td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+        .table-compact tr:hover { background: #fafafa; }
+        .status-ok { color: #28a745; font-weight: 600; }
+        .status-warning { color: #ffc107; font-weight: 600; }
+        .status-danger { color: #dc3545; font-weight: 600; }
+        .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .btn-primary { background: #0066cc; color: white; }
+        .btn-primary:hover { background: #0052a3; }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn-secondary:hover { background: #ddd; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+        .card { background: white; border: 1px solid #eee; border-radius: 6px; padding: 1rem; }
+        .card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Dashboard on.imob</h1>
+        <p>Visão centralizada de financeiro, imóveis, garantias e comunicados</p>
+    </div>
+
+    <div class="container">
+        <!-- KPIs Principais -->
+        <div class="kpi-row">
+            <div class="kpi success">
+                <div class="kpi-label">Aluguéis Recebidos</div>
+                <div class="kpi-value">R$ 13.100</div>
+                <div style="font-size: 12px; color: #666;">Este mês</div>
+            </div>
+            <div class="kpi warning">
+                <div class="kpi-label">Em Atraso</div>
+                <div class="kpi-value">R$ 2.500</div>
+                <div style="font-size: 12px; color: #666;">2 imóveis</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Repassos Realizados</div>
+                <div class="kpi-value">R$ 10.200</div>
+                <div style="font-size: 12px; color: #666;">Aos proprietários</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Ocupação</div>
+                <div class="kpi-value">92%</div>
+                <div style="font-size: 12px; color: #666;">11 de 12 imóveis</div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 1: FINANCEIRO -->
+        <div class="secao">
+            <div class="secao-header" onclick="toggleSecao(this)">
+                <h2>💰 FINANCEIRO</h2>
+                <span class="icon">▼</span>
+            </div>
+            <div class="secao-body show">
+                <div class="row">
+                    <div class="chart-container">
+                        <canvas id="chartAlugueis"></canvas>
+                    </div>
+                    <div>
+                        <table class="table-compact">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Qtd</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="status-ok">✓ Recebido</td>
+                                    <td>9</td>
+                                    <td>R$ 13.100</td>
+                                </tr>
+                                <tr>
+                                    <td class="status-warning">⏳ Pendente</td>
+                                    <td>1</td>
+                                    <td>R$ 2.500</td>
+                                </tr>
+                                <tr>
+                                    <td class="status-danger">⏰ Atrasado</td>
+                                    <td>2</td>
+                                    <td>R$ 1.800</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 2: REPASSOS -->
+        <div class="secao">
+            <div class="secao-header" onclick="toggleSecao(this)">
+                <h2>💵 REPASSOS AOS PROPRIETÁRIOS</h2>
+                <span class="icon">▼</span>
+            </div>
+            <div class="secao-body show">
+                <div class="row">
+                    <div class="chart-container">
+                        <canvas id="chartRepassos"></canvas>
+                    </div>
+                    <div>
+                        <table class="table-compact">
+                            <thead>
+                                <tr>
+                                    <th>Proprietário</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Carlos Oliveira</td>
+                                    <td>R$ 4.600</td>
+                                    <td class="status-ok">✓ Repassado</td>
+                                </tr>
+                                <tr>
+                                    <td>Maria Santos</td>
+                                    <td>R$ 3.300</td>
+                                    <td class="status-warning">⏳ Pendente</td>
+                                </tr>
+                                <tr>
+                                    <td>Pedro Ferreira</td>
+                                    <td>R$ 2.300</td>
+                                    <td class="status-ok">✓ Repassado</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 3: IMÓVEIS -->
+        <div class="secao">
+            <div class="secao-header" onclick="toggleSecao(this)">
+                <h2>🏠 IMÓVEIS E OCUPAÇÃO</h2>
+                <span class="icon">▼</span>
+            </div>
+            <div class="secao-body show">
+                <div class="row full">
+                    <div class="chart-container">
+                        <canvas id="chartOcupacao"></canvas>
+                    </div>
+                </div>
+                <div class="row full" style="margin-top: 1.5rem;">
+                    <div>
+                        <h3 style="margin-bottom: 1rem; font-size: 14px;">Imóveis Ativos</h3>
+                        <table class="table-compact">
+                            <thead>
+                                <tr>
+                                    <th>Imóvel</th>
+                                    <th>Inquilino</th>
+                                    <th>Aluguel</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Apt. Paulista</strong></td>
+                                    <td>João Silva</td>
+                                    <td>R$ 2.500</td>
+                                    <td class="status-ok">✓ Alugado</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Casa Vila</strong></td>
+                                    <td>Maria Santos</td>
+                                    <td>R$ 1.800</td>
+                                    <td class="status-warning">⏰ Atrasado</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Loft Consolação</strong></td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td class="status-danger">⚫ Vago</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 4: GARANTIAS -->
+        <div class="secao">
+            <div class="secao-header" onclick="toggleSecao(this)">
+                <h2>✅ GARANTIAS E CAUÇÃO</h2>
+                <span class="icon">▼</span>
+            </div>
+            <div class="secao-body show">
+                <div class="row">
+                    <div>
+                        <h3 style="margin-bottom: 1rem; font-size: 14px;">Caução Ativa</h3>
+                        <table class="table-compact">
+                            <thead>
+                                <tr>
+                                    <th>Imóvel</th>
+                                    <th>Valor</th>
+                                    <th>Saldo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Apt. Paulista</td>
+                                    <td>R$ 5.000</td>
+                                    <td class="status-ok">R$ 5.000</td>
+                                </tr>
+                                <tr>
+                                    <td>Casa Vila</td>
+                                    <td>R$ 3.600</td>
+                                    <td class="status-warning">R$ 3.100</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 1rem; font-size: 14px;">Fiadores Registrados</h3>
+                        <table class="table-compact">
+                            <thead>
+                                <tr>
+                                    <th>Imóvel</th>
+                                    <th>Fiador</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Apt. Paulista</td>
+                                    <td>João Fiador</td>
+                                    <td class="status-ok">✓ Ativo</td>
+                                </tr>
+                                <tr>
+                                    <td>Casa Vila</td>
+                                    <td>—</td>
+                                    <td class="status-danger">✗ Nenhum</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 5: COMUNICADOS E CARTAS -->
+        <div class="secao">
+            <div class="secao-header" onclick="toggleSecao(this)">
+                <h2>📢 CARTAS E COMUNICADOS</h2>
+                <span class="icon">▼</span>
+            </div>
+            <div class="secao-body show">
+                <div style="margin-bottom: 1.5rem;">
+                    <button class="btn btn-primary" onclick="abrirBibliotecaModelos()">📚 Biblioteca de Modelos</button>
+                    <button class="btn btn-secondary" onclick="gerarCartaIA()" style="margin-left: 0.5rem;">🤖 Gerar com IA</button>
+                </div>
+                <div>
+                    <h3 style="margin-bottom: 1rem; font-size: 14px;">Últimas Cartas Geradas</h3>
+                    <table class="table-compact">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Destinatário</th>
+                                <th>Data</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cobrança Gentil</td>
+                                <td>Maria Silva</td>
+                                <td>02/10/2026</td>
+                                <td>
+                                    <button class="btn btn-secondary" onclick="abrirWord('cobranca-maria')">📄 Word</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Aviso Protesto</td>
+                                <td>João Santos</td>
+                                <td>01/10/2026</td>
+                                <td>
+                                    <button class="btn btn-secondary" onclick="abrirWord('protesto-joao')">📄 Word</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Biblioteca de Modelos -->
+    <div id="modalModelos" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 8px; width: 90%; max-width: 800px; max-height: 80vh; overflow-y: auto; padding: 2rem;">
+            <h2 style="margin-bottom: 1.5rem;">📚 Biblioteca de Modelos</h2>
+
+            <div style="margin-bottom: 2rem;">
+                <button class="btn btn-primary" onclick="buscarModelos()">🔍 Buscar Modelos na Internet</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <!-- Cartas de Cobrança -->
+                <div class="card">
+                    <h3>💳 Cartas de Cobrança</h3>
+                    <ul style="list-style: none; margin-top: 1rem;">
+                        <li><a href="#" onclick="selecionarModelo('cobranca_gentil')">Cobrança Gentil (1º aviso)</a></li>
+                        <li style="margin-top: 0.5rem;"><a href="#" onclick="selecionarModelo('aviso_protesto')">Aviso de Protesto (2º aviso)</a></li>
+                        <li style="margin-top: 0.5rem;"><a href="#" onclick="selecionarModelo('ultima_chance')">Última Chance (3º aviso)</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contratos -->
+                <div class="card">
+                    <h3>📋 Contratos</h3>
+                    <ul style="list-style: none; margin-top: 1rem;">
+                        <li><a href="#" onclick="selecionarModelo('contrato_residencial')">Contrato Residencial</a></li>
+                        <li style="margin-top: 0.5rem;"><a href="#" onclick="selecionarModelo('contrato_comercial')">Contrato Comercial</a></li>
+                        <li style="margin-top: 0.5rem;"><a href="#" onclick="selecionarModelo('contrato_temporada')">Contrato Temporada</a></li>
+                    </ul>
+                </div>
+
+                <!-- Comunicados -->
+                <div class="card">
+                    <h3>📢 Comunicados</h3>
+                    <ul style="list-style: none; margin-top: 1rem;">
+                        <li><a href="#" onclick="selecionarModelo('comunicado_manutencao')">Manutenção do Imóvel</a></li>
+                        <li style="margin-top: 0.5rem;"><a href="#" onclick="selecionarModelo('encerramento_contrato')">Encerramento Contrato</a></li>
+                        <li style="margin-top: 0.5rem;"><a href="#" onclick="selecionarModelo('devolucao_caacao')">Devolução de Caução</a></li>
+                    </ul>
+                </div>
+
+                <!-- Pedidos -->
+                <div class="card">
+                    <h3>🏠 Pedidos de Imóvel</h3>
+                    <ul style="list-style: none; margin-top: 1rem;">
+                        <li><a href="#" onclick="selecionarModelo('pedido_atualizacao_dados')">Atualizar Dados Cadastrais</a></li>
+                        <li style="margin-top: 0.5rem;"><a href="#" onclick="selecionarModelo('pedido_referencia')">Pedir Referência</a></li>
+                        <li style="margin-top: 0.5rem;"><a href="#" onclick="selecionarModelo('pedido_renovacao')">Pedido Renovação</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; text-align: right;">
+                <button class="btn btn-secondary" onclick="fecharModal('modalModelos')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function toggleSecao(header) {
+            const body = header.nextElementSibling;
+            body.classList.toggle('show');
+            header.classList.toggle('collapsed');
+        }
+
+        function abrirBibliotecaModelos() {
+            document.getElementById('modalModelos').style.display = 'flex';
+        }
+
+        function fecharModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function selecionarModelo(modelo) {
+            alert(`📄 Modelo selecionado: ${modelo}\n\nEm breve: Editor + Download Word`);
+        }
+
+        function abrirWord(cartaId) {
+            alert(`📥 Baixando ${cartaId} em Word...`);
+        }
+
+        function gerarCartaIA() {
+            alert('🤖 Gerando carta com IA...\n\nPrecisa de GEMINI_API_KEY configurada');
+        }
+
+        function buscarModelos() {
+            alert('🔍 Buscando modelos reais na internet...');
+        }
+
+        // Gráficos
+        const ctxAlugueis = document.getElementById('chartAlugueis').getContext('2d');
+        new Chart(ctxAlugueis, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'],
+                datasets: [{
+                    label: 'Aluguéis Recebidos',
+                    data: [10000, 11000, 12000, 13000, 12500, 13100, 13200, 13100, 12800, 13100],
+                    borderColor: '#0066cc',
+                    backgroundColor: 'rgba(0,102,204,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        const ctxRepassos = document.getElementById('chartRepassos').getContext('2d');
+        new Chart(ctxRepassos, {
+            type: 'bar',
+            data: {
+                labels: ['Carlos O.', 'Maria S.', 'Pedro F.'],
+                datasets: [{
+                    label: 'Repassos (R$)',
+                    data: [4600, 3300, 2300],
+                    backgroundColor: ['#28a745', '#ffc107', '#0066cc']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        const ctxOcupacao = document.getElementById('chartOcupacao').getContext('2d');
+        new Chart(ctxOcupacao, {
+            type: 'doughnut',
+            data: {
+                labels: ['Alugado', 'Vago'],
+                datasets: [{
+                    data: [92, 8],
+                    backgroundColor: ['#28a745', '#ddd']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+    </script>
+
+    <!-- 🤖 IA Assistant Bar -->
+    <script>
+        // Estado do chat
+        const chatState = {
+            aberto: false,
+            pagina: 'dashboard_financeiro',
+            contexto: {},
+            historico: []
+        };
+
+        // Obter contexto da página
+        function obterContextoPagina() {
+            return {
+                imovel_nome: "Apt. Paulista",
+                inquilino_nome: "João Silva",
+                dias_atraso: 17,
+                valor_aluguel: "R$ 2.500"
+            };
+        }
+
+        // Atualizar contexto
+        function atualizarContextoUI() {
+            chatState.contexto = obterContextoPagina();
+            const ctx = document.getElementById('iaContext');
+            if (!ctx) return;
+
+            let html = `<div class="ia-context-item"><span class="ia-context-label">📍 Dashboard</span></div>`;
+            if (chatState.contexto.imovel_nome) {
+                html += `<div class="ia-context-item">🏠 ${chatState.contexto.imovel_nome}</div>`;
+            }
+            if (chatState.contexto.dias_atraso) {
+                html += `<div class="ia-context-item" style="color: #dc3545;">⏰ ${chatState.contexto.dias_atraso} dias atrasado</div>`;
+            }
+            ctx.innerHTML = html;
+        }
+
+        // Abrir/Fechar
+        function abrirAssistente() {
+            const panel = document.getElementById('iaPanel');
+            if (panel) {
+                panel.classList.add('open');
+                document.getElementById('iaOpenBtn').classList.add('hidden');
+                atualizarContextoUI();
+                document.getElementById('iaInput')?.focus();
+            }
+        }
+
+        function fecharAssistente() {
+            const panel = document.getElementById('iaPanel');
+            if (panel) {
+                panel.classList.remove('open');
+                document.getElementById('iaOpenBtn').classList.remove('hidden');
+            }
+        }
+
+        // Enviar pergunta
+        async function enviarPergunta() {
+            const input = document.getElementById('iaInput');
+            const pergunta = input.value.trim();
+            if (!pergunta) return;
+
+            adicionarMensagem(pergunta, 'user');
+            input.value = '';
+
+            const chatArea = document.getElementById('iaChatArea');
+            const typing = document.createElement('div');
+            typing.className = 'ia-typing';
+            typing.innerHTML = '<span></span><span></span><span></span>';
+            typing.id = 'iaTyping';
+            chatArea.appendChild(typing);
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            try {
+                const res = await fetch('/api/onimob/ia/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        pergunta: pergunta,
+                        pagina: chatState.pagina,
+                        contexto: chatState.contexto
+                    })
+                }).then(r => r.json());
+
+                document.getElementById('iaTyping')?.remove();
+                adicionarMensagem(res.resposta, 'assistant');
+
+                if (res.sugestoes) {
+                    mostrarSugestoes(res.sugestoes);
+                }
+                chatArea.scrollTop = chatArea.scrollHeight;
+            } catch (e) {
+                document.getElementById('iaTyping')?.remove();
+                adicionarMensagem('❌ Erro ao conectar', 'assistant');
+            }
+        }
+
+        function adicionarMensagem(texto, tipo) {
+            const chatArea = document.getElementById('iaChatArea');
+            if (!chatArea) return;
+            const msg = document.createElement('div');
+            msg.className = `ia-message ${tipo}`;
+            msg.textContent = texto;
+            chatArea.appendChild(msg);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function mostrarSugestoes(sugestoes) {
+            const sugDiv = document.getElementById('iaSuggestions');
+            if (!sugDiv) return;
+            sugDiv.innerHTML = sugestoes.slice(0, 3).map(s =>
+                `<button class="ia-suggestion-btn" onclick="document.getElementById('iaInput').value='${s}'; enviarPergunta();">${s}</button>`
+            ).join('');
+        }
+
+        window.addEventListener('load', atualizarContextoUI);
+    </script>
+
+    <style>
+        .ia-assistant-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .ia-button-open {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .ia-button-open:hover { transform: scale(1.1); }
+        .ia-button-open.hidden { display: none; }
+
+        .ia-panel {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            height: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .ia-panel.open { display: flex; }
+
+        .ia-header {
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            color: white;
+            padding: 16px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ia-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .ia-context {
+            background: #f0f4f9;
+            padding: 12px;
+            font-size: 12px;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .ia-context-item { margin: 4px 0; }
+        .ia-context-label { font-weight: 600; color: #666; }
+
+        .ia-chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .ia-message {
+            margin-bottom: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .ia-message.user {
+            background: #0066cc;
+            color: white;
+            margin-left: 20px;
+            text-align: right;
+        }
+
+        .ia-message.assistant {
+            background: #f0f0f0;
+            color: #333;
+            margin-right: 20px;
+        }
+
+        .ia-typing {
+            display: flex;
+            gap: 4px;
+            padding: 10px;
+        }
+
+        .ia-typing span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #999;
+            animation: pulse 1.4s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .ia-suggestions {
+            padding: 8px 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            border-top: 1px solid #eee;
+        }
+
+        .ia-suggestion-btn {
+            padding: 6px 12px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 16px;
+            font-size: 11px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .ia-suggestion-btn:hover { background: #e0e0e0; }
+
+        .ia-input-area {
+            padding: 12px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 8px;
+        }
+
+        .ia-input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 12px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .ia-input:focus { border-color: #0066cc; }
+
+        .ia-send-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #0066cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .ia-send-btn:hover { background: #0052a3; }
+    </style>
+
+    <!-- IA Assistant Panel with Voice & Multi-language -->
+    <div class="ia-assistant-container">
+        <button class="ia-button-open" id="iaOpenBtn" onclick="abrirAssistente()">🤖</button>
+        <div class="ia-panel" id="iaPanel">
+            <div class="ia-header">
+                <span>🤖 Assistente on.imob</span>
+                <button class="ia-close" onclick="fecharAssistente()">✕</button>
+            </div>
+            <div class="ia-context" id="iaContext"></div>
+            <div class="ia-chat-area" id="iaChatArea"></div>
+            <div class="ia-suggestions" id="iaSuggestions"></div>
+            <div class="ia-input-area">
+                <input type="text" class="ia-input" id="iaInput" placeholder="Sua dúvida..." onkeypress="if(event.key=='Enter') enviarPergunta()">
+                <button class="ia-send-btn" onclick="enviarPergunta()">➤</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste ADS Inteligente - Página 2 | Preferências</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 0; text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 28px; margin-bottom: 5px; }
+        .header p { opacity: 0.9; }
+
+        .progress-bar { width: 100%; height: 8px; background: #ddd; border-radius: 10px; margin-bottom: 40px; overflow: hidden; }
+        .progress-fill { width: 66%; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); }
+
+        .content { background: white; border-radius: 10px; padding: 50px; max-width: 800px; margin: 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+
+        .content h2 { color: #667eea; font-size: 32px; margin-bottom: 20px; }
+        .content p { color: #666; font-size: 16px; line-height: 1.8; margin-bottom: 20px; }
+
+        .checkbox-group { margin-bottom: 30px; }
+        .checkbox-group p { font-weight: 600; color: #333; margin-bottom: 15px; }
+
+        .checkbox-item { display: flex; align-items: center; margin-bottom: 12px; padding: 12px; background: #f8f9fa; border-radius: 5px; cursor: pointer; transition: all 0.2s; }
+        .checkbox-item:hover { background: #f0f4ff; }
+
+        .checkbox-item input { width: 20px; height: 20px; margin-right: 15px; cursor: pointer; }
+        .checkbox-item label { flex: 1; cursor: pointer; }
+        .checkbox-item .description { display: block; color: #999; font-size: 12px; margin-top: 5px; }
+
+        .radio-group { margin-bottom: 30px; }
+        .radio-group p { font-weight: 600; color: #333; margin-bottom: 15px; }
+
+        .radio-item { display: flex; align-items: center; margin-bottom: 12px; padding: 12px; background: #f8f9fa; border-radius: 5px; cursor: pointer; transition: all 0.2s; }
+        .radio-item:hover { background: #f0f4ff; }
+
+        .radio-item input { width: 20px; height: 20px; margin-right: 15px; cursor: pointer; }
+        .radio-item label { flex: 1; cursor: pointer; }
+
+        .buttons { display: flex; gap: 15px; margin-top: 40px; }
+        .btn { padding: 12px 30px; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; flex: 1; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn-secondary:hover { background: #e0e0e0; }
+
+        .info-box { background: #f0f4ff; border-left: 4px solid #667eea; padding: 20px; border-radius: 5px; margin-bottom: 30px; }
+        .info-box p { color: #333; margin: 0; font-size: 14px; }
+
+        @media (max-width: 768px) {
+            .content { padding: 30px; }
+            .buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🚀 Teste ADS Inteligente</h1>
+            <p>Personalize sua experiência - Página 2 de 3</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+
+        <div class="content">
+            <h2>Qual é sua Experiência?</h2>
+
+            <div class="info-box">
+                <p>Vamos personalizar o demo com base no que você já sabe e usa.</p>
+            </div>
+
+            <form id="preferencesForm" action="/demo/dashboard" method="POST">
+
+                <div class="radio-group">
+                    <p>Você já usa anúncios digitais? *</p>
+                    <div class="radio-item">
+                        <input type="radio" id="ads-yes" name="experience" value="yes" required>
+                        <label for="ads-yes">✓ Sim, já uso (Google/Meta/outros)</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="ads-no" name="experience" value="no" required>
+                        <label for="ads-no">✗ Não, é minha primeira vez</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="ads-maybe" name="experience" value="maybe" required>
+                        <label for="ads-maybe">~ Tenho pouca experiência</label>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <p>Quais plataformas você gostaria de testar? *</p>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="platform-google" name="platforms" value="google" checked>
+                        <label for="platform-google">Google Ads</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="platform-meta" name="platforms" value="meta" checked>
+                        <label for="platform-meta">Meta (Facebook/Instagram)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="platform-tiktok" name="platforms" value="tiktok">
+                        <label for="platform-tiktok">TikTok Ads</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="platform-linkedin" name="platforms" value="linkedin">
+                        <label for="platform-linkedin">LinkedIn Ads</label>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <p>Quais features você quer ver primeiro? *</p>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="feature-auto" name="features" value="auto-ad-creator" checked>
+                        <label for="feature-auto">
+                            ⚡ Auto-Ad-Creator (60 segundos)
+                            <span class="description">Criar campanhas em 1 minuto com IA</span>
+                        </label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="feature-dashboard" name="features" value="dashboard" checked>
+                        <label for="feature-dashboard">
+                            📊 Dashboard de Analytics
+                            <span class="description">Acompanhar performance das campanhas</span>
+                        </label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="feature-revenue" name="features" value="revenue-share">
+                        <label for="feature-revenue">
+                            💰 Revenue Share (R$0/mês)
+                            <span class="description">Ganhar comissões quando vender</span>
+                        </label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="feature-canva" name="features" value="mini-canva">
+                        <label for="feature-canva">
+                            🎨 Mini Canva
+                            <span class="description">Editor de imagens com IA</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="radio-group">
+                    <p>Qual é seu tipo ideal de demo? *</p>
+                    <div class="radio-item">
+                        <input type="radio" id="demo-quick" name="demoType" value="quick" required>
+                        <label for="demo-quick">⚡ Rápido (5 min) - Ver funcionalidades principais</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="demo-full" name="demoType" value="full" required>
+                        <label for="demo-full">📚 Completo (15 min) - Explorar tudo</label>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button type="button" class="btn btn-secondary" onclick="window.history.back()">← Voltar</button>
+                    <button type="submit" class="btn btn-primary">Continuar → Dashboard Demo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

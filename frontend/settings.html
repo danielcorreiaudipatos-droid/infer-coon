@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações — on.imob</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            position: fixed;
+            width: 250px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+
+        .sidebar-item.icon {
+            font-size: 18px;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: 250px;
+            padding: 40px;
+        }
+
+        .settings-section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .settings-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .setting-group {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .setting-group:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .setting-description {
+            display: block;
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 12px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="url"],
+        select,
+        textarea {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-danger {
+            background: #ff4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ff2222;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border-left: 4px solid #1976d2;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #388e3c;
+            border-left: 4px solid #388e3c;
+        }
+
+        .alert-warning {
+            background: #fff3e0;
+            color: #f57c00;
+            border-left: 4px solid #f57c00;
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .test-result {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .test-result.show {
+            display: block;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-connected {
+            background: #4caf50;
+        }
+
+        .status-disconnected {
+            background: #f44336;
+        }
+
+        .status-pending {
+            background: #ff9800;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                width: auto;
+                height: auto;
+                padding: 20px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="password"],
+            input[type="url"],
+            select {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>⚙️ Configurações</h2>
+            <div class="sidebar-item active" data-section="geral">
+                <span class="icon">🏢</span>
+                <span>Geral</span>
+            </div>
+            <div class="sidebar-item" data-section="branding">
+                <span class="icon">🎨</span>
+                <span>Branding</span>
+            </div>
+            <div class="sidebar-item" data-section="webhooks">
+                <span class="icon">🔗</span>
+                <span>Webhooks</span>
+            </div>
+            <div class="sidebar-item" data-section="open-banking">
+                <span class="icon">🏦</span>
+                <span>Open Banking</span>
+            </div>
+            <div class="sidebar-item" data-section="payment">
+                <span class="icon">💳</span>
+                <span>Pagamentos</span>
+            </div>
+            <div class="sidebar-item" data-section="whatsapp">
+                <span class="icon">💬</span>
+                <span>WhatsApp</span>
+            </div>
+            <div class="sidebar-item" data-section="integracao">
+                <span class="icon">🔌</span>
+                <span>Integrações</span>
+            </div>
+            <div class="sidebar-item" data-section="api">
+                <span class="icon">📡</span>
+                <span>API Keys</span>
+            </div>
+            <div class="sidebar-item" data-section="seguranca">
+                <span class="icon">🔐</span>
+                <span>Segurança</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+            <!-- Geral -->
+            <div class="settings-section active" id="geral">
+                <h2>Configurações Gerais</h2>
+                <div class="setting-group">
+                    <label class="setting-label">Nome da Imobiliária</label>
+                    <input type="text" placeholder="Sua imobiliária" value="Imobiliária Exemplo">
+                    <p class="setting-description">Nome que aparece em documentos e emails</p>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Email de Suporte</label>
+                    <input type="email" placeholder="suporte@imobiliaria.com">
+                    <p class="setting-description">Email para contato dos clientes</p>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Telefone</label>
+                    <input type="text" placeholder="(11) 9XXXX-XXXX">
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">WhatsApp</label>
+                    <input type="text" placeholder="55 11 9XXXX-XXXX">
+                    <p class="setting-description">Com país + DDD + número</p>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Endereço</label>
+                    <input type="text" placeholder="Rua, número, bairro, cidade">
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary">Salvar Configurações</button>
+                </div>
+            </div>
+
+            <!-- Branding -->
+            <div class="settings-section" id="branding">
+                <h2>Branding Customizável</h2>
+                <div class="alert alert-info">
+                    ℹ️ Configure cores, logo e fontes que sua imobiliária usará em todo o sistema
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Logo (URL)</label>
+                    <input type="url" placeholder="https://seu-site.com/logo.png">
+                    <p class="setting-description">Link direto para logo em PNG/JPG. Recomendado: 250x250px</p>
+                </div>
+                <div class="grid-2">
+                    <div class="setting-group">
+                        <label class="setting-label">Cor Primária</label>
+                        <input type="text" placeholder="#667eea" value="#667eea">
+                        <p class="setting-description">Cor principal (hex code)</p>
+                    </div>
+                    <div class="setting-group">
+                        <label class="setting-label">Cor Secundária</label>
+                        <input type="text" placeholder="#764ba2" value="#764ba2">
+                        <p class="setting-description">Cor secundária (hex code)</p>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Tagline</label>
+                    <input type="text" placeholder="Gestão Imobiliária Inteligente">
+                    <p class="setting-description">Frase de efeito em login e landing</p>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary">Salvar Branding</button>
+                    <button class="btn btn-secondary">Preview</button>
+                </div>
+            </div>
+
+            <!-- Webhooks -->
+            <div class="settings-section" id="webhooks">
+                <h2>Webhooks</h2>
+                <div class="alert alert-warning">
+                    ⚠️ URLs para receber eventos em tempo real. Certifique-se de que seu servidor está respondendo
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Webhook de Pagamento</label>
+                    <input type="url" placeholder="https://seu-servidor.com/webhook/payment">
+                    <p class="setting-description">Eventos: payment.received, payment.failed, payment.refunded</p>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Webhook de WhatsApp</label>
+                    <input type="url" placeholder="https://seu-servidor.com/webhook/whatsapp">
+                    <p class="setting-description">Eventos: message.received, message.sent</p>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Webhook de Lead</label>
+                    <input type="url" placeholder="https://seu-servidor.com/webhook/lead">
+                    <p class="setting-description">Eventos: lead.created, lead.qualified</p>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary">Salvar Webhooks</button>
+                    <button class="btn btn-secondary" onclick="testWebhook()">Testar Todos</button>
+                </div>
+                <div class="test-result" id="webhook-result">
+                    <strong>Resultado do teste:</strong><br>
+                    <span id="webhook-log"></span>
+                </div>
+            </div>
+
+            <!-- Open Banking -->
+            <div class="settings-section" id="open-banking">
+                <h2>Open Banking (BETA)</h2>
+                <div class="alert alert-info">
+                    ℹ️ Integre com seus bancos para sincronizar extratos automaticamente
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span class="status-indicator status-disconnected"></span>
+                        Banco Itaú
+                    </label>
+                    <p class="setting-description">Client ID Itaú Open Banking</p>
+                    <input type="text" placeholder="SEU_CLIENT_ID_ITAU">
+                    <p class="setting-description">Client Secret Itaú</p>
+                    <input type="password" placeholder="SEU_CLIENT_SECRET_ITAU">
+                    <button class="btn btn-secondary" style="margin-top: 10px;">Conectar Itaú</button>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span class="status-indicator status-disconnected"></span>
+                        Banco Bradesco
+                    </label>
+                    <p class="setting-description">Client ID Bradesco Open Banking</p>
+                    <input type="text" placeholder="SEU_CLIENT_ID_BRADESCO">
+                    <p class="setting-description">Client Secret Bradesco</p>
+                    <input type="password" placeholder="SEU_CLIENT_SECRET_BRADESCO">
+                    <button class="btn btn-secondary" style="margin-top: 10px;">Conectar Bradesco</button>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span class="status-indicator status-disconnected"></span>
+                        Banco Santander
+                    </label>
+                    <p class="setting-description">Client ID Santander Open Banking</p>
+                    <input type="text" placeholder="SEU_CLIENT_ID_SANTANDER">
+                    <p class="setting-description">Client Secret Santander</p>
+                    <input type="password" placeholder="SEU_CLIENT_SECRET_SANTANDER">
+                    <button class="btn btn-secondary" style="margin-top: 10px;">Conectar Santander</button>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary">Salvar Credenciais</button>
+                    <button class="btn btn-secondary">Sincronizar Extratos</button>
+                </div>
+            </div>
+
+            <!-- Pagamentos -->
+            <div class="settings-section" id="payment">
+                <h2>Configuração de Pagamentos</h2>
+                <div class="alert alert-success">
+                    ✓ PIX (0%), Boleto (2.49%), Cartão (2.99%)
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span class="status-indicator status-connected"></span>
+                        Stripe (Cartão de Crédito)
+                    </label>
+                    <p class="setting-description">API Key Stripe (encontre em dashboard.stripe.com)</p>
+                    <input type="password" placeholder="Sua chave secreta Stripe">
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span class="status-indicator status-connected"></span>
+                        Assas (Pagamento + Split)
+                    </label>
+                    <p class="setting-description">API Key Assas</p>
+                    <input type="password" placeholder="apy_...">
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Banco para Transferência (Split)</label>
+                    <input type="text" placeholder="Adicione sua conta bancária para repassos">
+                    <p class="setting-description">CNPJ da imobiliária para split 95/5</p>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary">Salvar Configurações</button>
+                    <button class="btn btn-secondary">Testar Conexão</button>
+                </div>
+            </div>
+
+            <!-- WhatsApp -->
+            <div class="settings-section" id="whatsapp">
+                <h2>WhatsApp Bot</h2>
+                <div class="alert alert-info">
+                    ℹ️ Configure seu número WhatsApp Business e credentials Meta
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Número WhatsApp Business</label>
+                    <input type="text" placeholder="55 11 9XXXX-XXXX">
+                    <p class="setting-description">Com país + DDD + número</p>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Business Account ID (Meta)</label>
+                    <input type="text" placeholder="SEU_BUSINESS_ACCOUNT_ID">
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Access Token (Meta API)</label>
+                    <input type="password" placeholder="EAAxxxxxx...">
+                    <p class="setting-description">Token de acesso com permissão whatsapp_business_messaging</p>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Webhook Verify Token</label>
+                    <input type="text" placeholder="seu_token_aleatorio_seguro" value="imob_webhook_verify_token_2024">
+                    <p class="setting-description">Token para verificação de webhooks. Você define este valor</p>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary">Salvar WhatsApp</button>
+                    <button class="btn btn-secondary">Testar Conexão</button>
+                </div>
+            </div>
+
+            <!-- Integrações -->
+            <div class="settings-section" id="integracao">
+                <h2>Integrações Externas</h2>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span class="status-indicator status-connected"></span>
+                        VivaReal
+                    </label>
+                    <p class="setting-description">Bearer Token VivaReal</p>
+                    <input type="password" placeholder="bearer_token_vivareal">
+                    <div class="toggle-switch">
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span>Auto-publicar imoveis</span>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span class="status-indicator status-connected"></span>
+                        ZapImóveis
+                    </label>
+                    <p class="setting-description">API Token ZapImóveis</p>
+                    <input type="password" placeholder="api_token_zapimovels">
+                    <div class="toggle-switch">
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span>Sincronizar bidirecional</span>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span class="status-indicator status-pending"></span>
+                        Nota Fiscal (SEFAZ)
+                    </label>
+                    <p class="setting-description">⏳ Configuração disponível em breve</p>
+                    <button class="btn btn-secondary" disabled>Indisponível</button>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span class="status-indicator status-pending"></span>
+                        DMOB (Sistema Único)
+                    </label>
+                    <p class="setting-description">⏳ Configuração disponível em breve</p>
+                    <button class="btn btn-secondary" disabled>Indisponível</button>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary">Salvar Integrações</button>
+                </div>
+            </div>
+
+            <!-- API Keys -->
+            <div class="settings-section" id="api">
+                <h2>API Keys</h2>
+                <div class="alert alert-info">
+                    ℹ️ Use essas chaves para integrar on.imob com seu sistema
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">API Key (Read/Write)</label>
+                    <input type="text" value="apy_abc123def456ghi789jkl0mno1pqr2" readonly>
+                    <button class="btn btn-secondary" style="margin-top: 10px;">Copiar</button>
+                    <button class="btn btn-secondary" style="margin-top: 10px;">Regenerar</button>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">API Base URL</label>
+                    <input type="text" value="https://api.on.imob.com/v1" readonly>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Documentação</label>
+                    <p class="setting-description">
+                        <a href="https://docs.on.imob.com" target="_blank">📖 Acessar documentação da API</a>
+                    </p>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Exemplo de Requisição</label>
+                    <textarea readonly>curl -X GET https://api.on.imob.com/v1/imoveis \
+  -H "Authorization: Bearer apy_abc123..." \
+  -H "Content-Type: application/json"</textarea>
+                </div>
+            </div>
+
+            <!-- Segurança -->
+            <div class="settings-section" id="seguranca">
+                <h2>Segurança</h2>
+
+                <div class="setting-group">
+                    <label class="setting-label">Alterar Senha</label>
+                    <input type="password" placeholder="Senha atual">
+                    <input type="password" placeholder="Nova senha" style="margin-top: 10px;">
+                    <input type="password" placeholder="Confirmar nova senha" style="margin-top: 10px;">
+                    <button class="btn btn-primary" style="margin-top: 10px;">Alterar Senha</button>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Autenticação em Dois Fatores (2FA)</label>
+                    <p class="setting-description">Adicione uma camada extra de segurança</p>
+                    <button class="btn btn-secondary">Ativar 2FA</button>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Sessões Ativas</label>
+                    <p class="setting-description">Você tem 3 sessões ativas (Última: 5 minutos atrás)</p>
+                    <button class="btn btn-danger">Fazer logout em outros dispositivos</button>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Histórico de Login</label>
+                    <p class="setting-description">2026-10-02 14:30 — São Paulo, SP | Chrome</p>
+                    <p class="setting-description">2026-10-02 09:15 — São Paulo, SP | Mobile Safari</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navegação entre seções
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const sectionId = this.dataset.section;
+
+                // Remover classe active de todos
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+
+                // Adicionar classe active ao clicado
+                this.classList.add('active');
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        function testWebhook() {
+            const resultDiv = document.getElementById('webhook-result');
+            const logSpan = document.getElementById('webhook-log');
+
+            resultDiv.classList.add('show');
+            logSpan.textContent = 'Testando webhooks...\n';
+
+            setTimeout(() => {
+                logSpan.textContent += '✓ Webhook de Pagamento: OK (200ms)\n';
+                logSpan.textContent += '✓ Webhook de WhatsApp: OK (150ms)\n';
+                logSpan.textContent += '✓ Webhook de Lead: OK (180ms)\n';
+                logSpan.textContent += '\nTodos os webhooks estão funcionando!';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

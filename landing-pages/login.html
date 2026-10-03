@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Acesso - ADS Inteligente</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a2550 100%);
+            color: #e0e6ff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00ff88;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #00ff88;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #b0b8ff;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .option-card {
+            background: linear-gradient(135deg, #1a2550 0%, #243366 100%);
+            border: 2px solid #4a5b9f;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00ff88, #0088ff);
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff88;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+        }
+
+        .option-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .option-title {
+            font-size: 1.5em;
+            color: #00ff88;
+            margin-bottom: 10px;
+        }
+
+        .option-desc {
+            color: #b0b8ff;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .option-features {
+            background: #0f1a3f;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 0.9em;
+            color: #b0b8ff;
+        }
+
+        .feature::before {
+            content: "✓";
+            color: #00ff88;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .option-button {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #0a0e27;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.3s;
+        }
+
+        .option-button:hover {
+            transform: scale(1.05);
+        }
+
+        .secondary-button {
+            background: transparent;
+            border: 2px solid #4a5b9f;
+            color: #00ff88;
+        }
+
+        .secondary-button:hover {
+            border-color: #00ff88;
+        }
+
+        /* Login Forms */
+        .login-section {
+            display: none;
+            background: linear-gradient(135deg, #1a2550 0%, #243366 100%);
+            border: 2px solid #4a5b9f;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .login-section.active {
+            display: block;
+        }
+
+        .login-section h2 {
+            color: #00ff88;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #b0b8ff;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: #0f1a3f;
+            border: 1px solid #4a5b9f;
+            color: #e0e6ff;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #0a0e27;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .submit-button:hover {
+            transform: scale(1.02);
+        }
+
+        .back-button {
+            background: #4a5b9f;
+            color: #e0e6ff;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .back-button:hover {
+            background: #5a6baf;
+        }
+
+        .demo-info {
+            background: #0f1a3f;
+            border-left: 4px solid #0088ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            color: #b0b8ff;
+        }
+
+        .demo-info h3 {
+            color: #00ff88;
+            margin-bottom: 10px;
+        }
+
+        .demo-info ul {
+            list-style-position: inside;
+            margin-top: 10px;
+        }
+
+        .demo-info li {
+            margin: 5px 0;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        .forgot-password a {
+            color: #00ff88;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #b0b8ff;
+        }
+
+        .signup-link a {
+            color: #00ff88;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .option-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">🎯 ADS Inteligente</div>
+
+    <div class="container">
+        <!-- OPCÕES INICIAIS -->
+        <div id="optionsView" class="view">
+            <div class="header">
+                <h1>Bem-vindo! 👋</h1>
+                <p>Escolha como você quer começar</p>
+            </div>
+
+            <div class="options-grid">
+                <!-- OPÇÃO 1: CONHECER A PLATAFORMA (Demo) -->
+                <div class="option-card" onclick="showLogin('demo')">
+                    <div class="option-icon">🔍</div>
+                    <div class="option-title">CONHECER</div>
+                    <div class="option-desc">Veja a plataforma em ação antes de comprar</div>
+
+                    <div class="option-features">
+                        <div class="feature">Dashboard demo ao vivo</div>
+                        <div class="feature">Teste gratuito de 15 minutos</div>
+                        <div class="feature">Veja todos os recursos Premium</div>
+                        <div class="feature">Sem cartão de crédito necessário</div>
+                    </div>
+
+                    <button class="option-button">Acessar Demo Gratuita →</button>
+                </div>
+
+                <!-- OPÇÃO 2: LOGIN NORMAL (Clientes) -->
+                <div class="option-card" onclick="showLogin('normal')">
+                    <div class="option-icon">🔐</div>
+                    <div class="option-title">ENTRAR</div>
+                    <div class="option-desc">Você já tem um plano? Acesse sua conta</div>
+
+                    <div class="option-features">
+                        <div class="feature">Acesso completo ao seu plano</div>
+                        <div class="feature">Dashboard personalisado</div>
+                        <div class="feature">Todas as suas campanhas</div>
+                        <div class="feature">Suporte prioritário</div>
+                    </div>
+
+                    <button class="option-button secondary-button">Entrar na Conta →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOGIN DEMO -->
+        <div id="demoLogin" class="login-section">
+            <h2>🎯 Demo Gratuita - 15 Minutos</h2>
+
+            <div class="demo-info">
+                <h3>O que você vai ver:</h3>
+                <ul>
+                    <li>✓ Dashboard completo com dados reais</li>
+                    <li>✓ Como gerenciar campanhas (Google + Meta + TikTok)</li>
+                    <li>✓ Auto-Ad Creator funcionando ao vivo</li>
+                    <li>✓ Mini Canva integrado</li>
+                    <li>✓ Análise preditiva com IA Gemini</li>
+                    <li>✓ Como economizar 5 horas/semana</li>
+                </ul>
+            </div>
+
+            <form onsubmit="submitDemoLogin(event)">
+                <div class="form-group">
+                    <label>Seu Email</label>
+                    <input type="email" required placeholder="seu.email@empresa.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Nome Completo</label>
+                    <input type="text" required placeholder="Seu Nome">
+                </div>
+
+                <div class="form-group">
+                    <label>WhatsApp (opcional)</label>
+                    <input type="tel" placeholder="(11) 99999-9999">
+                </div>
+
+                <button type="submit" class="submit-button">Acessar Demo Agora 🚀</button>
+            </form>
+
+            <button class="back-button" onclick="showOptions()">← Voltar</button>
+        </div>
+
+        <!-- LOGIN NORMAL -->
+        <div id="normalLogin" class="login-section">
+            <h2>Acesse sua Conta</h2>
+
+            <form onsubmit="submitNormalLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" required placeholder="seu.email@empresa.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" required placeholder="Sua senha">
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#esqueci-senha">Esqueceu a senha?</a>
+                </div>
+
+                <button type="submit" class="submit-button">Entrar 🔓</button>
+            </form>
+
+            <div class="signup-link">
+                Não tem uma conta? <a href="#planos">Escolha um plano aqui</a>
+            </div>
+
+            <button class="back-button" onclick="showOptions()">← Voltar</button>
+        </div>
+
+        <!-- APP DOWNLOAD BANNER -->
+        <div style="background: linear-gradient(135deg, #1a2550 0%, #243366 100%); border: 2px solid #4a5b9f; border-radius: 15px; padding: 30px; margin-top: 60px; text-align: center;">
+            <h3 style="font-size: 1.8em; color: #00ff88; margin-bottom: 15px;">📱 Coon Mobile - Gerencie de Qualquer Lugar</h3>
+            <p style="color: #b0b8ff; margin-bottom: 20px; font-size: 1.05em;">Acesse todas as suas campanhas direto do seu celular</p>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://apps.apple.com/br/app/coon/..." style="display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #0a0e27; border: none; border-radius: 8px; font-weight: bold; text-decoration: none; cursor: pointer; transition: transform 0.3s;">
+                    📥 App Store
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=..." style="display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #0a0e27; border: none; border-radius: 8px; font-weight: bold; text-decoration: none; cursor: pointer; transition: transform 0.3s;">
+                    📥 Play Store
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showLogin(type) {
+            document.getElementById('optionsView').style.display = 'none';
+
+            if (type === 'demo') {
+                document.getElementById('demoLogin').classList.add('active');
+                document.getElementById('normalLogin').classList.remove('active');
+            } else {
+                document.getElementById('normalLogin').classList.add('active');
+                document.getElementById('demoLogin').classList.remove('active');
+            }
+        }
+
+        function showOptions() {
+            document.getElementById('optionsView').style.display = 'block';
+            document.getElementById('demoLogin').classList.remove('active');
+            document.getElementById('normalLogin').classList.remove('active');
+        }
+
+        function submitDemoLogin(e) {
+            e.preventDefault();
+            alert('✅ Demo agendada! Você receberá um link em seu email em 2 minutos.');
+            showOptions();
+        }
+
+        function submitNormalLogin(e) {
+            e.preventDefault();
+            alert('✅ Login realizado! Redirecionando para seu dashboard...');
+            // Aqui iria para o dashboard real
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

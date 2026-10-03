@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Inquilino — on.imob</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; padding: 2rem; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { margin-bottom: 1rem; color: #333; }
+        .user-info { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        .card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        .dados-linha { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .dado { }
+        .label { font-size: 12px; color: #666; font-weight: 600; }
+        .valor { font-size: 16px; color: #333; margin-top: 4px; }
+        button { padding: 10px 20px; background: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        button:hover { background: #0052a3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        th { background: #f9f9f9; font-weight: 600; }
+        .status-ok { color: #28a745; font-weight: 600; }
+        .status-vencido { color: #dc3545; font-weight: 600; }
+        .status-proximo { color: #ffc107; font-weight: 600; }
+        .btn-download { font-size: 12px; padding: 6px 12px; }
+        .aviso { background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; padding: 1rem; color: #856404; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏠 Portal Inquilino</h1>
+
+        <div class="user-info">
+            <div class="dados-linha">
+                <div class="dado">
+                    <div class="label">Nome</div>
+                    <div class="valor">João da Silva</div>
+                </div>
+                <div class="dado">
+                    <div class="label">Email</div>
+                    <div class="valor">joao@email.com</div>
+                </div>
+            </div>
+            <div class="dados-linha">
+                <div class="dado">
+                    <div class="label">Imóvel Locado</div>
+                    <div class="valor">Apt. Paulista, 100 - São Paulo/SP</div>
+                </div>
+                <div class="dado">
+                    <div class="label">Aluguel Mensal</div>
+                    <div class="valor">R$ 2.500,00</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="avisos"></div>
+
+        <!-- Contrato -->
+        <div class="card">
+            <h2>📋 Contrato</h2>
+            <div class="dados-linha">
+                <div class="dado">
+                    <div class="label">Tipo</div>
+                    <div class="valor">Aluguel Residencial</div>
+                </div>
+                <div class="dado">
+                    <div class="label">Prazo</div>
+                    <div class="valor">12 meses</div>
+                </div>
+            </div>
+            <div class="dados-linha">
+                <div class="dado">
+                    <div class="label">Data Início</div>
+                    <div class="valor">01/01/2024</div>
+                </div>
+                <div class="dado">
+                    <div class="label">Data Término</div>
+                    <div class="valor">31/12/2024</div>
+                </div>
+            </div>
+            <button onclick="baixarContrato()" class="btn-download">📥 Baixar Contrato (PDF)</button>
+        </div>
+
+        <!-- Pagamentos -->
+        <div class="card">
+            <h2>💳 Histórico de Pagamentos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mês</th>
+                        <th>Data Vencimento</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Data Pagamento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Outubro/2026</td>
+                        <td>01/10/2026</td>
+                        <td>R$ 2.500,00</td>
+                        <td class="status-ok">✓ Pago</td>
+                        <td>01/10/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Setembro/2026</td>
+                        <td>01/09/2026</td>
+                        <td>R$ 2.500,00</td>
+                        <td class="status-ok">✓ Pago</td>
+                        <td>01/09/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Agosto/2026</td>
+                        <td>01/08/2026</td>
+                        <td>R$ 2.500,00</td>
+                        <td class="status-ok">✓ Pago</td>
+                        <td>03/08/2026</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Documentos -->
+        <div class="card">
+            <h2>📁 Documentos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Data</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Contrato Assinado</td>
+                        <td>01/01/2024</td>
+                        <td><button class="btn-download" onclick="abrirDocumento('contrato')">📥 Abrir</button></td>
+                    </tr>
+                    <tr>
+                        <td>Comprovante Depósito Caução</td>
+                        <td>01/01/2024</td>
+                        <td><button class="btn-download" onclick="abrirDocumento('caucao')">📥 Abrir</button></td>
+                    </tr>
+                    <tr>
+                        <td>Certidão Negativa (PF)</td>
+                        <td>15/09/2024</td>
+                        <td><button class="btn-download" onclick="abrirDocumento('certidao')">📥 Abrir</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Comunicados -->
+        <div class="card">
+            <h2>📢 Comunicados do Proprietário</h2>
+            <div style="border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                <div style="font-weight: 600; margin-bottom: 0.5rem;">Manutenção Preventiva — 05/10/2026</div>
+                <div style="color: #666; font-size: 14px;">Será realizada limpeza da caixa d'água em 05/10. Pode haver falta d'água de 10h às 12h. Qualquer dúvida, entre em contato.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function verificarAtrasos() {
+            const hoje = new Date('2026-10-02');
+            const avisoDiv = document.getElementById('avisos');
+            // Exemplo: Se houvesse atraso, mostraria aviso
+            // avisoDiv.innerHTML = '<div class="aviso">⚠️ Você tem uma parcela vencida! Valor: R$ 2.500,00 — Vencimento: 01/10/2026</div>';
+        }
+
+        function baixarContrato() {
+            alert('Contrato será baixado em PDF...');
+        }
+
+        function abrirDocumento(tipo) {
+            alert(`Abrindo documento: ${tipo}`);
+        }
+
+        verificarAtrasos();
+    </script>
+</body>
+</html>

@@ -4,6 +4,7 @@ Motor de Inferência Estatística e API Principal FastAPI.
 """
 
 import os
+import io
 import time
 import math
 import json
@@ -39,6 +40,7 @@ from backend.auth import (
     UpgradeRequest,
     authenticate_user,
     register_user,
+    criar_usuario_staff,
     handle_google_login,
     create_jwt,
     decode_jwt
@@ -75,6 +77,14 @@ from backend.telemetry import (
     get_all_users_with_access,
     resolve_diagnostic
 )
+from backend.integracao_endpoints import router as integracao_router
+from backend.site_endpoints import router as site_router
+from backend.payment_endpoints import router as payment_router
+from backend.financial_endpoints import router as financial_router
+from backend.split_endpoints import router as split_router
+from backend.auth_endpoints import router as auth_router, router_branding as branding_router, router_frontend as frontend_router
+from backend.open_banking_endpoints import router as open_banking_router
+from backend.data_import import router as import_router
 
 from backend.financial import (
     init_financial_tables,
@@ -143,6 +153,13 @@ from backend.security_guard import (
     ban_ip_immediate,
     is_ip_banned
 )
+from backend.avaliacao_imovel import (
+    gerar_avaliacao_simples,
+    registrar_avaliacao,
+    obter_avaliacao,
+    extrair_dados_imovel,
+    gerar_pdf_avaliacao
+)
 from backend.integrations_hub import (
     init_integrations_tables,
     get_integrations_dashboard_status,
@@ -179,9 +196,17 @@ OFFICIAL_SITE_URL = os.getenv("OFFICIAL_SITE_URL", "https://www.coon.com.br")
 # no log — só serve pra testar localmente, não é previsível nem repetida.
 import secrets as _secrets
 COON_MASTER_KEY = os.getenv("COON_MASTER_KEY")
+_EM_PRODUCAO = bool(os.getenv("RENDER") or os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("DYNO"))
 if not COON_MASTER_KEY:
+    if _EM_PRODUCAO:
+        # Em produção, nunca gera e expõe uma chave de admin sozinha: força a
+        # configuração correta da variável de ambiente antes de subir o servico.
+        raise RuntimeError(
+            "COON_MASTER_KEY não está definida no ambiente de produção. "
+            "Configure-a em Settings > Environment (Render/Railway) antes de iniciar o servidor."
+        )
     COON_MASTER_KEY = _secrets.token_urlsafe(18)
-    print(f"[AVISO] COON_MASTER_KEY não definida no ambiente. Chave temporária gerada para esta sessão: {COON_MASTER_KEY}")
+    print("[AVISO] COON_MASTER_KEY não definida. Chave temporária gerada só para uso local; não fica em log de produção.")
 
 app = FastAPI(
     title="Infer.coon API",
@@ -607,9 +632,21 @@ def apply_transformation(val_array: np.ndarray, transform_type: str, var_name: s
         return np.square(val_array)
     return val_array.copy()
 
-# -------------------------------------------------------------
+# ========== ROUTERS REGISTRADOS ==========
+app.include_router(integracao_router)
+app.include_router(site_router)
+app.include_router(payment_router)
+app.include_router(financial_router)
+app.include_router(split_router)
+app.include_router(auth_router)
+app.include_router(branding_router)
+app.include_router(frontend_router)
+app.include_router(open_banking_router)
+app.include_router(import_router)
+
+# ========== ENDPOINTS PRINCIPAIS ==========
+
 # Endpoint Principal de Regressão e Inferência Estilo SisDEA
-# -------------------------------------------------------------
 
 @app.post("/api/regression/calculate")
 def run_regression(req: RegressionRequest):
@@ -1556,6 +1593,7 @@ def api_auth_login(req: LoginRequest):
         "email": user["email"],
         "name": user["name"],
         "plan": user["plan"],
+        "role": user.get("role", "cliente"),
         "is_admin": False
     })
     return {
@@ -1915,6 +1953,13 @@ def serve_onlove_app():
 # ONIMOB — MÓDULO 1: CADASTRO (imóveis, proprietários, inquilinos, corretores)
 # ==============================================================================
 import backend.imob_engine as imob_engine
+import backend.multi_tenant as multi_tenant
+import backend.gemini_integration as gemini_integration
+import backend.garantias as garantias
+import backend.modelos_cartas as modelos_cartas
+import backend.word_generator as word_generator
+import backend.ia_chat as ia_chat
+import backend.ia_analytics as ia_analytics
 
 @app.post("/api/onimob/corretores")
 def api_onimob_criar_corretor(dados: imob_engine.CorretorIn):
@@ -1993,6 +2038,92 @@ def api_onimob_atualizar_status(imovel_id: int, dados: AtualizarStatusImovelRequ
 def api_onimob_resumo():
     return imob_engine.painel_resumo()
 
+# ── AVALIAÇÃO DE IMÓVEIS (COON Infer) ────────────────────────────────────────
+
+@app.post("/api/onimob/imoveis/{imovel_id}/avaliar")
+def api_avaliar_imovel(imovel_id: int, escritorio_id: int = Query(...)):
+    """
+    Gera avaliação automática de um imóvel usando modelo COON.
+
+    Entrada: imovel_id e escritorio_id
+    Saída: valor central, intervalo de confiança, grau de precisão
+    """
+    try:
+        # Obter dados do imóvel
+        imovel = imob_engine.obter_imovel(imovel_id)
+        if not imovel:
+            raise HTTPException(status_code=404, detail="Imóvel não encontrado")
+
+        # Extrair características
+        dados_imovel = extrair_dados_imovel(imovel)
+
+        # Gerar avaliação
+        avaliacao = gerar_avaliacao_simples(dados_imovel, escritorio_id)
+
+        if avaliacao.get('sucesso'):
+            # Registrar no banco
+            registrar_avaliacao(imovel_id, escritorio_id, avaliacao)
+
+            return {
+                "sucesso": True,
+                "avaliacao": {
+                    "valor_central": avaliacao.get('valor_central'),
+                    "valor_minimo": avaliacao.get('valor_minimo'),
+                    "valor_maximo": avaliacao.get('valor_maximo'),
+                    "valor_m2": avaliacao.get('valor_m2'),
+                    "grau_precisao": avaliacao.get('grau_precisao'),
+                    "amplitude": avaliacao.get('amplitude'),
+                    "intervalo_confianca": avaliacao.get('intervalo_confianca')
+                },
+                "msg": "Avaliação gerada com sucesso"
+            }
+        else:
+            raise HTTPException(status_code=400, detail="Erro ao gerar avaliação")
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/imoveis/{imovel_id}/avaliacao")
+def api_obter_avaliacao(imovel_id: int):
+    """
+    Retorna a avaliação mais recente de um imóvel.
+    """
+    avaliacao = obter_avaliacao(imovel_id)
+
+    if avaliacao:
+        return {
+            "sucesso": True,
+            "avaliacao": avaliacao
+        }
+    else:
+        raise HTTPException(status_code=404, detail="Nenhuma avaliação encontrada para este imóvel")
+
+@app.get("/api/onimob/imoveis/{imovel_id}/avaliacao/pdf")
+def api_pdf_avaliacao(imovel_id: int):
+    """
+    Gera PDF com o relatório de avaliação.
+    """
+    try:
+        avaliacao = obter_avaliacao(imovel_id)
+        if not avaliacao:
+            raise HTTPException(status_code=404, detail="Avaliação não encontrada")
+
+        imovel = imob_engine.obter_imovel(imovel_id)
+        if not imovel:
+            raise HTTPException(status_code=404, detail="Imóvel não encontrado")
+
+        # Gerar PDF
+        pdf_content = gerar_pdf_avaliacao(avaliacao, imovel)
+
+        return Response(
+            content=pdf_content.encode('utf-8'),
+            media_type="application/pdf",
+            headers={"Content-Disposition": f"attachment; filename=avaliacao_{imovel_id}.pdf"}
+        )
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 # ── Módulo 2: Documentação online ────────────────────────────────────────────
 import uuid as _uuid
 
@@ -2014,6 +2145,8 @@ async def api_onimob_upload_documento(
         raise HTTPException(status_code=400, detail="Arquivo maior que 15 MB.")
     if len(conteudo) == 0:
         raise HTTPException(status_code=400, detail="Arquivo vazio.")
+    if not imob_engine.validar_assinatura_arquivo(ext, conteudo):
+        raise HTTPException(status_code=400, detail="O conteúdo do arquivo não corresponde a um PDF/JPG/PNG válido.")
 
     os.makedirs(imob_engine.UPLOAD_DIR, exist_ok=True)
     nome_arquivo = f"{_uuid.uuid4().hex}{ext}"
@@ -2029,16 +2162,48 @@ async def api_onimob_upload_documento(
         os.remove(caminho)  # desfaz o arquivo salvo se a validação dos dados falhar
         raise HTTPException(status_code=400, detail=str(e))
 
-def _exigir_acesso_onimob(request: Request):
-    """Documentos de RG/CPF/comprovante são dado sensível (LGPD): só admin (chave mestra)
-    ou sessão logada pode listar, baixar ou revisar. O envio em si (upload) fica público,
-    porque é o proprietário/inquilino mandando o documento pela primeira vez, sem conta ainda."""
+PAPEIS_STAFF_ONIMOB = {"onimob_staff", "admin"}
+
+def _exigir_acesso_onimob(request: Request) -> str:
+    """Documentos de RG/CPF/comprovante são dado sensível (LGPD): só a chave mestra do
+    admin ou uma conta de equipe (role 'onimob_staff', criada só pelo admin via
+    /api/admin/onimob/staff) pode listar, baixar ou revisar. O envio em si (upload) fica
+    público, porque é o proprietário/inquilino mandando o documento pela primeira vez,
+    sem conta ainda.
+    Não aceita qualquer JWT de login: o cadastro de usuário (/api/auth/register) é público
+    e não tem nenhum vínculo com o imóvel/proprietário/inquilino dono do documento, então
+    aceitar "qualquer logado" deixava qualquer pessoa que criasse conta ver RG/CPF de
+    terceiros só adivinhando o id sequencial.
+    Retorna um identificador de quem acessou, pra registrar autoria em revisões (auditoria)."""
     token = request.headers.get("Authorization", "").replace("Bearer ", "").strip()
     if not token:
         token = request.cookies.get("coon_auth_token", "")
-    if token and (token == COON_MASTER_KEY or decode_jwt(token)):
-        return
-    raise HTTPException(status_code=401, detail="Acesso restrito: faça login ou use a chave de administrador.")
+    if token == COON_MASTER_KEY:
+        return "admin_master"
+    payload = decode_jwt(token) if token else None
+    if payload and (payload.get("is_admin") or payload.get("role") in PAPEIS_STAFF_ONIMOB):
+        return payload.get("email") or f"uid:{payload.get('uid')}"
+    raise HTTPException(status_code=401, detail="Acesso restrito: faça login com uma conta de equipe ou use a chave de administrador.")
+
+class CriarStaffRequest(BaseModel):
+    name: str
+    email: str
+    password: str
+
+@app.post("/api/admin/onimob/staff")
+def api_admin_criar_staff(dados: CriarStaffRequest, request: Request):
+    """Só o admin (chave mestra) cria conta de equipe com acesso aos documentos do onimob."""
+    token = request.headers.get("Authorization", "").replace("Bearer ", "").strip()
+    if not token:
+        token = request.cookies.get("coon_auth_token", "")
+    if token != COON_MASTER_KEY:
+        raise HTTPException(status_code=401, detail="Só o administrador do escritório pode criar contas de equipe.")
+    if len(dados.password) < 4:
+        raise HTTPException(status_code=400, detail="A senha deve conter no mínimo 4 caracteres.")
+    try:
+        return criar_usuario_staff(dados.name.strip(), dados.email, dados.password)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.get("/api/onimob/documentos")
 def api_onimob_listar_documentos(request: Request, entidade_tipo: Optional[str] = None, entidade_id: Optional[int] = None, status: Optional[str] = None):
@@ -2062,15 +2227,177 @@ class RevisarDocumentoRequest(BaseModel):
 
 @app.patch("/api/onimob/documentos/{documento_id}/revisar")
 def api_onimob_revisar_documento(documento_id: int, dados: RevisarDocumentoRequest, request: Request):
-    _exigir_acesso_onimob(request)
+    quem = _exigir_acesso_onimob(request)
     try:
-        return imob_engine.revisar_documento(documento_id, dados.status, dados.motivo_rejeicao)
+        return imob_engine.revisar_documento(documento_id, dados.status, dados.motivo_rejeicao, revisado_por=quem)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 @app.get("/api/onimob/pendencias")
 def api_onimob_pendencias(entidade_tipo: str, entidade_id: int):
     return {"pendencias": imob_engine.pendencias_documentacao(entidade_tipo, entidade_id)}
+
+@app.post("/api/onimob/contratos")
+def api_onimob_criar_contrato(dados: imob_engine.ContratoIn):
+    return imob_engine.criar_contrato(dados)
+
+@app.post("/api/admin/onimob/modelo-contrato")
+async def api_admin_upload_modelo_contrato(request: Request, tipo_contrato: str = Form(...), numero: int = Form(1), arquivo: UploadFile = File(...)):
+    """Admin (chave mestra) sobe modelo de contrato (1, 2 ou 3) pra usar como template."""
+    token = request.headers.get("Authorization", "").replace("Bearer ", "").strip()
+    if not token:
+        token = request.cookies.get("coon_auth_token", "")
+    if token != COON_MASTER_KEY:
+        raise HTTPException(status_code=401, detail="Só o administrador pode fazer upload de modelo de contrato.")
+    if tipo_contrato not in imob_engine.TIPOS_CONTRATO:
+        raise HTTPException(status_code=400, detail=f"Tipo de contrato inválido. Aceitos: {', '.join(sorted(imob_engine.TIPOS_CONTRATO))}")
+    if numero not in (1, 2, 3):
+        raise HTTPException(status_code=400, detail="Número do modelo deve ser 1, 2 ou 3.")
+    if not arquivo.filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Apenas arquivos PDF são aceitos como modelo de contrato.")
+
+    os.makedirs(imob_engine.MODELOS_CONTRATO_DIR, exist_ok=True)
+    conteudo = await arquivo.read()
+    if len(conteudo) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Modelo de contrato não pode exceder 5 MB.")
+
+    caminho = os.path.join(imob_engine.MODELOS_CONTRATO_DIR, f"modelo_{tipo_contrato}_{numero}.pdf")
+    with open(caminho, "wb") as f:
+        f.write(conteudo)
+
+    return {"msg": f"Modelo {numero} de contrato '{tipo_contrato}' atualizado com sucesso.", "tipo": tipo_contrato, "numero": numero, "tamanho": len(conteudo)}
+
+@app.get("/api/onimob/contratos/{contrato_id}")
+def api_onimob_obter_contrato(contrato_id: int):
+    c = imob_engine.obter_contrato(contrato_id)
+    if not c:
+        raise HTTPException(status_code=404, detail="Contrato não encontrado.")
+    return c
+
+@app.get("/api/onimob/contratos/{contrato_id}/pdf")
+def api_onimob_gerar_contrato_pdf(contrato_id: int, request: Request, tipo_modelo: str = "residencial", numero_modelo: int = 1):
+    """tipo_modelo pode ser: 'customizado' (usa modelo 1, 2 ou 3 da imobiliária se tiver),
+    ou um dos auto-gerados: 'residencial', 'comercial', 'temporada', 'venda'."""
+    _exigir_acesso_onimob(request)
+    try:
+        usar_customizado = tipo_modelo == "customizado"
+        tipo_contrato = tipo_modelo if tipo_modelo != "customizado" else "residencial"
+        pdf_bytes = imob_engine.gerar_contrato_pdf(contrato_id, tipo_contrato, usar_modelo_customizado=usar_customizado, numero_modelo=numero_modelo)
+        return Response(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename=contrato_{contrato_id}.pdf"})
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.put("/api/onimob/proprietarios/{proprietario_id}")
+def api_onimob_atualizar_proprietario(proprietario_id: int, dados: imob_engine.ProprietarioIn):
+    conn = imob_engine.get_db()
+    row = conn.execute("SELECT id FROM imob_proprietarios WHERE id = ?", (proprietario_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Proprietário não encontrado.")
+    conn.execute(
+        "UPDATE imob_proprietarios SET nome = ?, cpf_cnpj = ?, telefone = ?, email = ?, chave_pix = ? WHERE id = ?",
+        (dados.nome, dados.cpf_cnpj, dados.telefone, dados.email, dados.chave_pix, proprietario_id),
+    )
+    conn.commit()
+    updated = imob_engine._row_to_dict(conn.execute("SELECT * FROM imob_proprietarios WHERE id = ?", (proprietario_id,)).fetchone())
+    conn.close()
+    return updated
+
+@app.put("/api/onimob/inquilinos/{inquilino_id}")
+def api_onimob_atualizar_inquilino(inquilino_id: int, dados: imob_engine.InquilinoIn):
+    conn = imob_engine.get_db()
+    row = conn.execute("SELECT id FROM imob_inquilinos WHERE id = ?", (inquilino_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Inquilino não encontrado.")
+    conn.execute(
+        "UPDATE imob_inquilinos SET nome = ?, cpf_cnpj = ?, telefone = ?, email = ? WHERE id = ?",
+        (dados.nome, dados.cpf_cnpj, dados.telefone, dados.email, inquilino_id),
+    )
+    conn.commit()
+    updated = imob_engine._row_to_dict(conn.execute("SELECT * FROM imob_inquilinos WHERE id = ?", (inquilino_id,)).fetchone())
+    conn.close()
+    return updated
+
+@app.put("/api/onimob/imoveis/{imovel_id}")
+def api_onimob_atualizar_imovel(imovel_id: int, dados: imob_engine.ImovelIn):
+    imovel = imob_engine.obter_imovel(imovel_id)
+    if not imovel:
+        raise HTTPException(status_code=404, detail="Imóvel não encontrado.")
+    conn = imob_engine.get_db()
+    conn.execute(
+        """UPDATE imob_imoveis SET titulo=?, tipo=?, finalidade=?, cep=?, rua=?, numero=?, complemento=?,
+           bairro=?, cidade=?, uf=?, area_terreno_m2=?, area_construida_m2=?, quartos=?, valor=?,
+           status=?, proprietario_id=?, corretor_id=?, inquilino_id=?, fiador_id=? WHERE id=?""",
+        (dados.titulo, dados.tipo, dados.finalidade, dados.cep, dados.rua, dados.numero, dados.complemento,
+         dados.bairro, dados.cidade, dados.uf, dados.area_terreno_m2, dados.area_construida_m2, dados.quartos,
+         dados.valor, dados.status, dados.proprietario_id, dados.corretor_id, dados.inquilino_id, dados.fiador_id, imovel_id),
+    )
+    conn.commit()
+    updated = imob_engine.obter_imovel(imovel_id)
+    conn.close()
+    return updated
+
+@app.delete("/api/onimob/proprietarios/{proprietario_id}")
+def api_onimob_deletar_proprietario(proprietario_id: int):
+    conn = imob_engine.get_db()
+    row = conn.execute("SELECT id FROM imob_proprietarios WHERE id = ?", (proprietario_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Proprietário não encontrado.")
+    conn.execute("DELETE FROM imob_proprietarios WHERE id = ?", (proprietario_id,))
+    conn.commit()
+    conn.close()
+    return {"msg": "Proprietário deletado."}
+
+@app.delete("/api/onimob/inquilinos/{inquilino_id}")
+def api_onimob_deletar_inquilino(inquilino_id: int):
+    conn = imob_engine.get_db()
+    row = conn.execute("SELECT id FROM imob_inquilinos WHERE id = ?", (inquilino_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Inquilino não encontrado.")
+    conn.execute("DELETE FROM imob_inquilinos WHERE id = ?", (inquilino_id,))
+    conn.commit()
+    conn.close()
+    return {"msg": "Inquilino deletado."}
+
+# ── Integração Site ─────────────────────────────────────────────────────────
+from backend.integracao_site import salvar_config_site, obter_config_site, publicar_imovel, obter_publicacao
+
+@app.post("/api/admin/integracao-site/config")
+def api_config_site(url_site: str = Form(...), api_key: str = Form(...), request: Request = None):
+    """Admin configura URL e API key do site externo pra publicar imóveis."""
+    token = request.headers.get("Authorization", "").replace("Bearer ", "").strip() if request else ""
+    if not token:
+        token = request.cookies.get("coon_auth_token", "") if request else ""
+    if token != COON_MASTER_KEY:
+        raise HTTPException(status_code=401, detail="Só o admin pode configurar o site.")
+    return salvar_config_site(url_site, api_key)
+
+@app.get("/api/admin/integracao-site/config")
+def api_obter_config_site(request: Request):
+    """Retorna config do site (sem a chave, só URL)."""
+    config = obter_config_site()
+    if config:
+        config.pop("api_key", None)
+    return config or {"msg": "Nenhuma configuração salva ainda."}
+
+@app.post("/api/onimob/imoveis/{imovel_id}/publicar-site")
+async def api_publicar_imovel_site(imovel_id: int, request: Request, fotos_urls: list = Form(default=[])):
+    """Publica imóvel no site externo."""
+    _exigir_acesso_onimob(request)
+    imovel = imob_engine.obter_imovel(imovel_id)
+    if not imovel:
+        raise HTTPException(status_code=404, detail="Imóvel não encontrado.")
+    resultado = await publicar_imovel(imovel, fotos_urls, [])
+    return resultado
+
+@app.get("/api/onimob/imoveis/{imovel_id}/publicacao-status")
+def api_status_publicacao(imovel_id: int):
+    """Retorna status de publicação de um imóvel no site externo."""
+    pub = obter_publicacao(imovel_id)
+    return pub or {"status": "não publicado"}
 
 @app.get("/imob/cadastro", response_class=HTMLResponse)
 def serve_onimob_cadastro():
@@ -2081,6 +2408,277 @@ def serve_onimob_cadastro():
             return HTMLResponse(content=f.read())
     return serve_portal()
 
+@app.get("/imob/repasse", response_class=HTMLResponse)
+def serve_repasse():
+    """Painel de controle de repassos: upload comprovante, lista status."""
+    repasse_file = os.path.join(FRONTEND_DIR, "repasse.html")
+    if os.path.exists(repasse_file):
+        with open(repasse_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+@app.get("/integracao-site", response_class=HTMLResponse)
+def serve_integracao_site():
+    """Painel de integração com site externo: config + publicar imóveis."""
+    integracao_file = os.path.join(FRONTEND_DIR, "integracao-site.html")
+    if os.path.exists(integracao_file):
+        with open(integracao_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+@app.get("/dashboard-financeiro", response_class=HTMLResponse)
+def serve_dashboard_financeiro():
+    """Dashboard financeiro: KPIs, aluguéis, repassos e taxa retida."""
+    dashboard_file = os.path.join(FRONTEND_DIR, "dashboard-financeiro.html")
+    if os.path.exists(dashboard_file):
+        with open(dashboard_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+@app.get("/portal-inquilino", response_class=HTMLResponse)
+def serve_portal_inquilino():
+    """Portal do inquilino: contrato, pagamentos, documentos."""
+    portal_file = os.path.join(FRONTEND_DIR, "portal-inquilino.html")
+    if os.path.exists(portal_file):
+        with open(portal_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+@app.get("/portal-proprietario", response_class=HTMLResponse)
+def serve_portal_proprietario():
+    """Portal do proprietário: imóveis, repassos, documentos, comunicados."""
+    portal_file = os.path.join(FRONTEND_DIR, "portal-proprietario.html")
+    if os.path.exists(portal_file):
+        with open(portal_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+@app.get("/dashboard-financeiro-v2", response_class=HTMLResponse)
+def serve_dashboard_financeiro_v2():
+    """Dashboard Financeiro v2: 3 tabelas, WhatsApp, PIX, alertas atraso."""
+    dashboard_file = os.path.join(FRONTEND_DIR, "dashboard-financeiro-v2.html")
+    if os.path.exists(dashboard_file):
+        with open(dashboard_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+@app.get("/dashboard", response_class=HTMLResponse)
+def serve_dashboard_unificado():
+    """Dashboard Unificado: Financeiro, Repassos, Imóveis, Garantias, Comunicados."""
+    dashboard_file = os.path.join(FRONTEND_DIR, "dashboard-unificado.html")
+    if os.path.exists(dashboard_file):
+        with open(dashboard_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+# ==============================================================================
+# GARANTIAS — Caução, Avalista, Seguro Fiança
+# ==============================================================================
+@app.post("/api/onimob/garantias/caacao")
+def api_registrar_caacao(contrato_id: int, valor: float):
+    """Registra caução no contrato."""
+    try:
+        return garantias.registrar_caacao(contrato_id, valor)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/onimob/garantias/fiador")
+def api_registrar_fiador(contrato_id: int, nome: str, cpf: str, telefone: str, email: str, endereco: str):
+    """Registra fiador/avalista."""
+    try:
+        return garantias.registrar_fiador(contrato_id, nome, cpf, telefone, email, endereco)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/garantias/{contrato_id}")
+def api_listar_garantias(contrato_id: int):
+    """Lista garantias de um contrato."""
+    return {"garantias": garantias.listar_garantias(contrato_id)}
+
+@app.post("/api/onimob/garantias/{garantia_id}/deducao")
+def api_registrar_deducao(garantia_id: int, motivo: str, valor: float):
+    """Registra dedução na caução."""
+    try:
+        return garantias.registrar_deducao_caacao(garantia_id, motivo, valor)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/onimob/garantias/{garantia_id}/liberar")
+def api_liberar_caacao(garantia_id: int):
+    """Libera caução ao final do contrato."""
+    try:
+        return garantias.liberar_caacao(garantia_id)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# ==============================================================================
+# GEMINI IA — Cartas, Comunicados, Dúvidas de Funcionários
+# ==============================================================================
+@app.post("/api/onimob/ia/carta")
+async def api_gerar_carta(tipo: str, context: Dict[str, Any]):
+    """Gera carta/comunicado usando IA ou template."""
+    try:
+        texto = await gemini_integration.gerar_comunicado_proprietario(tipo, context)
+        if not texto:
+            raise ValueError("Não foi possível gerar o comunicado")
+        return {"carta": texto}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/onimob/ia/duvida")
+async def api_responder_duvida(pergunta: str):
+    """Responde dúvida de funcionário usando Gemini."""
+    try:
+        resposta = await gemini_integration.responder_duvida_funcionario(pergunta)
+        if not resposta:
+            raise ValueError("Não foi possível gerar resposta")
+        return {"resposta": resposta}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/onimob/ia/chat")
+async def api_chat_ia(pergunta: str, pagina: str, contexto: Optional[Dict[str, Any]] = None):
+    """Chat IA com contexto do sistema — Assistente Inteligente."""
+    try:
+        ctx = ia_chat.ContextoChat(pagina, contexto or {})
+        resultado = await ia_chat.chat_ia(pergunta, ctx)
+
+        # Adicionar ação recomendada
+        acao = ia_chat.determinar_acao_recomendada(ctx)
+        resultado["acao_recomendada"] = acao
+
+        return resultado
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/ia/modelos-carta")
+def api_listar_modelos_carta():
+    """Lista modelos de cartas disponíveis."""
+    return {"modelos": gemini_integration.listar_modelos_carta()}
+
+@app.post("/api/onimob/ia/adicionar-modelo")
+def api_adicionar_modelo_carta(nome: str, template: str):
+    """Adiciona novo modelo de carta."""
+    try:
+        return gemini_integration.adicionar_modelo_carta(nome, template)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# ==============================================================================
+# ANALYTICS DA IA — Histórico, Frequência de Perguntas, Insights
+# ==============================================================================
+@app.post("/api/onimob/ia/registrar")
+def api_registrar_pergunta(usuario_email: str, pergunta: str, resposta: str, pagina: str, fonte: str):
+    """Registra pergunta no histórico analytics."""
+    try:
+        return ia_analytics.registrar_pergunta(usuario_email, pergunta, resposta, pagina, fonte)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/onimob/ia/historico")
+def api_obter_historico(usuario_email: str, limite: int = 20):
+    """Retorna histórico de perguntas do usuário."""
+    return {"historico": ia_analytics.obter_historico(usuario_email, limite)}
+
+@app.get("/api/onimob/ia/frequentes")
+def api_perguntas_frequentes(limite: int = 10):
+    """Retorna perguntas mais frequentes do sistema."""
+    return {"frequentes": ia_analytics.obter_perguntas_frequentes(limite)}
+
+@app.get("/api/onimob/ia/analytics/por-pagina")
+def api_analise_por_pagina():
+    """Analytics de perguntas por página."""
+    return {"por_pagina": ia_analytics.obter_analise_by_pagina()}
+
+@app.post("/api/onimob/ia/limpar-historico")
+def api_limpar_historico(usuario_email: str):
+    """Limpa histórico do usuário."""
+    return ia_analytics.limpar_historico(usuario_email)
+
+# ==============================================================================
+# BIBLIOTECA DE MODELOS — Cartas, Contratos, Comunicados (Lei 8.245/91)
+# ==============================================================================
+@app.get("/api/onimob/modelos/listar")
+def api_listar_modelos(categoria: Optional[str] = None):
+    """Lista todos os modelos disponíveis (cartas, contratos, comunicados)."""
+    return {"modelos": modelos_cartas.listar_modelos(categoria)}
+
+@app.get("/api/onimob/modelos/{modelo_id}")
+def api_obter_modelo(modelo_id: int):
+    """Obtém conteúdo completo de um modelo."""
+    modelo = modelos_cartas.obter_modelo(modelo_id)
+    if not modelo:
+        raise HTTPException(status_code=404, detail="Modelo não encontrado")
+    return modelo
+
+@app.post("/api/onimob/modelos/adicionar")
+def api_adicionar_modelo(nome: str, categoria: str, conteudo: str):
+    """Adiciona novo modelo customizado."""
+    try:
+        return modelos_cartas.adicionar_modelo(nome, categoria, conteudo)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.delete("/api/onimob/modelos/{modelo_id}")
+def api_deletar_modelo(modelo_id: int):
+    """Deleta modelo customizado (não pode deletar padrões)."""
+    return modelos_cartas.deletar_modelo(modelo_id)
+
+@app.post("/api/onimob/modelos/buscar-internet")
+async def api_buscar_modelos_internet(tipo: str):
+    """Busca modelos reais na internet via Gemini (Lei 8.245/91)."""
+    modelos = await modelos_cartas.buscar_modelos_internet(tipo)
+    return {"modelos": modelos}
+
+# ==============================================================================
+# GERAÇÃO DE DOCUMENTOS WORD — Cartas, Contratos com Edição Automática
+# ==============================================================================
+@app.post("/api/onimob/documentos/gerar-word")
+def api_gerar_documento_word(titulo: str, conteudo: str, dados: Dict[str, Any]):
+    """
+    Gera documento Word (.docx) a partir de modelo com auto-preenchimento.
+    Substituir {{CHAVE}} por dados reais automaticamente.
+    """
+    try:
+        # Gerar em memória
+        docx_bytes = word_generator.gerar_em_memoria(titulo, conteudo, dados)
+        if not docx_bytes:
+            raise ValueError("python-docx não está instalado. pip install python-docx")
+
+        # Retornar como download
+        return FileResponse(
+            io.BytesIO(docx_bytes),
+            media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            filename=f"{titulo.replace(' ', '_').lower()}.docx"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/onimob/documentos/preview-word")
+def api_preview_documento(titulo: str, conteudo: str, dados: Dict[str, Any]):
+    """Preview do documento antes de gerar Word (retorna HTML)."""
+    # Substituir placeholders
+    conteudo_preenchido = conteudo
+    for chave, valor in dados.items():
+        placeholder = "{" + "{" + chave + "}" + "}"
+        conteudo_preenchido = conteudo_preenchido.replace(placeholder, str(valor))
+
+    html = f"""
+    <html>
+    <head>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 2rem; line-height: 1.5; }}
+            h1 {{ color: #0066cc; text-align: center; }}
+            pre {{ white-space: pre-wrap; }}
+        </style>
+    </head>
+    <body>
+        <h1>{titulo}</h1>
+        <pre>{conteudo_preenchido}</pre>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html)
 
 @app.get("/inferencia", response_class=HTMLResponse)
 @app.get("/inferencia/", response_class=HTMLResponse)
@@ -3217,6 +3815,31 @@ if os.path.exists(frontend_path):
             "timestamp": ts,
             "output": out
         }
+
+@app.get("/funcionarios", response_class=HTMLResponse)
+def serve_funcionarios():
+    """Painel de login/liberação de funcionários pra site."""
+    funcionarios_file = os.path.join(FRONTEND_DIR, "funcionarios.html")
+    if os.path.exists(funcionarios_file):
+        with open(funcionarios_file, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return serve_portal()
+
+
+# ==============================================================================
+# HEALTH CHECK (para Docker, Heroku, etc.)
+# ==============================================================================
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint para monitoramento."""
+    return {
+        "status": "ok",
+        "service": "on.imob",
+        "version": "1.0.0",
+        "timestamp": datetime.now().isoformat()
+    }
+
 
     # Monta todos os ativos estáticos (imagens, CSS, JS, áudios)
     app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend_static")

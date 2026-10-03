@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha seu Plano - ADS Inteligente</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+        .header { text-align: center; margin-bottom: 50px; }
+        .header h1 { font-size: 42px; color: #333; margin-bottom: 10px; }
+        .header p { font-size: 18px; color: #666; }
+
+        .toggle-section { text-align: center; margin-bottom: 40px; }
+        .toggle-section p { margin-bottom: 15px; color: #333; font-weight: 600; }
+
+        .toggle { display: inline-flex; gap: 20px; background: #f0f0f0; padding: 8px; border-radius: 10px; }
+        .toggle-btn { padding: 10px 20px; border: none; background: transparent; cursor: pointer; border-radius: 8px; font-weight: 600; transition: all 0.3s; }
+        .toggle-btn.active { background: white; color: #667eea; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .toggle-btn { color: #666; }
+
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 60px; }
+
+        .price-card { background: white; border-radius: 10px; padding: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); transition: all 0.3s; position: relative; }
+        .price-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15); }
+        .price-card.popular { transform: scale(1.05); border: 3px solid #667eea; }
+        .price-card.popular:hover { transform: scale(1.05) translateY(-10px); }
+
+        .popular-badge { position: absolute; top: -15px; right: 20px; background: #667eea; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+
+        .price-card h3 { font-size: 24px; color: #333; margin-bottom: 15px; }
+        .price-card .price { font-size: 42px; color: #667eea; font-weight: bold; margin-bottom: 5px; }
+        .price-card .period { color: #999; font-size: 14px; margin-bottom: 20px; }
+        .price-card .description { color: #666; font-size: 14px; margin-bottom: 25px; }
+
+        .price-card ul { list-style: none; margin-bottom: 30px; }
+        .price-card li { padding: 12px 0; border-bottom: 1px solid #f0f0f0; color: #666; display: flex; align-items: center; }
+        .price-card li:before { content: "✓"; color: #4caf50; font-weight: bold; margin-right: 10px; }
+        .price-card li.unavailable:before { content: "✗"; color: #999; }
+        .price-card li.unavailable { opacity: 0.6; }
+
+        .btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 5px; font-weight: 600; font-size: 16px; cursor: pointer; transition: all 0.3s; text-decoration: none; text-align: center; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn-secondary:hover { background: #e0e0e0; }
+
+        .comparison-section { background: white; border-radius: 10px; padding: 40px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+        .comparison-section h3 { color: #667eea; font-size: 28px; margin-bottom: 30px; }
+
+        .comparison-table { width: 100%; border-collapse: collapse; }
+        .comparison-table th { background: #f8f9fa; padding: 15px; text-align: left; font-weight: 600; color: #333; border-bottom: 2px solid #ddd; }
+        .comparison-table td { padding: 15px; border-bottom: 1px solid #f0f0f0; }
+        .comparison-table tr:hover { background: #f8f9fa; }
+        .comparison-table .feature-name { font-weight: 600; color: #333; }
+        .comparison-table .check { color: #4caf50; font-weight: bold; }
+        .comparison-table .cross { color: #999; }
+
+        .revenue-share-section { background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: white; border-radius: 10px; padding: 40px; margin-bottom: 40px; text-align: center; }
+        .revenue-share-section h2 { font-size: 32px; margin-bottom: 15px; }
+        .revenue-share-section p { font-size: 18px; margin-bottom: 20px; opacity: 0.95; }
+
+        .faq-section { margin-top: 40px; }
+        .faq-section h3 { color: #667eea; font-size: 28px; margin-bottom: 30px; }
+        .faq-item { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px; cursor: pointer; transition: all 0.3s; }
+        .faq-item:hover { background: #f0f4ff; }
+        .faq-item h4 { color: #667eea; margin-bottom: 10px; }
+        .faq-item.open p { display: block; }
+        .faq-item p { display: none; color: #666; }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 32px; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .price-card.popular { transform: scale(1); }
+            .price-card.popular:hover { transform: translateY(-10px); }
+            .comparison-table { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ Escolha seu Plano</h1>
+            <p>Comece hoje - sem cartão de crédito obrigatório</p>
+        </div>
+
+        <div class="toggle-section">
+            <p>Como você prefere pagar?</p>
+            <div class="toggle">
+                <button class="toggle-btn active" onclick="togglePricing('monthly')">💳 Plano Mensal</button>
+                <button class="toggle-btn" onclick="togglePricing('revenue')">💰 Revenue Share (R$0/mês)</button>
+            </div>
+        </div>
+
+        <!-- Monthly Plans -->
+        <div id="monthly-plans" class="pricing-grid">
+            <div class="price-card">
+                <h3>📦 Starter</h3>
+                <div class="price">R$299<span style="font-size: 16px; color: #999;">/mês</span></div>
+                <div class="period">Plano básico para iniciantes</div>
+                <div class="description">Perfeito para testar anúncios em Google e Meta</div>
+                <ul>
+                    <li>50 campanhas max</li>
+                    <li>Google Ads + Meta</li>
+                    <li>1 usuário</li>
+                    <li>Analytics básico</li>
+                    <li class="unavailable">Auto-Ad-Creator</li>
+                    <li class="unavailable">Suporte prioritário</li>
+                </ul>
+                <button class="btn btn-secondary" onclick="selectPlan('starter-monthly')">Escolher Starter</button>
+            </div>
+
+            <div class="price-card popular">
+                <div class="popular-badge">⭐ MAIS POPULAR</div>
+                <h3>⭐ Professional</h3>
+                <div class="price">R$599<span style="font-size: 16px; color: #999;">/mês</span></div>
+                <div class="period">Recomendado para a maioria</div>
+                <div class="description">Acesso a todas as plataformas principais</div>
+                <ul>
+                    <li>Campanhas ilimitadas</li>
+                    <li>Google + Meta + LinkedIn + TikTok</li>
+                    <li>5 usuários</li>
+                    <li>Analytics avançado</li>
+                    <li>✓ Auto-Ad-Creator</li>
+                    <li>✓ Suporte por email</li>
+                </ul>
+                <button class="btn btn-primary" onclick="selectPlan('professional-monthly')">Escolher Professional</button>
+            </div>
+
+            <div class="price-card">
+                <h3>💎 Plus</h3>
+                <div class="price">R$999<span style="font-size: 16px; color: #999;">/mês</span></div>
+                <div class="period">Para agências e resellers</div>
+                <div class="description">Acesso completo com white-label</div>
+                <ul>
+                    <li>Tudo ilimitado</li>
+                    <li>Todas as plataformas</li>
+                    <li>Usuários ilimitados</li>
+                    <li>White-Label incluído</li>
+                    <li>✓ Programa reseller</li>
+                    <li>✓ 1h suporte semanal</li>
+                </ul>
+                <button class="btn btn-primary" onclick="selectPlan('plus-monthly')">Escolher Plus</button>
+            </div>
+        </div>
+
+        <!-- Revenue Share Section -->
+        <div id="revenue-plans" style="display: none;">
+            <div class="revenue-share-section">
+                <h2>💰 Revenue Share: R$0/mês + 15% por Venda</h2>
+                <p>Comece sem investimento. Pague apenas quando seus clientes venderem.</p>
+                <p style="font-size: 14px; opacity: 0.9;">Todos os 3 planos podem usar Revenue Share também!</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h3>📦 Starter Revenue</h3>
+                    <div class="price">R$0<span style="font-size: 16px; color: #999;">/mês</span></div>
+                    <div class="period">+ 15% por venda</div>
+                    <div class="description">Teste sem risco</div>
+                    <ul>
+                        <li>50 campanhas max</li>
+                        <li>Google + Meta</li>
+                        <li>1 usuário</li>
+                        <li>Pague quando vender</li>
+                        <li>30-day chargeback protection</li>
+                    </ul>
+                    <button class="btn btn-secondary" onclick="selectPlan('starter-revenue')">Começar com Revenue Share</button>
+                </div>
+
+                <div class="price-card popular">
+                    <div class="popular-badge">⭐ ZERO RISCO</div>
+                    <h3>⭐ Professional Revenue</h3>
+                    <div class="price">R$0<span style="font-size: 16px; color: #999;">/mês</span></div>
+                    <div class="period">+ 15% por venda</div>
+                    <div class="description">Comece agora</div>
+                    <ul>
+                        <li>Campanhas ilimitadas</li>
+                        <li>G + M + LinkedIn + TikTok</li>
+                        <li>5 usuários</li>
+                        <li>✓ Auto-Ad-Creator (FREE!)</li>
+                        <li>Pague quando vender</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="selectPlan('professional-revenue')">Começar Agora (Grátis)</button>
+                </div>
+
+                <div class="price-card">
+                    <h3>💎 Plus Revenue</h3>
+                    <div class="price">R$0<span style="font-size: 16px; color: #999;">/mês</span></div>
+                    <div class="period">+ 15% por venda</div>
+                    <div class="description">Ganhe 60% como reseller</div>
+                    <ul>
+                        <li>Tudo ilimitado</li>
+                        <li>White-Label incluído</li>
+                        <li>Programa reseller 60/40</li>
+                        <li>Pague quando vender</li>
+                        <li>Sem limite de clientes</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="selectPlan('plus-revenue')">Começar como Reseller</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="comparison-section" style="margin-top: 60px;">
+            <h3>📊 Comparação Completa de Features</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">Feature</th>
+                        <th style="text-align: center;">Starter</th>
+                        <th style="text-align: center;">Professional</th>
+                        <th style="text-align: center;">Plus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="feature-name">Campanhas</td>
+                        <td style="text-align: center;">50</td>
+                        <td style="text-align: center;"><span class="check">∞</span></td>
+                        <td style="text-align: center;"><span class="check">∞</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Plataformas</td>
+                        <td>Google + Meta</td>
+                        <td style="text-align: center;"><span class="check">4</span></td>
+                        <td style="text-align: center;"><span class="check">Todas</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Auto-Ad-Creator</td>
+                        <td style="text-align: center;"><span class="cross">✗</span></td>
+                        <td style="text-align: center;"><span class="check">✓</span></td>
+                        <td style="text-align: center;"><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Mini Canva</td>
+                        <td style="text-align: center;"><span class="cross">✗</span></td>
+                        <td style="text-align: center;"><span class="check">✓</span></td>
+                        <td style="text-align: center;"><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Gemini IA</td>
+                        <td style="text-align: center;"><span class="cross">✗</span></td>
+                        <td style="text-align: center;"><span class="check">✓</span></td>
+                        <td style="text-align: center;"><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">White-Label</td>
+                        <td style="text-align: center;"><span class="cross">✗</span></td>
+                        <td style="text-align: center;"><span class="cross">✗</span></td>
+                        <td style="text-align: center;"><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Programa Reseller</td>
+                        <td style="text-align: center;"><span class="cross">✗</span></td>
+                        <td style="text-align: center;"><span class="cross">✗</span></td>
+                        <td style="text-align: center;"><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Suporte</td>
+                        <td>Email</td>
+                        <td style="text-align: center;">Email</td>
+                        <td style="text-align: center;"><span class="check">1h/sem</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FAQ -->
+        <div class="faq-section">
+            <h3>❓ Perguntas Frequentes</h3>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <h4>Posso mudar de plano depois?</h4>
+                <p>Sim! Você pode fazer upgrade ou downgrade a qualquer momento. Ajustamos o valor no próximo ciclo de cobrança.</p>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <h4>Qual plano é melhor para mim?</h4>
+                <p><strong>Starter:</strong> Testando anúncios (< R$1k/mês). <strong>Professional:</strong> Sério com anúncios (R$1k-50k/mês). <strong>Plus:</strong> Agência ou reseller.</p>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <h4>Revenue Share + Plano Mensal?</h4>
+                <p>Não, você escolhe UMA opção. Revenue Share é R$0/mês. Planos mensais são fixos. Mas você pode mudar depois.</p>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <h4>Preciso de cartão de crédito agora?</h4>
+                <p>Para Revenue Share: Não! Apenas para Planos Mensais. Mas você pode começar grátis (30 dias) sem cartão.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePricing(type) {
+            const monthlyDiv = document.getElementById('monthly-plans');
+            const revenueDiv = document.getElementById('revenue-plans');
+            const buttons = document.querySelectorAll('.toggle-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            if (type === 'monthly') {
+                monthlyDiv.style.display = 'grid';
+                revenueDiv.style.display = 'none';
+                event.target.classList.add('active');
+            } else {
+                monthlyDiv.style.display = 'none';
+                revenueDiv.style.display = 'block';
+                event.target.classList.add('active');
+            }
+        }
+
+        function selectPlan(plan) {
+            // Simular seleção de plano
+            alert(`Você selecionou: ${plan}\n\nRedirecionando para criar sua conta...`);
+            window.location.href = `/signup?plan=${plan}`;
+        }
+
+        function toggleFaq(element) {
+            element.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

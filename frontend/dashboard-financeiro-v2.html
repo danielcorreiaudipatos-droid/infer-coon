@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financeiro v2 — on.imob</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; padding: 2rem; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { margin-bottom: 2rem; color: #333; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .kpi { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        .numero { font-size: 2rem; font-weight: 700; color: #0066cc; }
+        .label { font-size: 12px; color: #666; margin-top: 8px; }
+        .tabelas { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+        .card { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        h2 { font-size: 16px; margin-bottom: 1rem; color: #333; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+        th { background: #f9f9f9; font-weight: 600; }
+        .status-ok { color: #28a745; font-weight: 600; }
+        .status-pendente { color: #ffc107; font-weight: 600; }
+        .status-vencido { color: #dc3545; font-weight: 600; }
+        .btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; }
+        .btn-whatsapp { background: #25d366; color: white; }
+        .btn-whatsapp:hover { background: #1fa855; }
+        .btn-pix { background: #0066cc; color: white; }
+        .btn-pix:hover { background: #0052a3; }
+        .pix-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .pix-content { background: white; border-radius: 8px; padding: 2rem; max-width: 400px; text-align: center; }
+        .qr-code { width: 200px; height: 200px; background: #f0f0f0; margin: 1rem auto; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #666; }
+        .chave-pix { background: #f5f5f5; padding: 1rem; border-radius: 4px; margin: 1rem 0; font-family: monospace; word-break: break-all; }
+        .tamanho-pequeno { font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💰 Dashboard Financeiro v2</h1>
+
+        <!-- KPIs Principais -->
+        <div class="grid">
+            <div class="kpi">
+                <div class="label">Aluguéis Esperados</div>
+                <div class="numero">R$ 15.600</div>
+            </div>
+            <div class="kpi">
+                <div class="label">Recebido</div>
+                <div class="numero" style="color: #28a745;">R$ 13.100</div>
+            </div>
+            <div class="kpi">
+                <div class="label">Em Atraso</div>
+                <div class="numero" style="color: #dc3545;">R$ 2.500</div>
+            </div>
+            <div class="kpi">
+                <div class="label">Comissão Retida</div>
+                <div class="numero">R$ 2.700</div>
+            </div>
+        </div>
+
+        <!-- 3 Tabelas: Principal + 2 Menores -->
+        <div class="tabelas">
+            <!-- Tabela Principal: Aluguéis com Atrasos -->
+            <div class="card">
+                <h2>📊 Aluguéis (com Atrasos em Destaque)</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Imóvel</th>
+                            <th>Inquilino</th>
+                            <th>Valor</th>
+                            <th>Vencimento</th>
+                            <th>Status</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- ATRASADOS EM DESTAQUE -->
+                        <tr style="background: #ffebee;">
+                            <td><strong>Apt. Centro</strong></td>
+                            <td>Maria Silva</td>
+                            <td>R$ 2.500</td>
+                            <td>15/09/2026</td>
+                            <td class="status-vencido">⏰ 17 dias</td>
+                            <td>
+                                <button class="btn btn-whatsapp" onclick="enviarWhatsApp('Maria Silva', '+5511999999999')">WhatsApp</button>
+                                <button class="btn btn-pix" onclick="mostrarQRCode('Maria Silva', 2500, 'pix@maria')">PIX</button>
+                            </td>
+                        </tr>
+                        <tr style="background: #ffebee;">
+                            <td><strong>Casa Vila</strong></td>
+                            <td>João Santos</td>
+                            <td>R$ 1.800</td>
+                            <td>20/09/2026</td>
+                            <td class="status-vencido">⏰ 12 dias</td>
+                            <td>
+                                <button class="btn btn-whatsapp" onclick="enviarWhatsApp('João Santos', '+5511988888888')">WhatsApp</button>
+                                <button class="btn btn-pix" onclick="mostrarQRCode('João Santos', 1800, 'pix@joao')">PIX</button>
+                            </td>
+                        </tr>
+                        <!-- PENDENTES -->
+                        <tr style="background: #fffbea;">
+                            <td>Apt. Paulista</td>
+                            <td>Carlos Oliveira</td>
+                            <td>R$ 2.500</td>
+                            <td>01/10/2026</td>
+                            <td class="status-pendente">📅 Próximo</td>
+                            <td><button class="btn btn-pix" onclick="mostrarQRCode('Carlos Oliveira', 2500, 'pix@carlos')">PIX</button></td>
+                        </tr>
+                        <!-- RECEBIDO -->
+                        <tr style="background: #f0f8f0;">
+                            <td>Loft Sumaré</td>
+                            <td>Ana Costa</td>
+                            <td>R$ 3.000</td>
+                            <td>02/10/2026</td>
+                            <td class="status-ok">✓ Recebido</td>
+                            <td>—</td>
+                        </tr>
+                        <tr style="background: #f0f8f0;">
+                            <td>Kitnet Consolação</td>
+                            <td>Pedro Ferreira</td>
+                            <td>R$ 1.800</td>
+                            <td>05/10/2026</td>
+                            <td class="status-ok">✓ Recebido</td>
+                            <td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tabela Pequena 1: Comissões de Venda -->
+            <div class="card">
+                <h2 style="font-size: 14px;">🏆 Comissões Vendas</h2>
+                <table class="tamanho-pequeno">
+                    <thead>
+                        <tr>
+                            <th>Imóvel</th>
+                            <th>Taxa</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Apt. Tietê</td>
+                            <td>18%</td>
+                            <td>R$ 1.200</td>
+                        </tr>
+                        <tr>
+                            <td>Casa Morumbi</td>
+                            <td>18%</td>
+                            <td>R$ 950</td>
+                        </tr>
+                        <tr>
+                            <td>Loft Vila</td>
+                            <td>18%</td>
+                            <td>R$ 550</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top: 1rem; padding: 1rem; background: #f9f9f9; border-radius: 4px; font-weight: 600;">Total: R$ 2.700</div>
+            </div>
+
+            <!-- Tabela Pequena 2: Repassos Realizados -->
+            <div class="card">
+                <h2 style="font-size: 14px;">💵 Repassos Proprietários</h2>
+                <table class="tamanho-pequeno">
+                    <thead>
+                        <tr>
+                            <th>Proprietário</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Carlos O.</td>
+                            <td>R$ 2.300</td>
+                            <td class="status-ok">✓</td>
+                        </tr>
+                        <tr>
+                            <td>Maria S.</td>
+                            <td>R$ 1.650</td>
+                            <td class="status-pendente">⏳</td>
+                        </tr>
+                        <tr>
+                            <td>Pedro F.</td>
+                            <td>R$ 3.000</td>
+                            <td class="status-ok">✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top: 1rem; padding: 1rem; background: #f9f9f9; border-radius: 4px; font-weight: 600;">Total: R$ 6.950</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal PIX -->
+    <div class="pix-modal" id="pixModal">
+        <div class="pix-content">
+            <h2>Pagamento via PIX</h2>
+            <div style="margin: 1rem 0; font-size: 18px; font-weight: 600;" id="pixValor">R$ 0,00</div>
+            <div style="margin: 1rem 0; font-size: 14px; color: #666;" id="pixInquilino">Inquilino: —</div>
+
+            <div style="margin: 1.5rem 0; padding: 1rem; background: #f0f0f0; border-radius: 4px;">
+                <p style="margin-bottom: 0.5rem; font-size: 12px; color: #666;">Chave PIX (Cópia e Cola):</p>
+                <div class="chave-pix" id="chavePix">chave_pix@aqui</div>
+                <button class="btn" style="background: #0066cc; color: white; margin-top: 0.5rem; width: 100%;" onclick="copiarChavePix()">📋 Copiar Chave</button>
+            </div>
+
+            <div style="margin: 1rem 0; padding: 1rem; background: #f9f9f9; border-radius: 4px;">
+                <p style="font-size: 12px; color: #666; margin-bottom: 0.5rem;">QR Code (scanner):</p>
+                <div class="qr-code" id="qrCode">📱 QR Code aqui</div>
+            </div>
+
+            <button class="btn" style="background: #999; color: white; width: 100%; margin-top: 1rem;" onclick="fecharPixModal()">Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        function enviarWhatsApp(nome, telefone) {
+            const mensagem = encodeURIComponent(`Olá ${nome}! 👋\n\nObservei que seu aluguel está em atraso. Gostaria de avisar gentilmente para regularizar o pagamento o quanto antes.\n\nChave PIX disponível para você. Qualquer dúvida, estou à disposição! 😊`);
+            const url = `https://wa.me/${telefone.replace(/\D/g, '')}?text=${mensagem}`;
+            window.open(url, '_blank');
+        }
+
+        function mostrarQRCode(nome, valor, chavePix) {
+            document.getElementById('pixInquilino').textContent = `Inquilino: ${nome}`;
+            document.getElementById('pixValor').textContent = `R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('chavePix').textContent = chavePix;
+            document.getElementById('pixModal').style.display = 'flex';
+        }
+
+        function fecharPixModal() {
+            document.getElementById('pixModal').style.display = 'none';
+        }
+
+        function copiarChavePix() {
+            const chave = document.getElementById('chavePix').textContent;
+            navigator.clipboard.writeText(chave).then(() => {
+                alert('✓ Chave PIX copiada!');
+            });
+        }
+    </script>
+</body>
+</html>
