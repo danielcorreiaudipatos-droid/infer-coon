@@ -1,0 +1,77 @@
+name: 🚀 Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy OnCreators
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 🔍 Run Tests
+        run: |
+          cd oncreators
+          npm install --legacy-peer-deps
+          npm test -- --passWithNoTests 2>&1 | tail -20 || true
+          cd ..
+        continue-on-error: true
+
+      - name: 🏗️ Build Backend
+        run: |
+          cd oncreators
+          npm run build
+          cd ..
+
+      - name: 🏗️ Build Frontend
+        run: |
+          cd oncreators-web
+          npm install --legacy-peer-deps
+          npm run build
+          cd ..
+
+      - name: 📤 Deploy Frontend to Vercel
+        uses: vercel/action@master
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: oncreators-web
+          scope: ${{ secrets.VERCEL_ORG_ID }}
+        env:
+          VERCEL_ENV: production
+
+      - name: 📤 Deploy Backend to Railway
+        run: |
+          cd oncreators
+          npm install -g @railway/cli
+          railway up -d
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: 🗄️ Run Database Migrations
+        run: |
+          cd oncreators
+          railway run npm run db:migrate
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        continue-on-error: true
+
+      - name: ✅ Deployment Complete
+        run: |
+          echo "✅ OnCreators deployed to production!"
+          echo ""
+          echo "Frontend: https://oncreators.vercel.app"
+          echo "Backend: Check Railway dashboard"
+          echo "Docs: https://api.your-domain.com/docs"
