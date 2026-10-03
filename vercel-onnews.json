@@ -1,0 +1,71 @@
+{
+  "name": "ONNEWS Platform",
+  "version": 2,
+  "env": {
+    "DATABASE_URL": "@ONNEWS_DATABASE_URL",
+    "JWT_SECRET": "@ONNEWS_JWT_SECRET",
+    "JWT_EXPIRATION": "@ONNEWS_JWT_EXPIRATION",
+    "NODE_ENV": "production",
+    "API_PORT": "3000"
+  },
+  "buildCommand": "cd api-onnews && npm install && npm run build",
+  "outputDirectory": "api-onnews/dist",
+  "installCommand": "cd api-onnews && npm ci",
+  "framework": "nestjs",
+  "nodejs": "18.x",
+  "serverless_function_region": "sfo1",
+  "regions": ["sfo1"],
+  "functions": {
+    "api-onnews/**": {
+      "maxDuration": 30,
+      "memory": 1024
+    }
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "destination": "/api-onnews/src/main"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Access-Control-Allow-Credentials",
+          "value": "true"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api-onnews/src/main"
+    },
+    {
+      "source": "/health",
+      "destination": "/api-onnews/src/main"
+    },
+    {
+      "source": "/docs",
+      "destination": "/api-onnews/src/main"
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+name: 🚀 ONNEWS Auto Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - main
+      - claude/zealous-edison-cv62ld
+    paths:
+      - 'api-onnews/**'
+      - 'database/schemas/**'
+      - 'vercel-onnews.json'
+      - '.github/workflows/deploy-onnews.yml'
+      - 'prisma/schema.prisma'
+
+jobs:
+  test:
+    name: 🧪 Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'api-onnews/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd api-onnews
+          npm ci
+
+      - name: Run tests
+        run: |
+          cd api-onnews
+          npm test -- --passWithNoTests
+
+      - name: Check build
+        run: |
+          cd api-onnews
+          npm run build
+
+  deploy:
+    name: 🌐 Deploy to Vercel
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_ONNEWS }}
+          vercel-args: '--prod'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: ./
+          scope: ${{ secrets.VERCEL_ORG_SCOPE }}
+        env:
+          VERCEL_PROJECT_NAME: onnews-api
+
+      - name: ✅ Deployment successful
+        run: |
+          echo "🎉 ONNEWS deployed to Vercel"
+          echo "📊 API Endpoint: https://onnews-api.vercel.app"
+          echo "📖 Swagger Docs: https://onnews-api.vercel.app/docs"
+          echo "🏥 Health Check: https://onnews-api.vercel.app/health"
+
+  notify:
+    name: 📢 Notify Status
+    runs-on: ubuntu-latest
+    needs: [test, deploy]
+    if: always()
+
+    steps:
+      - name: Check deployment status
+        run: |
+          if [ "${{ needs.deploy.result }}" = "success" ]; then
+            echo "✅ ONNEWS Platform deployed successfully to Vercel"
+            echo "🚀 All systems operational"
+          else
+            echo "❌ Deployment failed - check logs above"
+          fi
