@@ -127,7 +127,7 @@ export default function DashboardPage() {
       <nav className="sticky top-0 z-50 bg-gradient-to-r from-purple-600 to-orange-600 shadow-lg">
         <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
           <Link href="/dashboard">
-            <div className="text-2xl font-bold text-white cursor-pointer">🎮 COON Games</div>
+            <div className="text-2xl font-bold text-white cursor-pointer">🎮 OnGame</div>
           </Link>
 
           <div className="hidden md:flex gap-8">

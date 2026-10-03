@@ -44,7 +44,7 @@ export default function SignupPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="text-4xl font-bold text-white mb-2">🎮 COON Games</div>
+          <div className="text-4xl font-bold text-white mb-2">🎮 OnGame</div>
           <p className="text-gray-400">Crie sua conta para começar</p>
         </div>
 

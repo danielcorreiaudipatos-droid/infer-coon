@@ -13,7 +13,7 @@ export default function LandingPage() {
       {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-gradient-to-r from-purple-600 to-orange-600 shadow-lg">
         <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-          <div className="text-2xl font-bold text-white">🎮 COON Games</div>
+          <div className="text-2xl font-bold text-white">🎮 OnGame</div>
 
           <div className="hidden md:flex gap-8">
             <a href="#" className="text-white hover:text-yellow-300 transition">Home</a>
