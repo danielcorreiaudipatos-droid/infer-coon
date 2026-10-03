@@ -3,8 +3,14 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as helmet from 'helmet';
 import { AppModule } from './app.module';
+import { initSentry } from './config/sentry.config';
 
 async function bootstrap() {
+  // Initialize Sentry for error tracking
+  if (process.env.SENTRY_DSN) {
+    initSentry();
+  }
+
   const app = await NestFactory.create(AppModule);
 
   // Security

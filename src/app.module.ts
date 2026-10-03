@@ -7,8 +7,18 @@ import { OnzapAiChatService } from './services/onzap-ai-chat.service';
 import { PerformanceOptimizationService } from './services/performance-optimization.service';
 import { GamificationService } from './services/gamification.service';
 import { BillingService } from './services/billing.service';
+import { GoogleAuthService } from './auth/google-auth.service';
+import { EmailService } from './services/email.service';
+import { CacheService } from './services/cache.service';
+import { AssasService } from './services/assas.service';
+import { TwilioService } from './services/twilio.service';
 import { OnzapChatController } from './controllers/onzap-chat.controller';
 import { CampaignDashboardController } from './controllers/campaign-dashboard.controller';
+import { AuthController } from './controllers/auth.controller';
+import { OnzapDashboardController } from './controllers/onzap-dashboard.controller';
+import { OnloveDashboardController } from './controllers/onlove-dashboard.controller';
+import { OnmailDashboardController } from './controllers/onmail-dashboard.controller';
+import { WalletDashboardController } from './controllers/wallet-dashboard.controller';
 
 @Module({
   imports: [
@@ -28,7 +38,20 @@ import { CampaignDashboardController } from './controllers/campaign-dashboard.co
     PerformanceOptimizationService,
     GamificationService,
     BillingService,
+    GoogleAuthService,
+    EmailService,
+    CacheService,
+    AssasService,
+    TwilioService,
   ],
-  controllers: [OnzapChatController, CampaignDashboardController],
+  controllers: [
+    OnzapChatController,
+    CampaignDashboardController,
+    AuthController,
+    OnzapDashboardController,
+    OnloveDashboardController,
+    OnmailDashboardController,
+    WalletDashboardController,
+  ],
 })
 export class AppModule {}
