@@ -15,7 +15,17 @@ model User {
   id                String   @id @default(cuid())
   email             String   @unique
   name              String
+  picture           String?
   product           String   // "onzap", "coon", "onlove"
+  googleId          String?  @unique
+  authMethod        String   @default("google")
+  apps              String[]
+  emailVerified     Boolean  @default(false)
+  bounced           Boolean  @default(false)
+  unsubscribed      Boolean  @default(false)
+  lastLoginAt       DateTime?
+  bouncedAt         DateTime?
+  unsubscribedAt    DateTime?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
@@ -26,6 +36,12 @@ model User {
   pointsLedger      PointsLedger[]
   userLevel         UserLevel?
   achievements      UserAchievement[]
+  consents          UserConsent[]
+  payouts           Payout[]
+  campaigns         Campaign[]
+  emailLogs         EmailLog[]
+  whatsappMessages  WhatsappMessage[]
+  subscribers       Subscriber[]
 }
 
 // ============================================
@@ -188,4 +204,142 @@ model FeatureFlag {
   rolloutPercent  Int      @default(0) // 0-100
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+// ============================================
+// Google OAuth & Auth
+// ============================================
+
+model UserConsent {
+  id                    String   @id @default(cuid())
+  userId                String
+  consentType           String   // 'terms', 'privacy', 'marketing', 'cookies', 'lgpd', 'ccpa'
+  status                String   // 'accepted', 'rejected', 'revoked'
+  acceptedAt            DateTime?
+  revokedAt             DateTime?
+  ipAddress             String?
+  userAgent             String?
+  version               String   @default("1.0")
+  createdAt             DateTime  @default(now())
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, consentType])
+}
+
+// ============================================
+// Email Service (SendGrid)
+// ============================================
+
+model EmailLog {
+  id                    String   @id @default(cuid())
+  to                    String
+  subject               String
+  body                  String?
+  status                String   @default("sent") // 'sent', 'delivered', 'failed', 'bounced'
+  error                 String?
+  opened                Boolean  @default(false)
+  openedAt              DateTime?
+  clicked               Boolean  @default(false)
+  clickedAt             DateTime?
+  sentAt                DateTime?
+  updatedAt             DateTime  @updatedAt
+
+  clicks                EmailClick[]
+
+  @@index([to])
+  @@index([sentAt])
+}
+
+model EmailClick {
+  id                    String   @id @default(cuid())
+  emailLogId            String
+  url                   String
+  clickedAt             DateTime  @default(now())
+
+  emailLog              EmailLog @relation(fields: [emailLogId], references: [id], onDelete: Cascade)
+}
+
+// ============================================
+// Payments (Assas)
+// ============================================
+
+model Payout {
+  id                    String   @id @default(cuid())
+  userId                String
+  assasTransferId       String?  @unique
+  amount                Decimal
+  status                String   @default("pending") // 'pending', 'processing', 'completed', 'failed'
+  completedAt           DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ============================================
+// WhatsApp Messages (Twilio)
+// ============================================
+
+model WhatsappMessage {
+  id                    String   @id @default(cuid())
+  userId                String?
+  twilioSid             String?  @unique
+  to                    String
+  body                  String
+  status                String   @default("sent") // 'sent', 'delivered', 'read', 'failed'
+  sentAt                DateTime?
+  updatedAt             DateTime  @updatedAt
+
+  user                  User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([to])
+  @@index([sentAt])
+}
+
+// ============================================
+// Campaigns (Multi-platform)
+// ============================================
+
+model Campaign {
+  id                    String   @id @default(cuid())
+  userId                String
+  name                  String
+  type                  String   // 'onzap', 'onlove', 'onmail', 'wallet'
+  platform              String   // 'google', 'meta', 'tiktok', 'whatsapp', 'email'
+  budget                Decimal
+  spent                 Decimal  @default(0)
+  status                String   @default("draft") // 'draft', 'active', 'paused', 'completed'
+  startDate             DateTime?
+  endDate               DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ============================================
+// Subscribers (Email Lists)
+// ============================================
+
+model Subscriber {
+  id                    String   @id @default(cuid())
+  userId                String
+  email                 String
+  name                  String?
+  source                String   // 'imported', 'signup', 'form', 'api'
+  status                String   @default("active") // 'active', 'unsubscribed', 'bounced'
+  engagementLevel       String   @default("medium") // 'high', 'medium', 'low'
+  opens                 Int      @default(0)
+  clicks                Int      @default(0)
+  revenue               Decimal  @default(0)
+  lastEngagementAt      DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, email])
+  @@index([email])
+  @@index([status])
 }
