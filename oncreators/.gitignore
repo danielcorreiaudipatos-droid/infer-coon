@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build
+dist/
+build/
+*.tsbuildinfo
+
+# Testing
+coverage/
+.nyc_output/
+
+# Runtime
+.env.production
+*.log
+logs/
+
+# Database
+prisma/seed.ts
+.sqlite
+*.db
+
+# Docker
+.dockerignore
+
+# OS
+Thumbs.db

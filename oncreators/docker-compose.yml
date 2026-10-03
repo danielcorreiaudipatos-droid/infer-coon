@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: oncreators-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: oncreators
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - oncreators-network
+
+  # PgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: oncreators-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@oncreators.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - oncreators-network
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: oncreators-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - oncreators-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  oncreators-network:
+    driver: bridge

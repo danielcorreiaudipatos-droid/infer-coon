@@ -1,0 +1,557 @@
+// OnCreators Marketplace - Prisma Schema
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ============================================
+// 1. USERS & AUTHENTICATION
+// ============================================
+
+model User {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email               String    @unique
+  username            String    @unique
+  passwordHash        String    @map("password_hash")
+  firstName           String?   @map("first_name")
+  lastName            String?   @map("last_name")
+  profilePictureUrl   String?   @map("profile_picture_url") @db.Text
+  bio                 String?   @db.Text
+  isEmailVerified     Boolean   @default(false) @map("is_email_verified")
+  isActive            Boolean   @default(true) @map("is_active")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  creator             Creator?
+  subscriptions       UserSubscription[]
+  payments            Payment[]
+  invoices            Invoice[]
+  contentAccess       ContentAccess[]
+  followers           CreatorFollower[]
+  reviews             Review[]
+  tickets             SupportTicket[]
+  analytics           UserAnalytics[]
+  marketplacePurchases MarketplacePurchase[]
+
+  @@index([email])
+  @@index([username])
+  @@map("users")
+}
+
+// ============================================
+// 2. CREATORS
+// ============================================
+
+model Creator {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @unique @db.Uuid @map("user_id")
+  creatorName         String    @map("creator_name")
+  description         String?   @db.Text
+  profileImageUrl     String?   @map("profile_image_url") @db.Text
+  bannerImageUrl      String?   @map("banner_image_url") @db.Text
+  websiteUrl          String?   @map("website_url")
+  twitterHandle       String?   @map("twitter_handle")
+  instagramHandle     String?   @map("instagram_handle")
+  isVerified          Boolean   @default(false) @map("is_verified")
+  verificationBadgeColor String? @map("verification_badge_color")
+  stripeAccountId     String?   @map("stripe_account_id")
+  followersCount      Int       @default(0) @map("followers_count")
+  totalContentCount   Int       @default(0) @map("total_content_count")
+  totalEarnings       Decimal   @default(0) @db.Decimal(15, 2) @map("total_earnings")
+  avgRating           Decimal?  @db.Decimal(3, 2) @map("avg_rating")
+  isActive            Boolean   @default(true) @map("is_active")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content             CreatorContent[]
+  followers           CreatorFollower[]
+  earnings            CreatorEarnings[]
+  payouts             Payout[]
+  affiliateLinks      AffiliateLink[]
+  analytics           CreatorAnalytics[]
+  reviews             Review[]
+  products            MarketplaceProduct[]
+  marketplacePurchases MarketplacePurchase[]
+  tickets             SupportTicket[]
+
+  @@index([userId])
+  @@index([isVerified])
+  @@map("creators")
+}
+
+// ============================================
+// 3. SUBSCRIPTIONS & PLANS
+// ============================================
+
+model SubscriptionPlan {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String
+  description     String?   @db.Text
+  priceMonthly    Decimal   @db.Decimal(10, 2) @map("price_monthly")
+  features        Json?
+  trialDays       Int       @default(0) @map("trial_days")
+  isActive        Boolean   @default(true) @map("is_active")
+  displayOrder    Int?      @map("display_order")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  subscriptions   UserSubscription[]
+
+  @@map("subscription_plans")
+}
+
+model UserSubscription {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @db.Uuid @map("user_id")
+  planId              String    @db.Uuid @map("plan_id")
+  stripeSubscriptionId String?  @map("stripe_subscription_id")
+  status              String    @default("active") // active, cancelled, past_due, unpaid
+  currentPeriodStart  DateTime? @map("current_period_start")
+  currentPeriodEnd    DateTime? @map("current_period_end")
+  trialEnd            DateTime? @map("trial_end")
+  cancelledAt         DateTime? @map("cancelled_at")
+  cancellationReason  String?   @map("cancellation_reason") @db.Text
+  autoRenew           Boolean   @default(true) @map("auto_renew")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan                SubscriptionPlan @relation(fields: [planId], references: [id])
+  payments            Payment[]
+  invoices            Invoice[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([stripeSubscriptionId])
+  @@map("user_subscriptions")
+}
+
+// ============================================
+// 4. PAYMENTS & BILLING
+// ============================================
+
+model Payment {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @db.Uuid @map("user_id")
+  subscriptionId      String?   @db.Uuid @map("subscription_id")
+  stripePaymentId     String?   @map("stripe_payment_id")
+  amount              Decimal   @db.Decimal(10, 2)
+  currency            String    @default("BRL") @db.Char(3)
+  status              String    @default("pending") // pending, succeeded, failed
+  paymentMethod       String?   @map("payment_method") // card, pix, paypal
+  last4Digits         String?   @map("last_4_digits") @db.Char(4)
+  attemptedAt         DateTime  @default(now()) @map("attempted_at")
+  succeededAt         DateTime? @map("succeeded_at")
+  failedAt            DateTime? @map("failed_at")
+  failureReason       String?   @map("failure_reason") @db.Text
+  receiptUrl          String?   @map("receipt_url") @db.Text
+  createdAt           DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription        UserSubscription? @relation(fields: [subscriptionId], references: [id])
+  marketplacePurchase MarketplacePurchase?
+
+  @@index([userId])
+  @@index([status])
+  @@index([stripePaymentId])
+  @@map("payments")
+}
+
+model Invoice {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @db.Uuid @map("user_id")
+  subscriptionId      String?   @db.Uuid @map("subscription_id")
+  invoiceNumber       String    @unique @map("invoice_number")
+  amount              Decimal   @db.Decimal(10, 2)
+  currency            String    @default("BRL") @db.Char(3)
+  status              String    @default("draft") // draft, sent, paid, failed
+  dueDate             DateTime? @map("due_date")
+  paidAt              DateTime? @map("paid_at")
+  pdfUrl              String?   @map("pdf_url") @db.Text
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription        UserSubscription? @relation(fields: [subscriptionId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@map("invoices")
+}
+
+// ============================================
+// 5. CREATOR CONTENT
+// ============================================
+
+model ContentCategory {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String
+  description     String?   @db.Text
+  iconUrl         String?   @map("icon_url") @db.Text
+  isActive        Boolean   @default(true) @map("is_active")
+
+  // Relations
+  content         CreatorContent[]
+
+  @@map("content_categories")
+}
+
+model CreatorContent {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  creatorId           String    @db.Uuid @map("creator_id")
+  categoryId          String?   @db.Uuid @map("category_id")
+  title               String
+  description         String?   @db.Text
+  contentType         String?   @map("content_type") // video, pdf, live, course, template
+  contentUrl          String?   @map("content_url") @db.Text
+  thumbnailUrl        String?   @map("thumbnail_url") @db.Text
+  previewUrl          String?   @map("preview_url") @db.Text
+  durationMinutes     Int?      @map("duration_minutes")
+  isPreviewAvailable  Boolean   @default(true) @map("is_preview_available")
+  requiresSubscription Boolean   @default(true) @map("requires_subscription")
+  priceIfSeparate     Decimal?  @db.Decimal(10, 2) @map("price_if_separate")
+  viewsCount          Int       @default(0) @map("views_count")
+  downloadsCount      Int       @default(0) @map("downloads_count")
+  rating              Decimal?  @db.Decimal(3, 2)
+  ratingCount         Int       @default(0) @map("rating_count")
+  isPublished         Boolean   @default(false) @map("is_published")
+  publishedAt         DateTime? @map("published_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  creator             Creator   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  category            ContentCategory? @relation(fields: [categoryId], references: [id])
+  access              ContentAccess[]
+  reviews             Review[]
+
+  @@index([creatorId])
+  @@index([isPublished])
+  @@index([categoryId])
+  @@map("creator_content")
+}
+
+model ContentAccess {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @db.Uuid @map("user_id")
+  contentId           String    @db.Uuid @map("content_id")
+  accessedAt          DateTime  @default(now()) @map("accessed_at")
+  watchedPercentage   Int       @default(0) @map("watched_percentage")
+  completed           Boolean   @default(false)
+  completedAt         DateTime? @map("completed_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content             CreatorContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, contentId])
+  @@index([userId])
+  @@index([contentId])
+  @@map("content_access")
+}
+
+// ============================================
+// 6. MARKETPLACE (COURSES, BUNDLES, PRODUCTS)
+// ============================================
+
+model MarketplaceProduct {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  creatorId           String    @db.Uuid @map("creator_id")
+  productType         String?   @map("product_type") // course, bundle, template, ebook
+  name                String
+  description         String?   @db.Text
+  price               Decimal   @db.Decimal(10, 2)
+  currency            String    @default("BRL") @db.Char(3)
+  thumbnailUrl        String?   @map("thumbnail_url") @db.Text
+  contentIds          String[]  @default([]) @map("content_ids") @db.Uuid
+  totalSold           Int       @default(0) @map("total_sold")
+  totalRevenue        Decimal   @default(0) @db.Decimal(15, 2) @map("total_revenue")
+  rating              Decimal?  @db.Decimal(3, 2)
+  ratingCount         Int       @default(0) @map("rating_count")
+  isPublished         Boolean   @default(false) @map("is_published")
+  publishedAt         DateTime? @map("published_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  creator             Creator   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  purchases           MarketplacePurchase[]
+  affiliateLinks      AffiliateLink[]
+  reviews             Review[]
+
+  @@index([creatorId])
+  @@index([isPublished])
+  @@map("marketplace_products")
+}
+
+model MarketplacePurchase {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @db.Uuid @map("user_id")
+  productId           String    @db.Uuid @map("product_id")
+  creatorId           String    @db.Uuid @map("creator_id")
+  amount              Decimal   @db.Decimal(10, 2)
+  creatorEarnings     Decimal   @db.Decimal(10, 2) @map("creator_earnings")
+  platformFee         Decimal   @db.Decimal(10, 2) @map("platform_fee")
+  paymentId           String?   @db.Uuid @map("payment_id")
+  purchasedAt         DateTime  @default(now()) @map("purchased_at")
+
+  // Relations
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product             MarketplaceProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+  creator             Creator   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  payment             Payment?  @relation(fields: [paymentId], references: [id])
+
+  @@index([userId])
+  @@index([creatorId])
+  @@map("marketplace_purchases")
+}
+
+// ============================================
+// 7. CREATOR EARNINGS & PAYOUTS
+// ============================================
+
+model CreatorEarnings {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  creatorId           String    @db.Uuid @map("creator_id")
+  periodStart         DateTime  @map("period_start")
+  periodEnd           DateTime  @map("period_end")
+  subscriptionEarnings Decimal   @default(0) @db.Decimal(15, 2) @map("subscription_earnings")
+  marketplaceEarnings Decimal   @default(0) @db.Decimal(15, 2) @map("marketplace_earnings")
+  affiliateEarnings   Decimal   @default(0) @db.Decimal(15, 2) @map("affiliate_earnings")
+  totalEarnings       Decimal   @default(0) @db.Decimal(15, 2) @map("total_earnings")
+  status              String    @default("calculated") @map("status") // calculated, approved, paid
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  creator             Creator   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  payouts             Payout[]
+
+  @@unique([creatorId, periodStart, periodEnd])
+  @@index([creatorId])
+  @@map("creator_earnings")
+}
+
+model Payout {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  creatorId           String    @db.Uuid @map("creator_id")
+  earningsId          String?   @db.Uuid @map("earnings_id")
+  amount              Decimal   @db.Decimal(15, 2)
+  currency            String    @default("BRL") @db.Char(3)
+  payoutMethod        String?   @map("payout_method") // bank_transfer, stripe, pix
+  bankAccountId       String?   @map("bank_account_id")
+  stripePayoutId      String?   @map("stripe_payout_id")
+  status              String    @default("pending") // pending, processing, paid, failed
+  scheduledDate       DateTime? @map("scheduled_date")
+  completedDate       DateTime? @map("completed_date")
+  failureReason       String?   @map("failure_reason") @db.Text
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  creator             Creator   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  earnings            CreatorEarnings? @relation(fields: [earningsId], references: [id])
+
+  @@index([creatorId])
+  @@index([status])
+  @@map("payouts")
+}
+
+// ============================================
+// 8. FOLLOWERS & RELATIONSHIPS
+// ============================================
+
+model CreatorFollower {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @db.Uuid @map("user_id")
+  creatorId           String    @db.Uuid @map("creator_id")
+  followedAt          DateTime  @default(now()) @map("followed_at")
+  isSubscriber        Boolean   @default(false) @map("is_subscriber")
+
+  // Relations
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creator             Creator   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, creatorId])
+  @@index([userId])
+  @@index([creatorId])
+  @@map("creator_followers")
+}
+
+// ============================================
+// 9. REVIEWS & RATINGS
+// ============================================
+
+model Review {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @db.Uuid @map("user_id")
+  creatorId           String?   @db.Uuid @map("creator_id")
+  contentId           String?   @db.Uuid @map("content_id")
+  productId           String?   @db.Uuid @map("product_id")
+  rating              Int       @db.SmallInt
+  title               String?
+  comment             String?   @db.Text
+  isVerifiedPurchase  Boolean   @default(false) @map("is_verified_purchase")
+  helpfulCount        Int       @default(0) @map("helpful_count")
+  isPublished         Boolean   @default(true) @map("is_published")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creator             Creator?  @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+  content             CreatorContent? @relation(fields: [contentId], references: [id], onDelete: SetNull)
+  product             MarketplaceProduct? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([creatorId])
+  @@index([userId])
+  @@map("reviews")
+}
+
+// ============================================
+// 10. AFFILIATE SYSTEM
+// ============================================
+
+model AffiliateLink {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  creatorId           String    @db.Uuid @map("creator_id")
+  productId           String    @db.Uuid @map("product_id")
+  affiliateCode       String    @unique @map("affiliate_code")
+  commissionPercent   Decimal   @default(10.00) @db.Decimal(5, 2) @map("commission_percent")
+  clicks              Int       @default(0)
+  conversions         Int       @default(0)
+  totalEarned         Decimal   @default(0) @db.Decimal(15, 2) @map("total_earned")
+  isActive            Boolean   @default(true) @map("is_active")
+  createdAt           DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  creator             Creator   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  product             MarketplaceProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([creatorId])
+  @@index([productId])
+  @@map("affiliate_links")
+}
+
+// ============================================
+// 11. ANALYTICS & TRACKING
+// ============================================
+
+model CreatorAnalytics {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  creatorId           String    @db.Uuid @map("creator_id")
+  date                DateTime  @map("date")
+  newSubscribers      Int       @default(0) @map("new_subscribers")
+  cancelledSubscribers Int      @default(0) @map("cancelled_subscribers")
+  totalViews          Int       @default(0) @map("total_views")
+  totalDownloads      Int       @default(0) @map("total_downloads")
+  revenue             Decimal   @default(0) @db.Decimal(15, 2)
+  avgRating           Decimal?  @db.Decimal(3, 2) @map("avg_rating")
+  createdAt           DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  creator             Creator   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@unique([creatorId, date])
+  @@index([creatorId])
+  @@map("creator_analytics")
+}
+
+model UserAnalytics {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @db.Uuid @map("user_id")
+  date                DateTime  @map("date")
+  contentViewed       Int       @default(0) @map("content_viewed")
+  contentDownloaded   Int       @default(0) @map("content_downloaded")
+  spentAmount         Decimal   @default(0) @db.Decimal(15, 2) @map("spent_amount")
+  createdAt           DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId])
+  @@map("user_analytics")
+}
+
+// ============================================
+// 12. SUPPORT & ISSUES
+// ============================================
+
+model SupportTicket {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @db.Uuid @map("user_id")
+  creatorId           String?   @db.Uuid @map("creator_id")
+  subject             String
+  description         String    @db.Text
+  category            String?
+  priority            String    @default("medium") // low, medium, high, urgent
+  status              String    @default("open") // open, in_progress, resolved, closed
+  assignedToId        String?   @db.Uuid @map("assigned_to") // reference to User ID
+  createdAt           DateTime  @default(now()) @map("created_at")
+  resolvedAt          DateTime? @map("resolved_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creator             Creator?  @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([status])
+  @@map("support_tickets")
+}
+
+// ============================================
+// 13. MARKETING & PROMOTIONS
+// ============================================
+
+model CouponCode {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                String    @unique
+  description         String?   @db.Text
+  discountType        String?   @map("discount_type") // percentage, fixed_amount
+  discountValue       Decimal   @db.Decimal(10, 2) @map("discount_value")
+  maxUses             Int?      @map("max_uses")
+  currentUses         Int       @default(0) @map("current_uses")
+  validFrom           DateTime? @map("valid_from")
+  validUntil          DateTime? @map("valid_until")
+  applicablePlans     String[]  @default([]) @map("applicable_plans") @db.Uuid
+  applicableCreators  String[]  @default([]) @map("applicable_creators") @db.Uuid
+  isActive            Boolean   @default(true) @map("is_active")
+  createdById         String?   @db.Uuid @map("created_by")
+  createdAt           DateTime  @default(now()) @map("created_at")
+
+  @@index([code])
+  @@map("coupon_codes")
+}
+
+// ============================================
+// 14. SECURITY & COMPLIANCE
+// ============================================
+
+model AuditLog {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String?   @db.Uuid @map("user_id")
+  action              String
+  resourceType        String?   @map("resource_type")
+  resourceId          String?   @db.Uuid @map("resource_id")
+  changes             Json?
+  ipAddress           String?   @map("ip_address") @db.Inet
+  userAgent           String?   @map("user_agent") @db.Text
+  createdAt           DateTime  @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
