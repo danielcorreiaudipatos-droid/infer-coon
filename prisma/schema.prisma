@@ -1,0 +1,191 @@
+// ONZAP Mobile AI Chat Database Schema
+// Week 1-2 Implementation
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Users (existing, extended)
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  name              String
+  product           String   // "onzap", "coon", "onlove"
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  chatMessages      ChatMessage[]
+  escalationQueues  EscalationQueue[]
+  aiChatMetrics     AiChatMetrics[]
+  pointsLedger      PointsLedger[]
+  userLevel         UserLevel?
+  achievements      UserAchievement[]
+}
+
+// ============================================
+// ONZAP Mobile: AI Chat Schema
+// ============================================
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  contactId String
+  message   String   @db.Text
+  sender    String   // "user" | "ai"
+  timestamp DateTime @default(now())
+
+  // Indexes for fast queries
+  @@index([userId, contactId])
+  @@index([timestamp])
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model EscalationQueue {
+  id        String   @id @default(cuid())
+  userId    String
+  contactId String
+  message   String   @db.Text
+  reason    String   // "ai_low_confidence", "timeout", "user_request"
+  status    String   // "pending", "assigned", "resolved"
+  assignedTo String?
+  createdAt DateTime @default(now())
+  resolvedAt DateTime?
+
+  // Indexes
+  @@index([userId])
+  @@index([status])
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AiChatMetrics {
+  id              String   @id @default(cuid())
+  userId          String
+  responseTime    Int      // milliseconds, target <2000
+  accuracy        Float    // 0-1, target >0.7
+  escalationRate  Float    // 0-1
+  timestamp       DateTime @default(now())
+
+  // Indexes
+  @@index([userId])
+  @@index([timestamp])
+
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ============================================
+// ONLOVE Mobile: Gamification Schema
+// ============================================
+
+model PointsLedger {
+  id            String   @id @default(cuid())
+  userId        String
+  points        Int      // Can be negative for deductions
+  action        String   // "post", "comment", "like", "follow", "daily_login"
+  referenceId   String?  // ID of post/comment/etc
+  description   String?
+  timestamp     DateTime @default(now())
+
+  // Indexes for fast aggregation
+  @@index([userId])
+  @@index([action])
+  @@index([timestamp])
+
+  // Relations
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserLevel {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  level         Int      @default(1) // 1, 2, 3, etc
+  totalPoints   Int      @default(0)
+  nextLevelAt   Int      // Points needed for next level
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Achievement {
+  id              String   @id @default(cuid())
+  name            String
+  description     String
+  icon            String   // URL to icon
+  requiredPoints  Int      // Points needed to unlock
+  category        String   // "milestone", "badge", "special"
+  createdAt       DateTime @default(now())
+
+  // Relations
+  users           UserAchievement[]
+}
+
+model UserAchievement {
+  id              String   @id @default(cuid())
+  userId          String
+  achievementId   String
+  unlockedAt      DateTime @default(now())
+
+  // Unique constraint
+  @@unique([userId, achievementId])
+  @@index([userId])
+
+  // Relations
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement     Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+}
+
+model Leaderboard {
+  id            String   @id @default(cuid())
+  userId        String
+  rank          Int
+  points        Int
+  level         Int
+  lastUpdated   DateTime @default(now())
+
+  @@index([rank])
+  @@index([points])
+  @@index([lastUpdated])
+}
+
+// ============================================
+// Performance Metrics (All Products)
+// ============================================
+
+model PerformanceMetrics {
+  id              String   @id @default(cuid())
+  appName         String   // "coon", "onzap", "onlove"
+  platform        String   // "mobile_android", "mobile_ios", "web"
+
+  startupTime     Int?     // milliseconds
+  memoryUsage     Int?     // MB
+  batteryDrain    Float?   // % per hour
+  dataUsage       Int?     // MB per hour
+  apiLatency      Int?     // milliseconds
+
+  timestamp       DateTime @default(now())
+
+  @@index([appName])
+  @@index([platform])
+  @@index([timestamp])
+}
+
+model FeatureFlag {
+  id              String   @id @default(cuid())
+  name            String   @unique
+  enabled         Boolean  @default(false)
+  description     String
+  rolloutPercent  Int      @default(0) // 0-100
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
