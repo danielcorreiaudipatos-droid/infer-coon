@@ -1,0 +1,113 @@
+{
+  "name": "OnGame Production",
+  "public": false,
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "npm ci",
+  "serverless_function_region": "sfo1",
+  "env": {
+    "NEXT_PUBLIC_API_URL": "@PROD_API_URL",
+    "NEXT_PUBLIC_COON_API_URL": "@PROD_COON_API_URL",
+    "DATABASE_URL": "@PROD_DATABASE_URL",
+    "STRIPE_SECRET_KEY": "@PROD_STRIPE_SECRET_KEY",
+    "JWT_SECRET": "@PROD_JWT_SECRET",
+    "ENCRYPTION_KEY": "@PROD_ENCRYPTION_KEY",
+    "SENDGRID_API_KEY": "@PROD_SENDGRID_API_KEY",
+    "DATADOG_API_KEY": "@PROD_DATADOG_API_KEY"
+  },
+  "regions": ["sfo1", "iad1", "hnd1", "gru1"],
+  "functions": {
+    "api/**": {
+      "maxDuration": 60,
+      "memory": 3008,
+      "regions": ["sfo1", "iad1", "hnd1"]
+    },
+    "pages/api/webhooks/**": {
+      "maxDuration": 30,
+      "memory": 1024
+    },
+    "pages/game/**": {
+      "maxDuration": 120,
+      "memory": 2048
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(self)"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/_next/static/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/old/(.*)",
+      "destination": "/new/$1",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": "/pages/admin/$1"
+    }
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "framework": "nextjs",
+  "nodejs": "18.x"
+}
