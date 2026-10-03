@@ -19,6 +19,7 @@ import { OnzapDashboardController } from './controllers/onzap-dashboard.controll
 import { OnloveDashboardController } from './controllers/onlove-dashboard.controller';
 import { OnmailDashboardController } from './controllers/onmail-dashboard.controller';
 import { WalletDashboardController } from './controllers/wallet-dashboard.controller';
+import { TVModule } from './modules/tv/tv.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { WalletDashboardController } from './controllers/wallet-dashboard.contro
       secret: process.env.JWT_SECRET || 'dev-secret-key-change-in-production',
       signOptions: { expiresIn: process.env.JWT_EXPIRATION || '24h' },
     }),
+    TVModule,
   ],
   providers: [
     PrismaService,

@@ -1,60 +1,68 @@
-version: '3.9'
+version: '3.8'
 
 services:
-  postgres:
+  # PostgreSQL Database
+  db:
     image: postgres:15-alpine
+    container_name: onnews-db
     environment:
-      POSTGRES_DB: ads_db
-      POSTGRES_USER: ads_user
-      POSTGRES_PASSWORD: ads_password_change_in_prod
+      POSTGRES_USER: onnews_user
+      POSTGRES_PASSWORD: onnews_password_change_me
+      POSTGRES_DB: onnews_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./database/schemas/onnews.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./database/schemas/onnews-v2-cep-cnpj.sql:/docker-entrypoint-initdb.d/02-cep-cnpj.sql
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ads_user"]
+      test: ["CMD-SHELL", "pg_isready -U onnews_user -d onnews_db"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  backend:
+  # API Backend
+  api:
     build:
-      context: .
-      dockerfile: ads-backend/Dockerfile
+      context: ./api-onnews
+      dockerfile: Dockerfile
+    container_name: onnews-api
     environment:
-      DATABASE_URL: postgresql://ads_user:ads_password_change_in_prod@postgres:5432/ads_db
-      REDIS_URL: redis://redis:6379
-      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      NODE_ENV: development
+      PORT: 3001
+      DATABASE_URL: postgresql://onnews_user:onnews_password_change_me@db:5432/onnews_db
+      JWT_SECRET: dev-secret-key-change-in-production
+      CORS_ORIGIN: http://localhost:3000,http://localhost:3001
+      CEP_API_PROVIDER: viacep
+      BRASIL_IO_API_KEY: ${BRASIL_IO_API_KEY:-}
     ports:
-      - "8000:8000"
+      - "3001:3001"
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
-      redis:
-        condition: service_healthy
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-
-  frontend:
-    image: node:20-alpine
-    working_dir: /app
-    ports:
-      - "3000:3000"
     volumes:
-      - ./ads-frontend:/app
-      - /app/node_modules
-    command: npm install && npm start
+      - ./api-onnews/src:/app/src
+      - ./api-onnews/node_modules:/app/node_modules
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # pgAdmin (Database UI)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: onnews-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@onnews.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
     depends_on:
-      - backend
+      - db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
 
 volumes:
   postgres_data:
+  pgadmin_data:

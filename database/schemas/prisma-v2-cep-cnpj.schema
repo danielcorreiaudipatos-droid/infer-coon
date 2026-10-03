@@ -1,0 +1,178 @@
+// ============================================
+// PRISMA SCHEMA - CEP & CNPJ ADDITIONS
+// Add these models to the main prisma.schema
+// ============================================
+
+// ============================================
+// ADDRESS TABLE (CEP Integration)
+// ============================================
+
+model Address {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String    @unique @map("user_id") @db.Uuid
+  cep              String    @db.VarChar(10) // Format: XXXXX-XXX
+  street           String    @db.VarChar(255)
+  number           String    @db.VarChar(20)
+  complement       String?   @db.VarChar(255)
+  neighborhood     String    @db.VarChar(100)
+  city             String    @db.VarChar(100)
+  state            String    @db.VarChar(2)
+  country          String    @default("BR") @db.VarChar(2)
+  latitude         Decimal?  @db.Decimal(10, 8)
+  longitude        Decimal?  @db.Decimal(11, 8)
+  isVerified       Boolean   @default(false) @map("is_verified")
+  isPrimary        Boolean   @default(true) @map("is_primary")
+  cepApiSource     String?   @map("cep_api_source") @db.VarChar(50) // 'viacep', 'postmon', 'opencep'
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([cep])
+  @@index([city])
+  @@schema("onnews")
+  @@map("addresses")
+}
+
+// ============================================
+// STREAMER COMPANY DATA (CNPJ Integration)
+// ============================================
+
+model StreamerCompany {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  streamerId          String    @unique @map("streamer_id") @db.Uuid
+  cnpj                String?   @unique @db.VarChar(18) // Format: XX.XXX.XXX/XXXX-XX
+  companyName         String?   @map("company_name") @db.VarChar(255)
+  tradingName         String?   @map("trading_name") @db.VarChar(255)
+  companyEmail        String?   @map("company_email") @db.VarChar(255)
+  companyPhone        String?   @map("company_phone") @db.VarChar(20)
+  companyWebsite      String?   @map("company_website") @db.VarChar(255)
+  registrationDate    DateTime? @map("registration_date") @db.Date
+  companySize         String?   @map("company_size") @db.VarChar(50) // 'MEI', 'PJ', 'LTDA', 'SA'
+  activityDescription String?   @map("activity_description")
+  isCnpjVerified      Boolean   @default(false) @map("is_cnpj_verified")
+  verificationDate    DateTime? @map("verification_date")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  streamer Streamer              @relation(fields: [streamerId], references: [id], onDelete: Cascade)
+  addresses StreamerCompanyAddress[]
+  bankAccounts BankAccount[]
+
+  @@index([cnpj])
+  @@index([isCnpjVerified])
+  @@schema("onnews")
+  @@map("streamer_company")
+}
+
+model StreamerCompanyAddress {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  companyId     String    @map("company_id") @db.Uuid
+  cep           String    @db.VarChar(10)
+  street        String    @db.VarChar(255)
+  number        String    @db.VarChar(20)
+  complement    String?   @db.VarChar(255)
+  neighborhood  String    @db.VarChar(100)
+  city          String    @db.VarChar(100)
+  state         String    @db.VarChar(2)
+  country       String    @default("BR") @db.VarChar(2)
+  addressType   String    @default("commercial") @map("address_type") @db.VarChar(50) // 'commercial', 'billing', 'warehouse'
+  isPrimary     Boolean   @default(true) @map("is_primary")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  company StreamerCompany @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([cep])
+  @@index([companyId])
+  @@schema("onnews")
+  @@map("streamer_company_address")
+}
+
+// ============================================
+// BANK ACCOUNT (CEP/CNPJ related)
+// ============================================
+
+model BankAccount {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId             String?   @map("user_id") @db.Uuid
+  companyId          String?   @map("company_id") @db.Uuid
+  bankCode           String    @map("bank_code") @db.VarChar(5) // '001' (BB), '033' (Santander)
+  bankName           String?   @map("bank_name") @db.VarChar(255)
+  accountType        String    @map("account_type") @db.VarChar(20) // 'checking', 'savings'
+  agencyNumber       String    @map("agency_number") @db.VarChar(10)
+  accountNumber      String    @map("account_number") @db.VarChar(20)
+  accountDigit       String?   @map("account_digit") @db.VarChar(2)
+  cpfCnpj            String?   @map("cpf_cnpj") @db.VarChar(18) // CPF or CNPJ
+  accountHolderName  String    @map("account_holder_name") @db.VarChar(255)
+  isVerified         Boolean   @default(false) @map("is_verified")
+  verificationDate   DateTime? @map("verification_date")
+  isPrimary          Boolean   @default(true) @map("is_primary")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  user    User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company StreamerCompany? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bankCode, agencyNumber, accountNumber])
+  @@unique([companyId, bankCode, agencyNumber, accountNumber])
+  @@index([userId])
+  @@index([companyId])
+  @@index([cpfCnpj])
+  @@schema("onnews")
+  @@map("bank_accounts")
+}
+
+// ============================================
+// CEP API CACHE (Performance optimization)
+// ============================================
+
+model CepCache {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  cep       String    @unique @db.VarChar(10)
+  street    String?   @db.VarChar(255)
+  neighborhood String? @db.VarChar(100)
+  city      String?   @db.VarChar(100)
+  state     String?   @db.VarChar(2)
+  latitude  Decimal?  @db.Decimal(10, 8)
+  longitude Decimal?  @db.Decimal(11, 8)
+  source    String?   @db.VarChar(50) // 'viacep', 'postmon', 'opencep'
+  cachedAt  DateTime  @default(now()) @map("cached_at")
+  expiresAt DateTime  @default(dbgenerated("CURRENT_TIMESTAMP + INTERVAL '30 days'")) @map("expires_at")
+
+  @@index([cep])
+  @@index([expiresAt])
+  @@schema("onnews")
+  @@map("cep_cache")
+}
+
+// ============================================
+// CNPJ VERIFICATION CACHE
+// ============================================
+
+model CnpjCache {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  cnpj               String    @unique @db.VarChar(18)
+  companyName        String?   @map("company_name") @db.VarChar(255)
+  tradingName        String?   @map("trading_name") @db.VarChar(255)
+  registrationDate   DateTime? @map("registration_date") @db.Date
+  status             String?   @db.VarChar(50) // 'active', 'inactive', 'cancelled'
+  companySize        String?   @map("company_size") @db.VarChar(50)
+  activityCode       String?   @map("activity_code") @db.VarChar(10)
+  activityDescription String?  @map("activity_description")
+  latitude           Decimal?  @db.Decimal(10, 8)
+  longitude          Decimal?  @db.Decimal(11, 8)
+  source             String?   @db.VarChar(50) // 'receita', 'api_brasil', 'manual'
+  cachedAt           DateTime  @default(now()) @map("cached_at")
+  expiresAt          DateTime  @default(dbgenerated("CURRENT_TIMESTAMP + INTERVAL '90 days'")) @map("expires_at")
+
+  @@index([cnpj])
+  @@index([expiresAt])
+  @@schema("onnews")
+  @@map("cnpj_cache")
+}
+
+// ============================================
+// UPDATE TO STREAMER MODEL
+// Add this field to existing Streamer model:
+// ============================================
+// company StreamerCompany?

@@ -1,0 +1,454 @@
+// OnNews Prisma Schema
+// Database ORM for PostgreSQL
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ============================================
+// USERS & AUTHENTICATION
+// ============================================
+
+model User {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email             String    @unique @db.VarChar(255)
+  username          String    @unique @db.VarChar(100)
+  passwordHash      String    @map("password_hash") @db.VarChar(255)
+  phone             String?   @db.VarChar(20)
+  dateOfBirth       DateTime? @map("date_of_birth") @db.Date
+  cpf               String?   @unique @db.VarChar(14)
+  state             String?   @db.VarChar(2)
+  city              String?   @db.VarChar(100)
+  profilePictureUrl String?   @map("profile_picture_url")
+  bio               String?
+  isVerified        Boolean   @default(false) @map("is_verified")
+  isActive          Boolean   @default(true) @map("is_active")
+  lastLogin         DateTime? @map("last_login")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  sessions               Session[]
+  wallet                 Wallet?
+  transactions           Transaction[]
+  withdrawalRequests     WithdrawalRequest[]
+  watchingSessions       WatchingSession[]
+  tradingAccount         TradingAccount?
+  tradingPredictions     TradingPrediction[]
+  streamer               Streamer?
+  streamerFollowers      StreamerFollower[]
+  userAchievements       UserAchievement[]
+  userAnalytics          UserAnalytics?
+  activityLogs           ActivityLog[]
+  notifications          Notification[]
+
+  @@schema("onnews")
+  @@map("users")
+}
+
+model Session {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  token        String    @unique @db.VarChar(500)
+  refreshToken String?   @map("refresh_token") @db.VarChar(500)
+  ipAddress    String?   @map("ip_address") @db.Inet
+  userAgent    String?   @map("user_agent")
+  expiresAt    DateTime  @map("expires_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@schema("onnews")
+  @@map("sessions")
+}
+
+// ============================================
+// WALLET & TRANSACTIONS
+// ============================================
+
+model Wallet {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String    @unique @map("user_id") @db.Uuid
+  balance        Decimal   @default(0.00) @db.Decimal(15, 2)
+  totalEarned    Decimal   @default(0.00) @map("total_earned") @db.Decimal(15, 2)
+  totalWithdrawn Decimal   @default(0.00) @map("total_withdrawn") @db.Decimal(15, 2)
+  currency       String    @default("BRL") @db.VarChar(3)
+  lastUpdated    DateTime  @default(now()) @map("last_updated")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions         Transaction[]
+  withdrawalRequests   WithdrawalRequest[]
+
+  @@schema("onnews")
+  @@map("wallet")
+}
+
+model Transaction {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String    @map("user_id") @db.Uuid
+  walletId      String    @map("wallet_id") @db.Uuid
+  type          String    @db.VarChar(50) // 'watch_earning', 'trading_earning', 'withdrawal', 'purchase'
+  amount        Decimal   @db.Decimal(15, 2)
+  description   String?
+  referenceId   String?   @map("reference_id") @db.Uuid
+  status        String    @default("completed") @db.VarChar(20) // 'pending', 'completed', 'failed'
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt(sort: Desc)])
+  @@schema("onnews")
+  @@map("transactions")
+}
+
+model WithdrawalRequest {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  walletId        String    @map("wallet_id") @db.Uuid
+  amount          Decimal   @db.Decimal(15, 2)
+  bankAccountId   String?   @map("bank_account_id") @db.Uuid
+  status          String    @default("pending") @db.VarChar(20)
+  requestDate     DateTime  @default(now()) @map("request_date")
+  processedDate   DateTime? @map("processed_date")
+  notes           String?
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@schema("onnews")
+  @@map("withdrawal_requests")
+}
+
+// ============================================
+// TV STREAMING
+// ============================================
+
+model Stream {
+  id                       String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title                    String    @db.VarChar(255)
+  description              String?
+  thumbnailUrl             String?   @map("thumbnail_url")
+  category                 String?   @db.VarChar(50) // 'finance', 'news', 'trading', 'tutorial'
+  rtmpUrl                  String?   @map("rtmp_url") @db.VarChar(500)
+  hlsUrl                   String?   @map("hls_url") @db.VarChar(500)
+  isLive                   Boolean   @default(false) @map("is_live")
+  rewardPerMinute          Decimal   @default(0.01) @map("reward_per_minute") @db.Decimal(10, 4)
+  viewerCount              Int       @default(0) @map("viewer_count")
+  scheduledStart           DateTime? @map("scheduled_start")
+  scheduledEnd             DateTime? @map("scheduled_end")
+  actualStart              DateTime? @map("actual_start")
+  actualEnd                DateTime? @map("actual_end")
+  durationMinutes          Int?      @map("duration_minutes")
+  totalEarningsDistributed Decimal   @default(0.00) @map("total_earnings_distributed") @db.Decimal(15, 2)
+  totalViewers             Int       @default(0) @map("total_viewers")
+  createdAt                DateTime  @default(now()) @map("created_at")
+  updatedAt                DateTime  @updatedAt @map("updated_at")
+
+  watchingSessions WatchingSession[]
+
+  @@index([isLive])
+  @@index([category])
+  @@index([createdAt(sort: Desc)])
+  @@schema("onnews")
+  @@map("streams")
+}
+
+model WatchingSession {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  streamId        String    @map("stream_id") @db.Uuid
+  startTime       DateTime  @default(now()) @map("start_time")
+  endTime         DateTime? @map("end_time")
+  durationMinutes Decimal?  @map("duration_minutes") @db.Decimal(10, 2)
+  earnings        Decimal   @default(0.00) @db.Decimal(15, 2)
+  isCompleted     Boolean   @default(false) @map("is_completed")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stream Stream @relation(fields: [streamId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([streamId])
+  @@index([createdAt(sort: Desc)])
+  @@index([isCompleted])
+  @@schema("onnews")
+  @@map("watching_sessions")
+}
+
+// ============================================
+// QUOTATIONS
+// ============================================
+
+model Quote {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  symbol        String    @unique @db.VarChar(50)
+  name          String?   @db.VarChar(255)
+  price         Decimal   @db.Decimal(15, 4)
+  previousClose Decimal?  @map("previous_close") @db.Decimal(15, 4)
+  changeAmount  Decimal?  @map("change_amount") @db.Decimal(15, 4)
+  changePercent Decimal?  @map("change_percent") @db.Decimal(10, 4)
+  highDay       Decimal?  @map("high_day") @db.Decimal(15, 4)
+  lowDay        Decimal?  @map("low_day") @db.Decimal(15, 4)
+  volume        BigInt?
+  marketCap     Decimal?  @map("market_cap") @db.Decimal(20, 2)
+  source        String?   @db.VarChar(50) // 'brapi', 'alpha_vantage', 'coingecko'
+  lastUpdated   DateTime  @default(now()) @map("last_updated")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  history QuoteHistory[]
+
+  @@index([lastUpdated(sort: Desc)])
+  @@schema("onnews")
+  @@map("quotes")
+}
+
+model QuoteHistory {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  quoteId      String    @map("quote_id") @db.Uuid
+  symbol       String    @db.VarChar(50)
+  price        Decimal   @db.Decimal(15, 4)
+  changePercent Decimal? @map("change_percent") @db.Decimal(10, 4)
+  recordedAt   DateTime  @default(now()) @map("recorded_at")
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@index([symbol])
+  @@index([recordedAt(sort: Desc)])
+  @@schema("onnews")
+  @@map("quote_history")
+}
+
+// ============================================
+// TRADING SIMULATOR
+// ============================================
+
+model TradingAccount {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String    @unique @map("user_id") @db.Uuid
+  initialBalance   Decimal   @default(10000.00) @map("initial_balance") @db.Decimal(15, 2)
+  currentBalance   Decimal   @default(10000.00) @map("current_balance") @db.Decimal(15, 2)
+  totalProfitLoss  Decimal   @default(0.00) @map("total_profit_loss") @db.Decimal(15, 2)
+  profitLossPercent Decimal  @default(0.00) @map("profit_loss_percent") @db.Decimal(10, 4)
+  totalTrades      Int       @default(0) @map("total_trades")
+  winningTrades    Int       @default(0) @map("winning_trades")
+  losingTrades     Int       @default(0) @map("losing_trades")
+  accuracyPercent  Decimal   @default(0.00) @map("accuracy_percent") @db.Decimal(10, 4)
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  predictions TradingPrediction[]
+
+  @@schema("onnews")
+  @@map("trading_accounts")
+}
+
+model TradingPrediction {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  accountId       String    @map("account_id") @db.Uuid
+  symbol          String    @db.VarChar(50)
+  prediction      String    @db.VarChar(10) // 'up', 'down'
+  entryPrice      Decimal   @map("entry_price") @db.Decimal(15, 4)
+  quantity        Int
+  stakeAmount     Decimal   @map("stake_amount") @db.Decimal(15, 2)
+  expectedEarning Decimal?  @map("expected_earning") @db.Decimal(15, 2) // R$ 0.50
+  isCorrect       Boolean?  @map("is_correct")
+  exitPrice       Decimal?  @map("exit_price") @db.Decimal(15, 4)
+  profitLoss      Decimal   @default(0.00) @map("profit_loss") @db.Decimal(15, 2)
+  status          String    @default("open") @db.VarChar(20) // 'open', 'closed', 'expired'
+  timeFrame       String?   @map("time_frame") @db.VarChar(50) // '1m', '5m', '15m', '1h'
+  resultTime      DateTime? @map("result_time")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  closedAt        DateTime? @map("closed_at")
+
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account TradingAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([accountId])
+  @@index([status])
+  @@index([symbol])
+  @@schema("onnews")
+  @@map("trading_predictions")
+}
+
+// ============================================
+// STREAMERS
+// ============================================
+
+model Streamer {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String    @unique @map("user_id") @db.Uuid
+  streamerName     String    @map("streamer_name") @db.VarChar(255)
+  bio              String?
+  profileImageUrl  String?   @map("profile_image_url")
+  bannerImageUrl   String?   @map("banner_image_url")
+  isVerified       Boolean   @default(false) @map("is_verified")
+  verificationDate DateTime? @map("verification_date")
+  followersCount   Int       @default(0) @map("followers_count")
+  totalStreams     Int       @default(0) @map("total_streams")
+  totalViewers     Int       @default(0) @map("total_viewers")
+  totalEarnings    Decimal   @default(0.00) @map("total_earnings") @db.Decimal(15, 2)
+  streamKey        String?   @unique @map("stream_key") @db.VarChar(255)
+  isActive         Boolean   @default(true) @map("is_active")
+  suspendedUntil   DateTime? @map("suspended_until")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  followers StreamerFollower[]
+
+  @@index([isActive])
+  @@schema("onnews")
+  @@map("streamers")
+}
+
+model StreamerFollower {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  streamerId String    @map("streamer_id") @db.Uuid
+  followedAt DateTime  @default(now()) @map("followed_at")
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  streamer Streamer @relation(fields: [streamerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, streamerId])
+  @@index([userId])
+  @@index([streamerId])
+  @@schema("onnews")
+  @@map("streamer_followers")
+}
+
+// ============================================
+// ACHIEVEMENTS
+// ============================================
+
+model Achievement {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code             String    @unique @db.VarChar(100)
+  name             String    @db.VarChar(255)
+  description      String?
+  iconUrl          String?   @map("icon_url")
+  requirementType  String    @map("requirement_type") @db.VarChar(50)
+  requirementValue Int?      @map("requirement_value")
+  rewardAmount     Decimal?  @map("reward_amount") @db.Decimal(15, 2)
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  userAchievements UserAchievement[]
+
+  @@schema("onnews")
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String    @map("user_id") @db.Uuid
+  achievementId String    @map("achievement_id") @db.Uuid
+  earnedAt      DateTime  @default(now()) @map("earned_at")
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@index([achievementId])
+  @@schema("onnews")
+  @@map("user_achievements")
+}
+
+// ============================================
+// LEADERBOARD
+// ============================================
+
+model LeaderboardEntry {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String    @map("user_id") @db.Uuid
+  username          String    @db.VarChar(100)
+  rank              Int
+  totalEarnings     Decimal   @map("total_earnings") @db.Decimal(15, 2)
+  watchHours        Decimal   @map("watch_hours") @db.Decimal(10, 2)
+  tradingAccuracy   Decimal   @map("trading_accuracy") @db.Decimal(10, 4)
+  period            String    @db.VarChar(20) // 'daily', 'weekly', 'monthly', 'all_time'
+  updatedAt         DateTime  @default(now()) @map("updated_at")
+
+  @@index([period])
+  @@index([rank])
+  @@schema("onnews")
+  @@map("leaderboard_entries")
+}
+
+// ============================================
+// ANALYTICS
+// ============================================
+
+model UserAnalytics {
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String    @unique @map("user_id") @db.Uuid
+  totalWatchTimeMinutes Decimal   @default(0) @map("total_watch_time_minutes") @db.Decimal(10, 2)
+  totalEarnings         Decimal   @default(0.00) @map("total_earnings") @db.Decimal(15, 2)
+  averageSessionDuration Decimal? @map("average_session_duration") @db.Decimal(10, 2)
+  favoriteCategory      String?   @map("favorite_category") @db.VarChar(50)
+  lastActivity          DateTime? @map("last_activity")
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@schema("onnews")
+  @@map("user_analytics")
+}
+
+model ActivityLog {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String?   @map("user_id") @db.Uuid
+  action        String    @db.VarChar(100)
+  resourceType  String?   @map("resource_type") @db.VarChar(50)
+  resourceId    String?   @map("resource_id") @db.Uuid
+  details       Json?
+  ipAddress     String?   @map("ip_address") @db.Inet
+  userAgent     String?   @map("user_agent")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt(sort: Desc)])
+  @@schema("onnews")
+  @@map("activity_logs")
+}
+
+// ============================================
+// NOTIFICATIONS
+// ============================================
+
+model Notification {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  type      String    @db.VarChar(50) // 'earning', 'stream_live', 'achievement', 'trading'
+  title     String    @db.VarChar(255)
+  message   String?
+  actionUrl String?   @map("action_url")
+  isRead    Boolean   @default(false) @map("is_read")
+  readAt    DateTime? @map("read_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@schema("onnews")
+  @@map("notifications")
+}
