@@ -1,0 +1,8 @@
+{
+  "buildCommand": "npm run build || true",
+  "outputDirectory": "out",
+  "env": {
+    "NEXT_PUBLIC_API_URL": "@api_url"
+  },
+  "regions": ["sfo1"]
+}
