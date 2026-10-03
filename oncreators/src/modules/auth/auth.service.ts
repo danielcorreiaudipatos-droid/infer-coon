@@ -29,6 +29,7 @@ export class AuthService {
         passwordHash,
         firstName: dto.firstName,
         lastName: dto.lastName,
+        isEmailVerified: false,
       },
     });
 
@@ -41,6 +42,7 @@ export class AuthService {
         username: user.username,
       },
       access_token: token,
+      message: 'Registration successful',
     };
   }
 
@@ -65,9 +67,29 @@ export class AuthService {
         id: user.id,
         email: user.email,
         username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
       },
       access_token: token,
+      message: 'Login successful',
     };
+  }
+
+  async refreshToken(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const token = this.jwtService.sign({ sub: user.id, email: user.email });
+    return { access_token: token };
+  }
+
+  async logout(userId: string) {
+    return { message: 'Logout successful', userId };
   }
 
   async validateUser(payload: any) {

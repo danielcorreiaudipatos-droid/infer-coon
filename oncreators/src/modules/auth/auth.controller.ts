@@ -19,10 +19,30 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
+  @Post('refresh')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async refresh(@Request() req: any) {
+    return this.authService.refreshToken(req.user.id);
+  }
+
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async logout(@Request() req: any) {
+    return this.authService.logout(req.user.id);
+  }
+
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async getMe(@Request() req: any) {
-    return req.user;
+    return {
+      id: req.user.id,
+      email: req.user.email,
+      username: req.user.username,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+    };
   }
 }
