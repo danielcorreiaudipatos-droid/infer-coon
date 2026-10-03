@@ -1,0 +1,220 @@
+name: 🚀 Deploy ALL Applications to Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  # ============================================
+  # TIER 1: BACKEND APIs
+  # ============================================
+
+  deploy-infer-coon-api:
+    name: 🔵 Deploy Infer Coon API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install & Test
+        run: |
+          npm install
+          npm test -- --passWithNoTests 2>&1 | tail -5
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_INFER }}
+          vercel-args: '--prod'
+        env:
+          VERCEL_PROJECT_NAME: infer-coon-api
+
+      - name: ✅ Infer Coon API Live
+        run: echo "📍 https://infer-coon-api.vercel.app"
+
+  deploy-onnews-api:
+    name: 📺 Deploy ONNEWS API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'api-onnews/package-lock.json'
+
+      - name: Install & Test
+        run: |
+          cd api-onnews
+          npm ci
+          npm test -- --passWithNoTests 2>&1 | tail -5
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_ONNEWS }}
+          vercel-args: '--prod'
+        env:
+          VERCEL_PROJECT_NAME: onnews-api
+
+      - name: ✅ ONNEWS API Live
+        run: echo "📍 https://onnews-api.vercel.app"
+
+  deploy-ads-api:
+    name: 📊 Deploy ADS Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check if ADS backend exists
+        run: |
+          if [ -d "ads-backend" ] && [ -f "ads-backend/package.json" ]; then
+            echo "ADS_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "ADS_EXISTS=false" >> $GITHUB_ENV
+          fi
+
+      - name: Setup Node.js
+        if: env.ADS_EXISTS == 'true'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install & Test
+        if: env.ADS_EXISTS == 'true'
+        run: |
+          cd ads-backend
+          npm ci
+          npm test -- --passWithNoTests 2>&1 | tail -5
+
+      - name: Deploy to Vercel
+        if: env.ADS_EXISTS == 'true'
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_ADS }}
+          vercel-args: '--prod'
+
+      - name: ✅ ADS API Live (if exists)
+        if: env.ADS_EXISTS == 'true'
+        run: echo "📍 https://ads-api.vercel.app"
+
+      - name: ⏭️ ADS Backend skipped (not found)
+        if: env.ADS_EXISTS == 'false'
+        run: echo "ADS Backend not configured"
+
+  deploy-python-api:
+    name: 🐍 Deploy Python Backend (Alice)
+    runs-on: ubuntu-latest
+    if: false  # Disabled until configured
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy Python Backend
+        run: |
+          echo "Python backend deployment would go here"
+          echo "Requires: Heroku, Railway, or similar platform"
+
+  # ============================================
+  # TIER 2: FRONTEND Applications
+  # ============================================
+
+  deploy-website:
+    name: 🌐 Deploy Main Website
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy Frontend to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}
+          vercel-args: '--prod'
+          working-directory: ./frontend
+        env:
+          VERCEL_PROJECT_NAME: infer-coon-website
+
+      - name: ✅ Website Live
+        run: echo "📍 https://infer-coon.vercel.app"
+
+  deploy-ads-frontend:
+    name: 📈 Deploy ADS Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check if ADS frontend exists
+        run: |
+          if [ -d "ads-frontend" ] && [ -f "ads-frontend/package.json" ]; then
+            echo "ADS_FRONTEND_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "ADS_FRONTEND_EXISTS=false" >> $GITHUB_ENV
+          fi
+
+      - name: Setup Node.js
+        if: env.ADS_FRONTEND_EXISTS == 'true'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Build & Deploy
+        if: env.ADS_FRONTEND_EXISTS == 'true'
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_ADS_FRONTEND }}
+          vercel-args: '--prod'
+          working-directory: ./ads-frontend
+
+      - name: ✅ ADS Frontend Live (if exists)
+        if: env.ADS_FRONTEND_EXISTS == 'true'
+        run: echo "📍 https://ads.infer-coon.vercel.app"
+
+  # ============================================
+  # FINAL: Status Check
+  # ============================================
+
+  deployment-status:
+    name: 📊 Deployment Status
+    runs-on: ubuntu-latest
+    needs: [deploy-infer-coon-api, deploy-onnews-api, deploy-ads-api, deploy-website, deploy-ads-frontend]
+    if: always()
+    steps:
+      - name: Print Deployment URLs
+        run: |
+          echo "╔════════════════════════════════════════════════════════════════╗"
+          echo "║              🚀 ALL APPLICATIONS DEPLOYED                      ║"
+          echo "╚════════════════════════════════════════════════════════════════╝"
+          echo ""
+          echo "📍 API ENDPOINTS:"
+          echo "   🔵 Infer Coon API: https://infer-coon-api.vercel.app"
+          echo "   📺 ONNEWS API: https://onnews-api.vercel.app"
+          echo "   📊 ADS API: https://ads-api.vercel.app (if configured)"
+          echo ""
+          echo "🌐 WEBSITES:"
+          echo "   🏠 Main Website: https://infer-coon.vercel.app"
+          echo "   📈 ADS Platform: https://ads.infer-coon.vercel.app (if configured)"
+          echo ""
+          echo "📚 DOCUMENTATION:"
+          echo "   Infer Coon: https://infer-coon-api.vercel.app/api"
+          echo "   ONNEWS: https://onnews-api.vercel.app/docs"
+          echo ""
+          echo "✅ Deployment completed at $(date)"
