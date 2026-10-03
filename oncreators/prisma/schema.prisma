@@ -158,7 +158,6 @@ model Payment {
   // Relations
   user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   subscription        UserSubscription? @relation(fields: [subscriptionId], references: [id])
-  marketplacePurchase MarketplacePurchase?
 
   @@index([userId])
   @@index([status])
@@ -310,7 +309,6 @@ model MarketplacePurchase {
   user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   product             MarketplaceProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
   creator             Creator   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  payment             Payment?  @relation(fields: [paymentId], references: [id])
 
   @@index([userId])
   @@index([creatorId])

@@ -15,12 +15,12 @@ export class HealthService {
         environment: process.env.NODE_ENV || 'development',
         version: '1.0.0',
       };
-    } catch (error) {
+    } catch (error: unknown) {
       return {
         status: 'degraded',
         timestamp: new Date().toISOString(),
         database: 'disconnected',
-        error: error.message,
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }
